@@ -1,0 +1,228 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Calibragem_DelayMaiorZero" xml:space="preserve">
+    <value>El retraso debe ser mayor que cero.</value>
+  </data>
+  <data name="Calibragem_DelayMenorIgual" xml:space="preserve">
+    <value>El retraso debe ser inferior o igual a {0}.</value>
+  </data>
+  <data name="Calibragem_NaoContemValor" xml:space="preserve">
+    <value>La calibración no contiene ningún valor.</value>
+  </data>
+  <data name="Calibragem_QuantidadePulsosMaiorZero" xml:space="preserve">
+    <value>A quantidade de pulsos deve ser maior que zero.</value>
+  </data>
+  <data name="Calibragem_VelocidadeMaiorZero" xml:space="preserve">
+    <value>El número de impulsos debe ser mayor que cero.</value>
+  </data>
+  <data name="Calibragem_VelocidadeMenorIgual" xml:space="preserve">
+    <value>La velocidad debe ser inferior o igual a {0}.</value>
+  </data>
+  <data name="Colorantes_Circuito" xml:space="preserve">
+    <value>[Circuito para colorear {0}]</value>
+  </data>
+  <data name="Colorantes_CorrespondenciaRepetida" xml:space="preserve">
+    <value>correspondencia repetida.</value>
+  </data>
+  <data name="Colorantes_MassaEspecificaObrigatoria" xml:space="preserve">
+    <value>La masa específica debe ser mayor que cero.</value>
+  </data>
+  <data name="Colorantes_NomeObrigatorio" xml:space="preserve">
+    <value>El nombre del tinte es un conjunto de datos requeridos.</value>
+  </data>
+  <data name="Global_UnidadeMedida_Abreviacao_Mililitro" xml:space="preserve">
+    <value>ml</value>
+  </data>
+  <data name="Parametors_Comunicacao_TimeoutFaixa" xml:space="preserve">
+    <value>El tiempo de espera debe ser un valor entre 0 y 65535.</value>
+  </data>
+  <data name="Parametros_Dat_DiretorioInvalido" xml:space="preserve">
+    <value>El directorio de supervisión de archivos dat no es válido.</value>
+  </data>
+  <data name="Parametros_Dat_PadraoConteudoObrigatorio" xml:space="preserve">
+    <value>Es obligatorio informar al patrón de contenido de archivos dat.</value>
+  </data>
+  <data name="Parametros_Dat_RepositorioInvalido" xml:space="preserve">
+    <value>El depósito de archivos DAT manera no es válido.</value>
+  </data>
+  <data name="Parametros_Global_AceleracaoMaiorZero" xml:space="preserve">
+    <value>La aceleración total debe ser mayor que cero.</value>
+  </data>
+  <data name="Parametros_Global_VelocidadeMaiorZero" xml:space="preserve">
+    <value>La velocidad global debe ser mayor que cero.</value>
+  </data>
+  <data name="Parametros_Inicializacao_AceleracaoMaiorZero" xml:space="preserve">
+    <value>El paso de variación del circuito de inicialización debe ser mayor que cero.</value>
+  </data>
+  <data name="Parametros_Inicializacao_PulsoInicialMaiorZero" xml:space="preserve">
+    <value>El pulso inicial del circuito de inicialización debe ser mayor que cero.</value>
+  </data>
+  <data name="Parametros_Inicializacao_PulsoLimiteMaiorZero" xml:space="preserve">
+    <value>El borde de pulso de los circuitos de inicialización debe ser mayor que cero.</value>
+  </data>
+  <data name="Parametros_Inicializacao_QtdeCircuitosGrupoFaixa" xml:space="preserve">
+    <value>La cantidad de circuitos por grupo debe estar entre 3 y 5.</value>
+  </data>
+  <data name="Parametros_Inicializacao_StepVariacaoMaiorZero" xml:space="preserve">
+    <value>O step de variação da inicialização de circuitos deve ser maior que zero.</value>
+  </data>
+  <data name="Parametros_Inicializacao_VariacaoPulsoMaiorZero" xml:space="preserve">
+    <value>La variación de impulso de inicialización de circuito debe ser mayor que cero.</value>
+  </data>
+  <data name="Parametros_Inicializacao_VelocidadeMaiorZero" xml:space="preserve">
+    <value>La velocidad del circuito de inicialización debe ser mayor que cero.</value>
+  </data>
+  <data name="Parametros_Log_DiretorioLogProcessoInvalido" xml:space="preserve">
+    <value>El registro de proceso de exención directorio de almacenamiento no es válida.</value>
+  </data>
+  <data name="Parametros_Log_DiretorioLogQuantidadeDispensadaInvalido" xml:space="preserve">
+    <value>La cantidad dispensada directorio de almacenamiento de registro no es válido.</value>
+  </data>
+  <data name="Parametros_Nivel_MaximoMaiorQueMInimo" xml:space="preserve">
+    <value>El nivel máximo de tinte debe ser mayor que el mínimo.</value>
+  </data>
+  <data name="Parametros_Nivel_MaximoMaiorZero" xml:space="preserve">
+    <value>El nivel máximo de tinte debe ser mayor que cero.</value>
+  </data>
+  <data name="Parametros_Nivel_MinimoMaiorZero" xml:space="preserve">
+    <value>El nivel mínimo de tinte debe ser mayor que cero.</value>
+  </data>
+  <data name="Parametros_Purga_AceleracaoMaiorZero" xml:space="preserve">
+    <value>La aceleración del drenaje debe ser mayor que cero.</value>
+  </data>
+  <data name="Parametros_Purga_PrazoExecucaoMaiorZero" xml:space="preserve">
+    <value>El límite de purga de tiempo debe ser mayor que cero.</value>
+  </data>
+  <data name="Parametros_Purga_VelocidadeMaiorZero" xml:space="preserve">
+    <value>La velocidad de la purga debe ser mayor que cero.</value>
+  </data>
+  <data name="Parametros_Purga_VolumeMaiorZero" xml:space="preserve">
+    <value>El volumen de la purga debe ser mayor que cero.</value>
+  </data>
+  <data name="Parametros_UnidadeMedida_ShotMaiorZero" xml:space="preserve">
+    <value>El valor de la vacuna debe ser mayor que cero.</value>
+  </data>
+  <data name="Parametros_UnidadeMedida_UnidadeEntradaObrigatoria" xml:space="preserve">
+    <value>Es obligatorio seleccionar una unidad de medida para la entrada del usuario.</value>
+  </data>
+  <data name="Parametros_UnidadeMedida_UnidadeExibicaoObrigatoria" xml:space="preserve">
+    <value>Es obligatorio seleccionar la unidad de visualización de la medición en el control del nivel de colorante.</value>
+  </data>
+</root>

@@ -1,0 +1,19 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Corantes>
+  <Corante Motor="1" Nome="G" MassaEspecifica="1.2325" Habilitado="true" Volume="0" Correspondencia="1" />
+  <Corante Motor="2" Nome="B" MassaEspecifica="1.3252" Habilitado="true" Volume="0" Correspondencia="2" />
+  <Corante Motor="3" Nome="C" MassaEspecifica="1.7722" Habilitado="true" Volume="0" Correspondencia="3" />
+  <Corante Motor="4" Nome="D" MassaEspecifica="1.3454" Habilitado="true" Volume="0" Correspondencia="4" />
+  <Corante Motor="5" Nome="E" MassaEspecifica="1.3846" Habilitado="true" Volume="0" Correspondencia="5" />
+  <Corante Motor="6" Nome="F" MassaEspecifica="2.1056" Habilitado="true" Volume="0" Correspondencia="6" />
+  <Corante Motor="7" Nome="J" MassaEspecifica="1.365" Habilitado="true" Volume="0" Correspondencia="7" />
+  <Corante Motor="8" Nome="W" MassaEspecifica="1.9871" Habilitado="true" Volume="0" Correspondencia="8" />
+  <Corante Motor="9" Nome="L" MassaEspecifica="1.3249" Habilitado="true" Volume="0" Correspondencia="9" />
+  <Corante Motor="10" Nome="M" MassaEspecifica="1.2996" Habilitado="true" Volume="0" Correspondencia="10" />
+  <Corante Motor="11" Nome="Z" MassaEspecifica="1.26" Habilitado="true" Volume="0" Correspondencia="11" />
+  <Corante Motor="12" Nome="V" MassaEspecifica="1.2507" Habilitado="true" Volume="0" Correspondencia="12" />
+  <Corante Motor="13" Nome="13X" MassaEspecifica="0" Habilitado="false" Volume="0" Correspondencia="13" />
+  <Corante Motor="14" Nome="14X" MassaEspecifica="0" Habilitado="false" Volume="0" Correspondencia="14" />
+  <Corante Motor="15" Nome="15X" MassaEspecifica="0" Habilitado="false" Volume="0" Correspondencia="15" />
+  <Corante Motor="16" Nome="16X" MassaEspecifica="0" Habilitado="false" Volume="0" Correspondencia="16" />
+</Corantes>

@@ -1,0 +1,61 @@
+﻿Versão 2.2.27
+	Lógica na calibração conectar somente no inicio da pesagem.
+	Implementação para identificar se a comunicação com a placa estiver Conectada.
+
+Versão 2.2.26
+	Problema na Dispensa simultânea com a configuração sequencial entre placas
+
+Versão 2.2.25
+	Timeout de conexão com placa, implementação de semaforo entre protocolos
+
+Versão 2.2.24
+	Desenvolvimento placa de movimentação full DeskTop. Mixer e Mover.
+
+Versão 2.2.34
+	Desenvolvimento de sensores para identificar Copo pela placa Eletrônica.
+	Processos Purga, Purga Individual, Recirculação, Pesagem e Dispensa Sequencial ou 
+	Simultânea. Alerta por periodo para identifica se existe esponja no modo da
+	máquina em repouso.Armazena Log status da machina e se o copo de esponja
+	está no suporte para recipiente. Salvar log de comunicação Serial.
+	
+Versão 2.2.35
+	Desenvolvimento de Circuito Seguidor. Processos Purga, Purga Individual, Recirculação, Pesagem e Dispensa Sequencial ou 
+	Simultânea, Calibração automática, Formula Personalisada, Controle de Nevel, Fila de Dosagem, Teste de Dosagem
+
+Versão 3.0.0
+	Protocolo UDCP. Processo de abortar as dispensas, Consulta na placa de Versão e Resset da placa 
+Versão 3.0.1
+	Protocolo Dat 07. Desenvolvimento para automatizar Licensa Online
+Versão 3.0.2
+	Protocolo Dat UDCP, melhoria no retorno do arquivo result "CanisterContents". Desenvolvimento para diminuir a qtd de Faixas na calibração.
+	Desenvolvimento para gerar os Eventos :
+	    InicalizarSistema = 1, FecharSistema = 2, AlteradaCalibracao = 3, Purga = 4, PurgaIndividual = 5, Recircular = 6, InicializarCircuitos = 7,
+            MonitoramentoCircuitos = 8, FormulaPersonalizada = 9, Abastecimento = 10, OnLine = 11, OffLine = 12, ALteradaConfiguacao = 13,
+            FalhaComunicacaoPlaca = 14, NivelCanisterBaixo = 15, RessetPlaca = 16, MaquinaLigada = 17, MaquinaDesligada = 18, AlteradoProdutos = 19,
+	    Dispensa = 20
+	Desenvolvimento de configuração de abastecimento pré definido
+	Desenvolvimento de mensagem configuradas
+
+	Versão 3.0.3
+	Protocolo Dat UDCP
+	Desenvolvimento para gerar os Eventos :
+	     OnLine = 11, OffLine = 12 => para informar se existe internet
+	Desenvolvimento de configuração de visualizar Tipo de unidade métrica Onça
+	Desenvolvimento de visualização no abastecimento tipo de unidade métrica Onça
+
+	Versão 3.0.4	
+	Desenvolvimento para gerar os Eventos :
+	     OnLineMSP e OffLineMSP => para informar se o acesso remoto está rodando
+
+	Versão 3.0.5	
+	Protocolo Dat UDCP loop para aguardar a retirada da lata
+	Habilitar Teste de dosagem no protocolo UDCP
+
+	Versão 3.1.0	
+	Usuário master no sistema e tela de configuração ajustado para cada tipo de usuário
+
+	Versão 3.1.1	
+	Informar a versão do IOConnect em cada dispensa de formula
+
+Versão 4.0.0
+	Upgrade para plataforma .NET 8	

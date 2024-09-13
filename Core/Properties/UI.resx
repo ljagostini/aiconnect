@@ -1,0 +1,249 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Calibragem_DelayMaiorZero" xml:space="preserve">
+    <value>Delay deve ser maior ou igual a zero.</value>
+  </data>
+  <data name="Calibragem_DelayMenorIgual" xml:space="preserve">
+    <value>Delay deve ser menor ou igual a {0}</value>
+  </data>
+  <data name="Calibragem_NaoContemValor" xml:space="preserve">
+    <value>A calibragem não contém valor.</value>
+  </data>
+  <data name="Calibragem_QuantidadePulsosMaiorZero" xml:space="preserve">
+    <value>Quantidade de pulsos deve ser maior que zero.</value>
+  </data>
+  <data name="Calibragem_VelocidadeMaiorZero" xml:space="preserve">
+    <value>Velocidade deve ser maior ou igual a zero.</value>
+  </data>
+  <data name="Calibragem_VelocidadeMenorIgual" xml:space="preserve">
+    <value>Velocidade deve ser menor ou igual a {0}</value>
+  </data>
+  <data name="Colorantes_Circuito" xml:space="preserve">
+    <value>[Circuito de colorante {0}]</value>
+  </data>
+  <data name="Colorantes_CorrespondenciaRepetida" xml:space="preserve">
+    <value>Correpondência repetida.</value>
+  </data>
+  <data name="Colorantes_MassaEspecificaObrigatoria" xml:space="preserve">
+    <value>A massa específica deve ser maior que zero.</value>
+  </data>
+  <data name="Colorantes_NomeObrigatorio" xml:space="preserve">
+    <value>Nome do colorante é um dado obrigatório.</value>
+  </data>
+  <data name="Global_UnidadeMedida_Abreviacao_Mililitro" xml:space="preserve">
+    <value>ml</value>
+  </data>
+  <data name="Parametors_Comunicacao_TimeoutFaixa" xml:space="preserve">
+    <value>Timeout deve ser um valor entre 0 e 65535.</value>
+  </data>
+  <data name="Parametros_Dat_DiretorioInvalido" xml:space="preserve">
+    <value>Diretório de monitoramento do arquivo dat é inválido.</value>
+  </data>
+  <data name="Parametros_Dat_PadraoConteudoObrigatorio" xml:space="preserve">
+    <value>O padrão de arquivo dat é uma dado obrigatório.</value>
+  </data>
+  <data name="Parametros_Dat_RepositorioInvalido" xml:space="preserve">
+    <value>Caminho do arquivo dat é inválido.</value>
+  </data>
+  <data name="Parametros_Global_AceleracaoMaiorZero" xml:space="preserve">
+    <value>Aceleração global deve ser maior que zero.</value>
+  </data>
+  <data name="Parametros_Global_VelocidadeMaiorZero" xml:space="preserve">
+    <value>Velocidade global deve ser maior que zero.</value>
+  </data>
+  <data name="Parametros_Inicializacao_AceleracaoMaiorZero" xml:space="preserve">
+    <value>A aceleração da inicialização de circuitos deve ser maior que zero.</value>
+  </data>
+  <data name="Parametros_Inicializacao_PulsoInicialMaiorZero" xml:space="preserve">
+    <value>O pulso inicial da inicialização de circuitos deve ser maior que zero.</value>
+  </data>
+  <data name="Parametros_Inicializacao_PulsoLimiteMaiorZero" xml:space="preserve">
+    <value>O pulso limite da inicialização de circuito deve ser maior que zero.</value>
+  </data>
+  <data name="Parametros_Inicializacao_QtdeCircuitosGrupoFaixa" xml:space="preserve">
+    <value>A quantidade de circuitos por grupo deve estar entre 3 e 5.</value>
+  </data>
+  <data name="Parametros_Inicializacao_StepVariacaoMaiorZero" xml:space="preserve">
+    <value>Step de variação da inicialização de circuito deve ser maior que zero.</value>
+  </data>
+  <data name="Parametros_Inicializacao_VariacaoPulsoMaiorZero" xml:space="preserve">
+    <value>A variação do pulso da inicialização de circuito deve ser maior que zero.</value>
+  </data>
+  <data name="Parametros_Inicializacao_VelocidadeMaiorZero" xml:space="preserve">
+    <value>A velocidade da inicialização de circuito deve ser maior que zero.</value>
+  </data>
+  <data name="Parametros_Log_DiretorioLogProcessoInvalido" xml:space="preserve">
+    <value>O diretório de armazenamento do log de processo é inválido.</value>
+  </data>
+  <data name="Parametros_Log_DiretorioLogQuantidadeDispensadaInvalido" xml:space="preserve">
+    <value>O diretório de armazenamento do log de quantidade dispensada é inválido.</value>
+  </data>
+  <data name="Parametros_Monit_AceleracaoMaiorZero" xml:space="preserve">
+    <value>A aceleração monitoramento de circuitos deve ser maior que zero.</value>
+  </data>
+  <data name="Parametros_Monit_DelayMaiorZero" xml:space="preserve">
+    <value>O delay do monitoramento de circuitos deve ser maior que zero.</value>
+  </data>
+  <data name="Parametros_Monit_PulsoMaiorZero" xml:space="preserve">
+    <value>O pulso do monitoramento de circuitos deve ser maior que 0 minutos.</value>
+  </data>
+  <data name="Parametros_Monit_QtdeCircuitosGrupoFaixa" xml:space="preserve">
+    <value>A quantidade de circuitos por grupo deve estar entre 3 e 5.</value>
+  </data>
+  <data name="Parametros_Monit_TimerDelayIniMaiorDez" xml:space="preserve">
+    <value>O tempo para inicializar o monitoramento de circuitos deve ser maior que 10 minutos.</value>
+  </data>
+  <data name="Parametros_Monit_TimerDelayMaiorDez" xml:space="preserve">
+    <value>O tempo do monitoramento de circuitos deve ser maior que 10 minutos.</value>
+  </data>
+  <data name="Parametros_Monit_VelocidadeMaiorZero" xml:space="preserve">
+    <value>A velocidade monitoramento de circuitos deve ser maior que zero.</value>
+  </data>
+  <data name="Parametros_Nivel_MaximoMaiorQueMInimo" xml:space="preserve">
+    <value>O nível máximo de colorante deve ser maior que o nível mínimo.</value>
+  </data>
+  <data name="Parametros_Nivel_MaximoMaiorZero" xml:space="preserve">
+    <value>O nível máximo de colorante deve ser maior que zero.</value>
+  </data>
+  <data name="Parametros_Nivel_MinimoMaiorZero" xml:space="preserve">
+    <value>O nível mínimo de colorante deve ser maior que zero.</value>
+  </data>
+  <data name="Parametros_Purga_AceleracaoMaiorZero" xml:space="preserve">
+    <value>A acelaração da purga deve ser maior que zero.</value>
+  </data>
+  <data name="Parametros_Purga_PrazoExecucaoMaiorZero" xml:space="preserve">
+    <value>Prazo de execução da purga deve ser maior que zero.</value>
+  </data>
+  <data name="Parametros_Purga_VelocidadeMaiorZero" xml:space="preserve">
+    <value>A velocidade da purga deve ser maior que zero.</value>
+  </data>
+  <data name="Parametros_Purga_VolumeMaiorZero" xml:space="preserve">
+    <value>O volume da purga deve ser maior que zero.</value>
+  </data>
+  <data name="Parametros_UnidadeMedida_ShotMaiorZero" xml:space="preserve">
+    <value>O valor da unidade shot deve ser maior que zero.</value>
+  </data>
+  <data name="Parametros_UnidadeMedida_UnidadeEntradaObrigatoria" xml:space="preserve">
+    <value>É obrigatório selecionar uma unidade de medida para entrada do usuário.</value>
+  </data>
+  <data name="Parametros_UnidadeMedida_UnidadeExibicaoObrigatoria" xml:space="preserve">
+    <value>É obrigatório selecionar a unidade de medida que o usuário visualizará no controle de nível.</value>
+  </data>
+</root>

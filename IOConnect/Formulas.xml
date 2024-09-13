@@ -1,0 +1,8 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Formulas>
+  <Formula Id="01a08451-a298-4ac0-81ec-c6eac6d8d603" Nome="FÓRMULA T001">
+    <Item IdCorante="1" Volume="5" />
+    <Item IdCorante="2" Volume="5" />
+    <Item IdCorante="3" Volume="5" />
+  </Formula>
+</Formulas>

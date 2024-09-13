@@ -1,0 +1,149 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="Current" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Compile Update="fAguarde.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="fAutenticacao.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="fBasDat05.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="fBasDat06.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="fCalibracao.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="fCalibracaoAutomatica.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="fCaminhoArquivo.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="fColoranteConfig.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="fConfigGeral.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="fConfiguracoes.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="fDat05.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="fDat06.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="fDispensaSequencial.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="fDispensaSimultanea.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="fFormulaPersonalizada.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="fGerenciarFormula.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="fGerenciarNivel.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="fHistoricoValores.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="fInicializacaoCircuitos.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="fLicenca.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="fLimpezaBicos.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="fLogComunication.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="fLogin.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="fMensagem.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="fMonitoramentoCircuitos.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="fMonitoramentoFilaDat.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="fNivel.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="fNumeroSerie.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="fPainelControle.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="fPesagem.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="fPlacaInput.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="fPlacaMovManutencao.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="fPlacaValvula.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="fPrecisao.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="fPrecisaoMenu.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="fPrimeiraPesagem.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="fProdutoConfig.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="fPurga.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="fPurgaIndividual.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="fRecirculacaoProd.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="fRecircular.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="fRecircularAuto.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="fSelColorante.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="fSincFormula.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="fSobre.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="fTratarAlertasP3.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="fTreinamentoCalibracao.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="fValidadeLicensa.cs">
+      <SubType>Form</SubType>
+    </Compile>
+  </ItemGroup>
+</Project>

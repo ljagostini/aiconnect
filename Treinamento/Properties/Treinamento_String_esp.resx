@@ -1,0 +1,242 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Abastecimento_001_Texto" xml:space="preserve">
+    <value>Para el suministro de los depósitos de colorante, siga con la máxima atención los siguientes pasos:
+
+⇒ Verificar los colorantes con bajo nivel y separar las embalajes correspondientes en su inventario;
+⇒ Coloque el colorante en el mixer y agitar durante al menos 3 minutos.
+⇒ Abra la tapa del colorante usando abretapas, hacer una apertura entre 8 y 10 cm y una pequeña abertura en el lado opuesto de la cubierta superior, para hacer un "respiro". Esto evitará que el colorante sailga sin control de envases en el momento de su liberación en el depósito;</value>
+  </data>
+  <data name="Abastecimento_001_Titulo" xml:space="preserve">
+    <value>Suministro</value>
+  </data>
+  <data name="Abastecimento_002_Texto" xml:space="preserve">
+    <value>⇒ tomar sólo la embalaje del colorante que le será suministrada, verter el contenido cuidadosamente en el tanque.
+⇒ Inmediatamente cerrar el depósito;
+⇒ Hacer el registro de suministro con el fin de establecer unos niveles seguros de colorante de control y evitar la falta de ella durante las dosificaciones.
+⇒ Importante: Evitar verter colorante sobre la vara de las paletas de agitación. Siempre use los bordes laterales para depositar el colorante como la imagen de abajo.</value>
+  </data>
+  <data name="Abastecimento_002_Titulo" xml:space="preserve">
+    <value>Suministro</value>
+  </data>
+  <data name="Abertura_Texto" xml:space="preserve">
+    <value>A continuación, se discuten los principales problemas en el uso de sus equipos, donde podrá aprender a usarlo de manera más productiva y también algunos consejos para el cuidado preventivo que puede garantizar la calidad de sus puntos fuertes y preservación de su dosificadora Percolore!</value>
+  </data>
+  <data name="Abertura_Titulo" xml:space="preserve">
+    <value>¡Sea bienvenido!</value>
+  </data>
+  <data name="CuidadosBasicos_001_Texto" xml:space="preserve">
+    <value>Su dosificadora es un equipo de precisión y debe ser conservada para operar con la máxima calidad.
+Con un poco de cuidado en el mantenimiento preventivo, aun el ahoro que tiene, la calidad se mantiene en sus pigmentaciones.
+Limpieza de los bicos dosadores asegura el flujo perfecto de colorante en el momento de la dosificación; por lo tanto tiene la máxima atención a los pasos del proceso requerido para mantener la boquilla en perfecta condiciones de limpieza:
+
+⇒ Proceso de purga: La dosificadora AD-D8 hace una solicitud al día de purga, antes de iniciar un nuevo ciclo de trabajo, la ejecución del proceso de purga. una dispensación mínima de cada colorante se hará en este proceso;
+
+⇒ esponja protección: es esencial humectar continuamente la esponja para evitar la sedimentación de los residuos y el secado de los bicos. La esponja debe ser reemplazada después de la pérdida de absorción. En caso de altas temperaturas, se recomienda la revisión todos los días;
+
+⇒ Obstrucción de colorante en los bicos: cada vez que se observa cambio en el chorro de los colorantes o goteo irregular, le recomendamos que revise los bicos con una barra de metal pequeña, teniendo cuidado de no introducir ningún tipo de residuos que ya estea seco en el interior.</value>
+  </data>
+  <data name="CuidadosBasicos_001_Titulo" xml:space="preserve">
+    <value>Atención básica</value>
+  </data>
+  <data name="CuidadosBasicos_002_Texto" xml:space="preserve">
+    <value>Los colorantes son el combustible de su dosificación!
+
+Mantener depósitos abastecidos y registrar adecuadamente la cantidad en stock, se evitan las interrupciones en la dispensación de una fórmula en el tiempo que se estea haciendo una pintura a su cliente.
+Esta precaución también evita la entrada de aire en la bomba, lo que podría provocar un fallo en la cantidad de colorante dispensado, alterando el resultado deseado!
+
+Importante: No sobre-llenar el depósito hasta el punto de desbordamiento o que obstaculice el proceso automático de agitación, por lo que solicitamos atención a la recomendación de nivel máximo</value>
+  </data>
+  <data name="CuidadosBasicos_002_Titulo" xml:space="preserve">
+    <value>Nivel de colorante</value>
+  </data>
+  <data name="CuidadosBasicos_003_Texto" xml:space="preserve">
+    <value>Poner su maquina dosificadora AD-D8 en un lugar de trabajo definitivo, evitando el desplazamiento constante de la misma.
+Si el piso no está correctamente nivelada, ajuste los pies de la máquina para obtener las mejores condiciones de estabilidad y seguridad.
+Es importante posicionar la maquina doificadora para que tenga fácil acceso y facilitar las operaciones de suministro de colorante, toma eléctrica con conexión a terra y cualquier mantenimiento técnico.</value>
+  </data>
+  <data name="CuidadosBasicos_003_Titulo" xml:space="preserve">
+    <value>Lugar de trabajo</value>
+  </data>
+  <data name="Dosagem_001_Texto" xml:space="preserve">
+    <value>La operación hacer la pintura por dosificación sigue una secuencia lógica de pasos que les permitan realizar la fórmula/color deseada tan rápidamente y con tranquilidad. A continuación presentamos los pasos:
+
+⇒ La elección del color (se puede utilizar el nombre del color o su código);
+⇒ Seleccione la base para ser pigmentada;
+⇒ Seleccione el Embalaje que desea hacer;
+⇒ Generación de la fórmula;
+⇒ Dosificación de colorantes.
+
+Importante: Después de la elección de la base y embalaje adecuado solicitado por el cliente, abrirlo y colocarlo en la bandeja en la posición correcta indicada por el LED ROJO, que es el punto de mira en el centro del recipiente, como la imagen:</value>
+  </data>
+  <data name="Dosagem_001_Titulo" xml:space="preserve">
+    <value>Dosificación</value>
+  </data>
+  <data name="Encerramento_001_Texto" xml:space="preserve">
+    <value>
+
+Felicitaciones!
+Usted realizó el entrenamiento completo para el uso de su dosificadora AD-D8
+
+
+En caso necesario, póngase en contacto con nuestro servicio de atención al cliente:
+whatsapp: +55 51 96937468
+Telefono: +55 51 99740-8288
+sac@percolore.com
+www.percolore.com.br
+
+</value>
+  </data>
+  <data name="Encerramento_001_Titulo" xml:space="preserve">
+    <value />
+  </data>
+  <data name="Purga_001_Texto" xml:space="preserve">
+    <value>La dosificadora hara una solicitación todos los dias para hacer una purga de todos los colorantes.
+Este es un procedimiento rápido y necesario para evitar el bloqueo y las bombas y evitar la obstrucción o taponamiento de los bicos por los residuos de colorante seco como resultado de transacciones pasadas.
+
+Para su seguridad, la máquina no permitirá una nueva operación antes de ejecutar el proceso diario de purga.
+Utilice un único recipiente para recoger la pequeña cantidad de colorante a dispensar individualmente por todos los bicos (colores).
+
+Basta mover el mecanismo de liberación de bicos hacia atrás con la mano y haga clic en el botón que controla la ejecución de la purga.</value>
+  </data>
+  <data name="Purga_001_Titulo" xml:space="preserve">
+    <value>Proceso de purga</value>
+  </data>
+  <data name="RegistroAbastecimento_001_Texto" xml:space="preserve">
+    <value>Actualizar volúmenes colorantes siempre que reponer su dosificación.
+
+Este procedimiento es esencial para evitar que el nivel de colorante sea muy bajo, lo que puede evitar que la exención para correr y causar la formación de bolsas de aire dentro del depósito.
+
+Puede acceder a la pantalla de volumen del colorante desde la pantalla principal, como en la imagen de abajo.
+En la pantalla que se abre, tenga en cuenta lo siguiente:
+
+⇒ En la columna de la izquierda aparece el nombre del colorante;
+⇒ En la columna central muestra el circuito (depósito y bomba) del colorante;
+⇒ En la columna de la derecha muestra el volumen actual de colorante;
+⇒ El botón añadir abre una nueva ventana para informar la cantidad que desea anadir;
+⇒ El botón cambia de cero a cero el volumen actual de colorante;</value>
+  </data>
+  <data name="RegistroAbastecimento_001_Titulo" xml:space="preserve">
+    <value>Registro de suministro</value>
+  </data>
+  <data name="UI_Titulo" xml:space="preserve">
+    <value>Formación Dosadora AD-D8</value>
+  </data>
+</root>

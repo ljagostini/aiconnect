@@ -1,0 +1,242 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Abastecimento_001_Texto" xml:space="preserve">
+    <value>To fill the colorant canisters of your Dispenser Machine, follow these steps carefully:
+
+⇒ Check the low level dyes and separate the corresponding packages in your stock;
+⇒ Place the package on your Percolore shaker and shake for at least 3 minutes;
+⇒ Open the package lid using a can opener, make a tear between 8 and 10 cm and a small opening on the opposite side of the top cover to make a "breath". This will prevent the colorant from coming out of the package in an out-of-control way at the time of dumping into the reservoir;</value>
+  </data>
+  <data name="Abastecimento_001_Titulo" xml:space="preserve">
+    <value>Supply</value>
+  </data>
+  <data name="Abastecimento_002_Texto" xml:space="preserve">
+    <value>⇒ Remove only the lid of the dye to be filled, pour the contents carefully into the reservoir.
+⇒ Close the container immediately;
+⇒ Make the supply register in order to establish a safe control of the dye levels and avoid the lack of them during the dosages.
+⇒ Important: Avoid spilling dye on the mixing pads shaft. Always use the side edges to deposit the dye, as shown below.</value>
+  </data>
+  <data name="Abastecimento_002_Titulo" xml:space="preserve">
+    <value>Supply</value>
+  </data>
+  <data name="Abertura_Texto" xml:space="preserve">
+    <value>Next, we will address the main issues related to the use of your equipment, where you will learn how to use it with greater productivity and also some preventive care tips that can ensure the quality of your dosages and preservation of your machine!</value>
+  </data>
+  <data name="Abertura_Titulo" xml:space="preserve">
+    <value>Welcome!</value>
+  </data>
+  <data name="CuidadosBasicos_001_Texto" xml:space="preserve">
+    <value>Your Dispenser Machine is a precision equipment and needs to be preserved to operate with maximum quality.
+With some care in preventive maintenance, in addition to economy, you will have continuous quality in your pigmentations. 
+Nozzle cleaning ensures perfect colorant flow at dosing time, so pay maximum attention to the process steps required to keep the nozzles in perfect condition:
+
+⇒ Purge process: Your AD-D8 will request daily, before the start of a new work cycle, the execution of the purge process. A minimum of one drop of each dye will be dispensed with in this process;
+
+⇒ Protective sponge: it is essential to constantly moisten the sponge in order to avoid sedimentation of residues and dryness of the nozzles. The sponge should be replaced after loss of absorption. In case of high temperatures, we recommend daily revision;
+
+⇒ Clearance: whenever there is a deviation in the colorant jet or irregular dripping, we recommend that you check the nozzles with a small metal rod, taking care not to push in any residues of dryness.</value>
+  </data>
+  <data name="CuidadosBasicos_001_Titulo" xml:space="preserve">
+    <value>Basic care</value>
+  </data>
+  <data name="CuidadosBasicos_002_Texto" xml:space="preserve">
+    <value>Colorants are the fuel of your Dispenser Machine!
+
+By keeping the reservoirs filled and correctly recording the quantity in stock, you will avoid interruptions in the dispensation of a formula at the time of serving your customer.
+This precaution also prevents air from entering the pumps, which could lead to a failure in the amount of colorant dispensed, changing the desired result!
+
+Important: Do not overfill the tank to such an extent that it overflows or impairs the automatic stirring process, so please observe the recommendation for the maximum level.</value>
+  </data>
+  <data name="CuidadosBasicos_002_Titulo" xml:space="preserve">
+    <value>Colorant Level</value>
+  </data>
+  <data name="CuidadosBasicos_003_Texto" xml:space="preserve">
+    <value>Try to leave your Dispenser Machine in a definitive place of work, avoiding the constant displacement of the equipment.
+If the floor is not correctly levelled, adjust the feet of your machine until you get the best stability and safety condition.
+It is important to position your metering unit in a location with easy access to facilitate the operations of supply, electric power and eventual technical maintenance.</value>
+  </data>
+  <data name="CuidadosBasicos_003_Titulo" xml:space="preserve">
+    <value>Work Place</value>
+  </data>
+  <data name="Dosagem_001_Texto" xml:space="preserve">
+    <value>The dosage operation follows a logical sequence of steps that will allow them to execute the desired formula quickly and smoothly. Below are the steps that will be presented:
+
+⇒ Choice of color (you can use the name of the color or its code);
+⇒ Choice of the base that will be pigmented;
+⇒ Choice of packaging that will be provided;
+⇒ Formula generation;
+⇒ Colorant dispensing.
+
+Important: After choosing the appropriate base and packaging requested by the customer, open it and place it on the tray in the correct position indicated by the led, which targets the center of the container, as shown in the image:</value>
+  </data>
+  <data name="Dosagem_001_Titulo" xml:space="preserve">
+    <value>Dosage</value>
+  </data>
+  <data name="Encerramento_001_Texto" xml:space="preserve">
+    <value>
+
+Congratulations!
+You have completed the complete training for the use of your AD-D8.
+
+
+Whenever necessary, contact our Customer Service:
+whatsapp: +55 51 996937468
++55 51 3107 6600
+sac@percolore.com
+www.percolore.com.br
+
+</value>
+  </data>
+  <data name="Encerramento_001_Titulo" xml:space="preserve">
+    <value />
+  </data>
+  <data name="Purga_001_Texto" xml:space="preserve">
+    <value>Your Dispenser Machine will request daily purging of all colorants.
+This is a quick and necessary procedure to prevent the pumps from clogging the nozzles with dry dye residue from previous operations.
+
+For your safety, the equipment will not allow a new dosage before performing this process.
+Use a single container to collect the small amount of colorant that will be dispensed individually by all nozzles (colors).
+
+To do this, simply move the nozzle release mechanism back and click the purge button on the IOConnect interface.</value>
+  </data>
+  <data name="Purga_001_Titulo" xml:space="preserve">
+    <value>Purging Process</value>
+  </data>
+  <data name="RegistroAbastecimento_001_Texto" xml:space="preserve">
+    <value>Update colorant volumes every time you refill your Dispenser Machine.
+
+This procedure is critical to prevent the colorant level from becoming too low, which can prevent dispensing from being performed and cause air pockets to form inside the reservoir.
+
+You can access the colorant volume screen from your main screen, as in the image below.
+On the following screen observe:
+
+⇒ The name of the colorant is displayed in the left column;
+⇒ The colorant circuit (reservoir and pump) is displayed in the intermediate column;
+⇒ The right column shows the current colorant volume;
+⇒ The add button opens a new window to enter the quantity filled;
+⇒ The zero button changes the current colorant volume to zero;</value>
+  </data>
+  <data name="RegistroAbastecimento_001_Titulo" xml:space="preserve">
+    <value>Supply record</value>
+  </data>
+  <data name="UI_Titulo" xml:space="preserve">
+    <value>AD-D8 Training</value>
+  </data>
+</root>

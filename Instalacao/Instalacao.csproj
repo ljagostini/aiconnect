@@ -1,0 +1,48 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <Nullable>disable</Nullable>
+    <UseWindowsForms>true</UseWindowsForms>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <AssemblyName>Instalacao</AssemblyName>
+    <RootNamespace>Percolore.Instalacao</RootNamespace>
+    <BaseOutputPath></BaseOutputPath>
+    <StartupObject>Percolore.Instalacao.Program</StartupObject>
+    <Version>2.0.0</Version>
+    <Authors>Fábio Luiz Biano</Authors>
+    <Company>Percolore Máqiuinas</Company>
+    <Copyright>Copyright © 2024</Copyright>
+    <Title>Assembly de rotinas auxiliares à instalação Percolore</Title>
+    <Description>Assembly de rotinas auxiliares à instalação Percolore.</Description>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="System.Data.OleDb" Version="8.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Core\Core.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="Properties\Settings.Designer.cs">
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
+
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+    <Exec Command="xcopy /Y /E &quot;$(TargetDir)*&quot; &quot;$(SolutionDir)dist\$(Configuration)\net8.0-windows\&quot;" />
+  </Target>
+
+</Project>

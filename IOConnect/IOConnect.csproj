@@ -1,0 +1,66 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <Nullable>disable</Nullable>
+    <UseWindowsForms>true</UseWindowsForms>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <AssemblyName>IOConnect</AssemblyName>
+    <RootNamespace>Percolore.IOConnect</RootNamespace>
+    <StartupObject>Percolore.IOConnect.Program</StartupObject>
+    <ApplicationIcon>ioconnect.ico</ApplicationIcon>
+    <ApplicationManifest>Properties\app.manifest</ApplicationManifest>
+    <BaseOutputPath>../dist</BaseOutputPath>
+    <PlatformTarget>x86</PlatformTarget>
+    <Copyright>Copyright © 2024</Copyright>
+    <Title>Utilitário de comunicação e execução de dispensa Percolore</Title>
+    <Version>4.0.0</Version>
+    <Authors>Fábio Luiz Biano</Authors>
+    <Company>Percolore Máquinas</Company>
+    <Description>Utilitário de comunicação e execução de dispensa Percolore.</Description>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Content Include="ioconnect.ico" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="FluentFTP" Version="51.0.0" />
+    <PackageReference Include="Fractions" Version="8.0.4" />
+    <PackageReference Include="InTheHand.Net.Bluetooth" Version="4.1.44" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+    <PackageReference Include="System.Data.SqlClient" Version="4.8.6" />
+    <PackageReference Include="System.Data.SQLite" Version="1.0.118" />
+    <PackageReference Include="System.IO.Ports" Version="8.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Core\Core.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="WSMBS">
+      <HintPath>..\libs\WSMBS.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="Calibragem.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Colorantes.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="ControleVersao.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Formulas.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Parametros.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+</Project>

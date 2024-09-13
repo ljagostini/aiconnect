@@ -1,0 +1,964 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Autenticacao_lblTitulo" xml:space="preserve">
+    <value>Autenticación</value>
+  </data>
+  <data name="Autenticacao_rdbSenha" xml:space="preserve">
+    <value>Contraseña</value>
+  </data>
+  <data name="FormulaPersonalizada_Label_0009" xml:space="preserve">
+    <value>Edición de fórmula personalizada</value>
+  </data>
+  <data name="FormulaPersonalizada_Label_0010" xml:space="preserve">
+    <value>Nombre</value>
+  </data>
+  <data name="FormulaPersonalizada_Label_0011" xml:space="preserve">
+    <value>Colorante</value>
+  </data>
+  <data name="FormulaPersonalizada_Label_0012" xml:space="preserve">
+    <value>Cantidad</value>
+  </data>
+  <data name="GerenciarFormulaPersonalizada_Label_0007" xml:space="preserve">
+    <value>Administrar fórmulas personalizadas</value>
+  </data>
+  <data name="GerenciarFormulaPersonalizada_Label_0008" xml:space="preserve">
+    <value>Fórmula</value>
+  </data>
+  <data name="GerenciarNivel_btnAbastecerTodos" xml:space="preserve">
+    <value>Llenar todos colorantes</value>
+  </data>
+  <data name="GerenciarNivel_btnZerarTodos" xml:space="preserve">
+    <value>Reajustar todos colorantes</value>
+  </data>
+  <data name="GerenciarNivel_lblTitulo" xml:space="preserve">
+    <value>Administrar nivel de colorante</value>
+  </data>
+  <data name="Global_Abortar" xml:space="preserve">
+    <value>Interrumpir</value>
+  </data>
+  <data name="Global_Cancelar" xml:space="preserve">
+    <value>Anular</value>
+  </data>
+  <data name="Global_Iniciar" xml:space="preserve">
+    <value>Comenzar</value>
+  </data>
+  <data name="Global_Label_Dias" xml:space="preserve">
+    <value>días</value>
+  </data>
+  <data name="IncializacaoCircuitos_ProgressBar_Msg01" xml:space="preserve">
+    <value>Haga clic en Inicio para ejecutar el proceso!</value>
+  </data>
+  <data name="IncializacaoCircuitos_ProgressBar_Msg02" xml:space="preserve">
+    <value>La inicialización de los circuitos de colorantes</value>
+  </data>
+  <data name="IncializacaoCircuitos_ProgressBar_Msg03" xml:space="preserve">
+    <value>Proceso completado</value>
+  </data>
+  <data name="Licenca_lblChave" xml:space="preserve">
+    <value>Clave</value>
+  </data>
+  <data name="Licenca_lblLicenca" xml:space="preserve">
+    <value>Licencia</value>
+  </data>
+  <data name="Licenca_lblTitulo" xml:space="preserve">
+    <value>La activación de software</value>
+  </data>
+  <data name="Nivel_lblTitulo" xml:space="preserve">
+    <value>Editar nivel de colorante</value>
+  </data>
+  <data name="Nivel_lblUnidadeMedida" xml:space="preserve">
+    <value>Unidad de medida</value>
+  </data>
+  <data name="NumeroSerie_lblNumeroSerie" xml:space="preserve">
+    <value>Número de serie</value>
+  </data>
+  <data name="NumeroSerie_lblTitulo" xml:space="preserve">
+    <value>Número de serie del equipo</value>
+  </data>
+  <data name="Purgar_lblStatus_Msg01" xml:space="preserve">
+    <value>Listo para purgar los circuitos de colorantes</value>
+  </data>
+  <data name="Purgar_lblStatus_Msg02" xml:space="preserve">
+    <value>Purga del circuito de colorante.</value>
+  </data>
+  <data name="Purgar_lblSubStatus_Msg01" xml:space="preserve">
+    <value>Haga clic en el botón Inicio para ejecutar el proceso!</value>
+  </data>
+  <data name="Purgar_lblSubStatus_Msg02" xml:space="preserve">
+    <value>Posición de circuito:</value>
+  </data>
+  <data name="Sobre_Label_0000" xml:space="preserve">
+    <value>Acerca del IOConnect</value>
+  </data>
+  <data name="Sobre_Label_0001" xml:space="preserve">
+    <value>Numero de serie:</value>
+  </data>
+  <data name="Sobre_Label_0003" xml:space="preserve">
+    <value>Versión de software:</value>
+  </data>
+  <data name="Sobre_Label_0004" xml:space="preserve">
+    <value>Fecha de instalación:</value>
+  </data>
+  <data name="Sobre_Label_0005" xml:space="preserve">
+    <value>Validez de mantenimiento:</value>
+  </data>
+  <data name="Sobre_Label_0006" xml:space="preserve">
+    <value>Idioma activo:</value>
+  </data>
+  <data name="Sobre_lnkRedefinirManutencao" xml:space="preserve">
+    <value>[Haga clic para restablecer]</value>
+  </data>
+  <data name="ValidadeManutencao_lblTitulo" xml:space="preserve">
+    <value>Restablecer validez de mantenimiento</value>
+  </data>
+  <data name="Autenticacao_DadosNaoInformados" xml:space="preserve">
+    <value>Datos de autenticación no informados.</value>
+  </data>
+  <data name="Autenticacao_SenhaInvalida" xml:space="preserve">
+    <value>Contraseña inválida.</value>
+  </data>
+  <data name="Global_TokenExpirado" xml:space="preserve">
+    <value>Token expirado.</value>
+  </data>
+  <data name="Global_TokenInvalido" xml:space="preserve">
+    <value>Token inválido.</value>
+  </data>
+  <data name="CaminhoArquivo_lblDiretorio" xml:space="preserve">
+    <value>Directorio
+</value>
+  </data>
+  <data name="CaminhoArquivo_lblNome" xml:space="preserve">
+    <value>Nombre</value>
+  </data>
+  <data name="CaminhoArquivo_lblTitulo" xml:space="preserve">
+    <value>Informar Archivo</value>
+  </data>
+  <data name="DispensaSequencial_lblStatus_Msg01" xml:space="preserve">
+    <value>Lista para dispensar colorantes.</value>
+  </data>
+  <data name="DispensaSequencial_lblStatus_Msg02" xml:space="preserve">
+    <value>Dispensación de colorante</value>
+  </data>
+  <data name="DispensaSequencial_lblSubStatus_Msg01" xml:space="preserve">
+    <value>Haga clic en el botón Inicio para ejecutar el proceso!</value>
+  </data>
+  <data name="DispensaSequencial_lblSubStatus_Msg02" xml:space="preserve">
+    <value>Circuito:</value>
+  </data>
+  <data name="DispensaSimultanea_lblStatus_Msg01" xml:space="preserve">
+    <value>Lista para dispensar</value>
+  </data>
+  <data name="DispensaSimultanea_lblStatus_Msg02" xml:space="preserve">
+    <value>Dispensación de colorantes.</value>
+  </data>
+  <data name="DispensaSimultanea_lblSubStatus_Msg01" xml:space="preserve">
+    <value>Haga clic en el botón para iniciar la distribución de colorantes!</value>
+  </data>
+  <data name="Global_AcessoNegado" xml:space="preserve">
+    <value>No se permite el acceso.</value>
+  </data>
+  <data name="Configuracao_lblGeralPorta" xml:space="preserve">
+    <value>Puerta modbus</value>
+  </data>
+  <data name="Configuracoes_blColoranteMassa" xml:space="preserve">
+    <value>Masa espec. (g/ml)</value>
+  </data>
+  <data name="Configuracoes_blColoranteNome" xml:space="preserve">
+    <value>Nombre</value>
+  </data>
+  <data name="Configuracoes_btnCalibragemEditar" xml:space="preserve">
+    <value>Habilitar la edición de valores</value>
+  </data>
+  <data name="Configuracoes_btnCalibragemHistorico0" xml:space="preserve">
+    <value>Historia</value>
+  </data>
+  <data name="Configuracoes_btnCalibragemHistorico1" xml:space="preserve">
+    <value>Historia</value>
+  </data>
+  <data name="Configuracoes_btnCalibragemHistorico2" xml:space="preserve">
+    <value>Historia</value>
+  </data>
+  <data name="Configuracoes_btnCalibragemHistorico3" xml:space="preserve">
+    <value>Historia</value>
+  </data>
+  <data name="Configuracoes_btnCalibragemHistorico4" xml:space="preserve">
+    <value>Historia</value>
+  </data>
+  <data name="Configuracoes_btnCalibragemHistorico5" xml:space="preserve">
+    <value>Historia</value>
+  </data>
+  <data name="Configuracoes_btnCalibragemHistorico6" xml:space="preserve">
+    <value>Historia</value>
+  </data>
+  <data name="Configuracoes_btnCalibragemHistorico7" xml:space="preserve">
+    <value>Historia</value>
+  </data>
+  <data name="Configuracoes_btnInicializacaoExecutar" xml:space="preserve">
+    <value>Circuito de arranque ejecutar</value>
+  </data>
+  <data name="Configuracoes_chkControlarNivel" xml:space="preserve">
+    <value>Control de nivel de colorante</value>
+  </data>
+  <data name="Configuracoes_chkDispensaSequencial" xml:space="preserve">
+    <value>Dosificación secuencial</value>
+  </data>
+  <data name="Configuracoes_chkFormulasPersonalizadas" xml:space="preserve">
+    <value>Fórmulas personalizadas</value>
+  </data>
+  <data name="Configuracoes_chkGeralSomarRevSteps" xml:space="preserve">
+    <value>Añadir pulso inversa a la cantidad de tiempo que la calibración pulso de dosificación</value>
+  </data>
+  <data name="Configuracoes_chkInicializacaoExecutarAntesPurga" xml:space="preserve">
+    <value>Inicializar los circuitos antes de purgar</value>
+  </data>
+  <data name="Configuracoes_chkInicializacaoMovimentoReverso" xml:space="preserve">
+    <value>Iniciar el proceso con el movimiento inverso</value>
+  </data>
+  <data name="Configuracoes_chkModoSimulacao" xml:space="preserve">
+    <value>Modo de simulación</value>
+  </data>
+  <data name="Configuracoes_chkPurgaControleExecucao" xml:space="preserve">
+    <value>Realice una purga de obligatoria</value>
+  </data>
+  <data name="Configuracoes_chkTecladoVirtual" xml:space="preserve">
+    <value>Teclado virtual</value>
+  </data>
+  <data name="Configuracoes_chkTesteRecipiente" xml:space="preserve">
+    <value>Teste de embalaje</value>
+  </data>
+  <data name="Configuracoes_chkUtilizarCorrespondencia" xml:space="preserve">
+    <value>Copiar circuitos colorantes</value>
+  </data>
+  <data name="Configuracoes_Confirma_RecarregarDadosCalibragem" xml:space="preserve">
+    <value>Para que los cambios surtan efecto necesita volver a cargar los datos de calibración.
+¿Quieres volver a cargarlos ahora?</value>
+  </data>
+  <data name="Configuracoes_Informacao_InformeDelay" xml:space="preserve">
+    <value>Informar delay/espera!</value>
+  </data>
+  <data name="Configuracoes_Informacao_InformePulsos" xml:space="preserve">
+    <value>Informar pulsos!</value>
+  </data>
+  <data name="Configuracoes_Informacao_InformeVelocidade" xml:space="preserve">
+    <value>Informar velocidad!</value>
+  </data>
+  <data name="Configuracoes_Informacao_NumeroSerieDigitos" xml:space="preserve">
+    <value>El número de serie debe tener 4 dígitos.</value>
+  </data>
+  <data name="Configuracoes_Informacao_SenhaDigitos" xml:space="preserve">
+    <value>La contraseña debe tener al menos 4 caracteres.</value>
+  </data>
+  <data name="Configuracoes_Informacao_ValoresInvalidos" xml:space="preserve">
+    <value>Se encontraron los siguientes valores válidos:</value>
+  </data>
+  <data name="Configuracoes_lblAdminNumeroSerial" xml:space="preserve">
+    <value>Numero de serie</value>
+  </data>
+  <data name="Configuracoes_lblAdminSenha" xml:space="preserve">
+    <value>Contraseña de administrador</value>
+  </data>
+  <data name="Configuracoes_lblCalibragemColorante" xml:space="preserve">
+    <value>Colorante</value>
+  </data>
+  <data name="Configuracoes_lblCalibragemDelay" xml:space="preserve">
+    <value>Delay (ms)</value>
+  </data>
+  <data name="Configuracoes_lblCalibragemDesvio" xml:space="preserve">
+    <value>Desvío (%)</value>
+  </data>
+  <data name="Configuracoes_lblCalibragemLegendaMassaEspec" xml:space="preserve">
+    <value>Masa específica:</value>
+  </data>
+  <data name="Configuracoes_lblCalibragemLegendaMotor" xml:space="preserve">
+    <value>Motor:</value>
+  </data>
+  <data name="Configuracoes_lblCalibragemMassa" xml:space="preserve">
+    <value>Masa (g)</value>
+  </data>
+  <data name="Configuracoes_lblCalibragemMassaIdeal" xml:space="preserve">
+    <value>Masa ideal</value>
+  </data>
+  <data name="Configuracoes_lblCalibragemPulsos" xml:space="preserve">
+    <value>Pulsos</value>
+  </data>
+  <data name="Configuracoes_lblCalibragemVelocidade" xml:space="preserve">
+    <value>Velocidad</value>
+  </data>
+  <data name="Configuracoes_lblCalibragemVolume" xml:space="preserve">
+    <value>Volumen</value>
+  </data>
+  <data name="Configuracoes_lblColoranteCircuito" xml:space="preserve">
+    <value>Circuito</value>
+  </data>
+  <data name="Configuracoes_lblColoranteCorrespondencia" xml:space="preserve">
+    <value>Correspond.</value>
+  </data>
+  <data name="Configuracoes_lblDatBaseCircuito" xml:space="preserve">
+    <value>Circuito de colorantes empeza en:</value>
+  </data>
+  <data name="Configuracoes_lblDatCaminhoMonitoramento" xml:space="preserve">
+    <value>Camino de monitorización de archivos</value>
+  </data>
+  <data name="Configuracoes_lblDatCaminhoRepositorio" xml:space="preserve">
+    <value>Camino do repositório de arquivos dat renombrado</value>
+  </data>
+  <data name="Configuracoes_lblDatPadraoConteudo" xml:space="preserve">
+    <value>Contenido estándar del archivo DAT:</value>
+  </data>
+  <data name="Configuracoes_lblGeralAceleracao" xml:space="preserve">
+    <value>Aceleración</value>
+  </data>
+  <data name="Configuracoes_lblGeralComunicacao" xml:space="preserve">
+    <value>Comunicación</value>
+  </data>
+  <data name="Configuracoes_lblGeralDelayReverso" xml:space="preserve">
+    <value>Retardo reverso</value>
+  </data>
+  <data name="Configuracoes_lblGeralFuncinamentoSoftware" xml:space="preserve">
+    <value>Funcionamiento del software</value>
+  </data>
+  <data name="Configuracoes_lblGeralParametroDispensaGlobal" xml:space="preserve">
+    <value>Parámetros de dosificación globales</value>
+  </data>
+  <data name="Configuracoes_lblGeralPulsoReverso" xml:space="preserve">
+    <value>Pulso reverso</value>
+  </data>
+  <data name="Configuracoes_lblGeralVelocidade" xml:space="preserve">
+    <value>Velocidad</value>
+  </data>
+  <data name="Configuracoes_lblInicializacaoAceleracao" xml:space="preserve">
+    <value>Aceleración</value>
+  </data>
+  <data name="Configuracoes_lblInicializacaoPulsoInicial" xml:space="preserve">
+    <value>Pulso inicial</value>
+  </data>
+  <data name="Configuracoes_lblInicializacaoPulsoLimite" xml:space="preserve">
+    <value>Límite de pulso</value>
+  </data>
+  <data name="Configuracoes_lblInicializacaoStepVariacao" xml:space="preserve">
+    <value>Step</value>
+  </data>
+  <data name="Configuracoes_lblInicializacaoVariacaoPulso" xml:space="preserve">
+    <value>Pulso variación</value>
+  </data>
+  <data name="Configuracoes_lblInicializacaoVelocidade" xml:space="preserve">
+    <value>Velocidad</value>
+  </data>
+  <data name="Configuracoes_lblLogProcessoDispensa" xml:space="preserve">
+    <value>Camino del archivo del proceso de dispensar</value>
+  </data>
+  <data name="Configuracoes_lblLogQuantidadeDispensa" xml:space="preserve">
+    <value>Camino del archivo DAT</value>
+  </data>
+  <data name="Configuracoes_lblNivelMaximo" xml:space="preserve">
+    <value>Nível máximo</value>
+  </data>
+  <data name="Configuracoes_lblNivelMinimo" xml:space="preserve">
+    <value>Nivel mínimo</value>
+  </data>
+  <data name="Configuracoes_lblPurgaAceleracao" xml:space="preserve">
+    <value>Aceleración</value>
+  </data>
+  <data name="Configuracoes_lblPurgaDelay" xml:space="preserve">
+    <value>Delay</value>
+  </data>
+  <data name="Configuracoes_lblPurgaHoras" xml:space="preserve">
+    <value>horas</value>
+  </data>
+  <data name="Configuracoes_lblPurgaParâmetrosDispensa" xml:space="preserve">
+    <value>Parámetros utilizados para la purga para dosificar</value>
+  </data>
+  <data name="Configuracoes_lblPurgaVelocidade" xml:space="preserve">
+    <value>Velocidad</value>
+  </data>
+  <data name="Configuracoes_lblPurgaVolume" xml:space="preserve">
+    <value>Volumen dispensado</value>
+  </data>
+  <data name="Configuracoes_lblTitulo" xml:space="preserve">
+    <value>Ajustes</value>
+  </data>
+  <data name="Configuracoes_lblUniMedidaUnidadeExibicao" xml:space="preserve">
+    <value>Nivel de la unidad de visualización de control de colorante</value>
+  </data>
+  <data name="Configuracoes_lblUniMedidaUnidadesHabilitadas" xml:space="preserve">
+    <value>Unidades habilitadas para la entrada de datos</value>
+  </data>
+  <data name="Configuracoes_rdbBaseDat00" xml:space="preserve">
+    <value>Base 00</value>
+  </data>
+  <data name="Configuracoes_rdbDatBase01" xml:space="preserve">
+    <value>Base 01</value>
+  </data>
+  <data name="Configuracoes_rdbDatPadrao01" xml:space="preserve">
+    <value>Estándar 01</value>
+  </data>
+  <data name="Configuracoes_rdbDatPadrao02" xml:space="preserve">
+    <value>Estándar 02</value>
+  </data>
+  <data name="Configuracoes_rdbDatPadrao03" xml:space="preserve">
+    <value>Estándar 03</value>
+  </data>
+  <data name="Configuracoes_tabAdmin" xml:space="preserve">
+    <value>Admin</value>
+  </data>
+  <data name="Configuracoes_tabCalibragem" xml:space="preserve">
+    <value>Calibración</value>
+  </data>
+  <data name="Configuracoes_tabColorantes" xml:space="preserve">
+    <value>Colorantes</value>
+  </data>
+  <data name="Configuracoes_tabControleVolume" xml:space="preserve">
+    <value>Nivel de colorante</value>
+  </data>
+  <data name="Configuracoes_tabInicializarCircuito" xml:space="preserve">
+    <value>Circuitos de inicialización</value>
+  </data>
+  <data name="Configuracoes_tabLog" xml:space="preserve">
+    <value>Log</value>
+  </data>
+  <data name="Configuracoes_tabUnidadeMedida" xml:space="preserve">
+    <value>Unidad medida</value>
+  </data>
+  <data name="FormulaPersonalizada_Informacao_ColoranteExistente" xml:space="preserve">
+    <value>El colorante seleccionado se ha añadido.</value>
+  </data>
+  <data name="FormulaPersonalizada_Informacao_QuantidadeNaoInformada" xml:space="preserve">
+    <value>La cantidad de colorante no fue informado.</value>
+  </data>
+  <data name="FormulaPersonalizada_Informaco_InformarColorante" xml:space="preserve">
+    <value>Incluir al menos un colorante!</value>
+  </data>
+  <data name="FormulaPersonalizada_Informaco_InformarFormula" xml:space="preserve">
+    <value>Introduzca el nombre de la fórmula!</value>
+  </data>
+  <data name="GerenciarFormulaPersonalizada_Falha_Dispensar" xml:space="preserve">
+    <value>No se pudo dosificar.
+
+Detalhes:
+</value>
+  </data>
+  <data name="GerenciarNivel_Confirmar_ZerarNivel" xml:space="preserve">
+    <value>Usted realmente desea restablecer el nivel de colorante?</value>
+  </data>
+  <data name="GerenciarNivel_Informacao_ColorantesDesabilitados" xml:space="preserve">
+    <value>Todos los colorantes están desactivados.</value>
+  </data>
+  <data name="Global_BaixaColoranteEfetuada" xml:space="preserve">
+    <value>Cantidad de colorante hecho.</value>
+  </data>
+  <data name="Global_CircuitoColoranteAbastecido" xml:space="preserve">
+    <value>El siguiente circuito colorante se cargó: </value>
+  </data>
+  <data name="Global_CircuitoColoranteInexistente" xml:space="preserve">
+    <value>Circuito de colorante inexistente</value>
+  </data>
+  <data name="Global_CircuitoColoranteZerado" xml:space="preserve">
+    <value>El nivel del siguiente colorante fue llenado: </value>
+  </data>
+  <data name="Global_Confirmar_AbastecerDosadora" xml:space="preserve">
+    <value>¿Quieres llenar colorantes ahora?</value>
+  </data>
+  <data name="Global_Confirmar_DesejaTentarNovamente" xml:space="preserve">
+    <value>¿Quieres intentar una vez más?</value>
+  </data>
+  <data name="Global_Confirmar_ExcluirDados" xml:space="preserve">
+    <value>Confirma la exclusión de los datos?</value>
+  </data>
+  <data name="Global_Confirmar_ExecutarPorcesso" xml:space="preserve">
+    <value>Desea ejecutar el proceso ahora?</value>
+  </data>
+  <data name="Global_Confirmar_Sair" xml:space="preserve">
+    <value>¿Desea realmente salir de esta pantalla?</value>
+  </data>
+  <data name="Global_Confirma_RedefinirValidade" xml:space="preserve">
+    <value>¿Quieres reajustar la fecha de caducidad ahora?</value>
+  </data>
+  <data name="Global_DispensaExecutadaEdicaoFormula" xml:space="preserve">
+    <value>Dispensa realiza en la edición de fórmulas personalizadas</value>
+  </data>
+  <data name="Global_DispensaExecutadaGerenciamentoFormula" xml:space="preserve">
+    <value>Dispensa hecha en la gestión de fórmulas personalizadas.</value>
+  </data>
+  <data name="Global_DosagemAbortada" xml:space="preserve">
+    <value>Dosificación interrumpida</value>
+  </data>
+  <data name="Global_DosagemCancelada" xml:space="preserve">
+    <value>Dosificación anulada</value>
+  </data>
+  <data name="Global_DosagemConcluida" xml:space="preserve">
+    <value>Dosificación finalizada</value>
+  </data>
+  <data name="Global_DosagemIniciada" xml:space="preserve">
+    <value>Dosificación iniciada</value>
+  </data>
+  <data name="Global_FalhaDosagem" xml:space="preserve">
+    <value>No se ha podido dosificar</value>
+  </data>
+  <data name="Global_FalhaPurgar" xml:space="preserve">
+    <value>No se ha podido hacher purga</value>
+  </data>
+  <data name="Global_Falha_CarregarDados" xml:space="preserve">
+    <value>Error al cargar los datos.
+
+Detalles:
+</value>
+  </data>
+  <data name="Global_Falha_Dispensar" xml:space="preserve">
+    <value>Falha dosificar.</value>
+  </data>
+  <data name="Global_Falha_EnviarDados" xml:space="preserve">
+    <value>No se pudo enviar datos.
+
+Detalles:
+</value>
+  </data>
+  <data name="Global_Falha_ExcluirDados" xml:space="preserve">
+    <value>No se pudo borrar datos.
+
+Detalles:
+</value>
+  </data>
+  <data name="Global_Falha_ExecucaoPorcesso" xml:space="preserve">
+    <value>No se ha podido ejecutar el proceso.
+
+Detalles:
+</value>
+  </data>
+  <data name="Global_Falha_GravarDados" xml:space="preserve">
+    <value>No se pudo grabar los datos.
+
+Detalles:
+</value>
+  </data>
+  <data name="Global_Falha_Monitoramento" xml:space="preserve">
+    <value>Error de monitoreo.</value>
+  </data>
+  <data name="Global_Falha_NaoFoiPossivelAtualizar" xml:space="preserve">
+    <value>No se pudo realizar las actualizaciones.
+La aplicación se cerrará.</value>
+  </data>
+  <data name="Global_Falha_NaoFoiPossivelConectar" xml:space="preserve">
+    <value>No se puede conectar al dispositivo dispensador.</value>
+  </data>
+  <data name="Global_Falha_PerdaDeConexao" xml:space="preserve">
+    <value>Pérdida de la conexión.</value>
+  </data>
+  <data name="Global_FormatoInvalido" xml:space="preserve">
+    <value>Formato no válido.</value>
+  </data>
+  <data name="Global_Informacao_AplicativoEmExecucao" xml:space="preserve">
+    <value>La aplicación ya está en marcha.</value>
+  </data>
+  <data name="Global_Informacao_ArquivoDatDeletado" xml:space="preserve">
+    <value>Se ha eliminado el archivo dat.</value>
+  </data>
+  <data name="Global_Informacao_ArquivoNaoInformadoOuInvalido" xml:space="preserve">
+    <value>Nombre de archivo no se informó o no válido.</value>
+  </data>
+  <data name="Global_Informacao_DadosGravadosSucesso" xml:space="preserve">
+    <value>Grabación de los datos hecha con éxito.</value>
+  </data>
+  <data name="Global_informacao_DatRenomeado" xml:space="preserve">
+    <value>Archivo Dat renombrado.</value>
+  </data>
+  <data name="Global_Informacao_DispensaAbortada" xml:space="preserve">
+    <value>Dispensa abortada.</value>
+  </data>
+  <data name="Global_Informacao_DispensaCancelada" xml:space="preserve">
+    <value>Dispensa anulada.</value>
+  </data>
+  <data name="Global_Informacao_ExpiracaoManutencao" xml:space="preserve">
+    <value>La validad del mantenimiento expirará en</value>
+  </data>
+  <data name="Global_Informacao_NenhumColorante" xml:space="preserve">
+    <value>No ha sido seleccionado nengún colorante.</value>
+  </data>
+  <data name="Global_Informacao_NivelColoranteInsuficiente" xml:space="preserve">
+    <value>El nivel de colorante es insuficiente.</value>
+  </data>
+  <data name="Global_Informacao_NivelMinimo" xml:space="preserve">
+    <value>La cantidad de colorante de dispensación de la siguiente formula hará que el nivel almacenado en la máquina cae por debajo del mínimo configurado:</value>
+  </data>
+  <data name="Global_Informacao_NumeroSerialInvalido" xml:space="preserve">
+    <value>Número de serie válido.
+El número de serie debe tener 4 dígitos.</value>
+  </data>
+  <data name="Global_Informacao_ProcessoCancelado" xml:space="preserve">
+    <value>Proceso anulado.</value>
+  </data>
+  <data name="Global_Informacao_RecipienteNaoPosicionado" xml:space="preserve">
+    <value>No hay embalaje en la boquilla del dosificador.</value>
+  </data>
+  <data name="Global_Informacao_RecipienteNaoPosicionado_2" xml:space="preserve">
+    <value>Embalaje no esta posicionada.</value>
+  </data>
+  <data name="Global_Informacao_RequisitosNaoAtendidos" xml:space="preserve">
+    <value>Los siguientes requisitos previos de ejecución no se cumplieron:</value>
+  </data>
+  <data name="Global_InicializacaoInterrompida" xml:space="preserve">
+    <value>A inicializção de circuitos foi interrompida. Não é possível executar purga.</value>
+  </data>
+  <data name="Global_IOConnectInicializado" xml:space="preserve">
+    <value>IOConnect inicializado.</value>
+  </data>
+  <data name="Global_IOConnectInicializadoModoSimulacao" xml:space="preserve">
+    <value>IOConnect comenzó en el modo de simulación</value>
+  </data>
+  <data name="Global_MonitoramentoPausado" xml:space="preserve">
+    <value>Monitoreo en pausa.</value>
+  </data>
+  <data name="Global_Monitorando" xml:space="preserve">
+    <value>Monitoreo</value>
+  </data>
+  <data name="Global_Nao" xml:space="preserve">
+    <value>No</value>
+  </data>
+  <data name="Global_ProcessoCanceladoUsuario" xml:space="preserve">
+    <value>Proceso anulado por el usuario.</value>
+  </data>
+  <data name="Global_ProcessoDispensaIniciado" xml:space="preserve">
+    <value>Proceso de dosificación empezado.</value>
+  </data>
+  <data name="Global_PurgaAbortada" xml:space="preserve">
+    <value>Purga interrumpida</value>
+  </data>
+  <data name="Global_PurgaCancelada" xml:space="preserve">
+    <value>Purga anulada</value>
+  </data>
+  <data name="Global_PurgaConcluida" xml:space="preserve">
+    <value>Purga completado</value>
+  </data>
+  <data name="Global_PurgaPendente" xml:space="preserve">
+    <value>Hay una purga pendiente. No se puede dosificar hasta que se haga purga</value>
+  </data>
+  <data name="Global_PurgaPendente3" xml:space="preserve">
+    <value>Purga pendiente</value>
+  </data>
+  <data name="Global_SelecionadoMenuPurga" xml:space="preserve">
+    <value>Seleccionado purga el menú.</value>
+  </data>
+  <data name="Global_Sim" xml:space="preserve">
+    <value>Sí</value>
+  </data>
+  <data name="Global_TodosCircuitosColoranteAbastecidos" xml:space="preserve">
+    <value>Todos los colorantes fueron llenados.</value>
+  </data>
+  <data name="Global_TodosCircuitosColoranteZerados" xml:space="preserve">
+    <value>El nivel de todos los colorantes fueran reajustados a zero.</value>
+  </data>
+  <data name="Global_TokenNaoInformado" xml:space="preserve">
+    <value>Token no informado</value>
+  </data>
+  <data name="Global_UnidadeMedida_Grama" xml:space="preserve">
+    <value>Gramo</value>
+  </data>
+  <data name="Global_UnidadeMedida_Mililitro" xml:space="preserve">
+    <value>Mililitro</value>
+  </data>
+  <data name="Global_UnidadeMedida_Onca" xml:space="preserve">
+    <value>Onza</value>
+  </data>
+  <data name="Global_UnidadeMedida_Shot" xml:space="preserve">
+    <value>Shot</value>
+  </data>
+  <data name="Gobal_PurgaIniciada" xml:space="preserve">
+    <value>Purga comenzado</value>
+  </data>
+  <data name="Historico_ColunaDelay" xml:space="preserve">
+    <value>Retardo</value>
+  </data>
+  <data name="Historico_ColunaDesvio" xml:space="preserve">
+    <value>Desvío M</value>
+  </data>
+  <data name="Historico_ColunaMassa" xml:space="preserve">
+    <value>Masa M</value>
+  </data>
+  <data name="Historico_ColunaPulsos" xml:space="preserve">
+    <value>Pulsos</value>
+  </data>
+  <data name="Historico_ColunaVelocidade" xml:space="preserve">
+    <value>Velocidad</value>
+  </data>
+  <data name="Historico_lblHistoricoLegendaVolume" xml:space="preserve">
+    <value>Volumen:</value>
+  </data>
+  <data name="Historico_Titulo" xml:space="preserve">
+    <value>Historico de los valores confirmados</value>
+  </data>
+  <data name="Init_Confirmacao_ManutencaoExpirada" xml:space="preserve">
+    <value>La validad de servicio ha expirado.
+No se puede ejecutar el IOConnect hasta que se ingrese la clave de activación.
+
+¿Quieres que reajustar la fecha de caducidad ahora?</value>
+  </data>
+  <data name="Licenca_Informacao_ChaveIncorreta" xml:space="preserve">
+    <value>Clave de activación incorrecta.</value>
+  </data>
+  <data name="LogProcesso_DatRefinidoLeitura" xml:space="preserve">
+    <value>Archivo Dat definido sólo para lectura.</value>
+  </data>
+  <data name="Nivel_Confirmar_AbastecimentoColorante" xml:space="preserve">
+    <value>Confirma suministro de colorante?</value>
+  </data>
+  <data name="Nivel_Informacao_ExcedeNivelMaximo" xml:space="preserve">
+    <value>El nivel de los siguientes colorantes excede el nivel máximo permitido:</value>
+  </data>
+  <data name="Nivel_Informacao_NivelMaiorZero" xml:space="preserve">
+    <value>El nivel de colorante debe ser mayor que cero.</value>
+  </data>
+  <data name="PainelControle_Menu_Configurações" xml:space="preserve">
+    <value>Ajustes</value>
+  </data>
+  <data name="PainelControle_Menu_FormulasPersonalizadas" xml:space="preserve">
+    <value>Fórmulas personalizadas</value>
+  </data>
+  <data name="PainelControle_Menu_NivelColorante" xml:space="preserve">
+    <value>Nivel de colorante</value>
+  </data>
+  <data name="PainelControle_Menu_Purga" xml:space="preserve">
+    <value>Ejecutar la purga</value>
+  </data>
+  <data name="PainelControle_Menu_Sair" xml:space="preserve">
+    <value>Salir</value>
+  </data>
+  <data name="PainelControle_Menu_Sobre" xml:space="preserve">
+    <value>Acerca</value>
+  </data>
+  <data name="Pesagem_btnPesagemAdicionar" xml:space="preserve">
+    <value>Añadir</value>
+  </data>
+  <data name="Pesagem_btnPesagemConfirmar" xml:space="preserve">
+    <value>Confirmar</value>
+  </data>
+  <data name="Pesagem_btnPesagemDispensar" xml:space="preserve">
+    <value>Dispensar</value>
+  </data>
+  <data name="Pesagem_chkPesagemRedefinirPulsos" xml:space="preserve">
+    <value>Redefinir pulso</value>
+  </data>
+  <data name="Pesagem_Confirma_Descarte" xml:space="preserve">
+    <value>Confirma la eliminación de pesaje?</value>
+  </data>
+  <data name="Pesagem_Confirma_MassaMedia" xml:space="preserve">
+    <value>Confirma la masa media?</value>
+  </data>
+  <data name="Pesagem_lblPesagemDesvio" xml:space="preserve">
+    <value>Desvío</value>
+  </data>
+  <data name="Pesagem_lblPesagemLegendaMassaIdeal" xml:space="preserve">
+    <value>Masa ideal</value>
+  </data>
+  <data name="Pesagem_lblPesagemLegendaVolume" xml:space="preserve">
+    <value>Volumen</value>
+  </data>
+  <data name="Pesagem_lblPesagemMassa" xml:space="preserve">
+    <value>Masa (g)</value>
+  </data>
+  <data name="ValidadeManutencao_DataRedefinida" xml:space="preserve">
+    <value>La fecha de vencimiento del mantenimiento se ha restablecido a</value>
+  </data>
+  <data name="Global_UnidadeMedida_Abreviacao_Grama" xml:space="preserve">
+    <value>g</value>
+  </data>
+  <data name="Global_UnidadeMedida_Abreviacao_Mililitro" xml:space="preserve">
+    <value>ml</value>
+  </data>
+  <data name="Global_UnidadeMedida_Abreviacao_Onca" xml:space="preserve">
+    <value>flOz</value>
+  </data>
+  <data name="Global_UnidadeMedida_Abreviacao_Shot" xml:space="preserve">
+    <value>shot</value>
+  </data>
+  <data name="Global_Circuito" xml:space="preserve">
+    <value>Circuito</value>
+  </data>
+  <data name="Global_Colorante" xml:space="preserve">
+    <value>Colorante</value>
+  </data>
+  <data name="Global_Falha_TestarRecipiente" xml:space="preserve">
+    <value>No se ha podido comprobar si la embalaje está colocado correctamente.</value>
+  </data>
+  <data name="Configuracoes_lblGeralTimeout" xml:space="preserve">
+    <value>Timeout</value>
+  </data>
+  <data name="Init_Falha_Diretorio" xml:space="preserve">
+    <value>El siguiente directorio no se encuentra y un intento de crear fracasó:</value>
+  </data>
+  <data name="Init_RelogioAlterado" xml:space="preserve">
+    <value>El reloj ha sido cambiado.</value>
+  </data>
+  <data name="Init_ValidarDataHora" xml:space="preserve">
+    <value>No se puede validar la fecha y hora de la máquina</value>
+  </data>
+  <data name="Init_ArquivoNaoEncontrado" xml:space="preserve">
+    <value>No se pudo encontrar el archivo.</value>
+  </data>
+  <data name="InicializacaoCircuitos_btnInicializacaoExecutar" xml:space="preserve">
+    <value>Iniciar los circuitos</value>
+  </data>
+  <data name="ValidadeManutencao_lblNumeroSerie" xml:space="preserve">
+    <value>Numero de serie:</value>
+  </data>
+  <data name="Sobre_Label_0007" xml:space="preserve">
+    <value>Dispositivo activo:</value>
+  </data>
+  <data name="LogProcesso_SucessoLeituraConteudoDat" xml:space="preserve">
+    <value>El contenido del archivo dat se ha leído con éxito.</value>
+  </data>
+  <data name="LogProcesso_FalhaLeituraConteudoDat" xml:space="preserve">
+    <value>Error al intentar leer contenido del archivo de fecha.</value>
+  </data>
+  <data name="Configuracoes_chkDatInterfaceDispSequencial" xml:space="preserve">
+    <value>Deshabilitar la interfaz de ejecución de la dosificación secuencial</value>
+  </data>
+  <data name="Configuracoes_chkDatInterfaceDispSimultanea" xml:space="preserve">
+    <value>Deshabilitar la interfaz de ejecución de la dosificación simultánea</value>
+  </data>
+  <data name="Configuracoes_chkIncializacaoInterface" xml:space="preserve">
+    <value>Deshabilitar interfaz de ejecución del proceso</value>
+  </data>
+  <data name="Configuracoes_chkPurgaInterfaceProcesso" xml:space="preserve">
+    <value>Deshabilitar interfaz de ejecución del proceso</value>
+  </data>
+  <data name="Global_Treinamento_NaofoiPossivelIniciar" xml:space="preserve">
+    <value>No se pudo iniciar el entrenamiento.</value>
+  </data>
+  <data name="String1" xml:space="preserve">
+    <value />
+  </data>
+  <data name="PainelControle_Menu_Treinamento" xml:space="preserve">
+    <value>Entrenamiento</value>
+  </data>
+  <data name="Configuracoes_btnCalibragemHistorico10" xml:space="preserve">
+    <value>Historia</value>
+  </data>
+  <data name="Configuracoes_btnCalibragemHistorico11" xml:space="preserve">
+    <value>Historia</value>
+  </data>
+  <data name="Configuracoes_btnCalibragemHistorico12" xml:space="preserve">
+    <value>Historia</value>
+  </data>
+  <data name="Configuracoes_btnCalibragemHistorico8" xml:space="preserve">
+    <value>Historia</value>
+  </data>
+  <data name="Configuracoes_btnCalibragemHistorico9" xml:space="preserve">
+    <value>Historia</value>
+  </data>
+</root>
