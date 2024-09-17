@@ -2250,7 +2250,9 @@ namespace Percolore.IOConnect
                     case "tabLog":
                     case "tabProducao":
                         {
-                            PersistirParametros();
+                            if (!PersistirParametros())
+                                return;
+
                             Util.ObjectParametros.InitLoad();
                             _parametros = Util.ObjectParametros.Load();
 
@@ -3355,6 +3357,12 @@ namespace Percolore.IOConnect
             p.DesabilitaMonitSyncBkpCalibragem = chkMonitBkpCalibragem.Checked;
 
             //base Dados
+            if (cmbTipoBaseDados.SelectedValue == null)
+            {
+                MessageBox.Show("Tipo de base de dados não selecionado.", "ATENÇÃO", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return false;
+            }
+
             p.TipoBaseDados = cmbTipoBaseDados.SelectedValue.ToString();
             p.PathBasesDados = txtPathBaseDados.Text;
 

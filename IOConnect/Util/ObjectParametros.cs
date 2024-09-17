@@ -292,7 +292,8 @@ namespace Percolore.IOConnect.Util
                     sb.Append(" HabilitarDispensaSequencial TEXT NULL,");
                     sb.Append(" HabilitarFormulaPersonalizada TEXT NULL,");
                     sb.Append(" HabilitarTesteRecipiente TEXT NULL,");
-                    sb.Append(" IdIdioma TEXT NULL,");
+					sb.Append(" HabilitarIdentificacaoCopo TEXT NULL,");
+					sb.Append(" IdIdioma TEXT NULL,");
                     sb.Append(" IdDispositivo TEXT NULL,");
                     sb.Append(" HabilitarPurgaIndividual TEXT NULL,");
                     sb.Append(" HabilitarTouchScrenn TEXT NULL,");
@@ -302,10 +303,18 @@ namespace Percolore.IOConnect.Util
                     sb.Append(" VersaoIoconnect TEXT NULL,");
                     sb.Append(" HabilitarDispensaSequencialP1 TEXT NULL,");
                     sb.Append(" HabilitarDispensaSequencialP2 TEXT NULL,");
+					sb.Append(" TreinamentoCal TEXT NULL,");
+					sb.Append(" ViewMessageProc TEXT NULL,");
+					sb.Append(" QtdTentativasConexao TEXT NULL,");
+					sb.Append(" DelayEsponja TEXT NULL,");
+					sb.Append(" HabLimpBicos TEXT NULL,");
+					sb.Append(" DelayLimpBicos TEXT NULL,");
+					sb.Append(" TipoLimpBicos TEXT NULL,");
+					sb.Append(" TipoDosagemExec TEXT NULL,");
 
-                    #endregion
-                    #region DAT
-                    sb.Append(" PathDAT TEXT NULL,");
+					#endregion
+					#region DAT
+					sb.Append(" PathDAT TEXT NULL,");
                     sb.Append(" PathRepositorioDAT TEXT NULL,");
                     sb.Append(" PadraoConteudoDAT TEXT NULL,");
                     sb.Append(" BasePosicaoCircuitoDAT TEXT NULL,");
@@ -321,10 +330,37 @@ namespace Percolore.IOConnect.Util
                     sb.Append(" DesabilitarVolumeMinimoDat TEXT NULL,");
                     sb.Append(" VolumeMinimoDat TEXT NULL,");
 
+					sb.Append(" Dat_06_UNT_Pref TEXT NULL,");
+					sb.Append(" Dat_06_UNT_1_IsPonto  TEXT NULL,");
+					sb.Append(" Dat_06_UNT_2_IsPonto TEXT NULL,");
+					sb.Append(" Dat_06_CAN_Pref TEXT NULL,");
+					sb.Append(" Dat_06_CAN_1_IsPonto TEXT NULL,");
+					sb.Append(" Dat_06_FRM_Pref TEXT NULL,");
+					sb.Append(" Dat_06_FRM_SEP TEXT NULL,");
+					sb.Append(" Dat_06_FRM_1_IsPonto TEXT NULL,");
+					sb.Append(" Dat_06_BAS_Pref TEXT NULL,");
+					sb.Append(" Dat_06_BAS_1_IsPonto TEXT NULL,");
+					sb.Append(" Dat_06_BAS_Habilitado TEXT NULL,");
+					sb.Append(" Dat_05_UNT_Pref TEXT NULL,");
+					sb.Append(" Dat_05_UNT_1_IsPonto TEXT NULL,");
+					sb.Append(" Dat_05_UNT_2_IsPonto TEXT NULL,");
+					sb.Append(" Dat_05_CAN_Pref TEXT NULL,");
+					sb.Append(" Dat_05_CAN_1_IsPonto TEXT NULL,");
+					sb.Append(" Dat_05_FRM_Pref TEXT NULL,");
+					sb.Append(" Dat_05_FRM_SEP TEXT NULL,");
+					sb.Append(" Dat_05_FRM_1_IsPonto TEXT NULL,");
+					sb.Append(" Dat_05_BAS_Pref TEXT NULL,");
+					sb.Append(" Dat_05_BAS_1_IsPonto TEXT NULL,");
+					sb.Append(" Dat_05_BAS_Habilitado TEXT NULL,");
+					sb.Append(" ExtFileTmpUDCP TEXT NULL,");
+					sb.Append(" CreateFileTmpUDCP TEXT NULL,");
+					sb.Append(" DelayUDCP TEXT NULL,");
+					sb.Append(" ProcRemoveLataUDCP TEXT NULL,");
+					sb.Append(" DisablePopUpDispDat TEXT NULL,");
 
-                    #endregion
-                    #region Purga
-                    sb.Append(" PrazoExecucaoPurga TEXT NULL,");
+					#endregion
+					#region Purga
+					sb.Append(" PrazoExecucaoPurga TEXT NULL,");
                     sb.Append(" DataExecucaoPurga TEXT NULL,");
                     sb.Append(" VolumePurga TEXT NULL,");
                     sb.Append(" VelocidadePurga TEXT NULL,");
@@ -354,9 +390,9 @@ namespace Percolore.IOConnect.Util
                     sb.Append(" InicializarCircuitosPurgaIndividual TEXT NULL,");
                     sb.Append(" QtdeCircuitoGrupo TEXT NULL,");
 
-                    #endregion
-                    #region Unidade de medida
-                    sb.Append(" ValorShot TEXT NULL,");
+					#endregion
+					#region Unidade de medida
+					sb.Append(" ValorShot TEXT NULL,");
                     sb.Append(" HabilitarShot TEXT NULL,");
                     sb.Append(" HabilitarOnca TEXT NULL,");
                     sb.Append(" HabilitarMililitro TEXT NULL,");
@@ -370,11 +406,13 @@ namespace Percolore.IOConnect.Util
                     sb.Append(" PathLogControleDispensa TEXT NULL,");
                     sb.Append(" HabilitarLogComunicacao TEXT NULL,");
                     sb.Append(" PathLogComunicacao TEXT NULL,");
+					sb.Append(" HabilitarLogAutomateTesterProt TEXT NULL,");
+					sb.Append(" LogAutomateBackup TEXT NULL,");
 
-                    #endregion
-                    #region Monitoramento dos circuitos
-                    sb.Append(" QtdeMonitCircuitoGrupo TEXT NULL,");
-                    sb.Append(" MonitVelocidade TEXT NULL,");
+					#endregion
+					#region Monitoramento dos circuitos
+					sb.Append(" QtdeMonitCircuitoGrupo TEXT NULL,");
+					sb.Append(" MonitVelocidade TEXT NULL,");
                     sb.Append(" MonitAceleracao TEXT NULL,");
                     sb.Append(" MonitDelay TEXT NULL,");
                     sb.Append(" MonitTimerDelay TEXT NULL,");
@@ -395,20 +433,38 @@ namespace Percolore.IOConnect.Util
                     #region Sinc Formula
                     sb.Append(" DesabilitaMonitSincFormula TEXT NULL,");
                     sb.Append(" PortaSincFormula TEXT NULL,");
-                    sb.Append(" IpSincFormula TEXT NULL");
-                    #endregion
+                    sb.Append(" IpSincFormula TEXT NULL,");
+					#endregion
 
-                   
+					#region Miscelanea
+					sb.Append(" TimeoutPingTcp TEXT NULL,");
+					sb.Append(" DesabilitaMonitSyncToken TEXT NULL,");
+					sb.Append(" IpSincToken TEXT NULL,");
+					sb.Append(" PortaSincToken TEXT NULL,");
+					sb.Append(" TipoEventos TEXT NULL,");
+					sb.Append(" DesabilitaMonitSyncBkpCalibragem TEXT NULL,");
+					sb.Append(" UrlSincBkpCalibragem TEXT NULL,");
+					sb.Append(" HabilitarRecirculacao TEXT NULL,");
+					sb.Append(" DelayMonitRecirculacao TEXT NULL,");
+					sb.Append(" Address_PlacaMov TEXT NULL,");
+					sb.Append(" NomeDispositivo_PlacaMov TEXT NULL,");
+					sb.Append(" DelayAlertaPlacaMov TEXT NULL,");
+					sb.Append(" HabilitarRecirculacaoAuto TEXT NULL,");
+					sb.Append(" DelayMonitRecirculacaoAuto TEXT NULL,");
+					sb.Append(" DelayNotificacaotRecirculacaoAuto TEXT NULL,");
+					sb.Append(" QtdNotificacaotRecirculacaoAuto TEXT NULL,");
+					sb.Append(" TempoReciAuto TEXT NULL,");
+					sb.Append(" LogBD TEXT NULL,");
+					sb.Append(" NameRemoteAccess TEXT NULL,");
+					sb.Append(" TipoBaseDados TEXT NULL,");
+					sb.Append(" PathBasesDados TEXT NULL,");
+					sb.Append(" LogStatusMaquina TEXT NULL");
 
-                    //sb.Append(" TipoBaseDados TEXT NULL,");
-                    //sb.Append(" PathBasesDados TEXT NULL");
+					#endregion
 
-
-                    sb.Append(");");
+					sb.Append(");");
 
                     string createQuery = sb.ToString();
-                      
-
 
                     SQLiteConnection connectCreate = Util.SQLite.CreateSQLiteConnection(PathFile, false);
                     connectCreate.Open();
