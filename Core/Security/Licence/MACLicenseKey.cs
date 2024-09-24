@@ -11,33 +11,26 @@ namespace Percolore.Core.Security.License
 
         public MACLicenseKey()
         {
-            try
+            List<NetworkInterface> nics = new List<NetworkInterface>();
+            NetworkInterface[] interfaces = NetworkInterface.GetAllNetworkInterfaces();
+
+            foreach (NetworkInterface n in interfaces)
             {
-                List<NetworkInterface> nics = new List<NetworkInterface>();
-                NetworkInterface[] interfaces = NetworkInterface.GetAllNetworkInterfaces();
-
-                foreach (NetworkInterface n in interfaces)
-                {
-                    if (n.NetworkInterfaceType == NetworkInterfaceType.Ethernet)
-                        nics.Add(n);
-                }
-
-                if (nics.Count == 0)
-                {
-                    //Se não houver placa de rede gera código a partir de chave pré-definida
-                    createLicensePair("tacosaregood");
-                }
-                else
-                {
-                    if (nics[0].GetPhysicalAddress().ToString().Equals(""))
-                        createLicensePair("tacosaregood2");
-                    else
-                        createLicensePair(nics[0].GetPhysicalAddress().ToString());
-                }
+                if (n.NetworkInterfaceType == NetworkInterfaceType.Ethernet)
+                    nics.Add(n);
             }
-            catch
+
+            if (nics.Count == 0)
             {
-                createLicensePair("somethingwentverywrong");
+                //Se não houver placa de rede gera código a partir de chave pré-definida
+                createLicensePair("tacosaregood");
+            }
+            else
+            {
+                if (nics[0].GetPhysicalAddress().ToString().Equals(""))
+                    createLicensePair("tacosaregood2");
+                else
+                    createLicensePair(nics[0].GetPhysicalAddress().ToString());
             }
         }
         public MACLicenseKey(string key)

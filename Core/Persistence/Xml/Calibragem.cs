@@ -143,86 +143,74 @@ namespace Percolore.Core.Persistence.Xml
             StringBuilder validacoes = new StringBuilder();
             StringBuilder validacao = new StringBuilder();
 
-            try
+            for (int i = 0; i <= 11; i++)
             {
-                for (int i = 0; i <= 11; i++)
+                validacao.Clear();
+                ValoresVO valores = c.Valores[i];
+
+                //Pulsos
+                if (valores.PulsoHorario == 0)
+                    validacao.AppendLine(Properties.UI.Calibragem_QuantidadePulsosMaiorZero);
+
+                //Velocidade
+                if (valores.Velocidade < 0)
                 {
-                    validacao.Clear();
-                    ValoresVO valores = c.Valores[i];
-
-                    //Pulsos
-                    if (valores.PulsoHorario == 0)
-                        validacao.AppendLine(Properties.UI.Calibragem_QuantidadePulsosMaiorZero);
-
-                    //Velocidade
-                    if (valores.Velocidade < 0)
+                    validacao.AppendLine(Properties.UI.Calibragem_VelocidadeMaiorZero);
+                }
+                else
+                {
+                    /*
+                    //[A velocidade não pode ser maior que a velocidade para o volume 
+                    //na posição imediatamente acima]
+                    if (i > 0)
                     {
-                        validacao.AppendLine(Properties.UI.Calibragem_VelocidadeMaiorZero);
-                    }
-                    else
-                    {
-                        /*
-                        //[A velocidade não pode ser maior que a velocidade para o volume 
-                        //na posição imediatamente acima]
-                        if (i > 0)
+                        int limite = c.Valores[i - 1].Velocidade;
+                        if (valores.Velocidade > limite)
                         {
-                            int limite = c.Valores[i - 1].Velocidade;
-                            if (valores.Velocidade > limite)
-                            {
-                                string texto =
-                                    string.Format(Properties.UI.Calibragem_VelocidadeMenorIgual, limite.ToString());
-                                validacao.AppendLine(texto);
-                            }
+                            string texto =
+                                string.Format(Properties.UI.Calibragem_VelocidadeMenorIgual, limite.ToString());
+                            validacao.AppendLine(texto);
                         }
-                        */
+                    }
+                    */
                         
-                    }
-
-                    //Delay
-                    if (valores.Delay < 0)
-                    {
-                        validacao.AppendLine(Properties.UI.Calibragem_DelayMaiorZero);
-                    }
-                    else
-                    {
-                        /*
-                        //[A velocidade não pode ser maior que a velocidade para o volume 
-                        //na posição imediatamente acima]
-                        if (i > 0)
-                        {
-                            int limite = c.Valores[i - 1].Delay;
-                            if (valores.Delay > limite)
-                            {
-                                string texto =
-                                  string.Format(Properties.UI.Calibragem_DelayMenorIgual, limite.ToString());
-                                validacao.AppendLine(texto);
-                            }
-                        }
-                        */
-                    }
-
-                    if (validacao.Length > 0)
-                    {
-                        string MililitroAbrev =
-                            Properties.UI.Global_UnidadeMedida_Abreviacao_Mililitro;
-                        validacoes.AppendLine("[" + valores.Volume.ToString() + MililitroAbrev);
-                        validacoes.Append(validacao.ToString());
-                        validacoes.AppendLine();
-                    }
                 }
 
-                outMsg = validacoes.ToString();
-                return (validacoes.Length == 0);
+                //Delay
+                if (valores.Delay < 0)
+                {
+                    validacao.AppendLine(Properties.UI.Calibragem_DelayMaiorZero);
+                }
+                else
+                {
+                    /*
+                    //[A velocidade não pode ser maior que a velocidade para o volume 
+                    //na posição imediatamente acima]
+                    if (i > 0)
+                    {
+                        int limite = c.Valores[i - 1].Delay;
+                        if (valores.Delay > limite)
+                        {
+                            string texto =
+                                string.Format(Properties.UI.Calibragem_DelayMenorIgual, limite.ToString());
+                            validacao.AppendLine(texto);
+                        }
+                    }
+                    */
+                }
+
+                if (validacao.Length > 0)
+                {
+                    string MililitroAbrev =
+                        Properties.UI.Global_UnidadeMedida_Abreviacao_Mililitro;
+                    validacoes.AppendLine("[" + valores.Volume.ToString() + MililitroAbrev);
+                    validacoes.Append(validacao.ToString());
+                    validacoes.AppendLine();
+                }
             }
-            catch (Exception)
-            {
-                throw;
-            }
-            finally
-            {
-                validacoes = null;
-                validacao = null;
-            }
+
+            outMsg = validacoes.ToString();
+            return (validacoes.Length == 0);
         }
 
         public static void Add(Calibragem c)

@@ -157,12 +157,7 @@ namespace Percolore.Core.Util
                   Process.GetProcesses().FirstOrDefault(p => p.ProcessName == processName);
             if (keyboard != null)
             {
-                try
-                {
-                    keyboard.Kill();
-                }
-                catch
-                { }            
+                keyboard.Kill();          
             }
         }
 

@@ -44,78 +44,57 @@ namespace Percolore.Core.Persistence.Xml
 
         public static void Persist(Formula formula)
         {
-            try
+            if (formula.Id == Guid.Empty)
             {
-                if (formula.Id == Guid.Empty)
-                {
-                    formula.Id = Guid.NewGuid();
-                    Add(formula);
-                }
-                else
-                {
-                    Update(formula);
-                }
+                formula.Id = Guid.NewGuid();
+                Add(formula);
             }
-            catch
+            else
             {
-                throw;
+                Update(formula);
             }
         }
 
         public static void Delete(Guid id)
         {
-            try
-            {
-                XElement xml = XElement.Load(PathFile);
-                XElement xeFormula =
-                    xml.Elements()
-                    .Where(xe => xe.Attribute("Id").Value == id.ToString())
-                    .First();
+            XElement xml = XElement.Load(PathFile);
+            XElement xeFormula =
+                xml.Elements()
+                .Where(xe => xe.Attribute("Id").Value == id.ToString())
+                .First();
 
-                xeFormula.Remove();
-                xml.Save(PathFile);
-            }
-            catch { throw; }
+            xeFormula.Remove();
+            xml.Save(PathFile);
         }
 
         public static Formula Load(Guid id)
         {
             Formula formula = null;
 
-            try
-            {
-                XElement xml = XElement.Load(PathFile);
-                XElement xeFormula =
-                    xml.Elements()
-                    .Where(xe => xe.Attribute("Id").Value == id.ToString())
-                    .First();
+            XElement xml = XElement.Load(PathFile);
+            XElement xeFormula =
+                xml.Elements()
+                .Where(xe => xe.Attribute("Id").Value == id.ToString())
+                .First();
 
-                formula = new Formula(xeFormula);
-                return formula;
-            }
-            catch { throw; }
-            finally { formula = null; }
+            formula = new Formula(xeFormula);
+            return formula;
         }
 
         public static List<Formula> List()
         {
             List<Formula> list = new List<Formula>();
 
-            try
+            IEnumerable<XElement> xml =
+                XElement.Load(PathFile).Elements();
+
+            foreach (XElement xeFormula in xml)
             {
-                IEnumerable<XElement> xml =
-                    XElement.Load(PathFile).Elements();
-
-                foreach (XElement xeFormula in xml)
-                {
-                    Formula formula = new Formula(xeFormula);
-                    list.Add(formula);
-                }
-
-                return list;
+                Formula formula = new Formula(xeFormula);
+                list.Add(formula);
             }
-            catch { throw; }
-            finally { list = null; }
+
+            return list;
         }
 
         #endregion

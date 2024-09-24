@@ -74,12 +74,7 @@ namespace Percolore.Core.Windows
                 new ManagementObjectSearcher("root\\CIMV2", "SELECT * FROM Win32_BaseBoard");
             foreach (ManagementObject wmi in searcher.Get())
             {
-                try
-                {
-                    return wmi.GetPropertyValue("Manufacturer").ToString();
-                }
-
-                catch { }
+                return wmi.GetPropertyValue("Manufacturer").ToString();
             }
 
             return "Board Maker: Unknown";
@@ -95,11 +90,7 @@ namespace Percolore.Core.Windows
                 new ManagementObjectSearcher("root\\CIMV2", "SELECT * FROM Win32_BaseBoard");
             foreach (ManagementObject wmi in searcher.Get())
             {
-                try
-                {
-                    return wmi.GetPropertyValue("Product").ToString();
-                }
-                catch { }
+                return wmi.GetPropertyValue("Product").ToString();
             }
 
             return "Product: Unknown";
@@ -116,11 +107,7 @@ namespace Percolore.Core.Windows
             {
                 foreach (ManagementObject wmi in searcher.Get())
                 {
-                    try
-                    {
-                        return wmi.GetPropertyValue("Manufacturer").ToString();
-                    }
-                    catch { }
+                    return wmi.GetPropertyValue("Manufacturer").ToString();
                 }
             }
 
@@ -145,17 +132,10 @@ namespace Percolore.Core.Windows
 
             return serialNumber;
 
-
-
             //ManagementObjectSearcher searcher = new ManagementObjectSearcher("root\\CIMV2", "SELECT * FROM Win32_BIOS");
             //foreach (ManagementObject wmi in searcher.Get())
             //{
-            //    try
-            //    {
-            //        return wmi.GetPropertyValue("SerialNumber").ToString();
-
-            //    }
-            //    catch { }
+            //    return wmi.GetPropertyValue("SerialNumber").ToString();
             //}
 
             //return "BIOS Serial Number: Unknown";
@@ -174,13 +154,9 @@ namespace Percolore.Core.Windows
 
             foreach (ManagementObject wmi in searcher.Get())
             {
-                try
-                {
-                    return wmi.GetPropertyValue("Caption").ToString();
-
-                }
-                catch { }
+                return wmi.GetPropertyValue("Caption").ToString();
             }
+
             return "BIOS Caption: Unknown";
         }
 
@@ -195,13 +171,9 @@ namespace Percolore.Core.Windows
 
             foreach (ManagementObject wmi in searcher.Get())
             {
-                try
-                {
-
-                    return wmi.GetPropertyValue("Name").ToString();
-                }
-                catch { }
+                return wmi.GetPropertyValue("Name").ToString();
             }
+
             return "User Account Name: Unknown";
 
         }
@@ -226,6 +198,7 @@ namespace Percolore.Core.Windows
                 mCap = Convert.ToInt64(obj["Capacity"]);
                 MemSize += mCap;
             }
+
             MemSize = (MemSize / 1024) / 1024;
             return MemSize.ToString() + "MB";
         }
@@ -241,11 +214,13 @@ namespace Percolore.Core.Windows
             ObjectQuery oQuery2 = new ObjectQuery("SELECT MemoryDevices FROM Win32_PhysicalMemoryArray");
             ManagementObjectSearcher oSearcher2 = new ManagementObjectSearcher(oMs, oQuery2);
             ManagementObjectCollection oCollection2 = oSearcher2.Get();
+            
             foreach (ManagementObject obj in oCollection2)
             {
                 MemSlots = Convert.ToInt32(obj["MemoryDevices"]);
 
             }
+
             return MemSlots.ToString();
         }
 
@@ -273,6 +248,7 @@ namespace Percolore.Core.Windows
                     cpuMan = obj.Properties["Manufacturer"].Value.ToString();
                 }
             }
+
             return cpuMan;
         }
 
@@ -287,6 +263,7 @@ namespace Percolore.Core.Windows
             ManagementClass mgmt = new ManagementClass("Win32_Processor");
             //create a ManagementObjectCollection to loop through
             ManagementObjectCollection objCol = mgmt.GetInstances();
+            
             //start our loop for all processors found
             foreach (ManagementObject obj in objCol)
             {
@@ -296,6 +273,7 @@ namespace Percolore.Core.Windows
                     cpuClockSpeed = Convert.ToInt32(obj.Properties["CurrentClockSpeed"].Value.ToString());
                 }
             }
+            
             //return the status
             return cpuClockSpeed;
         }
@@ -313,6 +291,7 @@ namespace Percolore.Core.Windows
             //create our ManagementObjectCollection to get the attributes with
             ManagementObjectCollection objCol = mgmt.GetInstances();
             string gateway = String.Empty;
+            
             //loop through all the objects we find
             foreach (ManagementObject obj in objCol)
             {
@@ -331,6 +310,7 @@ namespace Percolore.Core.Windows
                 //dispose of our object
                 obj.Dispose();
             }
+
             //replace the ":" with an empty space, this could also
             //be removed if you wish
             gateway = gateway.Replace(":", "");
@@ -353,6 +333,7 @@ namespace Percolore.Core.Windows
                     break;
                 }
             }
+
             return GHz;
         }
 
@@ -368,14 +349,7 @@ namespace Percolore.Core.Windows
 
             foreach (ManagementObject wmi in searcher.Get())
             {
-                try
-                {
-                    return wmi.GetPropertyValue("CurrentLanguage").ToString();
-
-                }
-
-                catch { }
-
+                return wmi.GetPropertyValue("CurrentLanguage").ToString();
             }
 
             return "BIOS Maker: Unknown";
@@ -392,11 +366,7 @@ namespace Percolore.Core.Windows
                 new ManagementObjectSearcher("SELECT * FROM Win32_OperatingSystem");
             foreach (ManagementObject wmi in searcher.Get())
             {
-                try
-                {
-                    return ((string)wmi["Caption"]).Trim() + ", " + (string)wmi["Version"] + ", " + (string)wmi["OSArchitecture"];
-                }
-                catch { }
+                return ((string)wmi["Caption"]).Trim() + ", " + (string)wmi["Version"] + ", " + (string)wmi["OSArchitecture"];
             }
 
             return "BIOS Maker: Unknown";
@@ -420,6 +390,7 @@ namespace Percolore.Core.Windows
                 //mo.Properties["Name"].Value.ToString();
                 //break;
             }
+
             return info;
         }
 
