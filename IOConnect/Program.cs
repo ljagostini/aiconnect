@@ -1,4 +1,6 @@
-﻿using Percolore.Core;
+﻿using Microsoft.Extensions.Configuration;
+using Percolore.Core;
+using Percolore.Core.Logging;
 using Percolore.Core.Persistence.WindowsRegistry;
 using Percolore.Core.Persistence.Xml;
 
@@ -9,10 +11,26 @@ namespace Percolore.IOConnect
         [STAThread]
         static void Main()
         {
+			// Lendo as configurações do appsettings.json
+			var config = new ConfigurationBuilder()
+				.SetBasePath(AppDomain.CurrentDomain.BaseDirectory)
+				.AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+				.Build();
+
+			// Inicializando o logger com base no appsettings.json
+			LogManager.InitializeLogger(config);
+
+			// Configura os handlers de exceções não tratadas na aplicação.
+			Application.ThreadException += new System.Threading.ThreadExceptionEventHandler(Application_ThreadException);
+			AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(CurrentDomain_UnhandledException);
+
+			Application.SetUnhandledExceptionMode(UnhandledExceptionMode.CatchException);
+
 			// To customize application configuration such as set high DPI settings or default font,
 			// see https://aka.ms/applicationconfiguration.
 			ApplicationConfiguration.Initialize();
             string log_inicializacao = string.Empty;
+            
             #region migrando xml to SQLITE 
 
             #region excluindo os arquivo db caso exista xml referente por default
@@ -766,5 +784,36 @@ namespace Percolore.IOConnect
 
             Application.Run(new fPainelControle());
         }
-    }
+
+		/// <summary>
+        /// Handler para exceções no thread da interface do usuário (UI)
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+		private static void Application_ThreadException(object sender, System.Threading.ThreadExceptionEventArgs e)
+		{
+			// Registra a exceção no arquivo de log
+			LogManager.LogError("Exceção não tratada capturada no thread de UI.", e.Exception);
+
+			// Opcional: Exibe uma mensagem amigável ao usuário
+			MessageBox.Show("Ocorreu um erro inesperado. Por favor, entre em contato com o suporte.", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
+		}
+
+		/// <summary>
+        /// Handler para exceções fora do thread de UI (ex.: threads de background)
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+		private static void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)
+		{
+			if (e.ExceptionObject is Exception ex)
+			{
+				// Registra a exceção no arquivo de log
+				LogManager.LogError("Exceção fatal não tratada capturada em thread não-UI", ex);
+
+				// Opcional: Exibe uma mensagem amigável ao usuário
+				MessageBox.Show("Ocorreu um erro fatal. O aplicativo poderá ser encerrado.", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
+			}
+		}
+	}
 }

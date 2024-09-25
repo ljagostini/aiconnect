@@ -1,25 +1,18 @@
 ﻿using Microsoft.Win32;
 using Percolore.Core;
+using Percolore.Core.Logging;
 using Percolore.Core.Persistence.WindowsRegistry;
-using Percolore.Core.Persistence.Xml;
 using Percolore.Core.Security.License;
-using Percolore.Core.UserControl;
-using Percolore.Core.Util;
-using System;
-using System.Collections.Generic;
 using System.Data;
 using System.Data.SQLite;
 using System.Diagnostics;
 using System.Globalization;
-using System.IO;
-using System.Linq;
 using System.Reflection;
 using System.Text;
-using System.Windows.Forms;
 
 namespace Percolore.IOConnect
 {
-    public class Init
+	public class Init
     {
 
         public static int versaoReleaseBD = 66;
@@ -231,7 +224,7 @@ namespace Percolore.IOConnect
             }
             catch (Exception ex)
             {
-                string log = LogHelper.ExceptionToLog(ex);
+                string log = LogManager.ExceptionToLog(ex);
                 Log.Logar(TipoLog.Erro, Util.ObjectParametros.PathDiretorioSistema, log);
 
                 return false;
@@ -265,7 +258,7 @@ namespace Percolore.IOConnect
             }
             catch (Exception ex)
             {
-                string log = LogHelper.ExceptionToLog(ex);
+                string log = LogManager.ExceptionToLog(ex);
                 Log.Logar(TipoLog.Erro, Util.ObjectParametros.PathDiretorioSistema, log);
                 return false;
             }
@@ -343,7 +336,7 @@ namespace Percolore.IOConnect
             }
             catch (Exception ex)
             {
-                string log = LogHelper.ExceptionToLog(ex);
+                string log = LogManager.ExceptionToLog(ex);
                 Log.Logar(TipoLog.Erro, Util.ObjectParametros.PathDiretorioSistema, log);
                 return false;
             }
@@ -617,7 +610,7 @@ namespace Percolore.IOConnect
             }
             catch (Exception ex)
             {
-                string log = LogHelper.ExceptionToLog(ex);
+                string log = LogManager.ExceptionToLog(ex);
                 Log.Logar(
                     TipoLog.Erro, Util.ObjectParametros.PathDiretorioSistema, log);
 
@@ -724,7 +717,7 @@ namespace Percolore.IOConnect
             }
             catch (Exception ex)
             {
-                string log = LogHelper.ExceptionToLog(ex);
+                string log = LogManager.ExceptionToLog(ex);
                 Log.Logar(TipoLog.Erro, Util.ObjectParametros.PathDiretorioSistema, log);
                 return false;
             }
