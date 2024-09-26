@@ -16,11 +16,25 @@ namespace Percolore.IOConnect.Util
 		{
 			foreach (BluetoothDeviceInfo d in result)
 			{
-				try
+				if (d.DeviceName.Contains("HC-06-") || d.DeviceName.Contains("HC-05-"))
 				{
-					if (d.DeviceName.Contains("HC-06-") || d.DeviceName.Contains("HC-05-"))
+					bool pairResult = BluetoothSecurity.PairRequest(d.DeviceAddress, "avsb");
+
+					if (pairResult)
 					{
-						bool pairResult = BluetoothSecurity.PairRequest(d.DeviceAddress, "avsb");
+						Log.Logar(
+							TipoLog.Comunicacao,
+							Percolore.IOConnect.Util.ObjectParametros.PathDiretorioSistema,
+							"Dispositivo Pareando Bluetooth: " + d.DeviceName
+							);
+
+						bool state = true;
+						foreach (var service in d.InstalledServices)
+							d.SetServiceState(service, state);
+					}
+					else if (d.DeviceName.Contains("HC-06-"))
+					{
+						pairResult = BluetoothSecurity.PairRequest(d.DeviceAddress, "1500");
 
 						if (pairResult)
 						{
@@ -30,41 +44,11 @@ namespace Percolore.IOConnect.Util
 								"Dispositivo Pareando Bluetooth: " + d.DeviceName
 								);
 
-							try
-							{
-								bool state = true;
-								foreach (var service in d.InstalledServices)
-									d.SetServiceState(service, state);
-							}
-							catch
-							{ }
-						}
-						else if (d.DeviceName.Contains("HC-06-"))
-						{
-							pairResult = BluetoothSecurity.PairRequest(d.DeviceAddress, "1500");
-
-							if (pairResult)
-							{
-								Log.Logar(
-									TipoLog.Comunicacao,
-									Percolore.IOConnect.Util.ObjectParametros.PathDiretorioSistema,
-									"Dispositivo Pareando Bluetooth: " + d.DeviceName
-									);
-
-								try
-								{
-									bool state = true;
-									foreach (var service in d.InstalledServices)
-										d.SetServiceState(service, state);
-								}
-								catch
-								{ }
-							}
+							bool state = true;
+							foreach (var service in d.InstalledServices)
+								d.SetServiceState(service, state);
 						}
 					}
-				}
-				catch
-				{
 				}
 			}
 		}

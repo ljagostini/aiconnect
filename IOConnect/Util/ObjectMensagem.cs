@@ -1,18 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data.SQLite;
-using System.IO;
-using System.Linq;
+﻿using System.Data.SQLite;
 using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
-
 
 namespace Percolore.IOConnect.Util
 {
-    public class ObjectMensagem
+	public class ObjectMensagem
     {
-
         public static readonly string PathFile = Path.Combine(Environment.CurrentDirectory, "Mensagens.db");
         public static readonly string FileName = Path.GetFileName(PathFile);
 
@@ -23,124 +15,101 @@ namespace Percolore.IOConnect.Util
 
         public static void CreateBD()
         {
-            try
+            if (!File.Exists(PathFile))
             {
-                if (!File.Exists(PathFile))
-                {
 
-                    SQLiteConnection connectCreate = Util.SQLite.CreateSQLiteConnection(PathFile, false);
-                    connectCreate.Open();
-					// Open connection to create DB if not exists.
-					connectCreate.Close();
-                    Thread.Sleep(2000);
-                    if (File.Exists(PathFile))
+                SQLiteConnection connectCreate = Util.SQLite.CreateSQLiteConnection(PathFile, false);
+                connectCreate.Open();
+				// Open connection to create DB if not exists.
+				connectCreate.Close();
+                Thread.Sleep(2000);
+                if (File.Exists(PathFile))
+                {
+                    StringBuilder sb = new StringBuilder();
+                    sb.Append("CREATE TABLE IF NOT EXISTS [Mensagem] (Id INTEGER PRIMARY KEY, Nome TEXT NULL, Conteudo TEXT NULL, IdIdioma TEXT NULL);");
+                    string createQuery = sb.ToString();
+                    using (SQLiteConnection conn = Util.SQLite.CreateSQLiteConnection(PathFile, false))
                     {
-                        StringBuilder sb = new StringBuilder();
-                        sb.Append("CREATE TABLE IF NOT EXISTS [Mensagem] (Id INTEGER PRIMARY KEY, Nome TEXT NULL, Conteudo TEXT NULL, IdIdioma TEXT NULL);");
-                        string createQuery = sb.ToString();
-                        using (SQLiteConnection conn = Util.SQLite.CreateSQLiteConnection(PathFile, false))
+                        using (SQLiteCommand cmd = new SQLiteCommand(conn))
                         {
-                            using (SQLiteCommand cmd = new SQLiteCommand(conn))
-                            {
-                                conn.Open();
-                                cmd.CommandText = createQuery;
-                                cmd.ExecuteNonQuery();
-                                conn.Close();
-                            }
+                            conn.Open();
+                            cmd.CommandText = createQuery;
+                            cmd.ExecuteNonQuery();
+                            conn.Close();
                         }
                     }
                 }
             }
-            catch
-            { }
         }
+
         public static void LoadMessage()
         {
-            try
-            {
-                Negocio.IdiomaResxExtensao.SetIDiomaRex();
-                List<ObjectMensagem> local = List();
-                SetConteudo(local);
-                
-            }
-            catch
-            { }
+            Negocio.IdiomaResxExtensao.SetIDiomaRex();
+            List<ObjectMensagem> local = List();
+            SetConteudo(local);
         }
      
         public ObjectMensagem Load(int id)
         {
             ObjectMensagem aux = null;
-            try
+            
+            using (SQLiteConnection conn = Util.SQLite.CreateSQLiteConnection(PathFile, false))
             {
-                using (SQLiteConnection conn = Util.SQLite.CreateSQLiteConnection(PathFile, false))
+                using (SQLiteCommand cmd = new SQLiteCommand(conn))
                 {
-                    using (SQLiteCommand cmd = new SQLiteCommand(conn))
+                    conn.Open();
+
+                    cmd.CommandText = "SELECT * FROM Mensagem WHERE Id = " + id.ToString() + ";";
+
+                    using (SQLiteDataReader reader = cmd.ExecuteReader())
                     {
-                        conn.Open();
-
-                        cmd.CommandText = "SELECT * FROM Mensagem WHERE Id = " + id.ToString() + ";";
-
-                        using (SQLiteDataReader reader = cmd.ExecuteReader())
+                        while (reader.Read())
                         {
-                            while (reader.Read())
-                            {
-                                aux = new ObjectMensagem();
-                                aux.Id = int.Parse(reader["Id"].ToString());
-                                aux.Nome = reader["Nome"].ToString();
-                                aux.Conteudo = reader["Conteudo"].ToString();
-                                break;
-                            }
+                            aux = new ObjectMensagem();
+                            aux.Id = int.Parse(reader["Id"].ToString());
+                            aux.Nome = reader["Nome"].ToString();
+                            aux.Conteudo = reader["Conteudo"].ToString();
+                            break;
                         }
                     }
-                    conn.Close();
                 }
-
-
-                return aux;
+                conn.Close();
             }
-            catch
-            {
-                throw;
-            }
+
+            return aux;
         }
 
         public static List<ObjectMensagem> List()
         {
             List<ObjectMensagem> list = new List<ObjectMensagem>();
             ObjectParametros op = ObjectParametros.Load();
-            try
+            
+            using (SQLiteConnection conn = Util.SQLite.CreateSQLiteConnection(PathFile, false))
             {
-                using (SQLiteConnection conn = Util.SQLite.CreateSQLiteConnection(PathFile, false))
+                using (SQLiteCommand cmd = new SQLiteCommand(conn))
                 {
-                    using (SQLiteCommand cmd = new SQLiteCommand(conn))
+                    conn.Open();
+
+                    cmd.CommandText = "SELECT * FROM Mensagem WHERE IdIdioma = '" + op.IdIdioma.ToString() + "';";
+
+                    using (SQLiteDataReader reader = cmd.ExecuteReader())
                     {
-                        conn.Open();
-
-                        cmd.CommandText = "SELECT * FROM Mensagem WHERE IdIdioma = '" + op.IdIdioma.ToString() + "';";
-
-                        using (SQLiteDataReader reader = cmd.ExecuteReader())
+                        while (reader.Read())
                         {
-                            while (reader.Read())
-                            {
-                                ObjectMensagem aux = new ObjectMensagem();
-                                aux.Id = int.Parse(reader["Id"].ToString());
-                                aux.Nome = reader["Nome"].ToString();
-                                aux.Conteudo = reader["Conteudo"].ToString();
-                                aux.IdIdioma = reader["IdIdioma"].ToString();
-                                list.Add(aux);
-                            }
+                            ObjectMensagem aux = new ObjectMensagem();
+                            aux.Id = int.Parse(reader["Id"].ToString());
+                            aux.Nome = reader["Nome"].ToString();
+                            aux.Conteudo = reader["Conteudo"].ToString();
+                            aux.IdIdioma = reader["IdIdioma"].ToString();
+                            list.Add(aux);
                         }
                     }
-                    conn.Close();
                 }
+                conn.Close();
             }
-            catch
-            {
 
-            }
             op = null;
             return list;
-
         }
 
         private static void SetConteudoObj(ObjectMensagem aux)
@@ -1081,10 +1050,7 @@ namespace Percolore.IOConnect.Util
                     }
                     count++;
                 }
-
             }
         }
-
-
     }
 }

@@ -1,15 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data.SQLite;
-using System.IO;
-using System.Linq;
+﻿using System.Data.SQLite;
 using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace Percolore.IOConnect.Util
 {
-    public class ObjectLimpBicos
+	public class ObjectLimpBicos
     {
         public static readonly string PathFile = Path.Combine(Environment.CurrentDirectory, "LimpezaBicos.db");
         public static readonly string FileName = Path.GetFileName(PathFile);
@@ -23,137 +17,116 @@ namespace Percolore.IOConnect.Util
         #region Métodos
         public static void CreateBD()
         {
-            try
+            if (!File.Exists(PathFile))
             {
-                if (!File.Exists(PathFile))
+                SQLiteConnection connectCreate = Util.SQLite.CreateSQLiteConnection(PathFile, false);
+                connectCreate.Open();
+				// Open connection to create DB if not exists.
+				connectCreate.Close();
+                Thread.Sleep(2000);
+                if (File.Exists(PathFile))
                 {
-
-                    SQLiteConnection connectCreate = Util.SQLite.CreateSQLiteConnection(PathFile, false);
-                    connectCreate.Open();
-					// Open connection to create DB if not exists.
-					connectCreate.Close();
-                    Thread.Sleep(2000);
-                    if (File.Exists(PathFile))
+                    StringBuilder sb = new StringBuilder();
+                    sb.Append("CREATE TABLE IF NOT EXISTS [Periodos] (Id INTEGER PRIMARY KEY, Horario TEXT NULL);");
+                    string createQuery = sb.ToString();
+                    using (SQLiteConnection conn = Util.SQLite.CreateSQLiteConnection(PathFile, false))
                     {
-                        StringBuilder sb = new StringBuilder();
-                        sb.Append("CREATE TABLE IF NOT EXISTS [Periodos] (Id INTEGER PRIMARY KEY, Horario TEXT NULL);");
-                        string createQuery = sb.ToString();
-                        using (SQLiteConnection conn = Util.SQLite.CreateSQLiteConnection(PathFile, false))
+                        using (SQLiteCommand cmd = new SQLiteCommand(conn))
                         {
-                            using (SQLiteCommand cmd = new SQLiteCommand(conn))
-                            {
-                                conn.Open();
-                                cmd.CommandText = createQuery;
-                                cmd.ExecuteNonQuery();
-                                conn.Close();
-                            }
+                            conn.Open();
+                            cmd.CommandText = createQuery;
+                            cmd.ExecuteNonQuery();
+                            conn.Close();
                         }
-                        sb = new StringBuilder();
-                        sb.Append("CREATE TABLE IF NOT EXISTS [Executado] (Id INTEGER PRIMARY KEY, Horario TEXT NULL);");
-                        createQuery = sb.ToString();
-                        using (SQLiteConnection conn = Util.SQLite.CreateSQLiteConnection(PathFile, false))
+                    }
+                    sb = new StringBuilder();
+                    sb.Append("CREATE TABLE IF NOT EXISTS [Executado] (Id INTEGER PRIMARY KEY, Horario TEXT NULL);");
+                    createQuery = sb.ToString();
+                    using (SQLiteConnection conn = Util.SQLite.CreateSQLiteConnection(PathFile, false))
+                    {
+                        using (SQLiteCommand cmd = new SQLiteCommand(conn))
                         {
-                            using (SQLiteCommand cmd = new SQLiteCommand(conn))
-                            {
-                                conn.Open();
-                                cmd.CommandText = createQuery;
-                                cmd.ExecuteNonQuery();
-                                conn.Close();
-                            }
+                            conn.Open();
+                            cmd.CommandText = createQuery;
+                            cmd.ExecuteNonQuery();
+                            conn.Close();
                         }
-                        string dataLastHorario = string.Format("{0:yyyy-MM-dd HH:mm:ss}", DateTime.Now.AddDays(-1));
-                        sb = new StringBuilder();
-                        sb.Append("INSERT INTO Executado (Horario) VALUES ('" + dataLastHorario + "');");
-                        createQuery = sb.ToString();
-                        using (SQLiteConnection conn = Util.SQLite.CreateSQLiteConnection(PathFile, false))
+                    }
+                    string dataLastHorario = string.Format("{0:yyyy-MM-dd HH:mm:ss}", DateTime.Now.AddDays(-1));
+                    sb = new StringBuilder();
+                    sb.Append("INSERT INTO Executado (Horario) VALUES ('" + dataLastHorario + "');");
+                    createQuery = sb.ToString();
+                    using (SQLiteConnection conn = Util.SQLite.CreateSQLiteConnection(PathFile, false))
+                    {
+                        using (SQLiteCommand cmd = new SQLiteCommand(conn))
                         {
-                            using (SQLiteCommand cmd = new SQLiteCommand(conn))
-                            {
-                                conn.Open();
-                                cmd.CommandText = createQuery;
-                                cmd.ExecuteNonQuery();
-                                conn.Close();
-                            }
+                            conn.Open();
+                            cmd.CommandText = createQuery;
+                            cmd.ExecuteNonQuery();
+                            conn.Close();
                         }
                     }
                 }
             }
-            catch
-            { }
         }
 
         public static ObjectLimpBicos Load(int id)
         {
             ObjectLimpBicos per = null;
-            try
+            
+            using (SQLiteConnection conn = Util.SQLite.CreateSQLiteConnection(PathFile, false))
             {
-                using (SQLiteConnection conn = Util.SQLite.CreateSQLiteConnection(PathFile, false))
+                using (SQLiteCommand cmd = new SQLiteCommand(conn))
                 {
-                    using (SQLiteCommand cmd = new SQLiteCommand(conn))
+                    conn.Open();
+
+                    cmd.CommandText = "SELECT * FROM Periodos WHERE Id = " + id.ToString() + ";";
+
+                    using (SQLiteDataReader reader = cmd.ExecuteReader())
                     {
-                        conn.Open();
-
-                        cmd.CommandText = "SELECT * FROM Periodos WHERE Id = " + id.ToString() + ";";
-
-                        using (SQLiteDataReader reader = cmd.ExecuteReader())
+                        while (reader.Read())
                         {
-                            while (reader.Read())
-                            {
-                                per = new ObjectLimpBicos();
-                                per.Id = int.Parse(reader["Id"].ToString());
-                                per.Horario = TimeSpan.Parse(reader["Horario"].ToString());                                
-                                break;
-                            }
+                            per = new ObjectLimpBicos();
+                            per.Id = int.Parse(reader["Id"].ToString());
+                            per.Horario = TimeSpan.Parse(reader["Horario"].ToString());                                
+                            break;
                         }
                     }
-                    conn.Close();
                 }
-
-
-                return per;
+                conn.Close();
             }
-            catch
-            {
-                throw;
-            }
+
+            return per;
         }
-     
 
         public static List<ObjectLimpBicos> List()
         {
             List<ObjectLimpBicos> list = new List<ObjectLimpBicos>();
 
-            try
+            using (SQLiteConnection conn = Util.SQLite.CreateSQLiteConnection(PathFile, false))
             {
-                using (SQLiteConnection conn = Util.SQLite.CreateSQLiteConnection(PathFile, false))
+                using (SQLiteCommand cmd = new SQLiteCommand(conn))
                 {
-                    using (SQLiteCommand cmd = new SQLiteCommand(conn))
+                    conn.Open();
+
+                    cmd.CommandText = "SELECT * FROM Periodos;";
+
+                    using (SQLiteDataReader reader = cmd.ExecuteReader())
                     {
-                        conn.Open();
-
-                        cmd.CommandText = "SELECT * FROM Periodos;";
-
-                        using (SQLiteDataReader reader = cmd.ExecuteReader())
+                        while (reader.Read())
                         {
-                            while (reader.Read())
-                            {
-                                ObjectLimpBicos per = new ObjectLimpBicos();
-                                per.Id = int.Parse(reader["Id"].ToString());
-                                per.Horario = TimeSpan.Parse(reader["Horario"].ToString());
+                            ObjectLimpBicos per = new ObjectLimpBicos();
+                            per.Id = int.Parse(reader["Id"].ToString());
+                            per.Horario = TimeSpan.Parse(reader["Horario"].ToString());
                                
-                                list.Add(per);
-                            }
+                            list.Add(per);
                         }
                     }
-                    conn.Close();
                 }
+                conn.Close();
             }
-            catch
-            {
 
-            }
             return list;
-
         }
 
         public static bool Validate(List<ObjectLimpBicos> lista, out string outMsg)
@@ -187,218 +160,182 @@ namespace Percolore.IOConnect.Util
 
         public static void Persist(ObjectLimpBicos per)
         {
-            try
+            ObjectLimpBicos objc = null;
+
+            if (per.Id > 0)
             {
-                ObjectLimpBicos objc = null;
-                if (per.Id > 0)
-                {
-                    objc = Load(per.Id);
-                }
-                //Insert
-                if (objc == null)
-                {
-                    StringBuilder sb = new StringBuilder();
-                    using (SQLiteConnection conn = Util.SQLite.CreateSQLiteConnection(PathFile, false))
-                    {
-                        using (SQLiteCommand cmd = new SQLiteCommand(conn))
-                        {
-                            conn.Open();
-                            sb.Append("INSERT INTO Periodos (Horario) VALUES (");                         
-                            sb.Append("'" + per.Horario.Value.ToString(@"hh\:mm\:ss") + "' ");
-                            sb.Append(");");
-
-                            cmd.CommandText = sb.ToString();
-
-                            cmd.ExecuteNonQuery();
-
-                            conn.Close();
-                        }
-                    }
-                }
-                //Update
-                else
-                {
-                    StringBuilder sb = new StringBuilder();
-                    using (SQLiteConnection conn = Util.SQLite.CreateSQLiteConnection(PathFile, false))
-                    {
-                        using (SQLiteCommand cmd = new SQLiteCommand(conn))
-                        {
-                            conn.Open();
-                            sb.Append("UPDATE Periodos SET "); // 
-                            sb.Append("Horario = '" + per.Horario.Value.ToString(@"hh\:mm\:ss") + "'");                            
-                            sb.Append(" WHERE Id = " + per.Id.ToString() + ";");
-
-                            cmd.CommandText = sb.ToString();
-
-                            cmd.ExecuteNonQuery();
-
-                            conn.Close();
-                        }
-                    }
-                }
-
+                objc = Load(per.Id);
             }
-            catch
+            //Insert
+            if (objc == null)
             {
-                throw;
+                StringBuilder sb = new StringBuilder();
+                using (SQLiteConnection conn = Util.SQLite.CreateSQLiteConnection(PathFile, false))
+                {
+                    using (SQLiteCommand cmd = new SQLiteCommand(conn))
+                    {
+                        conn.Open();
+                        sb.Append("INSERT INTO Periodos (Horario) VALUES (");                         
+                        sb.Append("'" + per.Horario.Value.ToString(@"hh\:mm\:ss") + "' ");
+                        sb.Append(");");
+
+                        cmd.CommandText = sb.ToString();
+
+                        cmd.ExecuteNonQuery();
+
+                        conn.Close();
+                    }
+                }
+            }
+            //Update
+            else
+            {
+                StringBuilder sb = new StringBuilder();
+                using (SQLiteConnection conn = Util.SQLite.CreateSQLiteConnection(PathFile, false))
+                {
+                    using (SQLiteCommand cmd = new SQLiteCommand(conn))
+                    {
+                        conn.Open();
+                        sb.Append("UPDATE Periodos SET "); // 
+                        sb.Append("Horario = '" + per.Horario.Value.ToString(@"hh\:mm\:ss") + "'");                            
+                        sb.Append(" WHERE Id = " + per.Id.ToString() + ";");
+
+                        cmd.CommandText = sb.ToString();
+
+                        cmd.ExecuteNonQuery();
+
+                        conn.Close();
+                    }
+                }
             }
         }
 
         public static void Persist(List<ObjectLimpBicos> lista)
         {
-            try
+            if (lista != null && lista.Count > 0)
             {
-                if (lista != null && lista.Count > 0)
+                foreach (ObjectLimpBicos per in lista)
                 {
-                    foreach (ObjectLimpBicos per in lista)
+                    ObjectLimpBicos objc = null;
+                    if (per.Id > 0)
                     {
-                        ObjectLimpBicos objc = null;
-                        if (per.Id > 0)
+                        objc = Load(per.Id);
+                    }
+                    //Insert
+                    if (objc == null)
+                    {
+                        StringBuilder sb = new StringBuilder();
+                        using (SQLiteConnection conn = Util.SQLite.CreateSQLiteConnection(PathFile, false))
                         {
-                            objc = Load(per.Id);
-                        }
-                        //Insert
-                        if (objc == null)
-                        {
-                            StringBuilder sb = new StringBuilder();
-                            using (SQLiteConnection conn = Util.SQLite.CreateSQLiteConnection(PathFile, false))
+                            using (SQLiteCommand cmd = new SQLiteCommand(conn))
                             {
-                                using (SQLiteCommand cmd = new SQLiteCommand(conn))
-                                {
-                                    conn.Open();
-                                    sb.Append("INSERT INTO Periodos (Horario) VALUES (");
-                                    sb.Append("'" + per.Horario.Value.ToString(@"hh\:mm\:ss") + "' ");
-                                    sb.Append(");");
+                                conn.Open();
+                                sb.Append("INSERT INTO Periodos (Horario) VALUES (");
+                                sb.Append("'" + per.Horario.Value.ToString(@"hh\:mm\:ss") + "' ");
+                                sb.Append(");");
 
-                                    cmd.CommandText = sb.ToString();
+                                cmd.CommandText = sb.ToString();
 
-                                    cmd.ExecuteNonQuery();
+                                cmd.ExecuteNonQuery();
 
-                                    conn.Close();
-                                }
+                                conn.Close();
                             }
                         }
-                        //Update
-                        else
+                    }
+                    //Update
+                    else
+                    {
+                        StringBuilder sb = new StringBuilder();
+                        using (SQLiteConnection conn = Util.SQLite.CreateSQLiteConnection(PathFile, false))
                         {
-                            StringBuilder sb = new StringBuilder();
-                            using (SQLiteConnection conn = Util.SQLite.CreateSQLiteConnection(PathFile, false))
+                            using (SQLiteCommand cmd = new SQLiteCommand(conn))
                             {
-                                using (SQLiteCommand cmd = new SQLiteCommand(conn))
-                                {
-                                    conn.Open();
-                                    sb.Append("UPDATE Periodos SET "); // 
-                                    sb.Append("Horario = '" + per.Horario.Value.ToString(@"hh\:mm\:ss") + "'");
-                                    sb.Append(" WHERE Id = " + per.Id.ToString() + ";");
+                                conn.Open();
+                                sb.Append("UPDATE Periodos SET "); // 
+                                sb.Append("Horario = '" + per.Horario.Value.ToString(@"hh\:mm\:ss") + "'");
+                                sb.Append(" WHERE Id = " + per.Id.ToString() + ";");
 
-                                    cmd.CommandText = sb.ToString();
+                                cmd.CommandText = sb.ToString();
 
-                                    cmd.ExecuteNonQuery();
+                                cmd.ExecuteNonQuery();
 
-                                    conn.Close();
-                                }
+                                conn.Close();
                             }
                         }
                     }
                 }
-            }
-            catch
-            {
-                throw;
             }
         }
 
         public static bool LimpBicos_Delete(int id)
         {
             bool retorno = false;
-            try
+            
+            StringBuilder sb = new StringBuilder();
+            using (SQLiteConnection conn = Util.SQLite.CreateSQLiteConnection(PathFile, false))
             {
-                StringBuilder sb = new StringBuilder();
-                using (SQLiteConnection conn = Util.SQLite.CreateSQLiteConnection(PathFile, false))
+                using (SQLiteCommand cmd = new SQLiteCommand(conn))
                 {
-                    using (SQLiteCommand cmd = new SQLiteCommand(conn))
-                    {
-                        conn.Open();
-                        sb.Append("Delete From Periodos WHERE Id = " + id.ToString() + ";");
-                        cmd.CommandText = sb.ToString();
+                    conn.Open();
+                    sb.Append("Delete From Periodos WHERE Id = " + id.ToString() + ";");
+                    cmd.CommandText = sb.ToString();
 
-                        cmd.ExecuteNonQuery();
+                    retorno = cmd.ExecuteNonQuery() > 0;
 
-                        conn.Close();
-                    }
+                    conn.Close();
                 }
+            }
 
-                retorno = true;
-            }
-            catch
-            {
-            }
             return retorno;
         }
 
         public static void UpdateExecutado(DateTime dtExecutado)
         {
-            try
+            StringBuilder sb = new StringBuilder();
+            using (SQLiteConnection conn = Util.SQLite.CreateSQLiteConnection(PathFile, false))
             {
-                StringBuilder sb = new StringBuilder();
-                using (SQLiteConnection conn = Util.SQLite.CreateSQLiteConnection(PathFile, false))
+                using (SQLiteCommand cmd = new SQLiteCommand(conn))
                 {
-                    using (SQLiteCommand cmd = new SQLiteCommand(conn))
-                    {
-                        conn.Open();
-                        sb.Append("UPDATE Executado SET "); // 
-                        sb.Append("Horario = '" + string.Format("{0:yyyy-MM-dd HH:mm:ss}", dtExecutado) + "';");
+                    conn.Open();
+                    sb.Append("UPDATE Executado SET "); // 
+                    sb.Append("Horario = '" + string.Format("{0:yyyy-MM-dd HH:mm:ss}", dtExecutado) + "';");
                        
 
-                        cmd.CommandText = sb.ToString();
+                    cmd.CommandText = sb.ToString();
 
-                        cmd.ExecuteNonQuery();
+                    cmd.ExecuteNonQuery();
 
-                        conn.Close();
-                    }
+                    conn.Close();
                 }
-
-            }
-            catch
-            {
-                throw;
             }
         }
 
         public static DateTime LoadExecutado()
         {
             DateTime dtExecutado = DateTime.Now;
-            try
+            
+            using (SQLiteConnection conn = Util.SQLite.CreateSQLiteConnection(PathFile, false))
             {
-                using (SQLiteConnection conn = Util.SQLite.CreateSQLiteConnection(PathFile, false))
+                using (SQLiteCommand cmd = new SQLiteCommand(conn))
                 {
-                    using (SQLiteCommand cmd = new SQLiteCommand(conn))
+                    conn.Open();
+
+                    cmd.CommandText = "SELECT * FROM Executado;";
+
+                    using (SQLiteDataReader reader = cmd.ExecuteReader())
                     {
-                        conn.Open();
-
-                        cmd.CommandText = "SELECT * FROM Executado;";
-
-                        using (SQLiteDataReader reader = cmd.ExecuteReader())
+                        while (reader.Read())
                         {
-                            while (reader.Read())
-                            {
-                                dtExecutado = Convert.ToDateTime(reader["Horario"].ToString());
-                                break;
-                            }
+                            dtExecutado = Convert.ToDateTime(reader["Horario"].ToString());
+                            break;
                         }
                     }
-                    conn.Close();
                 }
-
-
-                return dtExecutado;
+                conn.Close();
             }
-            catch
-            {
-                throw;
-            }
+
+            return dtExecutado;
         }
-
 
         #endregion
     }
