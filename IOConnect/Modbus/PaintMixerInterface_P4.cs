@@ -1,79 +1,73 @@
-﻿using InTheHand.Net.Bluetooth;
-using InTheHand.Net.Sockets;
-using Percolore.Core.Persistence.Xml;
+﻿using InTheHand.Net.Sockets;
 using Percolore.IOConnect;
 using Percolore.IOConnect.Util;
-using System;
-using System.Collections.Generic;
 using System.IO.Ports;
-using System.Text.RegularExpressions;
-using System.Threading;
-using WSMBS;
 
 namespace PaintMixer
 {
-    /// <summary>
-    /// Basic wrapper around the S3MBPC2 Modbus interface for the new firmware</summary>
-    /// <remarks>
-    /// This is a basic wrapper around the Modbus interface to the new board firmware for 
-    /// the S3MBPC2 (16 motor paint mixer control board). Like the interface for the 
-    /// last firmware, it uses the WSMBS.dll library from http://www.modbustools.com/.
-    /// 
-    /// Usage is fairly straight forward:
-    /// 
-    /// The constructor receives the Modbus slave address and COM port number. 
-    /// To open the COM port, call Connect, which will fail if the COM port is
-    /// open in another application, doesn't exist, or doesn't support 9600 baud,
-    /// one stop bit, even parity, eight data bits as a config.
-    /// 
-    /// To close the COM port, call disconnect. While not connected, all other public
-    /// methods will fail.
-    /// 
-    /// Once connected, there are two public methods to perform the motion routine:
-    /// Run and RunReverse. Both functions take three int[16] arrays containing the
-    /// distance each motor should move in steps, the velocity each motor should 
-    /// reach (in steps/sec), and the rate of acceleration/deceleration (in
-    /// steps/sec^2)
-    /// 
-    /// The Run method just moves each motor, whereas RunReverse includes an additional
-    /// reverse move (to suck the last drop of paint back into the pump) specified by two
-    /// parameters: the delay between the normal move and the reverse move, and an int[16] array
-    /// providing the length of the reverse move in steps for each motor.
-    /// 
-    /// When one of these methods is called, the move will begin, and the Busy flag in the
-    /// Status property will become true. The move is complete once the Busy flag becomes
-    /// false again.
-    /// 
-    /// While the move takes place, some information on the current state can be obtained:
-    /// <list type="bullet">
-    ///     <item><description>
-    ///     The Status flags Moving, Reving, and Delaying each indicate which portion of the move
-    ///     is currently occuring (only one of these will be enabled at a time).
-    ///     </item></description>
-    ///     <item><description>
-    ///     The current motor property returns the index (0 indexed) of the motor that is
-    ///     currently moving.
-    ///     </item></description>
-    /// </list>
-    /// 
-    /// To abrubtly abort motion, call the Halt method, and then clear the halt with Unhalt or
-    /// by simply performing a move.
-    /// 
-    /// Note that all of the methods and properties here perform blocking I/O operations on the
-    /// serial port. The Run and ReverseRun also sit in an idle loop for about 1 ms or 2. As such, 
-    /// consider operating this interface in a separate thread from GUI event loop if you find it
-    /// adds undesirable delays/jitters to the UI.
-    /// 
-    /// When polling the Status and CurrentMotor properties while a move takes place, it is
-    /// reccomended that you do not poll more than once every 100 milliseconds, to avoid 
-    /// "Denial of Servicing" the board and slowing down the motion control code. It is likely that
-    /// poll rates of less than this are fine, but they are probably useless and put an uneeded load on 
-    /// the board to process a bunch of redundant requests.
-    /// 
-    /// </remarks>
-    class PaintMixerInterface_P4 : IDisposable
+	/// <summary>
+	/// Basic wrapper around the S3MBPC2 Modbus interface for the new firmware</summary>
+	/// <remarks>
+	/// This is a basic wrapper around the Modbus interface to the new board firmware for 
+	/// the S3MBPC2 (16 motor paint mixer control board). Like the interface for the 
+	/// last firmware, it uses the WSMBS.dll library from http://www.modbustools.com/.
+	/// 
+	/// Usage is fairly straight forward:
+	/// 
+	/// The constructor receives the Modbus slave address and COM port number. 
+	/// To open the COM port, call Connect, which will fail if the COM port is
+	/// open in another application, doesn't exist, or doesn't support 9600 baud,
+	/// one stop bit, even parity, eight data bits as a config.
+	/// 
+	/// To close the COM port, call disconnect. While not connected, all other public
+	/// methods will fail.
+	/// 
+	/// Once connected, there are two public methods to perform the motion routine:
+	/// Run and RunReverse. Both functions take three int[16] arrays containing the
+	/// distance each motor should move in steps, the velocity each motor should 
+	/// reach (in steps/sec), and the rate of acceleration/deceleration (in
+	/// steps/sec^2)
+	/// 
+	/// The Run method just moves each motor, whereas RunReverse includes an additional
+	/// reverse move (to suck the last drop of paint back into the pump) specified by two
+	/// parameters: the delay between the normal move and the reverse move, and an int[16] array
+	/// providing the length of the reverse move in steps for each motor.
+	/// 
+	/// When one of these methods is called, the move will begin, and the Busy flag in the
+	/// Status property will become true. The move is complete once the Busy flag becomes
+	/// false again.
+	/// 
+	/// While the move takes place, some information on the current state can be obtained:
+	/// <list type="bullet">
+	///     <item><description>
+	///     The Status flags Moving, Reving, and Delaying each indicate which portion of the move
+	///     is currently occuring (only one of these will be enabled at a time).
+	///     </item></description>
+	///     <item><description>
+	///     The current motor property returns the index (0 indexed) of the motor that is
+	///     currently moving.
+	///     </item></description>
+	/// </list>
+	/// 
+	/// To abrubtly abort motion, call the Halt method, and then clear the halt with Unhalt or
+	/// by simply performing a move.
+	/// 
+	/// Note that all of the methods and properties here perform blocking I/O operations on the
+	/// serial port. The Run and ReverseRun also sit in an idle loop for about 1 ms or 2. As such, 
+	/// consider operating this interface in a separate thread from GUI event loop if you find it
+	/// adds undesirable delays/jitters to the UI.
+	/// 
+	/// When polling the Status and CurrentMotor properties while a move takes place, it is
+	/// reccomended that you do not poll more than once every 100 milliseconds, to avoid 
+	/// "Denial of Servicing" the board and slowing down the motion control code. It is likely that
+	/// poll rates of less than this are fine, but they are probably useless and put an uneeded load on 
+	/// the board to process a bunch of redundant requests.
+	/// 
+	/// </remarks>
+	class PaintMixerInterface_P4 : IDisposable
     {
         private const int MOTOR_COUNT = 24;
+
         private const int REG_STATUS = 0;
         private const int REG_CONTROL = 1;
         private const int REG_MOTOR_NUM = 2;
@@ -89,21 +83,17 @@ namespace PaintMixer
         private const int REG_POLARITY = 166;
         private const int REG_COUNT = 167;
         private const int REG_STEP = 168;
-
         private const int REG_RESSET_HARD = 169;
         private const int REG_VERSION = 170;
-
         private const int REG_STATUSVALVULA = 171;
-
         private const int REG_ACIONAVALVULA = 173;
-
-
 
         private const int STATUS_BUSY = 1;
         private const int STATUS_MOVING = 2;
         private const int STATUS_REVING = 4;
         private const int STATUS_DELAYED = 8;
         private const int STATUS_HALTED = 16;
+
         private const int CONTROL_IDLE = 0;
         private const int CONTROL_RUN = 1;
         private const int CONTROL_RUNREV = 2;
@@ -377,32 +367,29 @@ namespace PaintMixer
             if (!mb.isOpen())
             {
                 string[] portas = null;
-                try
+                
+                portas = SerialPort.GetPortNames();
+                //if(parametros.NomeDispositivo != "")
+                if (this.nomeDispositivo != "")
                 {
-                    portas = SerialPort.GetPortNames();
-                    //if(parametros.NomeDispositivo != "")
-                    if (this.nomeDispositivo != "")
+                    bool achouPorta = false;
+                    string mPortaConfig = "";
+                    foreach (string np in portas)
                     {
-                        bool achouPorta = false;
-                        string mPortaConfig = "";
-                        foreach (string np in portas)
+                        //if(np.ToUpper() == parametros.NomeDispositivo.ToUpper())
+                        if (np.ToUpper() == this.nomeDispositivo.ToUpper())
                         {
-                            //if(np.ToUpper() == parametros.NomeDispositivo.ToUpper())
-                            if (np.ToUpper() == this.nomeDispositivo.ToUpper())
-                            {
-                                mPortaConfig = np;
-                                achouPorta = true;
-                            }
-                        }
-                        if (achouPorta)
-                        {
-                            portas = new string[1];
-                            portas[0] = mPortaConfig;
+                            mPortaConfig = np;
+                            achouPorta = true;
                         }
                     }
+                    if (achouPorta)
+                    {
+                        portas = new string[1];
+                        portas[0] = mPortaConfig;
+                    }
                 }
-                catch
-                { }
+
                 //bool bConnect = false;
                 if (portas == null || portas.LongLength == 0)
                 {
@@ -425,18 +412,14 @@ namespace PaintMixer
                             this.counterConnect++;
                             //Se não for possível ler status, encerra comunicação com a porta                   
                             mb.CloseM();
-                            try
+                            
+                            if (counterConnect > 2)
                             {
-                                if (counterConnect > 2)
-                                {
-                                    counterConnect = 0;
-                                    BluetoothClient btClient = new BluetoothClient();
-									var devices = btClient.DiscoverDevices();
-									Bluetooth.PairBluetoothDevices(devices);
-								}
-                            }
-                            catch
-                            { }
+                                counterConnect = 0;
+                                BluetoothClient btClient = new BluetoothClient();
+								var devices = btClient.DiscoverDevices();
+								Bluetooth.PairBluetoothDevices(devices);
+							}
                         }
                         else
                         {
@@ -463,35 +446,10 @@ namespace PaintMixer
         public void Disconnect()
         {
             this.isDosed = true;
-            /*
-            if (wsmbs != null)
-            {
-                wsmbs.Disconnect();
-
-                if (parametros.HabilitarLogComunicacao)
-                {
-                    Log.Logar(
-                        TipoLog.Comunicacao, Percolore.IOConnect.Util.ObjectParametros.PathDiretorioSistema, "Conexão com dispositivo encerrada.");
-                }
-            }
-
-            wsmbs = null;
-            */
-
+            
             if (mb != null)
             {
                 mb.CloseM();
-
-            }
-            else
-            {
-                /*
-                mb = ModBusRtu.getModBusRtu();
-                if (mb != null && mb.isOpen())
-                {
-                    mb.CloseM();
-                }
-                */
             }
         }
 
@@ -603,8 +561,6 @@ namespace PaintMixer
             public bool Input_2;
             public bool Input_3;
             public bool Input_4;
-
-
         }
 
         public StatusInput Status_Inputs
@@ -681,34 +637,7 @@ namespace PaintMixer
                     Log.Logar(
                         TipoLog.Comunicacao, Percolore.IOConnect.Util.ObjectParametros.PathDiretorioSistema, "Inicia a leitura de Inputs.");
                 }
-                /*
-
-                if (wsmbs == null)
-                {
-                    if (parametros.HabilitarLogComunicacao)
-                    {
-                        Log.Logar(
-                        TipoLog.Comunicacao, Percolore.IOConnect.Util.ObjectParametros.PathDiretorioSistema, "Dispositivo desconectado.");
-                    }
-
-                    throw new Exception("Not Connected");
-                }
-
-                ushort[] v = new ushort[1];
-
-                if (wsmbs.ReadHoldingRegisters(slaveAddr, REG_INPUTS, 1, ref v) != WSMBSControl.RESULT.SUCCESS)
-                {
-                    if (parametros.HabilitarLogComunicacao)
-                    {
-                        Log.Logar(
-                            TipoLog.Comunicacao,
-                            Percolore.IOConnect.Util.ObjectParametros.PathDiretorioSistema,
-                            "Não foi possível efetuar a leitura dos registradores.");
-                    }
-
-                    throw new Exception("Could not read inputs register: " + wsmbs.GetLastErrorString());
-                }
-                */
+                
                 if (!mb.isOpen())
                 {
                     Connect(this.timeoutResp);
@@ -719,11 +648,6 @@ namespace PaintMixer
                 {
                     mb.SendFc3(slaveAddr, pollStart, 1, ref v);
                 }
-
-                //bool input01 = (v[0] & (1 << 0)) != 0;
-                //bool input02 = (v[0] & (2 << 0)) != 0;
-                //bool input03 = (v[0] & (3 << 0)) != 0;
-                //bool input04 = (v[0] & (4 << 0)) != 0;
 
                 bool input01 = (v[0] & (0x01)) != 0;
                 bool input02 = (v[0] & (0x02)) != 0;
@@ -753,21 +677,6 @@ namespace PaintMixer
         {
             get
             {
-                /*
-                if (wsmbs == null)
-                {
-                    throw new Exception("Not Connected");
-                }
-
-                ushort[] v = new ushort[1];
-
-                if (wsmbs.ReadHoldingRegisters(slaveAddr, REG_OUTPUTS, 1, ref v) != WSMBSControl.RESULT.SUCCESS)
-                {
-                    throw new Exception("Could not read outputs register: " + wsmbs.GetLastErrorString());
-                }
-
-                return v[0];
-                */
                 if (!mb.isOpen())
                 {
                     Connect(this.timeoutResp);
@@ -785,28 +694,16 @@ namespace PaintMixer
             }
             set
             {
-                /*
-                if (wsmbs == null)
-                {
-                    throw new Exception("Not Connected");
-                }
-
-                if (wsmbs.WriteSingleRegister(slaveAddr, REG_OUTPUTS, value) != WSMBSControl.RESULT.SUCCESS)
-                {
-                    throw new Exception("Could not write outputs register: " + wsmbs.GetLastErrorString());
-                }
-                */
                 if (!mb.isOpen())
                 {
                     Connect(this.timeoutResp);
                 }
-                //int[] v = new int[1];
+                
                 if (mb.isOpen())
                 {
-                    //  v[0] = (int)value;
                     ushort pollStart = (ushort)REG_OUTPUTS;
                     int v = (int)value;
-                    //if (!mb.SendFc16(slaveAddr, pollStart, 1, v))
+                    
                     if (!mb.SendFc6(slaveAddr, pollStart, v))
                     {
                         throw new Exception("Could not write outputs register: " + mb.modbusStatusStr + Environment.NewLine + Percolore.IOConnect.Negocio.IdiomaResxExtensao.FalhaPortaSerial);
@@ -915,10 +812,10 @@ namespace PaintMixer
                 writeControl(CONTROL_IDLE);
                 this.isDosed = true;
             }
-            catch (Exception exc)
+            catch
             {
                 this.isDosed = true;
-                throw new Exception(exc.Message);
+                throw;
 
             }
         }
@@ -953,7 +850,6 @@ namespace PaintMixer
             this.isDosed = false;
             try
             {
-
                 if (parametros.HabilitarLogComunicacao)
                 {
                     Log.Logar(
@@ -1039,25 +935,23 @@ namespace PaintMixer
                         throw new Exception("Could not read status register: " + mb.modbusStatusStr + Environment.NewLine + Percolore.IOConnect.Negocio.IdiomaResxExtensao.FalhaPortaSerial);
                     }
                 }
-                //Thread.Sleep(500);
+                
                 writeData(distances, velocities, accelerations, revDelaysMs, revSteps);
-                //Thread.Sleep(500);
+                
                 writeControl(CONTROL_RUNREV);
-                //Thread.Sleep(500);
+                
                 while (!Status.Busy)
                 {
                     Thread.Sleep(100);
                 }
-                //Thread.Sleep(1);
-                //Thread.Sleep(100);
+                
                 writeControl(CONTROL_IDLE);
                 this.isDosed = true;
             }
-            catch (Exception exc)
+            catch
             {
                 this.isDosed = true;
-                throw new Exception(exc.Message);
-
+                throw;
             }
         }
 
@@ -1076,10 +970,7 @@ namespace PaintMixer
             {
                 throw new Exception("Not connected");
             }
-            /*
-            if (wsmbs == null)
-                throw new Exception("Not connected");
-            */
+
             Thread.Sleep(1000);
             writeControl(CONTROL_HALT);
         }
@@ -1101,10 +992,6 @@ namespace PaintMixer
                 throw new Exception("Not connected");
             }
 
-            // if (wsmbs == null)
-            //     throw new Exception("Not connected");
-
-
             writeControl(CONTROL_IDLE);
         }
 
@@ -1122,13 +1009,6 @@ namespace PaintMixer
             {
                 throw new Exception("Could not write pulsewidth registers: " + mb.modbusStatusStr + Environment.NewLine + Percolore.IOConnect.Negocio.IdiomaResxExtensao.FalhaPortaSerial);
             }
-            /*
-
-            if (wsmbs.WriteSingleRegister(slaveAddr, REG_PULSEWIDTH, pw) != WSMBSControl.RESULT.SUCCESS)
-            {
-                throw new Exception("Could not write pulsewidth registers: " + wsmbs.GetLastErrorString());
-            }
-            */
         }
 
         /// <summary>
@@ -1156,14 +1036,6 @@ namespace PaintMixer
             {
                 throw new Exception("Could not write polarity register: " + mb.modbusStatusStr + Environment.NewLine + Percolore.IOConnect.Negocio.IdiomaResxExtensao.FalhaPortaSerial);
             }
-
-            /*
-            if (wsmbs.WriteSingleRegister(slaveAddr,
-                                         REG_POLARITY, val) != WSMBSControl.RESULT.SUCCESS)
-            {
-                throw new Exception("Could not write polarity register: " + wsmbs.GetLastErrorString());
-            }
-            */
         }
 
         /// <summary>
@@ -1209,20 +1081,6 @@ namespace PaintMixer
                 throw new Exception(
                     "Could not write motor order: " + mb.modbusStatusStr + Environment.NewLine + Percolore.IOConnect.Negocio.IdiomaResxExtensao.FalhaPortaSerial);
             }
-
-
-
-
-            /*
-            if (wsmbs.WriteMultipleRegisters(slaveAddr,
-                                            (ushort)REG_MOTOR_ORDER,
-                                            (ushort)motorOrder.Length,
-                                            ref motorOrder) != WSMBSControl.RESULT.SUCCESS)
-            {
-                throw new Exception(
-                    "Could not write motor order: " + wsmbs.GetLastErrorString());
-            }
-            */
         }
 
         protected virtual void Dispose(bool disposing)
@@ -1233,10 +1091,6 @@ namespace PaintMixer
                 {
                     mb.CloseM();
                 }
-                /*
-                wsmbs.Disconnect();
-                wsmbs.Dispose();
-                */
             }
         }
 
@@ -1279,10 +1133,7 @@ namespace PaintMixer
             {
                 throw new Exception("Could not read status register: " + mb.modbusStatusStr + Environment.NewLine + Percolore.IOConnect.Negocio.IdiomaResxExtensao.FalhaPortaSerial);
             }
-
         }
-
-
 
         public struct StatusValvulas
         {
@@ -1326,9 +1177,6 @@ namespace PaintMixer
             public bool Input_22;
             public bool Input_23;
             public bool Input_24;
-
-
-
         }
 
         public StatusValvulas Status_Valvulas
@@ -1338,7 +1186,7 @@ namespace PaintMixer
                 if (parametros.HabilitarLogComunicacao)
                 {
                     Log.Logar(
-                        TipoLog.Comunicacao, Percolore.IOConnect.Util.ObjectParametros.PathDiretorioSistema, "Inicia a leitura de V[alvulas.");
+                        TipoLog.Comunicacao, Percolore.IOConnect.Util.ObjectParametros.PathDiretorioSistema, "Inicia a leitura de Valvulas.");
                 }
 
                 if (!mb.isOpen())
@@ -1382,9 +1230,6 @@ namespace PaintMixer
                 bool input22 = (v[1] & (0x0020)) != 0;
                 bool input23 = (v[1] & (0x0040)) != 0;
                 bool input24 = (v[1] & (0x0080)) != 0;
-
-
-
 
                 if (parametros.HabilitarLogComunicacao)
                 {
@@ -1438,10 +1283,6 @@ namespace PaintMixer
 
             pacoteWr[0] = (nVal & 0xFFFF);
             pacoteWr[1] = (nVal >> 16) & 0xFFFF;
-
-            //pacoteWr[2] = (nVal >> 16) & 0x00FF;
-
-            //pacoteWr[3] = (nVal >> 24) & 0x00FF;
 
             if (!mb.isOpen())
             {

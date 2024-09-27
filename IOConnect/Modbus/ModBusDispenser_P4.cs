@@ -1,15 +1,10 @@
 ﻿using PaintMixer;
 using Percolore.Core;
-using Percolore.Core.Persistence.Xml;
 using Percolore.IOConnect.Modbus;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading;
 
 namespace Percolore.IOConnect
 {
-    public class ModBusDispenser_P4 : IDispenser, IDisposable
+	public class ModBusDispenser_P4 : IDispenser, IDisposable
     {
         private PaintMixerInterface_P4 mixer;
         private Util.ObjectParametros parametros = null;
@@ -31,9 +26,6 @@ namespace Percolore.IOConnect
             public bool Input_4 { get; set; }
         }
 
-      
-
-
         private int idDispositivo;
 
         public int IdDispositivo
@@ -47,7 +39,6 @@ namespace Percolore.IOConnect
             parametros = Util.ObjectParametros.Load();
             mixer = new PaintMixerInterface_P4(parametros.Slave, NomeDispositivo);
         }
-
 
         #region Propriedades
 
@@ -138,16 +129,13 @@ namespace Percolore.IOConnect
         public StatusSensores getStatusSensores()
         {
             StatusSensores retorno = new StatusSensores();
-            try
-            {
-                PaintMixerInterface_P4.StatusInput stI = mixer.Status_Inputs;
-                retorno.Input_1 = stI.Input_1;
-                retorno.Input_2 = stI.Input_2;
-                retorno.Input_3 = stI.Input_3;
-                retorno.Input_4 = stI.Input_4;
-            }
-            catch
-            { }
+            
+            PaintMixerInterface_P4.StatusInput stI = mixer.Status_Inputs;
+            retorno.Input_1 = stI.Input_1;
+            retorno.Input_2 = stI.Input_2;
+            retorno.Input_3 = stI.Input_3;
+            retorno.Input_4 = stI.Input_4;
+
             return retorno;
         }
 
@@ -491,7 +479,6 @@ namespace Percolore.IOConnect
 
                         #endregion
                     }
-
                 }
             }
             catch
@@ -531,63 +518,48 @@ namespace Percolore.IOConnect
         public bool RessetHard()
         {
             bool retorno = false;
-            try
-            {
-                mixer.RessetHard();
-                retorno = true;
-            }
-            catch
-            { }
+            
+            mixer.RessetHard();
+            retorno = true;
+
             return retorno;
         }
 
         public string GetVersion()
         {
-            string retorno = "";
-            try
-            {
-                retorno = mixer.GetVersion();
-            }
-            catch
-            {
-            }
-            return retorno;
+            return mixer.GetVersion();
         }
-
 
         public StatusValvulas getStatusValvulas()
         {
             StatusValvulas retorno = new StatusValvulas();
-            try
-            {
-                PaintMixerInterface_P4.StatusValvulas stV = mixer.Status_Valvulas;
-                retorno.Circuito_1 = stV.Input_1;
-                retorno.Circuito_2 = stV.Input_2;
-                retorno.Circuito_3 = stV.Input_3;
-                retorno.Circuito_4 = stV.Input_4;
-                retorno.Circuito_5 = stV.Input_5;
-                retorno.Circuito_6 = stV.Input_6;
-                retorno.Circuito_7 = stV.Input_7;
-                retorno.Circuito_8 = stV.Input_8;
-                retorno.Circuito_9 = stV.Input_9;
-                retorno.Circuito_10 = stV.Input_10;
-                retorno.Circuito_11 = stV.Input_11;
-                retorno.Circuito_12 = stV.Input_12;
-                retorno.Circuito_13 = stV.Input_13;
-                retorno.Circuito_14 = stV.Input_14;
-                retorno.Circuito_15 = stV.Input_15;
-                retorno.Circuito_16 = stV.Input_16;
-                retorno.Circuito_17 = stV.Input_17;
-                retorno.Circuito_18 = stV.Input_18;
-                retorno.Circuito_19 = stV.Input_19;
-                retorno.Circuito_20 = stV.Input_20;
-                retorno.Circuito_21 = stV.Input_21;
-                retorno.Circuito_22 = stV.Input_22;
-                retorno.Circuito_23 = stV.Input_23;
-                retorno.Circuito_24 = stV.Input_24;
-            }
-            catch
-            { }
+            
+            PaintMixerInterface_P4.StatusValvulas stV = mixer.Status_Valvulas;
+            retorno.Circuito_1 = stV.Input_1;
+            retorno.Circuito_2 = stV.Input_2;
+            retorno.Circuito_3 = stV.Input_3;
+            retorno.Circuito_4 = stV.Input_4;
+            retorno.Circuito_5 = stV.Input_5;
+            retorno.Circuito_6 = stV.Input_6;
+            retorno.Circuito_7 = stV.Input_7;
+            retorno.Circuito_8 = stV.Input_8;
+            retorno.Circuito_9 = stV.Input_9;
+            retorno.Circuito_10 = stV.Input_10;
+            retorno.Circuito_11 = stV.Input_11;
+            retorno.Circuito_12 = stV.Input_12;
+            retorno.Circuito_13 = stV.Input_13;
+            retorno.Circuito_14 = stV.Input_14;
+            retorno.Circuito_15 = stV.Input_15;
+            retorno.Circuito_16 = stV.Input_16;
+            retorno.Circuito_17 = stV.Input_17;
+            retorno.Circuito_18 = stV.Input_18;
+            retorno.Circuito_19 = stV.Input_19;
+            retorno.Circuito_20 = stV.Input_20;
+            retorno.Circuito_21 = stV.Input_21;
+            retorno.Circuito_22 = stV.Input_22;
+            retorno.Circuito_23 = stV.Input_23;
+            retorno.Circuito_24 = stV.Input_24;
+
             return retorno;
         }
 
@@ -695,7 +667,6 @@ namespace Percolore.IOConnect
 
             //1111 1111 1111 1111 1111 1111
             AcionaValvulas(nval);
-
         }
 
         public void AcionaValvulasRecirculacao(List<int> lcircuito)
@@ -804,7 +775,6 @@ namespace Percolore.IOConnect
 
             //1111 1111 1111 1111
             AcionaValvulas(nval);
-
         }
 
         public void AcionaValvulas(bool allVal)

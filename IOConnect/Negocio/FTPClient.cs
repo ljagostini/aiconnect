@@ -50,15 +50,10 @@ namespace Percolore.IOConnect.Negocio
         {
             bool retorno = false;
 
-            try
-            {
-                using var ftpClient = new FtpClient(new Uri(url).Host, usuario, senha);
-				ftpClient.Connect();
-				retorno = ftpClient.FileExists(url);
-            }
-            catch
-            {               
-            }
+            using var ftpClient = new FtpClient(new Uri(url).Host, usuario, senha);
+			ftpClient.Connect();
+			retorno = ftpClient.FileExists(url);
+
             return retorno;
         }
     }

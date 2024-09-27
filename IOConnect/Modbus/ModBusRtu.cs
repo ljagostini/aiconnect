@@ -1,14 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.IO.Ports;
-using System.Threading;
+﻿using System.IO.Ports;
 using System.Reflection;
-using System.IO;
 
 namespace Percolore.IOConnect
 {
-    class ModBusRtu
+	class ModBusRtu
     {
         //private SerialPort sp = new SerialPort();
         private SerialPort sp = null;
@@ -68,8 +63,6 @@ namespace Percolore.IOConnect
                 //sp.Handshake = Handshake.None;
                 //sp.RtsEnable = true;
 
-               
-
                 try
                 {
                    
@@ -107,18 +100,13 @@ namespace Percolore.IOConnect
                 {
                     string portname = sp.PortName;
 
-                    try
+                    if (this.isDataReceived)
                     {
-                        if (this.isDataReceived)
-                        {
-                            sp.DataReceived -= new SerialDataReceivedEventHandler(DataReceivedHandler);
-                        }
+                        sp.DataReceived -= new SerialDataReceivedEventHandler(DataReceivedHandler);
+                    }
 
-						sp.Close();
-						sp.Dispose();
-					}
-                    catch
-                    { }                 
+					sp.Close();
+					sp.Dispose();              
                     
                     GC.Collect();
                     sp = null;
@@ -129,18 +117,13 @@ namespace Percolore.IOConnect
                 }
                 else
                 {
-                    try
+                    if (this.isDataReceived)
                     {
-                        if (this.isDataReceived)
-                        {
-                            sp.DataReceived -= new SerialDataReceivedEventHandler(DataReceivedHandler);
-                        }
+                        sp.DataReceived -= new SerialDataReceivedEventHandler(DataReceivedHandler);
+                    }
 
-						sp.Close();
-						sp.Dispose();
-					}
-                    catch
-                    { }
+					sp.Close();
+					sp.Dispose();
                     
                     GC.Collect();
                     string portname = sp.PortName;
@@ -161,91 +144,70 @@ namespace Percolore.IOConnect
 
         public void SafeClose(SerialPort port)
         {
-            try
-            {
-                Stream internalSerialStream = (Stream)port.GetType()
-                    .GetField("internalSerialStream", BindingFlags.Instance | BindingFlags.NonPublic).GetValue(port);
+            Stream internalSerialStream = (Stream)port.GetType()
+                .GetField("internalSerialStream", BindingFlags.Instance | BindingFlags.NonPublic).GetValue(port);
 
-                GC.SuppressFinalize(port);
-                GC.SuppressFinalize(internalSerialStream);
-
-                try
-                {
-                    internalSerialStream.Close();
-                }
-                catch
-                {
-                    
-                }
-            }
-            catch
-            {
-                
-            }
+            GC.SuppressFinalize(port);
+            GC.SuppressFinalize(internalSerialStream);
+            internalSerialStream.Close();
+			internalSerialStream.Dispose();
         }
 
         static void ShutdownEventLoopHandler(Stream internalSerialStream)
         {
-            try
-            {
-                FieldInfo eventRunnerField = internalSerialStream.GetType()
-                    .GetField("eventRunner", BindingFlags.NonPublic | BindingFlags.Instance);
+            FieldInfo eventRunnerField = internalSerialStream.GetType()
+                .GetField("eventRunner", BindingFlags.NonPublic | BindingFlags.Instance);
 
-                if (eventRunnerField != null)
+            if (eventRunnerField != null)
+            {
+                object eventRunner = eventRunnerField.GetValue(internalSerialStream);
+                Type eventRunnerType = eventRunner.GetType();
+
+                FieldInfo endEventLoopFieldInfo = eventRunnerType.GetField(
+                    "endEventLoop", BindingFlags.Instance | BindingFlags.NonPublic);
+
+                FieldInfo eventLoopEndedSignalFieldInfo = eventRunnerType.GetField(
+                    "eventLoopEndedSignal", BindingFlags.Instance | BindingFlags.NonPublic);
+
+                FieldInfo waitCommEventWaitHandleFieldInfo = eventRunnerType.GetField(
+                    "waitCommEventWaitHandle", BindingFlags.Instance | BindingFlags.NonPublic);
+
+                if (endEventLoopFieldInfo == null
+                    || eventLoopEndedSignalFieldInfo == null
+                    || waitCommEventWaitHandleFieldInfo == null)
                 {
-                    object eventRunner = eventRunnerField.GetValue(internalSerialStream);
-                    Type eventRunnerType = eventRunner.GetType();
-
-                    FieldInfo endEventLoopFieldInfo = eventRunnerType.GetField(
-                        "endEventLoop", BindingFlags.Instance | BindingFlags.NonPublic);
-
-                    FieldInfo eventLoopEndedSignalFieldInfo = eventRunnerType.GetField(
-                        "eventLoopEndedSignal", BindingFlags.Instance | BindingFlags.NonPublic);
-
-                    FieldInfo waitCommEventWaitHandleFieldInfo = eventRunnerType.GetField(
-                        "waitCommEventWaitHandle", BindingFlags.Instance | BindingFlags.NonPublic);
-
-                    if (endEventLoopFieldInfo == null
-                       || eventLoopEndedSignalFieldInfo == null
-                       || waitCommEventWaitHandleFieldInfo == null)
-                    {
-                        /*
-                        logger.Warning("serial-port-debug",
-                            "Unable to find the EventLoopRunner internal wait handle or loop signal fields. "
-                            + "SerialPort workaround failure. Application may crash after "
-                            + "disposing SerialPort unless .NET 1.1 unhandled exception "
-                            + "policy is enabled from the application's config file.");
-                            */
-                    }
-                    else
-                    {
-                        var eventLoopEndedWaitHandle =
-                            (WaitHandle)eventLoopEndedSignalFieldInfo.GetValue(eventRunner);
-                        var waitCommEventWaitHandle =
-                            (ManualResetEvent)waitCommEventWaitHandleFieldInfo.GetValue(eventRunner);
-
-                        endEventLoopFieldInfo.SetValue(eventRunner, true);
-
-                        // Sometimes the event loop handler resets the wait handle
-                        // before exiting the loop and hangs (in case of USB disconnect)
-                        // In case it takes too long, brute-force it out of its wait by
-                        // setting the handle again.
-                        int i = 0;
-                        do
-                        {
-                            waitCommEventWaitHandle.Set();
-                            if(i>5)
-                            {
-                                break;
-                            }
-                            i++;
-                        } while (!eventLoopEndedWaitHandle.WaitOne(2000));
-                    }
+                    /*
+                    logger.Warning("serial-port-debug",
+                        "Unable to find the EventLoopRunner internal wait handle or loop signal fields. "
+                        + "SerialPort workaround failure. Application may crash after "
+                        + "disposing SerialPort unless .NET 1.1 unhandled exception "
+                        + "policy is enabled from the application's config file.");
+                        */
                 }
-            }
-            catch
-            {
-                
+                else
+                {
+                    var eventLoopEndedWaitHandle =
+                        (WaitHandle)eventLoopEndedSignalFieldInfo.GetValue(eventRunner);
+                    var waitCommEventWaitHandle =
+                        (ManualResetEvent)waitCommEventWaitHandleFieldInfo.GetValue(eventRunner);
+
+                    endEventLoopFieldInfo.SetValue(eventRunner, true);
+
+                    // Sometimes the event loop handler resets the wait handle
+                    // before exiting the loop and hangs (in case of USB disconnect)
+                    // In case it takes too long, brute-force it out of its wait by
+                    // setting the handle again.
+                    int i = 0;
+                    do
+                    {
+                        waitCommEventWaitHandle.Set();
+                        if(i>5)
+                        {
+                            break;
+                        }
+                        i++;
+                    } while (!eventLoopEndedWaitHandle.WaitOne(2000));
+                }
             }
         }
 
@@ -254,74 +216,56 @@ namespace Percolore.IOConnect
         public bool isOpen()
         {
             bool retorno = false;
-            try
+            
+            if (this.sp != null)
             {
-                if (this.sp != null)
-                {
-                    retorno = this.sp.IsOpen;
-                }
+                retorno = this.sp.IsOpen;
             }
-            catch
-            {
 
-            }
             return retorno;
         }
 
         private void LogSerialEvt(byte[] message, string tipoM, int tamanho)
         {
-            try
+            Util.LogSerial lSer = new Util.LogSerial();
+            lSer.dtHora = DateTime.Now;
+            lSer.tipoMessage = tipoM;
+            lSer.message = "";
+            for(int i = 0; message != null && i < message.Length && i < tamanho; i++)
             {
-                Util.LogSerial lSer = new Util.LogSerial();
-                lSer.dtHora = DateTime.Now;
-                lSer.tipoMessage = tipoM;
-                lSer.message = "";
-                for(int i = 0; message != null && i < message.Length && i < tamanho; i++)
+                if(lSer.message.Length == 0)
                 {
-                    if(lSer.message.Length == 0)
-                    {
-                        lSer.message = "" + (int)message[i];
-                    }
-                    else
-                    {
-                        lSer.message += "-" + (int)message[i];
-                    }
+                    lSer.message = "" + (int)message[i];
+                }
+                else
+                {
+                    lSer.message += "-" + (int)message[i];
+                }
                     
-                }
-                Percolore.IOConnect.Modbus.Constantes.listLogSerial.Add(lSer);
-                if(Percolore.IOConnect.Modbus.Constantes.listLogSerial.Count > Percolore.IOConnect.Modbus.Constantes.qtdLogSerial)
-                {
-                    Percolore.IOConnect.Modbus.Constantes.listLogSerial.RemoveAt(0);
-                }
             }
-            catch
-            { }
+            Percolore.IOConnect.Modbus.Constantes.listLogSerial.Add(lSer);
+            if(Percolore.IOConnect.Modbus.Constantes.listLogSerial.Count > Percolore.IOConnect.Modbus.Constantes.qtdLogSerial)
+            {
+                Percolore.IOConnect.Modbus.Constantes.listLogSerial.RemoveAt(0);
+            }
         }
 
         private void DataReceivedHandler(
-                        object sender,
-                        SerialDataReceivedEventArgs e)
+            object sender,
+            SerialDataReceivedEventArgs e)
         {
             //string indata = sp.ReadExisting();
             Console.WriteLine("Data Received:");
             //Console.Write(indata);
-            try
+            
+            SerialPort sp2 = (SerialPort)sender;
+            int tamanho = sp2.BytesToRead;
+            sp2.Read(readBytes, inicio_reader, tamanho);
+            inicio_reader += tamanho;
+            if (inicio_reader >= tamanho_read)
             {
-                SerialPort sp2 = (SerialPort)sender;
-                int tamanho = sp2.BytesToRead;
-                sp2.Read(readBytes, inicio_reader, tamanho);
-                inicio_reader += tamanho;
-                if (inicio_reader >= tamanho_read)
-                {
-                    isTerminouRead = true;
-                    LogSerialEvt(readBytes, "Read", tamanho_read);
-
-
-                }
-            }
-            catch
-            {
-
+                isTerminouRead = true;
+                LogSerialEvt(readBytes, "Read", tamanho_read);
             }
         }
 
@@ -418,16 +362,10 @@ namespace Percolore.IOConnect
             if (sp.IsOpen && Modbus.USBConstant.connectUsb)
             {
                 //Clear in/out buffers:
-                try
-                {
-                    sp.DiscardOutBuffer();
-                    sp.DiscardInBuffer();
-                    Thread.Sleep(10);
-                }
-                catch
-                {
+                sp.DiscardOutBuffer();
+                sp.DiscardInBuffer();
+                Thread.Sleep(10);
 
-                }
                 readBytes = new byte[2048];
                 //Message is 1 addr + 1 fcn + 2 start + 2 reg + 1 count + 2 * reg vals + 2 CRC
                 byte[] message = new byte[9 + (2 * registers)];
@@ -503,16 +441,10 @@ namespace Percolore.IOConnect
             if (sp.IsOpen && Modbus.USBConstant.connectUsb)
             {
                 //Clear in/out buffers:
-                try
-                {
-                    sp.DiscardOutBuffer();
-                    sp.DiscardInBuffer();
-                    Thread.Sleep(10);
-                }
-                catch
-                {
+                sp.DiscardOutBuffer();
+                sp.DiscardInBuffer();
+                Thread.Sleep(10);
 
-                }
                 readBytes = new byte[2048];
                 //Message is 1 addr + 1 fcn + 2 start + 2 reg + 1 count + 2 * reg vals + 2 CRC
                 byte[] message = new byte[8];
@@ -526,7 +458,6 @@ namespace Percolore.IOConnect
 
                 message[4] = (byte)(values >> 8);
                 message[5] = (byte)values;
-
 
                 byte[] CRC = new byte[2];
                 GetCRC(message, ref CRC);
@@ -588,16 +519,10 @@ namespace Percolore.IOConnect
             if (sp.IsOpen && Modbus.USBConstant.connectUsb)
             {
                 //Clear in/out buffers:
-                try
-                {
-                    sp.DiscardOutBuffer();
-                    sp.DiscardInBuffer();
-                    Thread.Sleep(10);
-                }
-                catch
-                {
+                sp.DiscardOutBuffer();
+                sp.DiscardInBuffer();
+                Thread.Sleep(10);
 
-                }
                 readBytes = new byte[2048];
                 //Function 3 request is always 8 bytes:
                 byte[] message = new byte[8];
@@ -657,26 +582,7 @@ namespace Percolore.IOConnect
                 modbusStatus = true;
                 return false;
             }
-
         }
         #endregion
-
-        //private bool ConvertBytesToHex(byte[] message, ref string messageRetorno)
-        //{
-        //    bool retorno = false;
-        //    StringBuilder sb = new StringBuilder();
-        //    try
-        //    {
-        //        for(int i = 0; message != null && i < message.Length; i++)
-        //        {
-        //            sb.Append(message[i].ToString("X2"));
-        //            sb.Append("-");
-        //        }
-        //        messageRetorno = sb.ToString();
-        //    }
-        //    catch
-        //    { }
-        //    return retorno;
-        //}
     }
 }

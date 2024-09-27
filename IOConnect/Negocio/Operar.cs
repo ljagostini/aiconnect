@@ -1,15 +1,10 @@
 ﻿using PaintMixer;
 using Percolore.Core;
-using Percolore.Core.Persistence.Xml;
-using Percolore.Core.UserControl;
-using System;
-using System.Collections.Generic;
-using System.Threading;
 using Percolore.Core.Persistence.WindowsRegistry;
 
 namespace Percolore.IOConnect
 {
-    public class Operar
+	public class Operar
     {
         private static int CounterComunication = 0;
         //Define o modo de execução do dispenser
@@ -59,8 +54,6 @@ namespace Percolore.IOConnect
                 revPulsos[motor-16] = valores.PulsoReverso;
 
             }
-
-           
 
             try
             {
@@ -321,23 +314,18 @@ namespace Percolore.IOConnect
 
         static void geraEventoFalhaComunicacao(string detalhes = "")
         {
-            try
+            #region gravar Evento Inicializacao
+            Util.ObjectEventos objEvt = new Util.ObjectEventos();
+            objEvt.DATAHORA = DateTime.Now;
+            objEvt.COD_EVENTO = (int)IOConnect.Core.PercoloreEnum.Eventos.FalhaComunicacaoPlaca;
+            objEvt.DETALHES = "0;" + detalhes;
+            objEvt.INTEGRADO = false;
+            using (PercoloreRegistry percRegistry = new PercoloreRegistry())
             {
-                #region gravar Evento Inicializacao
-                Util.ObjectEventos objEvt = new Util.ObjectEventos();
-                objEvt.DATAHORA = DateTime.Now;
-                objEvt.COD_EVENTO = (int)IOConnect.Core.PercoloreEnum.Eventos.FalhaComunicacaoPlaca;
-                objEvt.DETALHES = "0;" + detalhes;
-                objEvt.INTEGRADO = false;
-                using (PercoloreRegistry percRegistry = new PercoloreRegistry())
-                {
-                    objEvt.NUMERO_SERIE = percRegistry.GetSerialNumber();
-                }
-                Util.ObjectEventos.InsertEvento(objEvt);
-                #endregion
+                objEvt.NUMERO_SERIE = percRegistry.GetSerialNumber();
             }
-            catch
-            { }
+            Util.ObjectEventos.InsertEvento(objEvt);
+            #endregion
         }
 
         public static double CalcularDesvio(double valorMedio, double massaIdeal)
@@ -589,7 +577,7 @@ namespace Percolore.IOConnect
                     Negocio.IdiomaResxExtensao.Global_Falha_TestarRecipiente
                     + Environment.NewLine
                     + ex.Message;
-                throw new Exception(mensagem);
+                throw new Exception(mensagem, ex);
             }
         }
 
@@ -660,7 +648,7 @@ namespace Percolore.IOConnect
                     Negocio.IdiomaResxExtensao.Global_Falha_TestarRecipiente
                     + Environment.NewLine
                     + ex.Message;
-                throw new Exception(mensagem);
+                throw new Exception(mensagem, ex);
             }
         }
 
@@ -668,23 +656,18 @@ namespace Percolore.IOConnect
 
         static void geraEventoNivelBaixo(string detalhes="")
         {
-            try
+            #region gravar Evento Inicializacao
+            Util.ObjectEventos objEvt = new Util.ObjectEventos();
+            objEvt.DATAHORA = DateTime.Now;
+            objEvt.COD_EVENTO = (int)IOConnect.Core.PercoloreEnum.Eventos.NivelCanisterBaixo;
+            objEvt.DETALHES = "0;" + detalhes;
+            objEvt.INTEGRADO = false;
+            using (PercoloreRegistry percRegistry = new PercoloreRegistry())
             {
-                #region gravar Evento Inicializacao
-                Util.ObjectEventos objEvt = new Util.ObjectEventos();
-                objEvt.DATAHORA = DateTime.Now;
-                objEvt.COD_EVENTO = (int)IOConnect.Core.PercoloreEnum.Eventos.NivelCanisterBaixo;
-                objEvt.DETALHES = "0;" + detalhes;
-                objEvt.INTEGRADO = false;
-                using (PercoloreRegistry percRegistry = new PercoloreRegistry())
-                {
-                    objEvt.NUMERO_SERIE = percRegistry.GetSerialNumber();
-                }
-                Util.ObjectEventos.InsertEvento(objEvt);
-                #endregion
+                objEvt.NUMERO_SERIE = percRegistry.GetSerialNumber();
             }
-            catch
-            { }
+            Util.ObjectEventos.InsertEvento(objEvt);
+            #endregion
         }
 
         static bool TemColoranteSuficiente(int circuito, double volume, bool executaEvento = true)
@@ -712,8 +695,6 @@ namespace Percolore.IOConnect
                 VOLUME_A_SER_DISPENSADO = UnidadeMedidaHelper.GramaToMililitro(volume, c.MassaEspecifica);
             }
             
-                
-           
             // double VOLUME_MINIMO = Util.ObjectParametros.Load().VolumeMinimo;
             double VOLUME_MINIMO = c.NivelMinimo;
             //Nível de colorante não pode ficar abaixo do mínimo configurado
@@ -920,8 +901,6 @@ namespace Percolore.IOConnect
             }
         }
 
-    
-
         #endregion
 
         #region getVersion Resset
@@ -941,16 +920,12 @@ namespace Percolore.IOConnect
             { }
             finally
             {
-                try
-                {
-                    disp.Disconnect();
-                }
-                catch
-                { }
+                disp.Disconnect();
             }
 
             return retorno;
         }
+
         public static bool RessetHard(ModBusDispenser_P2 mdp2, int board)
         {
             bool retorno = false;
@@ -963,41 +938,33 @@ namespace Percolore.IOConnect
                     retorno = mdp2.RessetHard();
                     gerarEventoRessetplaca(0, board.ToString());
                 }
-                
             }
             catch
             { }
             finally
             {
-                try
-                {
-                    disp.Disconnect();
-                }
-                catch
-                { }
+                disp.Disconnect();
             }
             return retorno;
         }
+
         private static int gerarEventoRessetplaca(int result, string detalhes = "")
         {
             int retorno = 0;
-            try
+            
+            #region gravar Evento Resset Placa
+            Util.ObjectEventos objEvt = new Util.ObjectEventos();
+            objEvt.DATAHORA = DateTime.Now;
+            objEvt.COD_EVENTO = (int)IOConnect.Core.PercoloreEnum.Eventos.RessetPlaca;
+            objEvt.DETALHES = result.ToString() + ";" + detalhes;
+            objEvt.INTEGRADO = false;
+            using (PercoloreRegistry percRegistry = new PercoloreRegistry())
             {
-                #region gravar Evento Resset Placa
-                Util.ObjectEventos objEvt = new Util.ObjectEventos();
-                objEvt.DATAHORA = DateTime.Now;
-                objEvt.COD_EVENTO = (int)IOConnect.Core.PercoloreEnum.Eventos.RessetPlaca;
-                objEvt.DETALHES = result.ToString() + ";" + detalhes;
-                objEvt.INTEGRADO = false;
-                using (PercoloreRegistry percRegistry = new PercoloreRegistry())
-                {
-                    objEvt.NUMERO_SERIE = percRegistry.GetSerialNumber();
-                }
-                retorno = Util.ObjectEventos.InsertEvento(objEvt);
-                #endregion
+                objEvt.NUMERO_SERIE = percRegistry.GetSerialNumber();
             }
-            catch
-            { }
+            retorno = Util.ObjectEventos.InsertEvento(objEvt);
+            #endregion
+
             return retorno;
         }
         #endregion

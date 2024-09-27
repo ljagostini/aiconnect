@@ -1,15 +1,10 @@
 ﻿using Percolore.Core;
-using System;
-using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Percolore.IOConnect.Core
 {
-    public class DatPattern06 : IDat
+	public class DatPattern06 : IDat
     {
         private bool UTILIZAR_CORRESPONDENCIA;
         private List<ListCorrespondencia> LISTA_CORRESPONDENCIA;
@@ -33,9 +28,6 @@ namespace Percolore.IOConnect.Core
 
         private double vEmbref = -1;
 
-        
-
-
         private string _codigoCor = string.Empty;
         private string _quantidades = string.Empty;
 
@@ -54,58 +46,53 @@ namespace Percolore.IOConnect.Core
                 return _quantidades;
             }
         }
-        //Gambiarra para solucionar este formato de Dat, o padrão seria implementar lá na Percolore.Core, mas como lá não tem como identificar as configurações necessárias para este dat
-        //.....tive que implementar aqui
-        public DatPattern06(string conteudo, int basePosicaoCircuito, bool utilizarCorrespondencia, List<ListCorrespondencia> listaCorrespondencia) /*Dictionary<int, int> listaCorrespondencia)*/
+        
+        public DatPattern06(string conteudo, int basePosicaoCircuito, bool utilizarCorrespondencia, List<ListCorrespondencia> listaCorrespondencia)
         {
             UTILIZAR_CORRESPONDENCIA = utilizarCorrespondencia;
             LISTA_CORRESPONDENCIA = listaCorrespondencia;
-            try
+            
+            this._parametro  = Util.ObjectParametros.Load();
+            this.listBasDat06 = Util.ObjectBasDat06.List();
+            string trabalho = conteudo.Replace("\n", "");
+            string[] linhas = trabalho.Split('\r');
+            if(linhas != null && linhas.Length > 0)
             {
-                this._parametro  = Util.ObjectParametros.Load();
-                this.listBasDat06 = Util.ObjectBasDat06.List();
-                string trabalho = conteudo.Replace("\n", "");
-                string[] linhas = trabalho.Split('\r');
-                if(linhas != null && linhas.Length > 0)
+                foreach (string strLinha in linhas)
                 {
-                    foreach (string strLinha in linhas)
+                    if (strLinha.Contains(this._parametro.Dat_06_BAS_Pref))
                     {
-                        if (strLinha.Contains(this._parametro.Dat_06_BAS_Pref))
-                        {
-                            DesmontaBAS(strLinha.Replace("\n", ""));
-                        }
-                        else if (strLinha.Contains(this._parametro.Dat_06_CAN_Pref))
-                        {
-                            DesmontaCAN(strLinha.Replace("\n", ""));
-                        }
-                        else if (strLinha.Contains(this._parametro.Dat_06_FRM_Pref))
-                        {
-                            DesmontarFRM(strLinha.Replace("\n", ""));
-                        }
-                        else if (strLinha.Contains(this._parametro.Dat_06_UNT_Pref))
-                        {
-                            DesmontarUNT(strLinha.Replace("\n", ""));
-                        }
-                        else if (strLinha.Contains("@CLR"))
-                        {
-                            this._linhaCLR = strLinha;
-                        }
-                        else if (strLinha.Contains("@SV"))
-                        {
-                            DesmontarSV(strLinha.Replace("\n", ""));
-                        }
+                        DesmontaBAS(strLinha.Replace("\n", ""));
+                    }
+                    else if (strLinha.Contains(this._parametro.Dat_06_CAN_Pref))
+                    {
+                        DesmontaCAN(strLinha.Replace("\n", ""));
+                    }
+                    else if (strLinha.Contains(this._parametro.Dat_06_FRM_Pref))
+                    {
+                        DesmontarFRM(strLinha.Replace("\n", ""));
+                    }
+                    else if (strLinha.Contains(this._parametro.Dat_06_UNT_Pref))
+                    {
+                        DesmontarUNT(strLinha.Replace("\n", ""));
+                    }
+                    else if (strLinha.Contains("@CLR"))
+                    {
+                        this._linhaCLR = strLinha;
+                    }
+                    else if (strLinha.Contains("@SV"))
+                    {
+                        DesmontarSV(strLinha.Replace("\n", ""));
                     }
                 }
             }
-            catch
-            { }
+
             this._codigoCor = this._linhaCAN + ";" + this._linhaCLR.Replace("|", "/") + ";" + _linhaBAS + ";" + this._linhaAllFRM + ";"+ this._linhaUNT + ";";
             if(this._linhaSV != String.Empty)
             {
                 this._codigoCor += this._linhaSV + ";";
                 AssemblyInfo info = new AssemblyInfo(Assembly.GetExecutingAssembly());
                 this._codigoCor += "IO " + info.AssemblyComercialVersion + ";";
-
             }
         }
 
@@ -113,82 +100,70 @@ namespace Percolore.IOConnect.Core
         {
             string montando = string.Empty;
             string strfrmLimpo = strFRM;
-            try
+            
+            //Removendo os espacos duplos.....
+            while (strfrmLimpo.Contains("  "))
             {
-                //Removendo os espacos duplos.....
-                while (strfrmLimpo.Contains("  "))
+                strfrmLimpo = strfrmLimpo.Replace("  ", " ");
+            }
+            string[] controle = strfrmLimpo.Split(' ');
+            if (controle != null)
+            {
+                //Confirmando Prefixo nos parametros
+                if (controle[0].Equals(this._parametro.Dat_06_FRM_Pref))
                 {
-                    strfrmLimpo = strfrmLimpo.Replace("  ", " ");
-                }
-                string[] controle = strfrmLimpo.Split(' ');
-                if (controle != null)
-                {
-                    //Confirmando Prefixo nos parametros
-                    if (controle[0].Equals(this._parametro.Dat_06_FRM_Pref))
+                    string trabalho = controle[1];
+                    if (trabalho.Contains("\""))
                     {
-                        string trabalho = controle[1];
-                        if (trabalho.Contains("\""))
+                        trabalho = trabalho.Substring(trabalho.IndexOf("\"") + 1);
+                        if(trabalho.Contains("\""))
                         {
-                            trabalho = trabalho.Substring(trabalho.IndexOf("\"") + 1);
-                            if(trabalho.Contains("\""))
-                            {
-                                trabalho = trabalho.Substring(0, trabalho.IndexOf("\""));
-                                this.vEmbref = double.Parse(controle[2].Replace(",", "."), CultureInfo.InvariantCulture);
-                                montando = trabalho;
-                                this._linhaAllFRM = strfrmLimpo;
-                            }
-
+                            trabalho = trabalho.Substring(0, trabalho.IndexOf("\""));
+                            this.vEmbref = double.Parse(controle[2].Replace(",", "."), CultureInfo.InvariantCulture);
+                            montando = trabalho;
+                            this._linhaAllFRM = strfrmLimpo;
                         }
-
                     }
                 }
             }
-            catch
-            {
-
-            }
            
             this._linhaFRM = montando;
-
         }
 
         private void DesmontaBAS(string strBas)
         {
             string montando = string.Empty;
             string strbasLimpo = strBas;
-            try
+            
+            //Removendo os espacos duplos.....
+            while (strbasLimpo.Contains("  "))
             {
-                //Removendo os espacos duplos.....
-                while (strbasLimpo.Contains("  "))
-                {
-                    strbasLimpo = strbasLimpo.Replace("  ", " ");
-                }
-                string[] controle = strbasLimpo.Split(' ');
-                if (controle != null)
-                {
-                    //Confirmando Prefixo nos parametros
-                    if (controle[0].Equals(this._parametro.Dat_06_BAS_Pref))
-                    {   
+                strbasLimpo = strbasLimpo.Replace("  ", " ");
+            }
+            string[] controle = strbasLimpo.Split(' ');
+            if (controle != null)
+            {
+                //Confirmando Prefixo nos parametros
+                if (controle[0].Equals(this._parametro.Dat_06_BAS_Pref))
+                {   
                        
-                        if(controle[1].Contains("\""))
+                    if(controle[1].Contains("\""))
+                    {
+                        string str_B = controle[1].Replace("\"", "");
+                        foreach(Util.ObjectBasDat06  objD06 in  this.listBasDat06)
                         {
-                            string str_B = controle[1].Replace("\"", "");
-                            foreach(Util.ObjectBasDat06  objD06 in  this.listBasDat06)
+                            if(objD06.Name.ToUpper().Equals(str_B))
                             {
-                                if(objD06.Name.ToUpper().Equals(str_B))
-                                {
-                                    this.vVolumeBas = objD06.Volume;
-                                    this.vCircuitoBas = objD06.Circuito;
-                                    montando = strbasLimpo;
-                                }
+                                this.vVolumeBas = objD06.Volume;
+                                this.vCircuitoBas = objD06.Circuito;
+                                montando = strbasLimpo;
                             }
                         }
-                        
                     }
+                        
                 }
             }
-            catch
-            { }
+
             this._linhaBAS = montando;
         }
 
@@ -196,53 +171,46 @@ namespace Percolore.IOConnect.Core
         {
             string montando = string.Empty;
             string strcanLimpo = strCAN;
-            try
-            {  
-                //Removendo os espacos duplos.....
-                while (strcanLimpo.Contains("  "))
+            
+            //Removendo os espacos duplos.....
+            while (strcanLimpo.Contains("  "))
+            {
+                strcanLimpo = strcanLimpo.Replace("  ", " ");
+            }
+            string[] controle = strcanLimpo.Split(' ');
+            if (controle != null)
+            {
+                //Confirmando Prefixo nos parametros
+                if (controle[0].Equals(this._parametro.Dat_06_CAN_Pref))
                 {
-                    strcanLimpo = strcanLimpo.Replace("  ", " ");
-                }
-                string[] controle = strcanLimpo.Split(' ');
-                if (controle != null)
-                {
-                    //Confirmando Prefixo nos parametros
-                    if (controle[0].Equals(this._parametro.Dat_06_CAN_Pref))
+                    bool achou = false;
+                    double embdisp = -1;
+                    for (int i = 1; !achou && i < controle.Length;i++ )
                     {
-                        bool achou = false;
-                        double embdisp = -1;
-                        for (int i = 1; !achou && i < controle.Length;i++ )
+                        if (controle[i] != null && controle[i].Length > 0)
                         {
-                            try
+                            //Ponto == 1 e vrigula == 0
+                            if (this._parametro.Dat_06_CAN_1_IsPonto == 1 && !controle[i].Contains(","))
                             {
-                                if (controle[i] != null && controle[i].Length > 0)
-                                {
-                                    //Ponto == 1 e vrigula == 0
-                                    if (this._parametro.Dat_06_CAN_1_IsPonto == 1 && !controle[i].Contains(","))
-                                    {
-                                        embdisp = double.Parse(controle[i].Replace(",", "."), System.Globalization.CultureInfo.InvariantCulture);
-                                        achou = true;
-                                    }
-                                    else if (this._parametro.Dat_06_CAN_1_IsPonto == 0 && !controle[i].Contains("."))
-                                    {
-                                        embdisp = double.Parse(controle[i].Replace(",", "."), System.Globalization.CultureInfo.InvariantCulture);
-                                        achou = true;
-                                    }
-                                }
+                                embdisp = double.Parse(controle[i].Replace(",", "."), System.Globalization.CultureInfo.InvariantCulture);
+                                achou = true;
                             }
-                            catch
-                            { }
+                            else if (this._parametro.Dat_06_CAN_1_IsPonto == 0 && !controle[i].Contains("."))
+                            {
+                                embdisp = double.Parse(controle[i].Replace(",", "."), System.Globalization.CultureInfo.InvariantCulture);
+                                achou = true;
+                            }
                         }
-                        if(embdisp >=0)
-                        {
-                            this.vEmbdisp = embdisp;
-                            montando = strCAN;
-                        }
+                    }
+
+                    if(embdisp >=0)
+                    {
+                        this.vEmbdisp = embdisp;
+                        montando = strCAN;
                     }
                 }
             }
-            catch
-            { }
+
             this._linhaCAN = montando;
         }
 
@@ -250,118 +218,103 @@ namespace Percolore.IOConnect.Core
         {
             string montando = string.Empty;
             string struntLimpo = strUNT;
-            try
+            
+            //Removendo os espacos duplos.....
+            while(struntLimpo.Contains("  "))
             {
-                //Removendo os espacos duplos.....
-                while(struntLimpo.Contains("  "))
+                struntLimpo = struntLimpo.Replace("  ", " ");
+            }
+            string[] controle = struntLimpo.Split(' ');
+            if(controle!= null)
+            {
+                //Confirmando Prefixo nos parametros
+                if(controle[0].Equals(this._parametro.Dat_06_UNT_Pref))
                 {
-                    struntLimpo = struntLimpo.Replace("  ", " ");
-                }
-                string[] controle = struntLimpo.Split(' ');
-                if(controle!= null)
-                {
-                    //Confirmando Prefixo nos parametros
-                    if(controle[0].Equals(this._parametro.Dat_06_UNT_Pref))
+                    //Confirmando Fator
+                    double fator = -1;
+                    double fracao = -1;
+                    //Ponto == 1 e vrigula == 0
+                    if (this._parametro.Dat_06_UNT_1_IsPonto == 1 && !controle[1].Contains(","))
                     {
-                        //Confirmando Fator
-                        double fator = -1;
-                        double fracao = -1;
+                        fator = double.Parse(controle[1].Replace(",", "."), System.Globalization.CultureInfo.InvariantCulture);
+                    }
+                    else if(this._parametro.Dat_06_UNT_1_IsPonto == 0 && !controle[1].Contains("."))
+                    {
+                        fator = double.Parse(controle[1].Replace(",", "."), System.Globalization.CultureInfo.InvariantCulture);
+                    }
+                    if(fator > -1)
+                    {
                         //Ponto == 1 e vrigula == 0
-                        if (this._parametro.Dat_06_UNT_1_IsPonto == 1 && !controle[1].Contains(","))
+                        if (this._parametro.Dat_06_UNT_2_IsPonto == 1 && !controle[2].Contains(","))
                         {
-                            fator = double.Parse(controle[1].Replace(",", "."), System.Globalization.CultureInfo.InvariantCulture);
+                            fracao = double.Parse(controle[2].Replace(",", "."), System.Globalization.CultureInfo.InvariantCulture);
                         }
-                        else if(this._parametro.Dat_06_UNT_1_IsPonto == 0 && !controle[1].Contains("."))
+                        else if (this._parametro.Dat_06_UNT_2_IsPonto == 0 && !controle[2].Contains("."))
                         {
-                            fator = double.Parse(controle[1].Replace(",", "."), System.Globalization.CultureInfo.InvariantCulture);
+                            fracao = double.Parse(controle[2].Replace(",", "."), System.Globalization.CultureInfo.InvariantCulture);
                         }
-                        if(fator > -1)
-                        {
-                            //Ponto == 1 e vrigula == 0
-                            if (this._parametro.Dat_06_UNT_2_IsPonto == 1 && !controle[2].Contains(","))
-                            {
-                                fracao = double.Parse(controle[2].Replace(",", "."), System.Globalization.CultureInfo.InvariantCulture);
-                            }
-                            else if (this._parametro.Dat_06_UNT_2_IsPonto == 0 && !controle[2].Contains("."))
-                            {
-                                fracao = double.Parse(controle[2].Replace(",", "."), System.Globalization.CultureInfo.InvariantCulture);
-                            }
-                        }
-                        if(fracao > -1)
-                        {
-                            this.vFracaoUNT = fracao;
-                            this.vFatorUNT = fator;
-                            montando = "@UNT " + fator.ToString().Replace(",", ".") + "," + fracao.ToString().Replace(",", ".");
-                        }
-
-
+                    }
+                    if(fracao > -1)
+                    {
+                        this.vFracaoUNT = fracao;
+                        this.vFatorUNT = fator;
+                        montando = "@UNT " + fator.ToString().Replace(",", ".") + "," + fracao.ToString().Replace(",", ".");
                     }
                 }
             }
-            catch
-            {
 
-            }
             this._linhaUNT = montando;
-
         }
 
         private void DesmontarSV(string strSV)
         {
             string montando = string.Empty;
             string strsvLimpo = strSV;
-            try
+            
+            //Removendo os espacos duplos.....
+            while (strsvLimpo.Contains("  "))
             {
-                //Removendo os espacos duplos.....
-                while (strsvLimpo.Contains("  "))
+                strsvLimpo = strsvLimpo.Replace("  ", " ");
+            }
+            if(strsvLimpo.Contains("\""))
+            {
+                while (strsvLimpo.Contains("\""))
                 {
-                    strsvLimpo = strsvLimpo.Replace("  ", " ");
+                    strsvLimpo = strsvLimpo.Replace("\"", "");
                 }
-                if(strsvLimpo.Contains("\""))
+            }
+            string[] controle = strsvLimpo.Split(' ');
+            if (controle != null)
+            {
+                if (controle[0].Equals("@SV"))
                 {
-                    while (strsvLimpo.Contains("\""))
+                    for (int i = 1; i < controle.Length; i++)
                     {
-                        strsvLimpo = strsvLimpo.Replace("\"", "");
-                    }
-                }
-                string[] controle = strsvLimpo.Split(' ');
-                if (controle != null)
-                {
-                    if (controle[0].Equals("@SV"))
-                    {
-                        for (int i = 1; i < controle.Length; i++)
+                        if (montando == string.Empty)
                         {
-                            if (montando == string.Empty)
+                            if (controle[i] == "Rainbow")
                             {
-                                if (controle[i] == "Rainbow")
-                                {
-                                    montando = "@SV RB";
-                                }
-                                else if(controle[i] == "Colour-Smith")
-                                {
-                                    montando = "@SV CS";
-                                }
-                                else
-                                {
-                                    montando = "@SV " + controle[i];
-                                }
+                                montando = "@SV RB";
+                            }
+                            else if(controle[i] == "Colour-Smith")
+                            {
+                                montando = "@SV CS";
                             }
                             else
                             {
-                                montando += " " + controle[i];
+                                montando = "@SV " + controle[i];
                             }
                         }
-                        
+                        else
+                        {
+                            montando += " " + controle[i];
+                        }
                     }
                         
-                }
+                }  
             }
-            catch
-            {
 
-            }
             this._linhaSV = montando;
-
         }
 
         public bool Validar()
@@ -375,16 +328,11 @@ namespace Percolore.IOConnect.Core
                 retorno = !string.IsNullOrEmpty(_linhaBAS);
             }
 
-            try
+            string[] vShots = _linhaFRM.Split(new char[] { this._parametro.Dat_06_FRM_SEP[0] });
+            if(vShots == null || vShots.Length < 2)
             {
-                string[] vShots = _linhaFRM.Split(new char[] { this._parametro.Dat_06_FRM_SEP[0] });
-                if(vShots == null || vShots.Length < 2)
-                {
-                    retorno = false;
-                }
+                retorno = false;
             }
-            catch
-            { }
 
             return retorno;
         }
@@ -405,14 +353,12 @@ namespace Percolore.IOConnect.Core
                 {
                     CIRCUITO = _lCorv.Circuito;
                     double SHOT = double.Parse(vShots[index + 1].Replace(",", "."), CultureInfo.InvariantCulture);
-                    //double.TryParse(vShots[index + 1], out SHOT);
-
-                  
+                    
                     double QUANTIDADE = (this.vFatorUNT / this.vFracaoUNT) * (this.vEmbdisp / this.vEmbref) * SHOT ;
                     qtdes.Add(CIRCUITO, QUANTIDADE);
                 }
-                
             }
+
             if (this._parametro.Dat_06_BAS_Habilitado == 1)
             {
                 ListCorrespondencia _lCorvB = LISTA_CORRESPONDENCIA.Find(o => o.Circuito == this.vCircuitoBas);

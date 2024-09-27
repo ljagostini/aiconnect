@@ -1,13 +1,10 @@
 ﻿using Percolore.Core.Persistence.Xml;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 using System.Xml.Linq;
 
 namespace Percolore.IOConnect
 {
-    public class Bomba2
+	public class Bomba2
     {
         public static string path { get; } = @".\Bombas.xml";
 
@@ -23,52 +20,38 @@ namespace Percolore.IOConnect
 
         public static Bomba2 Get(int id)
         {
-            try
-            {
-                XElement xml = XElement.Load(path);
-                XElement xe = xml.Elements()
-                    .Where(f => f.Attribute("Id").Value == id.ToString()).First();
+            XElement xml = XElement.Load(path);
+            XElement xe = xml.Elements()
+                .Where(f => f.Attribute("Id").Value == id.ToString()).First();
 
-                Bomba2 b = new Bomba2();
-                b.Id = int.Parse(xe.Attribute("Id").Value);
-                b.Habilitado = bool.Parse(xe.Attribute("Habilitado").Value);
-                b.DataPurga = DateTime.Parse(xe.Attribute("DataPurga").Value);
-                b.PurgaPendente = bool.Parse(xe.Attribute("PurgaPendente").Value);
-                b.Colorante = Colorante.Load(id);
+            Bomba2 b = new Bomba2();
+            b.Id = int.Parse(xe.Attribute("Id").Value);
+            b.Habilitado = bool.Parse(xe.Attribute("Habilitado").Value);
+            b.DataPurga = DateTime.Parse(xe.Attribute("DataPurga").Value);
+            b.PurgaPendente = bool.Parse(xe.Attribute("PurgaPendente").Value);
+            b.Colorante = Colorante.Load(id);
 
-                return b;
-            }
-            catch
-            {
-                throw;
-            }
+            return b;
         }
 
         public static List<Bomba2> GetList()
         {
             List<Bomba2> list = new List<Bomba2>();
 
-            try
+            IEnumerable<XElement> xml = XElement.Load(path).Elements();
+            foreach (XElement xe in xml)
             {
-                IEnumerable<XElement> xml = XElement.Load(path).Elements();
-                foreach (XElement xe in xml)
-                {
-                    Bomba2 b = new Bomba2();
-                    b.Id = int.Parse(xe.Attribute("Id").Value);
-                    b.Habilitado = bool.Parse(xe.Attribute("Habilitado").Value);
-                    b.DataPurga = DateTime.Parse(xe.Attribute("DataPurga").Value);
-                    b.PurgaPendente = bool.Parse(xe.Attribute("PurgaPendente").Value);
-                    b.Colorante = Colorante.Load(b.Id);
+                Bomba2 b = new Bomba2();
+                b.Id = int.Parse(xe.Attribute("Id").Value);
+                b.Habilitado = bool.Parse(xe.Attribute("Habilitado").Value);
+                b.DataPurga = DateTime.Parse(xe.Attribute("DataPurga").Value);
+                b.PurgaPendente = bool.Parse(xe.Attribute("PurgaPendente").Value);
+                b.Colorante = Colorante.Load(b.Id);
 
-                    list.Add(b);
-                }
+                list.Add(b);
+            }
 
-                return list;
-            }
-            catch
-            {
-                throw;
-            }
+            return list;
         }
 
         public static bool Validar(List<Colorante> lista, out string outMsg)
@@ -103,44 +86,30 @@ namespace Percolore.IOConnect
 
         public static void Alterar(Colorante m)
         {
-            try
-            {
-                XElement xml = XElement.Load(path);
-                XElement xe = xml.Elements()
-                    .Where(f => f.Attribute("Motor").Value == m.Circuito.ToString()).First();
+            XElement xml = XElement.Load(path);
+            XElement xe = xml.Elements()
+                .Where(f => f.Attribute("Motor").Value == m.Circuito.ToString()).First();
 
-                xe.Attribute("Nome").SetValue(m.Nome);
-                xe.Attribute("MassaEspecifica").SetValue(m.MassaEspecifica);
-                xml.Save(path);
-            }
-            catch
-            {
-                throw;
-            }
+            xe.Attribute("Nome").SetValue(m.Nome);
+            xe.Attribute("MassaEspecifica").SetValue(m.MassaEspecifica);
+            xml.Save(path);
         }
 
         public static void Alterar(List<Colorante> lista)
         {
-            try
+            XElement xml = XElement.Load(path);
+            IEnumerable<XElement> eMassas = xml.Elements();
+
+            foreach (Colorante m in lista)
             {
-                XElement xml = XElement.Load(path);
-                IEnumerable<XElement> eMassas = xml.Elements();
+                XElement xe =
+                    eMassas.Where(f => f.Attribute("Motor").Value == m.Circuito.ToString()).First();
 
-                foreach (Colorante m in lista)
-                {
-                    XElement xe =
-                        eMassas.Where(f => f.Attribute("Motor").Value == m.Circuito.ToString()).First();
+                xe.Attribute("Nome").SetValue(m.Nome);
+                xe.Attribute("MassaEspecifica").SetValue(m.MassaEspecifica);
+            };
 
-                    xe.Attribute("Nome").SetValue(m.Nome);
-                    xe.Attribute("MassaEspecifica").SetValue(m.MassaEspecifica);
-                };
-
-                xml.Save(path);
-            }
-            catch
-            {
-                throw;
-            }
+            xml.Save(path);
         }    
 
         #endregion

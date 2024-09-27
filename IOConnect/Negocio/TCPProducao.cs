@@ -1,15 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net.NetworkInformation;
-using System.Net.Sockets;
+﻿using System.Net.Sockets;
 using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace Percolore.IOConnect.Negocio
 {
-    public class TCPProducao
+	public class TCPProducao
     {
         private Util.ObjectParametros _parametros = null;
         TcpClient tcpcliente = new TcpClient();
@@ -35,94 +29,67 @@ namespace Percolore.IOConnect.Negocio
 
         public void CloseProducaoTCP()
         {
-            try
+            if (this.tcpcliente.Connected)
             {
-                if (this.tcpcliente.Connected)
-                {
-                    try
-                    {
-                        this.tcpcliente.Close();
-                        this.tcpcliente.Dispose();
-                    }
-                    catch
-                    {
-
-                    }
-                }
+                this.tcpcliente.Close();
+                this.tcpcliente.Dispose();
             }
-            catch
-            { }
         }
-
-       
-
          
         #region Metodos Producao
 
         private bool isWriteTCP(byte[] pacoteMsg, string simCard)
         {
             bool retorno = false;
-            try
+            
+            if (this.testeConnect || CheckInternet.TestInternet(_parametros.IpProducao, _parametros.TimeoutPingTcp))
             {
-                if (this.testeConnect || CheckInternet.TestInternet(_parametros.IpProducao, _parametros.TimeoutPingTcp))
+                this.tcpcliente = new TcpClient();
+
+                this.tcpcliente.Connect(_parametros.IpProducao, Convert.ToInt32(_parametros.PortaProducao));
+                this.testeConnect = true;
+                NetworkStream netWriteread = this.tcpcliente.GetStream();
+                netWriteread.Write(pacoteMsg, 0, pacoteMsg.Length);
+                Thread.Sleep(1000);
+
+                if (this.tcpcliente.Connected)
                 {
-                    this.tcpcliente = new TcpClient();
-
-                    this.tcpcliente.Connect(_parametros.IpProducao, Convert.ToInt32(_parametros.PortaProducao));
-                    this.testeConnect = true;
-                    NetworkStream netWriteread = this.tcpcliente.GetStream();
-                    netWriteread.Write(pacoteMsg, 0, pacoteMsg.Length);
-                    Thread.Sleep(1000);
-
-                    if (this.tcpcliente.Connected)
+                    for (int i = 0; i < 5; i++)
                     {
-                        for (int i = 0; i < 5; i++)
+                        if (this.tcpcliente.Available <= 0)
                         {
-                            if (this.tcpcliente.Available <= 0)
-                            {
-                                Thread.Sleep(1000);
-                            }
-                            else
-                            {
-                                Thread.Sleep(1000);
-                                break;
-                            }
+                            Thread.Sleep(1000);
                         }
-                        try
+                        else
                         {
-                            if (this.tcpcliente.Available > 0)
-                            {
-                                int tamanho = 0;
-                                tamanho = this.tcpcliente.Available;
-                                Byte[] bytes = new Byte[tamanho];
-                                int i = netWriteread.Read(bytes, 0, tamanho);
+                            Thread.Sleep(1000);
+                            break;
+                        }
+                    }
+                        
+                    if (this.tcpcliente.Available > 0)
+                    {
+                        int tamanho = 0;
+                        tamanho = this.tcpcliente.Available;
+                        Byte[] bytes = new Byte[tamanho];
+                        int i = netWriteread.Read(bytes, 0, tamanho);
 
-                                StringBuilder sb = new StringBuilder();
-                                for (int k = 0; k < i; k++)
-                                {
-                                    byte b = bytes[k];
-                                    sb.Append(b.ToString("X2"));
-                                    if ((k - 1) < i)
-                                    {
-                                        sb.Append("-");
-                                    }
-                                }
-                                if (DesmontarPacoteTCP(sb.ToString(), simCard))
-                                {
-                                    retorno = true;
-                                }
+                        StringBuilder sb = new StringBuilder();
+                        for (int k = 0; k < i; k++)
+                        {
+                            byte b = bytes[k];
+                            sb.Append(b.ToString("X2"));
+                            if ((k - 1) < i)
+                            {
+                                sb.Append("-");
                             }
                         }
-                        catch
+                        if (DesmontarPacoteTCP(sb.ToString(), simCard))
                         {
-                            
+                            retorno = true;
                         }
                     }
                 }
-            }
-            catch
-            {
-
             }
 
             return retorno;
@@ -165,6 +132,7 @@ namespace Percolore.IOConnect.Negocio
                     #endregion
                 }
             }
+
             return retorno;
         }
 

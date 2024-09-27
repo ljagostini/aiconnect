@@ -1,15 +1,10 @@
 ﻿using PaintMixer;
 using Percolore.Core;
-using Percolore.Core.Persistence.Xml;
 using Percolore.IOConnect.Modbus;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading;
 
 namespace Percolore.IOConnect
 {
-    public class ModBusDispenserMover_P3 : IDispenser, IMover, IDisposable
+	public class ModBusDispenserMover_P3 : IDispenser, IMover, IDisposable
     {
         private PaintMixerInterface_P2 mixer;
         private PaintMoverInterface_P3 mover;
@@ -197,12 +192,7 @@ namespace Percolore.IOConnect
         {
             get
             {
-                try
-                {
-                    ReadSensores_Mover();
-                }
-                catch
-                { }
+                ReadSensores_Mover();
                 return this.stSensores.SensorEmergencia;
             }
         }
@@ -231,7 +221,6 @@ namespace Percolore.IOConnect
         {
             mover.Disconnect();
         }
-
 
         public void Halt()
         {
@@ -592,131 +581,124 @@ namespace Percolore.IOConnect
         public void AbrirGaveta(bool? _subirBico = null)
         {
             this.mover.TerminouProcessoDuplo = false;
-            try
+            
+            if (_subirBico != null && _subirBico.HasValue && _subirBico.Value)
             {
-                if (_subirBico != null && _subirBico.HasValue && _subirBico.Value)
+                this.ReadSensores_Mover();
+                if (!this.stSensores.SensorAltoBicos)
                 {
-                    this.ReadSensores_Mover();
-                    if (!this.stSensores.SensorAltoBicos)
+                    Thread.Sleep(500);
+                    SubirBico();
+                    bool isSubiu = false;
+                    for (int i = 0; !isSubiu && i < 20; i++)
                     {
                         Thread.Sleep(500);
-                        SubirBico();
-                        bool isSubiu = false;
-                        for (int i = 0; !isSubiu && i < 20; i++)
+                        this.ReadSensores_Mover();
+                        if ((this.stSensores.Nativo == 0 || this.stSensores.Nativo == 2) && this.stSensores.SensorAltoBicos)
+                        {
+                            isSubiu = true;
+                        }
+                        else
                         {
                             Thread.Sleep(500);
-                            this.ReadSensores_Mover();
-                            if ((this.stSensores.Nativo == 0 || this.stSensores.Nativo == 2) && this.stSensores.SensorAltoBicos)
-                            {
-                                isSubiu = true;
-                            }
-                            else
-                            {
-                                Thread.Sleep(500);
-                            }
+                        }
                             
-                        }
-                        if (isSubiu)
-                        {
-                            Thread.Sleep(100);
-                            this.MovimentarManual(1, true);
-                        }
-
                     }
-                    else
+                    if (isSubiu)
                     {
                         Thread.Sleep(100);
                         this.MovimentarManual(1, true);
                     }
+
                 }
                 else
                 {
+                    Thread.Sleep(100);
                     this.MovimentarManual(1, true);
                 }
-            }catch
-            {
-
             }
+            else
+            {
+                this.MovimentarManual(1, true);
+            }
+
             this.mover.TerminouProcessoDuplo = true;
         }
 
         public void FecharGaveta(bool? _descerBico = null)
         {
             this.mover.TerminouProcessoDuplo = false;
-            try
+            
+            bool isBicoAlto = false;
+            this.ReadSensores_Mover();
+            if(!this.stSensores.SensorAltoBicos)
             {
-                bool isBicoAlto = false;
-                this.ReadSensores_Mover();
-                if(!this.stSensores.SensorAltoBicos)
+                Thread.Sleep(100);
+                SubirBico();
+                for (int i = 0; !isBicoAlto && i < 20; i++)
                 {
-                    Thread.Sleep(100);
-                    SubirBico();
-                    for (int i = 0; !isBicoAlto && i < 20; i++)
+                    Thread.Sleep(500);
+                    this.ReadSensores_Mover();
+                    if ((this.stSensores.Nativo == 0 || this.stSensores.Nativo == 2) && this.stSensores.SensorAltoBicos)
+                    {
+                        isBicoAlto = true;
+                    }
+                    else
+                    {
+                        Thread.Sleep(500);
+                    }
+                }                    
+            }
+            else
+            {
+                isBicoAlto = true;
+            }
+            if (isBicoAlto)
+            {
+                Thread.Sleep(100);
+                this.MovimentarManual(1, false);
+                if (_descerBico != null && _descerBico.HasValue && _descerBico.Value)
+                {
+                    bool isFechouGaveta = false;
+                    for (int i = 0; !isFechouGaveta && i < 20; i++)
                     {
                         Thread.Sleep(500);
                         this.ReadSensores_Mover();
-                        if ((this.stSensores.Nativo == 0 || this.stSensores.Nativo == 2) && this.stSensores.SensorAltoBicos)
+                        if ((this.stSensores.Nativo == 0 || this.stSensores.Nativo == 2) && this.stSensores.SensorGavetaFechada)
                         {
-                            isBicoAlto = true;
+                            isFechouGaveta = true;
                         }
                         else
                         {
                             Thread.Sleep(500);
                         }
-                    }                    
-                }
-                else
-                {
-                    isBicoAlto = true;
-                }
-                if (isBicoAlto)
-                {
-                    Thread.Sleep(100);
-                    this.MovimentarManual(1, false);
-                    if (_descerBico != null && _descerBico.HasValue && _descerBico.Value)
+                    }
+                        
+                    //Thread.Sleep(1000);
+                    if (isFechouGaveta && !this.stSensores.SensorBaixoBicos)
                     {
-                        bool isFechouGaveta = false;
-                        for (int i = 0; !isFechouGaveta && i < 20; i++)
+                        Thread.Sleep(100);
+                        DescerBico();
+                        bool isDesceu = false;
+                        for (int i = 0; !isDesceu && i < 20; i++)
                         {
                             Thread.Sleep(500);
                             this.ReadSensores_Mover();
-                            if ((this.stSensores.Nativo == 0 || this.stSensores.Nativo == 2) && this.stSensores.SensorGavetaFechada)
+                            if ((this.stSensores.Nativo == 0 || this.stSensores.Nativo == 2) && this.stSensores.SensorBaixoBicos)
                             {
-                                isFechouGaveta = true;
+                                isDesceu = true;
                             }
                             else
                             {
                                 Thread.Sleep(500);
                             }
-                        }
-                        
-                        //Thread.Sleep(1000);
-                        if (isFechouGaveta && !this.stSensores.SensorBaixoBicos)
-                        {
-                            Thread.Sleep(100);
-                            DescerBico();
-                            bool isDesceu = false;
-                            for (int i = 0; !isDesceu && i < 20; i++)
-                            {
-                                Thread.Sleep(500);
-                                this.ReadSensores_Mover();
-                                if ((this.stSensores.Nativo == 0 || this.stSensores.Nativo == 2) && this.stSensores.SensorBaixoBicos)
-                                {
-                                    isDesceu = true;
-                                }
-                                else
-                                {
-                                    Thread.Sleep(500);
-                                }
-
-                            }
 
                         }
+
                     }
                 }
+            }
 
-            }catch
-            { }
             this.mover.TerminouProcessoDuplo = true;
         }
 
@@ -985,4 +967,3 @@ namespace Percolore.IOConnect
         }
     }
 }
-

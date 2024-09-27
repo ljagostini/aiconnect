@@ -1,11 +1,9 @@
 ﻿using Percolore.Core.Persistence.WindowsRegistry;
 using Percolore.Core.Util;
-using System;
-using System.IO;
 
 namespace Percolore.IOConnect
 {
-    public enum TipoLog
+	public enum TipoLog
     {
         Processo = 1,
         ControleDispensa = 2,
@@ -119,225 +117,203 @@ namespace Percolore.IOConnect
         /// </summary>
         private static void LogarProcesso(string path, string[] mensagens)
         {
-            try
+            bool existe = File.Exists(path);
+            if (existe)
             {
-                bool existe = File.Exists(path);
-                if (existe)
+                Util.ObjectParametros _par = Util.ObjectParametros.Load();
+                if (_par.LogAutomateBackup)
                 {
-                    Util.ObjectParametros _par = Util.ObjectParametros.Load();
-                    if (_par.LogAutomateBackup)
+                    FileInfo info = new FileInfo(path);
+                    double length = (info.Length / 1048576.0);
+                    if (length > 5.0)
                     {
-                        FileInfo info = new FileInfo(path);
-                        double length = (info.Length / 1048576.0);
-                        if (length > 5.0)
+                        string[] arrayPath = path.Split(Path.DirectorySeparatorChar);
+                        if (arrayPath.Length > 0)
                         {
-                            string[] arrayPath = path.Split(Path.DirectorySeparatorChar);
-                            if (arrayPath.Length > 0)
+                            string nameFile = string.Format("{0:dd-MM-yyyy}", DateTime.Now) + "_" + arrayPath[arrayPath.Length - 1];
+                            string nPathFile = "";
+                            for (int i = 0; i < arrayPath.Length - 1; i++)
                             {
-                                string nameFile = string.Format("{0:dd-MM-yyyy}", DateTime.Now) + "_" + arrayPath[arrayPath.Length - 1];
-                                string nPathFile = "";
-                                for (int i = 0; i < arrayPath.Length - 1; i++)
+                                if (arrayPath[i].Length > 0)
                                 {
-                                    if (arrayPath[i].Length > 0)
-                                    {
-                                        nPathFile += arrayPath[i] + Path.DirectorySeparatorChar;
-                                    }
+                                    nPathFile += arrayPath[i] + Path.DirectorySeparatorChar;
                                 }
-                                if (nPathFile.Length > 0)
-                                {
-                                    nPathFile += nameFile;
-                                }
-                                File.Move(path, nPathFile);
-                                existe = false;
                             }
+                            if (nPathFile.Length > 0)
+                            {
+                                nPathFile += nameFile;
+                            }
+                            File.Move(path, nPathFile);
+                            existe = false;
                         }
                     }
                 }
-                string log = string.Empty;
-
-                foreach (string msg in mensagens)
-                {
-                    if (existe)
-                        log += Environment.NewLine;
-
-                    log += string.Concat(DateTime.Now.ToString(), " | ", msg);
-                    Modbus.Constantes.listLog_TXT.Add(string.Concat(DateTime.Now.ToString(), " | ", msg));
-
-                }
-                while(Modbus.Constantes.listLog_TXT.Count > Modbus.Constantes.qtdLog_TXT)
-                {
-                    Modbus.Constantes.listLog_TXT.RemoveAt(0);
-                }
-
-                File.AppendAllText(path, log);
             }
-            catch
-            { }
+            string log = string.Empty;
+
+            foreach (string msg in mensagens)
+            {
+                if (existe)
+                    log += Environment.NewLine;
+
+                log += string.Concat(DateTime.Now.ToString(), " | ", msg);
+                Modbus.Constantes.listLog_TXT.Add(string.Concat(DateTime.Now.ToString(), " | ", msg));
+
+            }
+            while(Modbus.Constantes.listLog_TXT.Count > Modbus.Constantes.qtdLog_TXT)
+            {
+                Modbus.Constantes.listLog_TXT.RemoveAt(0);
+            }
+
+            File.AppendAllText(path, log);
         }
 
         private static void LogarControleDispensa(string path, string[] mensagens)
         {
-            try
-            {    
-                bool existe = File.Exists(path);
-                if(existe)
+            bool existe = File.Exists(path);
+            if(existe)
+            {
+                Util.ObjectParametros _par = Util.ObjectParametros.Load();
+                if (_par.LogAutomateBackup)
                 {
-                    Util.ObjectParametros _par = Util.ObjectParametros.Load();
-                    if (_par.LogAutomateBackup)
+                    FileInfo info = new FileInfo(path);
+                    double length = (info.Length / 1048576.0);
+                    if (length > 5.0)
                     {
-                        FileInfo info = new FileInfo(path);
-                        double length = (info.Length / 1048576.0);
-                        if (length > 5.0)
+                        string[] arrayPath = path.Split(Path.DirectorySeparatorChar);
+                        if (arrayPath.Length > 0)
                         {
-                            string[] arrayPath = path.Split(Path.DirectorySeparatorChar);
-                            if (arrayPath.Length > 0)
+                            string nameFile = string.Format("{0:dd-MM-yyyy}", DateTime.Now) + "_" + arrayPath[arrayPath.Length - 1];
+                            string nPathFile = "";
+                            for (int i = 0; i < arrayPath.Length - 1; i++)
                             {
-                                string nameFile = string.Format("{0:dd-MM-yyyy}", DateTime.Now) + "_" + arrayPath[arrayPath.Length - 1];
-                                string nPathFile = "";
-                                for (int i = 0; i < arrayPath.Length - 1; i++)
+                                if (arrayPath[i].Length > 0)
                                 {
-                                    if (arrayPath[i].Length > 0)
-                                    {
-                                        nPathFile += arrayPath[i] + Path.DirectorySeparatorChar;
-                                    }
+                                    nPathFile += arrayPath[i] + Path.DirectorySeparatorChar;
                                 }
-                                if (nPathFile.Length > 0)
-                                {
-                                    nPathFile += nameFile;
-                                }
-                                File.Move(path, nPathFile);
-                                existe = false;
                             }
+                            if (nPathFile.Length > 0)
+                            {
+                                nPathFile += nameFile;
+                            }
+                            File.Move(path, nPathFile);
+                            existe = false;
                         }
                     }
                 }
-                string log = string.Empty;
-
-                string serial = string.Empty;
-                using (PercoloreRegistry percRegistry = new PercoloreRegistry())
-                {
-                    serial = percRegistry.GetSerialNumber();
-                }
-
-                foreach (string mensagem in mensagens)
-                {
-                    if (existe)
-                        log += Environment.NewLine;
-
-                    long timestamp =
-                        DateTimeOffset.UtcNow.ToUnixTimeSeconds();
-
-                    log += $"{serial},{timestamp},{mensagem}";
-                }
-
-                File.AppendAllText(path, log);
             }
-            catch
-            { }
+            string log = string.Empty;
+
+            string serial = string.Empty;
+            using (PercoloreRegistry percRegistry = new PercoloreRegistry())
+            {
+                serial = percRegistry.GetSerialNumber();
+            }
+
+            foreach (string mensagem in mensagens)
+            {
+                if (existe)
+                    log += Environment.NewLine;
+
+                long timestamp =
+                    DateTimeOffset.UtcNow.ToUnixTimeSeconds();
+
+                log += $"{serial},{timestamp},{mensagem}";
+            }
+
+            File.AppendAllText(path, log);
         }
 
         private static void LogarErro(string path, string[] mensagens)
         {
-            try
+            bool fileExist = File.Exists(path);
+            if (fileExist)
             {
-                bool fileExist = File.Exists(path);
-                if (fileExist)
+                Util.ObjectParametros _par = Util.ObjectParametros.Load();
+                if (_par.LogAutomateBackup)
                 {
-                    Util.ObjectParametros _par = Util.ObjectParametros.Load();
-                    if (_par.LogAutomateBackup)
+                    FileInfo info = new FileInfo(path);
+                    double length = (info.Length / 1048576.0);
+                    if (length > 5.0)
                     {
-                        FileInfo info = new FileInfo(path);
-                        double length = (info.Length / 1048576.0);
-                        if (length > 5.0)
+                        string[] arrayPath = path.Split(Path.DirectorySeparatorChar);
+                        if (arrayPath.Length > 0)
                         {
-                            string[] arrayPath = path.Split(Path.DirectorySeparatorChar);
-                            if (arrayPath.Length > 0)
+                            string nameFile = string.Format("{0:dd-MM-yyyy}", DateTime.Now) + "_" + arrayPath[arrayPath.Length - 1];
+                            string nPathFile = "";
+                            for (int i = 0; i < arrayPath.Length - 1; i++)
                             {
-                                string nameFile = string.Format("{0:dd-MM-yyyy}", DateTime.Now) + "_" + arrayPath[arrayPath.Length - 1];
-                                string nPathFile = "";
-                                for (int i = 0; i < arrayPath.Length - 1; i++)
+                                if (arrayPath[i].Length > 0)
                                 {
-                                    if (arrayPath[i].Length > 0)
-                                    {
-                                        nPathFile += arrayPath[i] + Path.DirectorySeparatorChar;
-                                    }
+                                    nPathFile += arrayPath[i] + Path.DirectorySeparatorChar;
                                 }
-                                if (nPathFile.Length > 0)
-                                {
-                                    nPathFile += nameFile;
-                                }
-                                File.Move(path, nPathFile);
-                                fileExist = false;
                             }
+                            if (nPathFile.Length > 0)
+                            {
+                                nPathFile += nameFile;
+                            }
+                            File.Move(path, nPathFile);
+                            fileExist = false;
                         }
                     }
                 }
-                string log = string.Empty;
-
-                foreach (string mensagem in mensagens)
-                {
-                    if (fileExist)
-                        log += Environment.NewLine;
-
-                    log += $"{DateTimeOffset.Now} | {mensagem}";
-                }
-
-                File.AppendAllText(path, log);
             }
-            catch
-            { }
+            string log = string.Empty;
+
+            foreach (string mensagem in mensagens)
+            {
+                if (fileExist)
+                    log += Environment.NewLine;
+
+                log += $"{DateTimeOffset.Now} | {mensagem}";
+            }
+
+            File.AppendAllText(path, log);
         }
 
         private static void LogarComunicacao(string path, string[] mensagens)
         {
-            try
+            bool fileExist = File.Exists(path);
+            if (fileExist)
             {
-                bool fileExist = File.Exists(path);
-                if (fileExist)
+                Util.ObjectParametros _par = Util.ObjectParametros.Load();
+                if (_par.LogAutomateBackup)
                 {
-                    Util.ObjectParametros _par = Util.ObjectParametros.Load();
-                    if (_par.LogAutomateBackup)
+                    FileInfo info = new FileInfo(path);
+                    double length = (info.Length / 1048576.0);
+                    if (length > 5.0)
                     {
-                        FileInfo info = new FileInfo(path);
-                        double length = (info.Length / 1048576.0);
-                        if (length > 5.0)
+                        string[] arrayPath = path.Split(Path.DirectorySeparatorChar);
+                        if (arrayPath.Length > 0)
                         {
-                            string[] arrayPath = path.Split(Path.DirectorySeparatorChar);
-                            if (arrayPath.Length > 0)
+                            string nameFile = string.Format("{0:dd-MM-yyyy}", DateTime.Now) + "_" + arrayPath[arrayPath.Length - 1];
+                            string nPathFile = "";
+                            for (int i = 0; i < arrayPath.Length - 1; i++)
                             {
-                                string nameFile = string.Format("{0:dd-MM-yyyy}", DateTime.Now) + "_" + arrayPath[arrayPath.Length - 1];
-                                string nPathFile = "";
-                                for (int i = 0; i < arrayPath.Length - 1; i++)
+                                if (arrayPath[i].Length > 0)
                                 {
-                                    if (arrayPath[i].Length > 0)
-                                    {
-                                        nPathFile += arrayPath[i] + Path.DirectorySeparatorChar;
-                                    }
+                                    nPathFile += arrayPath[i] + Path.DirectorySeparatorChar;
                                 }
-                                if (nPathFile.Length > 0)
-                                {
-                                    nPathFile += nameFile;
-                                }
-                                File.Move(path, nPathFile);
-                                fileExist = false;
                             }
+                            if (nPathFile.Length > 0)
+                            {
+                                nPathFile += nameFile;
+                            }
+                            File.Move(path, nPathFile);
+                            fileExist = false;
                         }
                     }
                 }
-                string log = string.Empty;
-
-                foreach (string mensagem in mensagens)
-                {
-                    log += $"{DateTimeOffset.Now} | {mensagem}";
-                    log += Environment.NewLine;
-                }
-
-                File.AppendAllText(path, log);
             }
-            catch
+            string log = string.Empty;
+
+            foreach (string mensagem in mensagens)
             {
-
+                log += $"{DateTimeOffset.Now} | {mensagem}";
+                log += Environment.NewLine;
             }
+
+            File.AppendAllText(path, log);
         }
 
         #endregion

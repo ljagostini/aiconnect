@@ -30,7 +30,6 @@ namespace PaintMixer
             this.nomeDispositivo = NomeDispositivo;
         }
 
-
         public struct StatusValue
         {
             public StatusValue(int nativo, int coderror, bool copo, bool esponja, bool altoBico, bool baixoBico, bool gavetaAberta, bool gavetaFechada, bool valvulaAberta, 
@@ -74,13 +73,11 @@ namespace PaintMixer
         {
             get
             {
-                //ushort[] v = new ushort[1];
                 int[] v = new int[13];
               
                 ushort pollStart = (ushort)100;
                 if (!mb.SendFc3(slaveAddr, pollStart, 13, ref v))
                 {
-                    //throw new Exception("Could not read status register: " + wsmbs.GetLastErrorString());
                     throw new Exception("Could not read status register: " + mb.modbusStatusStr);
                 }
 
@@ -175,7 +172,7 @@ namespace PaintMixer
         public void Connect(int responseTimeout)
         {
             this.timeoutResp = responseTimeout;
-            //mb = ModBusRtu.getModBusRtu();
+            
             bool bConnect = false;
             if (mb == null)
             {
@@ -185,34 +182,27 @@ namespace PaintMixer
             bConnect = mb.isOpen();
             if (!mb.isOpen())
             {
-                string[] portas = null;
-                try
+                string[] portas = SerialPort.GetPortNames();
+                    
+                if (this.nomeDispositivo != "")
                 {
-                    portas = SerialPort.GetPortNames();
-                    //if(parametros.NomeDispositivo != "")
-                    if (this.nomeDispositivo != "")
+                    bool achouPorta = false;
+                    string mPortaConfig = "";
+                    foreach (string np in portas)
                     {
-                        bool achouPorta = false;
-                        string mPortaConfig = "";
-                        foreach (string np in portas)
+                        if (np.ToUpper() == this.nomeDispositivo.ToUpper())
                         {
-                            //if(np.ToUpper() == parametros.NomeDispositivo.ToUpper())
-                            if (np.ToUpper() == this.nomeDispositivo.ToUpper())
-                            {
-                                mPortaConfig = np;
-                                achouPorta = true;
-                            }
-                        }
-                        if (achouPorta)
-                        {
-                            portas = new string[1];
-                            portas[0] = mPortaConfig;
+                            mPortaConfig = np;
+                            achouPorta = true;
                         }
                     }
+                    if (achouPorta)
+                    {
+                        portas = new string[1];
+                        portas[0] = mPortaConfig;
+                    }
                 }
-                catch
-                { }
-                //bool bConnect = false;
+
                 if (portas == null || portas.LongLength == 0)
                 {
                     throw new Exception(
@@ -221,7 +211,6 @@ namespace PaintMixer
                 }
                 foreach (string porta in portas)
                 {
-                    //mb.Open(portas[0], 9600, 8, Parity.Even, StopBits.One);                    
                     mb.Open(porta, 9600, 8, Parity.Even, StopBits.One);
                     if (mb.isOpen())
                     {
@@ -234,19 +223,14 @@ namespace PaintMixer
                             this.counterConnect++;
                             //Se não for possível ler status, encerra comunicação com a porta                   
                             mb.CloseM();
-                            try
+                            
+                            if (counterConnect > 2)
                             {
-                                if (counterConnect > 2)
-                                {
-                                    counterConnect = 0;
-                                    BluetoothClient btClient = new BluetoothClient();
-									var devices = btClient.DiscoverDevices();
-									Bluetooth.PairBluetoothDevices(devices);
-								}
-                            }
-                            catch
-                            { }
-
+                                counterConnect = 0;
+                                BluetoothClient btClient = new BluetoothClient();
+								var devices = btClient.DiscoverDevices();
+								Bluetooth.PairBluetoothDevices(devices);
+							}
                         }
                         else
                         {
@@ -272,38 +256,11 @@ namespace PaintMixer
         /// </summary>
         public void Disconnect()
         {
-            /*
-            if (wsmbs != null)
-            {
-                wsmbs.Disconnect();
-
-                if (parametros.HabilitarLogComunicacao)
-                {
-                    Log.Logar(
-                        TipoLog.Comunicacao, Percolore.IOConnect.Util.ObjectParametros.PathDiretorioSistema, "Conexão com dispositivo encerrada.");
-                }
-            }
-
-            wsmbs = null;
-            */
-
             if (mb != null)
             {
                 mb.CloseM();
-
-            }
-            else
-            {
-                /*
-                mb = ModBusRtu.getModBusRtu();
-                if (mb != null && mb.isOpen())
-                {
-                    mb.CloseM();
-                }
-                */
             }
         }
-
 
         public void MovimentarManual(int motor, bool isForward)
         {
@@ -683,7 +640,6 @@ namespace PaintMixer
                 }
                 #endregion
             }
-
         }
 
         public void MovimentarAutomatico()
@@ -812,10 +768,6 @@ namespace PaintMixer
                 {
                     mb.CloseM();
                 }
-                /*
-                wsmbs.Disconnect();
-                wsmbs.Dispose();
-                */
             }
         }
 
