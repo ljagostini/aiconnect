@@ -1,19 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using Percolore.Core.Logging;
 using System.Data.SQLite;
-using System.IO;
-using System.Linq;
 using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace Percolore.IOConnect.Util
 {
-    public class ObjectMotorPlacaMovimentacao
+	public class ObjectMotorPlacaMovimentacao
     {
         public static readonly string PathFile = Path.Combine(Environment.CurrentDirectory, "PlMov.db");
         public static readonly string FileName = Path.GetFileName(PathFile);
-
         public int Circuito { get; set; }
         public int TipoMotor { get; set; } = 0;                     //0 -> Motor de Passo | 1 -> Motor DC 
         public bool Habilitado { get; set; } = true;
@@ -59,9 +53,11 @@ namespace Percolore.IOConnect.Util
                     }
                 }
             }
-            catch
-            { }
-        }
+			catch (Exception e)
+			{
+				LogManager.LogError($"Erro no módulo {typeof(ObjectMotorPlacaMovimentacao).Name}: ", e);
+			}
+		}
 
         public static ObjectMotorPlacaMovimentacao Load(int Circuito)
         {
@@ -98,14 +94,14 @@ namespace Percolore.IOConnect.Util
                     conn.Close();
                 }
 
-
                 return pMPMOV;
             }
-            catch
-            {
+			catch (Exception e)
+			{
+				LogManager.LogError($"Erro no módulo {typeof(ObjectMotorPlacaMovimentacao).Name}: ", e);
                 throw;
-            }
-        }
+			}
+		}
 
         public static List<ObjectMotorPlacaMovimentacao> List()
         {
@@ -142,12 +138,12 @@ namespace Percolore.IOConnect.Util
                     conn.Close();
                 }
             }
-            catch
-            {
+			catch (Exception e)
+			{
+				LogManager.LogError($"Erro no módulo {typeof(ObjectMotorPlacaMovimentacao).Name}: ", e);
+			}
 
-            }
-            return list.OrderBy(o=>o.Circuito).ToList();
-
+			return list.OrderBy(o=>o.Circuito).ToList();
         }
 
         public static void Persist(ObjectMotorPlacaMovimentacao pMMOV)
@@ -212,11 +208,12 @@ namespace Percolore.IOConnect.Util
                 }
 
             }
-            catch
-            {
+			catch (Exception e)
+			{
+				LogManager.LogError($"Erro no módulo {typeof(ObjectMotorPlacaMovimentacao).Name}: ", e);
                 throw;
-            }
-        }
+			}
+		}
 
         public static void Persist(List<ObjectMotorPlacaMovimentacao> lista)
         {
@@ -285,11 +282,12 @@ namespace Percolore.IOConnect.Util
                     }
                 }
             }
-            catch
-            {
+			catch (Exception e)
+			{
+				LogManager.LogError($"Erro no módulo {typeof(ObjectMotorPlacaMovimentacao).Name}: ", e);
                 throw;
-            }
-        }
+			}
+		}
 
         public static bool Validate(List<ObjectMotorPlacaMovimentacao> lista, out string outMsg)
         {
@@ -333,6 +331,5 @@ namespace Percolore.IOConnect.Util
 
             return retorno;
         }
-
     }
 }

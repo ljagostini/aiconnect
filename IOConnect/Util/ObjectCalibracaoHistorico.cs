@@ -1,17 +1,12 @@
-﻿using Percolore.IOConnect.Negocio;
-using System;
-using System.Collections.Generic;
+﻿using Percolore.Core.Logging;
+using Percolore.IOConnect.Negocio;
 using System.Data.SQLite;
 using System.Globalization;
-using System.IO;
-using System.Linq;
 using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace Percolore.IOConnect.Util
 {
-    public class ObjectCalibracaoHistorico
+	public class ObjectCalibracaoHistorico
     {
         public static readonly string PathFile = Path.Combine(Environment.CurrentDirectory, "CalibragemAutoHist.db");
         public static readonly string FileName = Path.GetFileName(PathFile);
@@ -71,9 +66,11 @@ namespace Percolore.IOConnect.Util
                     }
                 }
             }
-            catch
-            { }
-        }
+			catch (Exception e)
+			{
+				LogManager.LogError($"Erro no módulo {typeof(ObjectCalibracaoHistorico).Name}: ", e);
+			}
+		}
 
         public static ObjectCalibracaoHistorico Load(int motor)
         {
@@ -97,12 +94,7 @@ namespace Percolore.IOConnect.Util
                                 c.MaxMassaAdmRecipiente = double.Parse(reader["MaxMassaAdmRecipiente"].ToString(), CultureInfo.InvariantCulture);
                                 c.VolumeMaxRecipiente = double.Parse(reader["VolumeMaxRecipiente"].ToString(), CultureInfo.InvariantCulture);
                                 c.NumeroMaxTentativaRec = int.Parse(reader["NumeroMaxTentativaRec"].ToString());
-                                try
-                                {
-                                    c.MinMassaAdmRecipiente = double.Parse(reader["MinMassaAdmRecipiente"].ToString(), CultureInfo.InvariantCulture);
-                                }
-                                catch
-                                { }
+                                c.MinMassaAdmRecipiente = double.Parse(reader["MinMassaAdmRecipiente"].ToString(), CultureInfo.InvariantCulture);
                                 c.listOperacaoAutoHist = new List<OperacaoAutoHist>();
                                 break;
                             }
@@ -153,87 +145,60 @@ namespace Percolore.IOConnect.Util
                                     _MassaMedBalanca_str = reader["MassaMedBalanca"] != DBNull.Value ? reader["MassaMedBalanca"].ToString() : "";
                                     _VolumeDosado_str = reader["VolumeDosado"] != DBNull.Value ? reader["VolumeDosado"].ToString() : "";
                                     _Desvio_str = reader["Desvio"] != DBNull.Value ? reader["Desvio"].ToString() : "";
+                                    _Motor = int.Parse(reader["Motor"].ToString());
+                                    _Etapa = int.Parse(reader["Etapa"].ToString());
+                                    _Etapa_Tentativa = int.Parse(reader["Etapa_Tentativa"].ToString());
+                                    _Aprovado = int.Parse(reader["Aprovado"].ToString());
+                                    _Executado = int.Parse(reader["Executado"].ToString());
+                                    _Volume = double.Parse(_Volume_str, CultureInfo.InvariantCulture);
+                                    _MassaIdeal = double.Parse(_MassaIdeal_str, CultureInfo.InvariantCulture);
+                                    
+                                    if(_MassaMedBalanca_str.Contains("#"))
+                                    {
+                                        string[] _str = _MassaMedBalanca_str.Split('#');
+                                        double media = 0;
+                                        int count = 0;
+                                        foreach(string _st in _str)
+                                        {
+                                            if (_st != null && _st.Length > 0)
+                                            {
+                                                media += double.Parse(_st, CultureInfo.InvariantCulture);
+                                                count++;
+                                            }
+                                        }
+                                        media = media / count;
+                                        _MassaMedBalancaMedia_str = media.ToString();
+                                    }
+                                    else
+                                    {
+                                        _MassaMedBalancaMedia_str = _MassaMedBalanca_str;
+                                    }
+                                    
+                                    _MassaMedBalanca = double.Parse(_MassaMedBalancaMedia_str, CultureInfo.InvariantCulture);
+                                    
+                                    if (_VolumeDosado_str.Contains("#"))
+                                    {
+                                        string[] _str = _VolumeDosado_str.Split('#');
+                                        double media = 0;
+                                        int count = 0;
+                                        foreach (string _st in _str)
+                                        {
+                                            if (_st != null && _st.Length > 0)
+                                            {
+                                                media += double.Parse(_st, CultureInfo.InvariantCulture);
+                                                count++;
+                                            }
+                                        }
+                                        media = media / count;
+                                        _VolumeDosadoMedia_str = media.ToString();
+                                    }
+                                    else
+                                    {
+                                        _VolumeDosadoMedia_str = _VolumeDosado_str;
+                                    }
 
-                                    try
-                                    {
-                                        _Motor = int.Parse(reader["Motor"].ToString());
-                                        _Etapa = int.Parse(reader["Etapa"].ToString());
-                                        _Etapa_Tentativa = int.Parse(reader["Etapa_Tentativa"].ToString());
-                                        _Aprovado = int.Parse(reader["Aprovado"].ToString());
-                                        _Executado = int.Parse(reader["Executado"].ToString());
-                                    }
-                                    catch
-                                    {}
-                                    try
-                                    {
-                                        _Volume = double.Parse(_Volume_str, CultureInfo.InvariantCulture);
-                                    }
-                                    catch
-                                    {}
-                                    try
-                                    {
-                                        _MassaIdeal = double.Parse(_MassaIdeal_str, CultureInfo.InvariantCulture);
-                                    }
-                                    catch
-                                    {}
-                                    try
-                                    {
-                                        if(_MassaMedBalanca_str.Contains("#"))
-                                        {
-                                            string[] _str = _MassaMedBalanca_str.Split('#');
-                                            double media = 0;
-                                            int count = 0;
-                                            foreach(string _st in _str)
-                                            {
-                                                if (_st != null && _st.Length > 0)
-                                                {
-                                                    media += double.Parse(_st, CultureInfo.InvariantCulture);
-                                                    count++;
-                                                }
-                                            }
-                                            media = media / count;
-                                            _MassaMedBalancaMedia_str = media.ToString();
-                                        }
-                                        else
-                                        {
-                                            _MassaMedBalancaMedia_str = _MassaMedBalanca_str;
-                                        }
-                                        _MassaMedBalanca = double.Parse(_MassaMedBalancaMedia_str, CultureInfo.InvariantCulture);
-                                    }
-                                    catch
-                                    { }
-                                    try
-                                    {
-                                        if (_VolumeDosado_str.Contains("#"))
-                                        {
-                                            string[] _str = _VolumeDosado_str.Split('#');
-                                            double media = 0;
-                                            int count = 0;
-                                            foreach (string _st in _str)
-                                            {
-                                                if (_st != null && _st.Length > 0)
-                                                {
-                                                    media += double.Parse(_st, CultureInfo.InvariantCulture);
-                                                    count++;
-                                                }
-                                            }
-                                            media = media / count;
-                                            _VolumeDosadoMedia_str = media.ToString();
-                                        }
-                                        else
-                                        {
-                                            _VolumeDosadoMedia_str = _VolumeDosado_str;
-                                        }
-                                        _VolumeDosado = double.Parse(_VolumeDosadoMedia_str, CultureInfo.InvariantCulture);
-                                    }
-                                    catch
-                                    { }
-                                    try
-                                    {
-                                        _Desvio = double.Parse(_Desvio_str, CultureInfo.InvariantCulture);
-                                    }
-                                    catch
-                                    { }
+                                    _VolumeDosado = double.Parse(_VolumeDosadoMedia_str, CultureInfo.InvariantCulture);
+                                    _Desvio = double.Parse(_Desvio_str, CultureInfo.InvariantCulture);
 
                                     valores.Motor = _Motor;
                                     valores.Etapa = _Etapa;
@@ -269,11 +234,12 @@ namespace Percolore.IOConnect.Util
 
                 return c;
             }
-            catch
-            {
+			catch (Exception e)
+			{
+				LogManager.LogError($"Erro no módulo {typeof(ObjectCalibracaoHistorico).Name}: ", e);
                 throw;
-            }
-        }
+			}
+		}
 
         public static void Add(ObjectCalibracaoHistorico c, bool _att = false)
         {
@@ -315,10 +281,6 @@ namespace Percolore.IOConnect.Util
                             {
                                 using (SQLiteCommand cmd = new SQLiteCommand(conn))
                                 {
-
-                                    //sb.Append(" CREATE TABLE IF NOT EXISTS [Operacao] (Motor TEXT NULL, Etapa TEXT NULL, Etapa_Teantativa TEXT NULL, Volume TEXT NULL, ");
-                                    //sb.Append(" MassaIdeal TEXT NULL, MassaMedBalanca TEXT NULL, VolumeDosado TEXT NULL, Desvio TEXT NULL, Aprovado TEXT NULL, Executado TEXT NULL);");
-
                                     conn.Open();
                                     sb.Append("INSERT INTO Operacao (Motor, Etapa, Etapa_Tentativa, Volume, MassaIdeal, MassaMedBalanca, VolumeDosado, Desvio, Aprovado, Executado) VALUES (");
                                     sb.Append("'" + c._calibracaoAuto._colorante.Circuito.ToString() + "', ");
@@ -374,10 +336,6 @@ namespace Percolore.IOConnect.Util
                             {
                                 using (SQLiteCommand cmd = new SQLiteCommand(conn))
                                 {
-
-                                    //sb.Append(" CREATE TABLE IF NOT EXISTS [Operacao] (Motor TEXT NULL, Etapa TEXT NULL, Etapa_Teantativa TEXT NULL, Volume TEXT NULL, ");
-                                    //sb.Append(" MassaIdeal TEXT NULL, MassaMedBalanca TEXT NULL, VolumeDosado TEXT NULL, Desvio TEXT NULL, Aprovado TEXT NULL, Executado TEXT NULL);");
-
                                     conn.Open();
                                     sb.Append("INSERT INTO Operacao (Motor, Etapa, Etapa_Tentativa, Volume, MassaIdeal, MassaMedBalanca, VolumeDosado, Desvio, Aprovado, Executado) VALUES (");
                                     sb.Append("'" + c._calibracaoAuto._colorante.Circuito.ToString() + "', ");
@@ -445,12 +403,12 @@ namespace Percolore.IOConnect.Util
                 }
 
             }
-            catch (Exception)
-            {
-
+			catch (Exception e)
+			{
+				LogManager.LogError($"Erro no módulo {typeof(ObjectCalibracaoHistorico).Name}: ", e);
                 throw;
-            }
-        }
+			}
+		}
 
         public static void Update(ObjectCalibracaoHistorico c, bool _att = false)
         {
@@ -464,7 +422,6 @@ namespace Percolore.IOConnect.Util
                         using (SQLiteCommand cmd = new SQLiteCommand(conn))
                         {
                             conn.Open();
-                            //sb.Append("CREATE TABLE IF NOT EXISTS [Recipiente] (CapacideMaxBalanca TEXT NULL, MaxMassaAdmRecipiente TEXT NULL, VolumeMaxRecipiente TEXT NULL, NumeroMaxTentativaRec);");
                             sb.Append("UPDATE Recipiente SET "); //Pulsos, Velocidade, ReverseDelay, MassaMedia, DesvioMedio, PulsoReverso, Aceleracao                            
                             sb.Append("CapacideMaxBalanca = '" + c.CapacideMaxBalanca.ToString() + "', ");
                             sb.Append("MaxMassaAdmRecipiente = '" + c.MaxMassaAdmRecipiente.ToString().Replace(",", ".") + "', ");
@@ -483,7 +440,6 @@ namespace Percolore.IOConnect.Util
 
                 foreach (OperacaoAutoHist val in c.listOperacaoAutoHist)
                 {
-                    //sb = new StringBuilder();
                     using (SQLiteConnection conn = Util.SQLite.CreateSQLiteConnection(PathFile, false))
                     {
                         using (SQLiteCommand cmd = new SQLiteCommand(conn))
@@ -513,11 +469,12 @@ namespace Percolore.IOConnect.Util
                     }
                 }
             }
-            catch
-            {
+			catch (Exception e)
+			{
+				LogManager.LogError($"Erro no módulo {typeof(ObjectCalibracaoHistorico).Name}: ", e);
                 throw;
-            }
-        }
+			}
+		}
 
         public static void InsertOperacao(int motor, OperacaoAutoHist _val)
         {
@@ -551,11 +508,12 @@ namespace Percolore.IOConnect.Util
                 }
 
             }
-            catch
-            {
+			catch (Exception e)
+			{
+				LogManager.LogError($"Erro no módulo {typeof(ObjectCalibracaoHistorico).Name}: ", e);
                 throw;
-            }
-        }
+			}
+		}
 
         public static bool Delete(int motor, double volume, int etapa)
         {

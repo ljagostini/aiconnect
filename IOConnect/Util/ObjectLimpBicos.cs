@@ -1,15 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using Percolore.Core.Logging;
 using System.Data.SQLite;
-using System.IO;
-using System.Linq;
 using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace Percolore.IOConnect.Util
 {
-    public class ObjectLimpBicos
+	public class ObjectLimpBicos
     {
         public static readonly string PathFile = Path.Combine(Environment.CurrentDirectory, "LimpezaBicos.db");
         public static readonly string FileName = Path.GetFileName(PathFile);
@@ -78,9 +73,11 @@ namespace Percolore.IOConnect.Util
                     }
                 }
             }
-            catch
-            { }
-        }
+			catch (Exception e)
+			{
+				LogManager.LogError($"Erro no módulo {typeof(ObjectLimpBicos).Name}: ", e);
+			}
+		}
 
         public static ObjectLimpBicos Load(int id)
         {
@@ -112,11 +109,12 @@ namespace Percolore.IOConnect.Util
 
                 return per;
             }
-            catch
-            {
+			catch (Exception e)
+			{
+				LogManager.LogError($"Erro no módulo {typeof(ObjectLimpBicos).Name}: ", e);
                 throw;
-            }
-        }
+			}
+		}
      
 
         public static List<ObjectLimpBicos> List()
@@ -148,12 +146,12 @@ namespace Percolore.IOConnect.Util
                     conn.Close();
                 }
             }
-            catch
-            {
+			catch (Exception e)
+			{
+				LogManager.LogError($"Erro no módulo {typeof(ObjectLimpBicos).Name}: ", e);
+			}
 
-            }
-            return list;
-
+			return list;
         }
 
         public static bool Validate(List<ObjectLimpBicos> lista, out string outMsg)
@@ -236,13 +234,13 @@ namespace Percolore.IOConnect.Util
                         }
                     }
                 }
-
             }
-            catch
-            {
+			catch (Exception e)
+			{
+				LogManager.LogError($"Erro no módulo {typeof(ObjectLimpBicos).Name}: ", e);
                 throw;
-            }
-        }
+			}
+		}
 
         public static void Persist(List<ObjectLimpBicos> lista)
         {
@@ -302,11 +300,12 @@ namespace Percolore.IOConnect.Util
                     }
                 }
             }
-            catch
-            {
+			catch (Exception e)
+			{
+				LogManager.LogError($"Erro no módulo {typeof(ObjectLimpBicos).Name}: ", e);
                 throw;
-            }
-        }
+			}
+		}
 
         public static bool LimpBicos_Delete(int id)
         {
@@ -330,10 +329,12 @@ namespace Percolore.IOConnect.Util
 
                 retorno = true;
             }
-            catch
-            {
-            }
-            return retorno;
+			catch (Exception e)
+			{
+				LogManager.LogError($"Erro no módulo {typeof(ObjectLimpBicos).Name}: ", e);
+			}
+
+			return retorno;
         }
 
         public static void UpdateExecutado(DateTime dtExecutado)
@@ -359,11 +360,12 @@ namespace Percolore.IOConnect.Util
                 }
 
             }
-            catch
-            {
+			catch (Exception e)
+			{
+				LogManager.LogError($"Erro no módulo {typeof(ObjectLimpBicos).Name}: ", e);
                 throw;
-            }
-        }
+			}
+		}
 
         public static DateTime LoadExecutado()
         {
@@ -393,12 +395,12 @@ namespace Percolore.IOConnect.Util
 
                 return dtExecutado;
             }
-            catch
-            {
+			catch (Exception e)
+			{
+				LogManager.LogError($"Erro no módulo {typeof(ObjectLimpBicos).Name}: ", e);
                 throw;
-            }
-        }
-
+			}
+		}
 
         #endregion
     }

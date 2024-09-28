@@ -1,17 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using Percolore.Core.Logging;
 using System.Data;
 using System.Data.SQLite;
-using System.Drawing;
-using System.IO;
-using System.Linq;
 using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace Percolore.IOConnect.Util
 {
-    public class ObjectColorante
+	public class ObjectColorante
     {
         public static readonly string PathFile = Path.Combine(Environment.CurrentDirectory, "Colorantes.db");
         public static readonly string FileName = Path.GetFileName(PathFile);
@@ -81,9 +75,11 @@ namespace Percolore.IOConnect.Util
                     }
                 }
             }
-            catch
-            { }
-        }
+			catch (Exception e)
+			{
+				LogManager.LogError($"Erro no módulo {typeof(ObjectColorante).Name}: ", e);
+			}
+		}
 
         public static ObjectColorante Load(int Circuito)
         {
@@ -115,52 +111,36 @@ namespace Percolore.IOConnect.Util
                                 colorante.IsBase = Convert.ToBoolean(reader["IsBase"].ToString());
                                 colorante.Seguidor = Convert.ToInt32(reader["Seguidor"].ToString());
                                 colorante.Step = Convert.ToInt32(reader["Step"].ToString());
-                                try
-                                {
-                                    colorante.VolumePurga = double.Parse(reader["VolumePurga"].ToString(), System.Globalization.CultureInfo.InvariantCulture);
-                                }
-                                catch
-                                {
-                                    colorante.VolumePurga = 1;
-                                }
-
+                                colorante.VolumePurga = double.Parse(reader["VolumePurga"].ToString(), System.Globalization.CultureInfo.InvariantCulture);
+                                colorante.VolumePurga = 1;
+                                
                                 try
                                 {
                                     colorante.ColorRGB = reader["ColorRGB"].ToString();
                                     int red = 255;
                                     int green = 255;
                                     int blue = 255;
+                                    
                                     if (colorante.ColorRGB.Contains(";"))
                                     {
                                         string[] _arr = colorante.ColorRGB.Split(';');
                                         if (_arr.Length > 2)
                                         {
-                                            try
-                                            {
-                                                red = Convert.ToInt32(_arr[0]);
-                                                green = Convert.ToInt32(_arr[1]);
-                                                blue = Convert.ToInt32(_arr[2]);
-                                            }
-                                            catch
-                                            { }
+                                            red = Convert.ToInt32(_arr[0]);
+                                            green = Convert.ToInt32(_arr[1]);
+                                            blue = Convert.ToInt32(_arr[2]);
                                         }
-
                                     }
                                     colorante.corCorante = Color.FromArgb(red, green, blue);
                                 }
                                 catch
                                 {
                                     colorante.ColorRGB = "255;255;255;";
-                                    colorante.corCorante =Color.White;
+                                    colorante.corCorante = Color.White;
                                 }
 
-                                try
-                                {
-                                    colorante.VolumeBicoIndividual = double.Parse(reader["VolumeBicoIndividual"].ToString(), System.Globalization.CultureInfo.InvariantCulture);
-                                    colorante.IsBicoIndividual = Convert.ToBoolean(reader["IsBicoIndividual"].ToString());
-                                }
-                                catch
-                                { }
+                                colorante.VolumeBicoIndividual = double.Parse(reader["VolumeBicoIndividual"].ToString(), System.Globalization.CultureInfo.InvariantCulture);
+                                colorante.IsBicoIndividual = Convert.ToBoolean(reader["IsBicoIndividual"].ToString());
                                 break;
                             }
                         }
@@ -168,14 +148,14 @@ namespace Percolore.IOConnect.Util
                     conn.Close();
                 }
 
-
                 return colorante;
             }
-            catch
-            {
+			catch (Exception e)
+			{
+				LogManager.LogError($"Erro no módulo {typeof(ObjectColorante).Name}: ", e);
                 throw;
-            }
-        }
+			}
+		}
 
         public static List<ObjectColorante> List()
         {
@@ -234,20 +214,14 @@ namespace Percolore.IOConnect.Util
                                         string[] _arr = colorante.ColorRGB.Split(';');
                                         if(_arr.Length > 2)
                                         {
-                                            try
-                                            {
-                                                red = Convert.ToInt32(_arr[0]);
-                                                green = Convert.ToInt32(_arr[1]);
-                                                blue = Convert.ToInt32(_arr[2]);
-                                            }
-                                            catch
-                                            { }
+                                            red = Convert.ToInt32(_arr[0]);
+                                            green = Convert.ToInt32(_arr[1]);
+                                            blue = Convert.ToInt32(_arr[2]);
                                         }
 
                                     }
+
                                     colorante.corCorante = Color.FromArgb(red, green, blue);
-
-
                                 }
                                 catch
                                 {
@@ -255,27 +229,23 @@ namespace Percolore.IOConnect.Util
                                     colorante.corCorante = Color.White;
                                 }
 
-                                try
-                                {
-                                    colorante.VolumeBicoIndividual = double.Parse(reader["VolumeBicoIndividual"].ToString(), System.Globalization.CultureInfo.InvariantCulture);
-                                    colorante.IsBicoIndividual = Convert.ToBoolean(reader["IsBicoIndividual"].ToString());
-                                }
-                                catch
-                                { }
-
+                                colorante.VolumeBicoIndividual = double.Parse(reader["VolumeBicoIndividual"].ToString(), System.Globalization.CultureInfo.InvariantCulture);
+                                colorante.IsBicoIndividual = Convert.ToBoolean(reader["IsBicoIndividual"].ToString());
+                                
                                 list.Add(colorante);
                             }
                         }
                     }
+
                     conn.Close();
                 }
             }
-            catch
-            {
+			catch (Exception e)
+			{
+				LogManager.LogError($"Erro no módulo {typeof(ObjectColorante).Name}: ", e);
+			}
 
-            }
-            return list.OrderBy(o=>o.Circuito).ToList();
-
+			return list.OrderBy(o=>o.Circuito).ToList();
         }
 
         public static bool Validate(List<ObjectColorante> lista, out string outMsg)
@@ -397,11 +367,12 @@ namespace Percolore.IOConnect.Util
                 }
                
             }
-            catch
-            {
+			catch (Exception e)
+			{
+				LogManager.LogError($"Erro no módulo {typeof(ObjectColorante).Name}: ", e);
                 throw;
-            }
-        }
+			}
+		}
 
         public static void Persist(List<ObjectColorante> lista)
         {
@@ -485,11 +456,12 @@ namespace Percolore.IOConnect.Util
                     }
                 }
             }
-            catch
-            {
+			catch (Exception e)
+			{
+				LogManager.LogError($"Erro no módulo {typeof(ObjectColorante).Name}: ", e);
                 throw;
-            }
-        }
+			}
+		}
 
         public static DataSet getTables()
         {
@@ -508,11 +480,8 @@ namespace Percolore.IOConnect.Util
 
                         bool incluir = false;
 
-                        //foreach (DataRowCollection row in columnsTable.Rows)
-                        //for(int i = 0; i < columnsTable.Rows.Count; i++)
                         foreach (DataRow rownm in columnsTable.Rows)
                         {
-                            //DataRow rownm = columnsTable.Rows[i];
                             string colname = rownm["COLUMN_NAME"].ToString();
                             DataColumn col = new DataColumn(colname);
                             string data_type = rownm["DATA_TYPE"].ToString();
@@ -536,6 +505,7 @@ namespace Percolore.IOConnect.Util
                         }
 
                     }
+
                     con.Close();
                 }
             }
@@ -570,10 +540,12 @@ namespace Percolore.IOConnect.Util
                     }
                 }
             }
-            catch
-            { }
-            return retorno;
+			catch (Exception e)
+			{
+				LogManager.LogError($"Erro no módulo {typeof(ObjectColorante).Name}: ", e);
+			}
+
+			return retorno;
         }
-    }
-       
+    }   
 }

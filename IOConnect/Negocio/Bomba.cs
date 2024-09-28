@@ -1,13 +1,11 @@
-﻿using Percolore.Core.Persistence.Xml;
-using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using Percolore.Core.Logging;
+using Percolore.Core.Persistence.Xml;
 using System.Text;
 using System.Xml.Linq;
 
 namespace Percolore.IOConnect
 {
-    public class Bomba2
+	public class Bomba2
     {
         public static string path { get; } = @".\Bombas.xml";
 
@@ -38,11 +36,12 @@ namespace Percolore.IOConnect
 
                 return b;
             }
-            catch
-            {
+			catch (Exception e)
+			{
+				LogManager.LogError($"Erro no módulo {typeof(Bomba2).Name}: ", e);
                 throw;
-            }
-        }
+			}
+		}
 
         public static List<Bomba2> GetList()
         {
@@ -62,14 +61,14 @@ namespace Percolore.IOConnect
 
                     list.Add(b);
                 }
+            }
+			catch (Exception e)
+			{
+				LogManager.LogError($"Erro no módulo {typeof(Bomba2).Name}: ", e);
+			}
 
-                return list;
-            }
-            catch
-            {
-                throw;
-            }
-        }
+            return list;
+		}
 
         public static bool Validar(List<Colorante> lista, out string outMsg)
         {
@@ -113,11 +112,11 @@ namespace Percolore.IOConnect
                 xe.Attribute("MassaEspecifica").SetValue(m.MassaEspecifica);
                 xml.Save(path);
             }
-            catch
-            {
-                throw;
-            }
-        }
+			catch (Exception e)
+			{
+				LogManager.LogError($"Erro no módulo {typeof(Bomba2).Name}: ", e);
+			}
+		}
 
         public static void Alterar(List<Colorante> lista)
         {
@@ -137,11 +136,11 @@ namespace Percolore.IOConnect
 
                 xml.Save(path);
             }
-            catch
-            {
-                throw;
-            }
-        }    
+			catch (Exception e)
+			{
+				LogManager.LogError($"Erro no módulo {typeof(Bomba2).Name}: ", e);
+			}
+		}    
 
         #endregion
     }

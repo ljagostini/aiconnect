@@ -1,16 +1,10 @@
 ﻿using Percolore.Core;
-using System;
-using System.Collections.Generic;
+using Percolore.Core.Logging;
 using System.Globalization;
-using System.Linq;
-using System.Text;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
-
 
 namespace Percolore.IOConnect.Core
 {
-    public class DatPattern05 : IDat
+	public class DatPattern05 : IDat
     {
         private bool UTILIZAR_CORRESPONDENCIA;
         private List<ListCorrespondencia> LISTA_CORRESPONDENCIA;
@@ -88,8 +82,10 @@ namespace Percolore.IOConnect.Core
                     }
                 }
             }
-            catch
-            { }
+            catch (Exception e)
+            {
+                LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", e);
+            }
             this._codigoCor = this._linhaCAN + ";" + this._linhaCLR.Replace("|", "/") + ";" + _linhaBAS + ";" + this._linhaAllFRM + ";";
         }
 
@@ -131,12 +127,12 @@ namespace Percolore.IOConnect.Core
                     }
                 }
             }
-            catch
-            {
+			catch (Exception e)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", e);
+			}
 
-            }
-
-            this._linhaFRM = montando;
+			this._linhaFRM = montando;
 
         }
 
@@ -174,14 +170,15 @@ namespace Percolore.IOConnect.Core
                                     }
                                 }
                             }
-
                         }
                     }
                 }
             }
-            catch
-            { }
-            this._linhaBAS = montando;
+			catch (Exception e)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", e);
+			}
+			this._linhaBAS = montando;
         }
 
         private void DesmontaCAN(string strCAN)
@@ -206,25 +203,20 @@ namespace Percolore.IOConnect.Core
                         double embdisp = -1;
                         for (int i = 2; !achou && i < controle.Length; i++)
                         {
-                            try
+                            if (controle[i] != null && controle[i].Length > 0)
                             {
-                                if (controle[i] != null && controle[i].Length > 0)
+                                //Ponto == 1 e vrigula == 0
+                                if (this._parametro.Dat_05_CAN_1_IsPonto == 1 && !controle[i].Contains(","))
                                 {
-                                    //Ponto == 1 e vrigula == 0
-                                    if (this._parametro.Dat_05_CAN_1_IsPonto == 1 && !controle[i].Contains(","))
-                                    {
-                                        embdisp = double.Parse(controle[i].Replace(",", "."), System.Globalization.CultureInfo.InvariantCulture);
-                                        achou = true;
-                                    }
-                                    else if (this._parametro.Dat_05_CAN_1_IsPonto == 0 && !controle[i].Contains("."))
-                                    {
-                                        embdisp = double.Parse(controle[i].Replace(",", "."), System.Globalization.CultureInfo.InvariantCulture);
-                                        achou = true;
-                                    }
+                                    embdisp = double.Parse(controle[i].Replace(",", "."), System.Globalization.CultureInfo.InvariantCulture);
+                                    achou = true;
+                                }
+                                else if (this._parametro.Dat_05_CAN_1_IsPonto == 0 && !controle[i].Contains("."))
+                                {
+                                    embdisp = double.Parse(controle[i].Replace(",", "."), System.Globalization.CultureInfo.InvariantCulture);
+                                    achou = true;
                                 }
                             }
-                            catch
-                            { }
                         }
                         if (embdisp >= 0)
                         {
@@ -234,9 +226,11 @@ namespace Percolore.IOConnect.Core
                     }
                 }
             }
-            catch
-            { }
-            this._linhaCAN = montando;
+			catch (Exception e)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", e);
+			}
+			this._linhaCAN = montando;
         }
 
         private void DesmontarUNT(string strUNT)
@@ -286,17 +280,14 @@ namespace Percolore.IOConnect.Core
                             this.vFatorUNT = fator;
                             montando = "@UNT " + fator.ToString().Replace(",", ".") + ";" + fracao.ToString().Replace(",", ".");
                         }
-
-
                     }
                 }
             }
-            catch
-            {
-
-            }
-            this._linhaUNT = montando;
-
+			catch (Exception e)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", e);
+			}
+			this._linhaUNT = montando;
         }
 
         public bool Validar()
@@ -318,10 +309,12 @@ namespace Percolore.IOConnect.Core
                     retorno = false;
                 }
             }
-            catch
-            { }
+			catch (Exception e)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", e);
+			}
 
-            return retorno;
+			return retorno;
         }
 
         public Dictionary<int, double> GetQuantidades()

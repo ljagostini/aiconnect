@@ -1,15 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using Percolore.Core.Logging;
 using System.Data.SQLite;
-using System.IO;
-using System.Linq;
 using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace Percolore.IOConnect.Util
 {
-    public class ObjectUser
+	public class ObjectUser
     {
         public static readonly string PathFile = Path.Combine(Environment.CurrentDirectory, "Users.db");
         public static readonly string FileName = Path.GetFileName(PathFile);
@@ -18,16 +13,12 @@ namespace Percolore.IOConnect.Util
         public string Nome { get; set; }
         public string Senha { get; set; }
         public bool Tecnico { get; set; }
-        public int Tipo { get; set; }
-
-        //Tipo
-        //0 = Operador
-        //1 = Gerente
-        //2 = Tecnico
-
+		/// <summary>
+		/// Tipo: 0 = Operador | 1 = Gerente | 2 = Tecnico
+		/// </summary>
+		public int Tipo { get; set; }
 
         public ObjectUser() { }
-
 
         #region Métodos
         public static void CreateBD()
@@ -57,13 +48,14 @@ namespace Percolore.IOConnect.Util
                                 conn.Close();
                             }
                         }
-                       
                     }
                 }
             }
-            catch
-            { }
-        }
+			catch (Exception e)
+			{
+				LogManager.LogError($"Erro no módulo {typeof(ObjectUser).Name}: ", e);
+			}
+		}
 
         public static ObjectUser Load(int id)
         {
@@ -95,14 +87,14 @@ namespace Percolore.IOConnect.Util
                     conn.Close();
                 }
 
-
                 return user;
             }
-            catch
-            {
+			catch (Exception e)
+			{
+				LogManager.LogError($"Erro no módulo {typeof(ObjectUser).Name}: ", e);
                 throw;
-            }
-        }
+			}
+		}
 
         public static ObjectUser Load(string nome, string senha)
         {
@@ -134,14 +126,14 @@ namespace Percolore.IOConnect.Util
                     conn.Close();
                 }
 
-
                 return user;
             }
-            catch
-            {
+			catch (Exception e)
+			{
+				LogManager.LogError($"Erro no módulo {typeof(ObjectUser).Name}: ", e);
                 throw;
-            }
-        }
+			}
+		}
 
         public static List<ObjectUser> List()
         {
@@ -174,12 +166,12 @@ namespace Percolore.IOConnect.Util
                     conn.Close();
                 }
             }
-            catch
-            {
+			catch (Exception e)
+			{
+				LogManager.LogError($"Erro no módulo {typeof(ObjectUser).Name}: ", e);
+			}
 
-            }
-            return list;
-
+			return list;
         }
 
         public static bool Validate(List<ObjectUser> lista, out string outMsg)
@@ -202,8 +194,6 @@ namespace Percolore.IOConnect.Util
 
                 if (string.IsNullOrEmpty(user.Senha))
                     validaItem.AppendLine(Negocio.IdiomaResxExtensao.Usuario_SenhaObrigatorio);
-
-                
 
                 if (validaItem.Length > 0)
                 {
@@ -275,13 +265,13 @@ namespace Percolore.IOConnect.Util
                         }
                     }
                 }
-
             }
-            catch
-            {
+			catch (Exception e)
+			{
+				LogManager.LogError($"Erro no módulo {typeof(ObjectUser).Name}: ", e);
                 throw;
-            }
-        }
+			}
+		}
 
         public static void Persist(List<ObjectUser> lista)
         {
@@ -347,11 +337,12 @@ namespace Percolore.IOConnect.Util
                     }
                 }
             }
-            catch
-            {
+			catch (Exception e)
+			{
+				LogManager.LogError($"Erro no módulo {typeof(ObjectUser).Name}: ", e);
                 throw;
-            }
-        }
+			}
+		}
 
         public static bool User_Delete(int id)
         {
@@ -375,12 +366,13 @@ namespace Percolore.IOConnect.Util
                
                 retorno = true;
             }
-            catch
-            {
-            }
-            return retorno;
+			catch (Exception e)
+			{
+				LogManager.LogError($"Erro no módulo {typeof(ObjectUser).Name}: ", e);
+			}
+
+			return retorno;
         }
         #endregion
-
     }
 }

@@ -1,4 +1,5 @@
 ﻿using InTheHand.Net.Sockets;
+using Percolore.Core.Logging;
 using Percolore.IOConnect;
 using Percolore.IOConnect.Util;
 using System.IO.Ports;
@@ -367,10 +368,12 @@ namespace PaintMixer
                         }
                     }
                 }
-                catch
-                { }
-                
-                if (portas == null || portas.LongLength == 0)
+				catch (Exception e)
+				{
+					LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", e);
+				}
+
+				if (portas == null || portas.LongLength == 0)
                 {
                     throw new Exception(
                         Percolore.IOConnect.Negocio.IdiomaResxExtensao.Global_DisensaNaoConectado);
@@ -400,9 +403,11 @@ namespace PaintMixer
 									Bluetooth.PairBluetoothDevices(devices);
 								}
                             }
-                            catch
-                            { }
-                        }
+							catch (Exception e)
+							{
+								LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", e);
+							}
+						}
                         else
                         {
                             this.counterConnect = 0;
@@ -432,7 +437,6 @@ namespace PaintMixer
             if (mb != null)
             {
                 mb.CloseM();
-
             }
         }
 
@@ -792,11 +796,11 @@ namespace PaintMixer
                 writeControl(CONTROL_IDLE);
                 this.isDosed = true;
             }
-            catch (Exception exc)
+			catch (Exception exc)
             {
                 this.isDosed = true;
-                throw new Exception(exc.Message);
-
+                LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", exc);
+                throw;
             }
         }
 
@@ -930,10 +934,10 @@ namespace PaintMixer
             catch (Exception exc)
             {
                 this.isDosed = true;
-                throw new Exception(exc.Message);
-
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", exc);
+				throw;
             }
-        }
+		}
 
         /// <summary>
         /// Halts the board, abruptly stopping all motion until the halt is cleared.

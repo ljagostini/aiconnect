@@ -1,15 +1,11 @@
 ﻿using Percolore.Core;
-using System;
-using System.Collections.Generic;
+using Percolore.Core.Logging;
 using System.Globalization;
-using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Percolore.IOConnect.Core
 {
-    public class DatPatternSinteplast : IDat
+	public class DatPatternSinteplast : IDat
     {
         private bool UTILIZAR_CORRESPONDENCIA;
         private List<ListCorrespondencia> LISTA_CORRESPONDENCIA;
@@ -77,15 +73,17 @@ namespace Percolore.IOConnect.Core
                     }
                 }
             }
-            catch
-            { }
-            this._codigoCor = this._linhaPRD + ";" + _linhaBAS + ";@CNX " + this._linhaFRM + ";";
+			catch (Exception e)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", e);
+			}
+
+			this._codigoCor = this._linhaPRD + ";" + _linhaBAS + ";@CNX " + this._linhaFRM + ";";
             if (this._linhaSV != String.Empty)
             {
                 this._codigoCor += this._linhaSV + ";";
                 AssemblyInfo info = new AssemblyInfo(Assembly.GetExecutingAssembly());
                 this._codigoCor += "IO " + info.AssemblyComercialVersion + ";";
-
             }
         }
 
@@ -117,13 +115,14 @@ namespace Percolore.IOConnect.Core
                         {
                             this._linhaFRM += "," + controle[0] + "," + controle[1].Replace(",", ".");
                         }
-                        
                     }
                 }
             }
-            catch
-            { }
-        }
+			catch (Exception e)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", e);
+			}
+		}
         
         private void DesmontaBAS(string strBas)
         {
@@ -149,19 +148,18 @@ namespace Percolore.IOConnect.Core
                 }
                 montando = strbasLimpo;
             }
-            catch
-            { }
-            this._linhaBAS = montando;
+			catch (Exception e)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", e);
+			}
+
+			this._linhaBAS = montando;
         }
 
         public bool Validar()
         {
             bool retorno =
-                //(!string.IsNullOrEmpty(_linhaUNT)
-                //&& !string.IsNullOrEmpty(_linhaCAN)
-                //&& 
                 (!string.IsNullOrEmpty(_linhaFRM));
-
 
             try
             {
@@ -171,10 +169,12 @@ namespace Percolore.IOConnect.Core
                     retorno = false;
                 }
             }
-            catch
-            { }
+			catch (Exception e)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", e);
+			}
 
-            return retorno;
+			return retorno;
         }
 
         public Dictionary<int, double> GetQuantidades()
@@ -195,12 +195,10 @@ namespace Percolore.IOConnect.Core
                     double QtdML = double.Parse(vShots[index + 1].Replace(",", "."), CultureInfo.InvariantCulture);
                     //(ml) milimitros
                     qtdes.Add(CIRCUITO, QtdML);
-                    
                 }
             }
 
             return qtdes;
         }
-
     }
 }

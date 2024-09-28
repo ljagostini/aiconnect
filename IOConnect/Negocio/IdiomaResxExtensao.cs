@@ -1,14 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data.SQLite;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Percolore.Core.Logging;
 
 namespace Percolore.IOConnect.Negocio
 {
-    public class IdiomaResxExtensao
+	public class IdiomaResxExtensao
     {
         #region variaveis
         public static string Autenticacao_DadosNaoInformados { get; set; } = string.Empty;
@@ -3597,9 +3591,11 @@ namespace Percolore.IOConnect.Negocio
                 Util.ObjectMensagem.Persist(lMensagem, forceMessage);
 
             }
-            catch
-            { }
-        }
+			catch (Exception e)
+			{
+				LogManager.LogError($"Erro no módulo {typeof(IdiomaResxExtensao).Name}: ", e);
+			}
+		}
 
         private static Util.ObjectMensagem getMensagem(string idIdioma, string nome, string value)
         {
@@ -3616,6 +3612,5 @@ namespace Percolore.IOConnect.Negocio
             }
             return OM;
         }
-
     }
 }

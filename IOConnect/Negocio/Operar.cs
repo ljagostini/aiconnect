@@ -1,15 +1,11 @@
 ﻿using PaintMixer;
 using Percolore.Core;
-using Percolore.Core.Persistence.Xml;
-using Percolore.Core.UserControl;
-using System;
-using System.Collections.Generic;
-using System.Threading;
+using Percolore.Core.Logging;
 using Percolore.Core.Persistence.WindowsRegistry;
 
 namespace Percolore.IOConnect
 {
-    public class Operar
+	public class Operar
     {
         private static int CounterComunication = 0;
         //Define o modo de execução do dispenser
@@ -91,11 +87,11 @@ namespace Percolore.IOConnect
                 }
                
             }
-            catch
-            {
-                throw;
-            }
-            finally
+			catch (Exception e)
+			{
+				LogManager.LogError($"Erro no módulo {typeof(Operar).Name}: ", e);
+			}
+			finally
             {
                 if (mixer != null)
                 {
@@ -119,7 +115,6 @@ namespace Percolore.IOConnect
 
             if (p.SomarPulsoReverso)
             {
-                //   dist[motor] = valores.PulsoHorario + valores.PulsoReverso;
                 dist[motor] = valores.PulsoHorario + c.UltimoPulsoReverso;
             }
             else
@@ -127,8 +122,6 @@ namespace Percolore.IOConnect
 
             vel[motor] = valores.Velocidade;
             ace[motor] = valores.Aceleracao;
-            //revDelay[motor] = valores.Delay;
-            //revPulsos[motor] = valores.PulsoReverso;
 
             try
             {
@@ -143,13 +136,12 @@ namespace Percolore.IOConnect
                 //Executa
                 mixer.RunReverse(dist, vel, ace, valores.Delay, valores.PulsoReverso);
                 //Aqui salvando o ultimo Pulso Reverso
-              
             }
-            catch
-            {
-                throw;
-            }
-            finally
+			catch (Exception e)
+			{
+				LogManager.LogError($"Erro no módulo {typeof(Operar).Name}: ", e);
+			}
+			finally
             {
                 mixer.Disconnect();
             }
@@ -336,9 +328,11 @@ namespace Percolore.IOConnect
                 Util.ObjectEventos.InsertEvento(objEvt);
                 #endregion
             }
-            catch
-            { }
-        }
+			catch (Exception e)
+			{
+				LogManager.LogError($"Erro no módulo {typeof(Operar).Name}: ", e);
+			}
+		}
 
         public static double CalcularDesvio(double valorMedio, double massaIdeal)
         {
@@ -359,7 +353,6 @@ namespace Percolore.IOConnect
 
                 if (volume == listaValores[index].Volume)
                 {
-                    //valores = listaValores[index];
                     valores = new ValoresVO();
                     valores.PulsoHorario = listaValores[index].PulsoHorario;
                     valores.PulsoReverso = listaValores[index].PulsoReverso;
@@ -395,7 +388,6 @@ namespace Percolore.IOConnect
                     double P = volume * (inferior.PulsoHorario / inferior.Volume);
                     double PR = volume * (inferior.PulsoReverso / inferior.Volume);
                     valores.PulsoHorario = int.Parse(Math.Round(P).ToString());
-                    // valores.PulsoReverso = int.Parse(Math.Round(PR).ToString());
                     valores.PulsoReverso = inferior.PulsoReverso;
                     valores.Velocidade = inferior.Velocidade;
                     valores.Delay = inferior.Delay;
@@ -410,8 +402,7 @@ namespace Percolore.IOConnect
                     double P = volume * (superior.PulsoHorario / superior.Volume);
                     double PR = volume * (superior.PulsoReverso / superior.Volume);
                     valores.PulsoHorario = int.Parse(Math.Round(P).ToString());
-                    //valores.PulsoReverso = int.Parse(Math.Round(PR).ToString());
-
+                    
                     valores.PulsoReverso = superior.PulsoReverso;
                     valores.Velocidade = superior.Velocidade;
                     valores.Delay = superior.Delay;
@@ -440,9 +431,6 @@ namespace Percolore.IOConnect
                     double ACCS = superior.Aceleracao;
                     double ACCI = inferior.Aceleracao;
 
-                   
-
-
                     //Taxa auxiliar    
                     double TX = 0;
                     if (VOL > 1)
@@ -465,14 +453,10 @@ namespace Percolore.IOConnect
                     //Pulso Reverso
                     double PR = PULRI + (TX * (PULRS - PULRI));
                     
-                   
                     //Pulsos
                     double P = PULI + (TX * (PULS - PULI));
 
                     double ac_ = ACCI + (TX * (ACCS - ACCI));
-
-                   
-
 
                     valores.PulsoHorario = int.Parse(Math.Round(P).ToString());
                     valores.PulsoReverso = int.Parse(Math.Round(PR).ToString());
@@ -480,7 +464,6 @@ namespace Percolore.IOConnect
                     valores.Delay = int.Parse(Math.Round(D).ToString());
                     valores.Aceleracao = int.Parse(Math.Round(ac_).ToString());
 
-                   
                     #endregion
                 }
             }
@@ -488,7 +471,6 @@ namespace Percolore.IOConnect
             //[Soma os pulsos reversos à quantidade final de pulsos]
             if (Util.ObjectParametros.Load().SomarPulsoReverso)
             {
-                //valores.PulsoHorario += valores.PulsoReverso;
                 valores.PulsoHorario += pulsosRev;
             }
 
@@ -589,7 +571,7 @@ namespace Percolore.IOConnect
                     Negocio.IdiomaResxExtensao.Global_Falha_TestarRecipiente
                     + Environment.NewLine
                     + ex.Message;
-                throw new Exception(mensagem);
+                throw new Exception(mensagem, ex);
             }
         }
 
@@ -660,7 +642,7 @@ namespace Percolore.IOConnect
                     Negocio.IdiomaResxExtensao.Global_Falha_TestarRecipiente
                     + Environment.NewLine
                     + ex.Message;
-                throw new Exception(mensagem);
+                throw new Exception(mensagem, ex);
             }
         }
 
@@ -683,9 +665,11 @@ namespace Percolore.IOConnect
                 Util.ObjectEventos.InsertEvento(objEvt);
                 #endregion
             }
-            catch
-            { }
-        }
+			catch (Exception e)
+			{
+				LogManager.LogError($"Erro no módulo {typeof(Operar).Name}: ", e);
+			}
+		}
 
         static bool TemColoranteSuficiente(int circuito, double volume, bool executaEvento = true)
         {
@@ -712,9 +696,6 @@ namespace Percolore.IOConnect
                 VOLUME_A_SER_DISPENSADO = UnidadeMedidaHelper.GramaToMililitro(volume, c.MassaEspecifica);
             }
             
-                
-           
-            // double VOLUME_MINIMO = Util.ObjectParametros.Load().VolumeMinimo;
             double VOLUME_MINIMO = c.NivelMinimo;
             //Nível de colorante não pode ficar abaixo do mínimo configurado
             bool TEM_COLORANTE_SUFICIENTE =
@@ -915,12 +896,10 @@ namespace Percolore.IOConnect
                 {
                     colorante.Volume -= item.Value;
                 }
-                //colorante.Volume -= item.Value;
+                
                 Util.ObjectColorante.Persist(colorante);
             }
         }
-
-    
 
         #endregion
 
@@ -937,17 +916,21 @@ namespace Percolore.IOConnect
                     retorno = mdp2.GetVersion();
                 }                
             }
-            catch
-            { }
-            finally
+			catch (Exception e)
+			{
+				LogManager.LogError($"Erro no módulo {typeof(Operar).Name}: ", e);
+			}
+			finally
             {
                 try
                 {
                     disp.Disconnect();
                 }
-                catch
-                { }
-            }
+				catch (Exception e)
+				{
+					LogManager.LogError($"Erro no módulo {typeof(Operar).Name}: ", e);
+				}
+			}
 
             return retorno;
         }
@@ -963,21 +946,25 @@ namespace Percolore.IOConnect
                     retorno = mdp2.RessetHard();
                     gerarEventoRessetplaca(0, board.ToString());
                 }
-                
             }
-            catch
-            { }
-            finally
+			catch (Exception e)
+			{
+				LogManager.LogError($"Erro no módulo {typeof(Operar).Name}: ", e);
+			}
+			finally
             {
                 try
                 {
                     disp.Disconnect();
                 }
-                catch
-                { }
-            }
+				catch (Exception e)
+				{
+					LogManager.LogError($"Erro no módulo {typeof(Operar).Name}: ", e);
+				}
+			}
             return retorno;
         }
+
         private static int gerarEventoRessetplaca(int result, string detalhes = "")
         {
             int retorno = 0;
@@ -996,9 +983,12 @@ namespace Percolore.IOConnect
                 retorno = Util.ObjectEventos.InsertEvento(objEvt);
                 #endregion
             }
-            catch
-            { }
-            return retorno;
+			catch (Exception e)
+			{
+				LogManager.LogError($"Erro no módulo {typeof(Operar).Name}: ", e);
+			}
+
+			return retorno;
         }
         #endregion
     }

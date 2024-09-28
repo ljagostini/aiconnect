@@ -1,18 +1,13 @@
 ﻿using Percolore.Core;
+using Percolore.Core.Logging;
 using Percolore.Core.Persistence.WindowsRegistry;
-using System;
-using System.Collections.Generic;
 using System.Data;
 using System.Data.SQLite;
-using System.IO;
-using System.Linq;
 using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace Percolore.IOConnect.Util
 {
-    public class ObjectParametros
+	public class ObjectParametros
     {
         public static readonly string PathFile = Path.Combine(Environment.CurrentDirectory, "Parametros.db");
         public static readonly string FileName = Path.GetFileName(PathFile);
@@ -486,9 +481,11 @@ namespace Percolore.IOConnect.Util
                     }
                 }
             }
-            catch
-            { }
-        }
+			catch (Exception e)
+			{
+				LogManager.LogError($"Erro no módulo {typeof(ObjectParametros).Name}: ", e);
+			}
+		}
 
         public static void InitLoad()
         {
@@ -523,29 +520,10 @@ namespace Percolore.IOConnect.Util
                                 objPar.HabilitarDispensaSequencial = Convert.ToBoolean(reader["HabilitarDispensaSequencial"].ToString());
                                 objPar.HabilitarFormulaPersonalizada = Convert.ToBoolean(reader["HabilitarFormulaPersonalizada"].ToString());
                                 objPar.HabilitarTesteRecipiente = Convert.ToBoolean(reader["HabilitarTesteRecipiente"].ToString());
-
-                                try
-                                {
-                                    objPar.HabilitarIdentificacaoCopo = Convert.ToBoolean(reader["HabilitarIdentificacaoCopo"].ToString());
-                                }
-                                catch
-                                {
-                                }
-
-                                try
-                                {
-                                    objPar.TreinamentoCal = Convert.ToBoolean(reader["TreinamentoCal"].ToString());                                    
-                                }
-                                catch
-                                { }
-
-                                try
-                                {
-                                    objPar.DelayEsponja = Convert.ToInt32(reader["DelayEsponja"].ToString());
-                                }
-                                catch
-                                { }
-
+                                objPar.HabilitarIdentificacaoCopo = Convert.ToBoolean(reader["HabilitarIdentificacaoCopo"].ToString());
+                                objPar.TreinamentoCal = Convert.ToBoolean(reader["TreinamentoCal"].ToString());                                    
+                                objPar.DelayEsponja = Convert.ToInt32(reader["DelayEsponja"].ToString());
+                                
                                 try
                                 {
                                     objPar.IdIdioma = Convert.ToInt32(reader["IdIdioma"].ToString());
@@ -555,27 +533,18 @@ namespace Percolore.IOConnect.Util
                                     objPar.IdIdioma = 1;
 
                                 }
-                                try
-                                {
-                                    objPar.ViewMessageProc = Convert.ToBoolean(reader["ViewMessageProc"].ToString());
-                                }
-                                catch
-                                { }
 
-                                
+                                objPar.ViewMessageProc = Convert.ToBoolean(reader["ViewMessageProc"].ToString());
                                 objPar.IdDispositivo = Convert.ToInt32(reader["IdDispositivo"].ToString());                                
                                 objPar.HabilitarPurgaIndividual = Convert.ToBoolean(reader["HabilitarPurgaIndividual"].ToString());
                                 objPar.HabilitarTouchScrenn = Convert.ToBoolean(reader["HabilitarTouchScrenn"].ToString());
                                 objPar.IdDispositivo2 = Convert.ToInt32(reader["IdDispositivo2"].ToString());
-                                //
                                 objPar.NomeDispositivo = reader["NomeDispositivo"].ToString();
-                                //
                                 objPar.NomeDispositivo2 = reader["NomeDispositivo2"].ToString();
-                                //
                                 objPar.VersaoIoconnect = reader["VersaoIoconnect"].ToString();
-                                //
                                 objPar.HabilitarDispensaSequencialP1 = Convert.ToBoolean(reader["HabilitarDispensaSequencialP1"].ToString());
                                 objPar.HabilitarDispensaSequencialP2 = Convert.ToBoolean(reader["HabilitarDispensaSequencialP2"].ToString());
+                                
                                 try
                                 {
                                     objPar.QtdTentativasConexao = Convert.ToInt32(reader["QtdTentativasConexao"].ToString());
@@ -612,12 +581,8 @@ namespace Percolore.IOConnect.Util
                                     objPar.TipoLimpBicos = 1;
                                 }
 
-                                try
-                                {
-                                    objPar.TipoDosagemExec = Convert.ToInt32(reader["TipoDosagemExec"].ToString()); 
-                                }
-                                catch
-                                { }
+                                objPar.TipoDosagemExec = Convert.ToInt32(reader["TipoDosagemExec"].ToString());
+
                                 #endregion
 
                                 #region DAT
@@ -633,64 +598,43 @@ namespace Percolore.IOConnect.Util
                                 objPar.DesabilitarInterfacePurga = Convert.ToBoolean(reader["DesabilitarInterfacePurga"].ToString());
 
                                 //Versão 19
-                                try
-                                {
-                                    objPar.PathMonitoramentoFilaDAT = reader["PathFilaDAT"].ToString();
-                                    objPar.DesabilitarMonitoramentoFilaDAT = Convert.ToBoolean(reader["DesabilitarMonitoramentoFilaDAT"].ToString());
-                                    objPar.DelayMonitoramentoFilaDAT = Convert.ToInt32(reader["DelayMonitoramentoFilaDAT"].ToString());
-                                }
-                                catch
-                                { }
+                                objPar.PathMonitoramentoFilaDAT = reader["PathFilaDAT"].ToString();
+                                objPar.DesabilitarMonitoramentoFilaDAT = Convert.ToBoolean(reader["DesabilitarMonitoramentoFilaDAT"].ToString());
+                                objPar.DelayMonitoramentoFilaDAT = Convert.ToInt32(reader["DelayMonitoramentoFilaDAT"].ToString());
+
                                 //Versão 25
-                                try
-                                {
-                                    objPar.DesabilitarVolumeMinimoDat = Convert.ToBoolean(reader["DesabilitarVolumeMinimoDat"].ToString());
-                                    objPar.VolumeMinimoDat = double.Parse(reader["VolumeMinimoDat"].ToString(), System.Globalization.CultureInfo.InvariantCulture);                                    
-                                }
-                                catch
-                                { }
+                                objPar.DesabilitarVolumeMinimoDat = Convert.ToBoolean(reader["DesabilitarVolumeMinimoDat"].ToString());
+                                objPar.VolumeMinimoDat = double.Parse(reader["VolumeMinimoDat"].ToString(), System.Globalization.CultureInfo.InvariantCulture);
 
                                 //Versão 29
-                                try
-                                {
-                                    objPar.Dat_06_BAS_Pref = reader["Dat_06_BAS_Pref"].ToString();
-                                    objPar.Dat_06_CAN_Pref = reader["Dat_06_CAN_Pref"].ToString();
-                                    objPar.Dat_06_FRM_Pref = reader["Dat_06_FRM_Pref"].ToString();
-                                    objPar.Dat_06_FRM_SEP = reader["Dat_06_FRM_SEP"].ToString();
-                                    objPar.Dat_06_UNT_Pref = reader["Dat_06_UNT_Pref"].ToString();
+                                objPar.Dat_06_BAS_Pref = reader["Dat_06_BAS_Pref"].ToString();
+                                objPar.Dat_06_CAN_Pref = reader["Dat_06_CAN_Pref"].ToString();
+                                objPar.Dat_06_FRM_Pref = reader["Dat_06_FRM_Pref"].ToString();
+                                objPar.Dat_06_FRM_SEP = reader["Dat_06_FRM_SEP"].ToString();
+                                objPar.Dat_06_UNT_Pref = reader["Dat_06_UNT_Pref"].ToString();
 
-                                    objPar.Dat_06_CAN_1_IsPonto = reader["Dat_06_CAN_1_IsPonto"].ToString() == "0" ? 0 : 1 ;
-                                    objPar.Dat_06_FRM_1_IsPonto= reader["Dat_06_FRM_1_IsPonto"].ToString() == "0" ? 0 : 1;
-                                    objPar.Dat_06_UNT_1_IsPonto = reader["Dat_06_UNT_1_IsPonto"].ToString() == "0" ? 0 : 1;
-                                    objPar.Dat_06_UNT_2_IsPonto= reader["Dat_06_UNT_2_IsPonto"].ToString() == "0" ? 0 : 1;
-                                    objPar.Dat_06_BAS_1_IsPonto = reader["Dat_06_BAS_1_IsPonto"].ToString() == "0" ? 0 : 1;
+                                objPar.Dat_06_CAN_1_IsPonto = reader["Dat_06_CAN_1_IsPonto"].ToString() == "0" ? 0 : 1 ;
+                                objPar.Dat_06_FRM_1_IsPonto= reader["Dat_06_FRM_1_IsPonto"].ToString() == "0" ? 0 : 1;
+                                objPar.Dat_06_UNT_1_IsPonto = reader["Dat_06_UNT_1_IsPonto"].ToString() == "0" ? 0 : 1;
+                                objPar.Dat_06_UNT_2_IsPonto= reader["Dat_06_UNT_2_IsPonto"].ToString() == "0" ? 0 : 1;
+                                objPar.Dat_06_BAS_1_IsPonto = reader["Dat_06_BAS_1_IsPonto"].ToString() == "0" ? 0 : 1;
 
-                                    objPar.Dat_06_BAS_Habilitado = reader["Dat_06_BAS_Habilitado"].ToString() == "0" ? 0 : 1;
-
-                                }
-                                catch
-                                { }
+                                objPar.Dat_06_BAS_Habilitado = reader["Dat_06_BAS_Habilitado"].ToString() == "0" ? 0 : 1;
 
                                 //Versão 32
-                                try
-                                {
-                                    objPar.Dat_05_BAS_Pref = reader["Dat_05_BAS_Pref"].ToString();
-                                    objPar.Dat_05_CAN_Pref = reader["Dat_05_CAN_Pref"].ToString();
-                                    objPar.Dat_05_FRM_Pref = reader["Dat_05_FRM_Pref"].ToString();
-                                    objPar.Dat_05_FRM_SEP = reader["Dat_05_FRM_SEP"].ToString();
-                                    objPar.Dat_05_UNT_Pref = reader["Dat_05_UNT_Pref"].ToString();
+                                objPar.Dat_05_BAS_Pref = reader["Dat_05_BAS_Pref"].ToString();
+                                objPar.Dat_05_CAN_Pref = reader["Dat_05_CAN_Pref"].ToString();
+                                objPar.Dat_05_FRM_Pref = reader["Dat_05_FRM_Pref"].ToString();
+                                objPar.Dat_05_FRM_SEP = reader["Dat_05_FRM_SEP"].ToString();
+                                objPar.Dat_05_UNT_Pref = reader["Dat_05_UNT_Pref"].ToString();
 
-                                    objPar.Dat_05_CAN_1_IsPonto = reader["Dat_05_CAN_1_IsPonto"].ToString() == "0" ? 0 : 1;
-                                    objPar.Dat_05_FRM_1_IsPonto = reader["Dat_05_FRM_1_IsPonto"].ToString() == "0" ? 0 : 1;
-                                    objPar.Dat_05_UNT_1_IsPonto = reader["Dat_05_UNT_1_IsPonto"].ToString() == "0" ? 0 : 1;
-                                    objPar.Dat_05_UNT_2_IsPonto = reader["Dat_05_UNT_2_IsPonto"].ToString() == "0" ? 0 : 1;
-                                    objPar.Dat_05_BAS_1_IsPonto = reader["Dat_05_BAS_1_IsPonto"].ToString() == "0" ? 0 : 1;
+                                objPar.Dat_05_CAN_1_IsPonto = reader["Dat_05_CAN_1_IsPonto"].ToString() == "0" ? 0 : 1;
+                                objPar.Dat_05_FRM_1_IsPonto = reader["Dat_05_FRM_1_IsPonto"].ToString() == "0" ? 0 : 1;
+                                objPar.Dat_05_UNT_1_IsPonto = reader["Dat_05_UNT_1_IsPonto"].ToString() == "0" ? 0 : 1;
+                                objPar.Dat_05_UNT_2_IsPonto = reader["Dat_05_UNT_2_IsPonto"].ToString() == "0" ? 0 : 1;
+                                objPar.Dat_05_BAS_1_IsPonto = reader["Dat_05_BAS_1_IsPonto"].ToString() == "0" ? 0 : 1;
 
-                                    objPar.Dat_05_BAS_Habilitado = reader["Dat_05_BAS_Habilitado"].ToString() == "0" ? 0 : 1;
-
-                                }
-                                catch
-                                { }
+                                objPar.Dat_05_BAS_Habilitado = reader["Dat_05_BAS_Habilitado"].ToString() == "0" ? 0 : 1;
 
                                 #region Version 56
                                 try
@@ -719,8 +663,6 @@ namespace Percolore.IOConnect.Util
                                     objPar.DelayUDCP = 0;
                                 }
                                 #endregion
-
-                                
 
                                 #region Purga
 
@@ -779,9 +721,7 @@ namespace Percolore.IOConnect.Util
 
                                 objPar.InicializarCircuitosPurga = Convert.ToBoolean(reader["InicializarCircuitosPurga"].ToString());
 
-                                //
                                 objPar.InicializarCircuitosPurgaIndividual = Convert.ToBoolean(reader["InicializarCircuitosPurgaIndividual"].ToString());
-
 
                                 objPar.QtdeCircuitoGrupo = Convert.ToInt32(reader["QtdeCircuitoGrupo"].ToString());
 
@@ -822,22 +762,10 @@ namespace Percolore.IOConnect.Util
 
                                 objPar.PathLogComunicacao = reader["PathLogComunicacao"].ToString();
 
-                                try
-                                {
-                                    objPar.HabilitarLogAutomateTesterProt = Convert.ToBoolean(reader["HabilitarLogAutomateTesterProt"].ToString());
-                                }
-                                catch
-                                { }
-
-                                try
-                                {
-                                    objPar.LogAutomateBackup = Convert.ToBoolean(reader["LogAutomateBackup"].ToString());
-                                }
-                                catch
-                                { }
-
+                                objPar.HabilitarLogAutomateTesterProt = Convert.ToBoolean(reader["HabilitarLogAutomateTesterProt"].ToString());
                                 
-
+                                objPar.LogAutomateBackup = Convert.ToBoolean(reader["LogAutomateBackup"].ToString());
+                                
                                 #endregion
 
                                 #region Monitoramento dos circuitos
@@ -862,7 +790,6 @@ namespace Percolore.IOConnect.Util
 
                                 objPar.MonitPulsos = Convert.ToInt32(reader["MonitPulsos"].ToString());
 
-
                                 #endregion
 
                                 #region Producao
@@ -871,122 +798,75 @@ namespace Percolore.IOConnect.Util
 
                                 objPar.IpProducao = reader["IpProducao"].ToString();
 
-
                                 objPar.PortaProducao = reader["PortaProducao"].ToString();
-
 
                                 objPar.DesabilitaMonitProcessoProducao = Convert.ToBoolean(reader["DesabilitaMonitProcessoProducao"].ToString());
 
                                 #endregion
 
                                 #region Sinc Formula
-                                try
-                                {
-                                    objPar.DesabilitaMonitSincFormula = Convert.ToBoolean(reader["DesabilitaMonitSincFormula"].ToString());
+                                
+                                objPar.DesabilitaMonitSincFormula = Convert.ToBoolean(reader["DesabilitaMonitSincFormula"].ToString());
 
-                                    objPar.PortaSincFormula = reader["PortaSincFormula"].ToString();
+                                objPar.PortaSincFormula = reader["PortaSincFormula"].ToString();
 
-                                    objPar.IpSincFormula = reader["IpSincFormula"].ToString();
+                                objPar.IpSincFormula = reader["IpSincFormula"].ToString();
 
-                                }
-                                catch
-                                { }
+                                objPar.TipoBaseDados = reader["TipoBaseDados"].ToString();
 
-                                try
-                                {
-                                    objPar.TipoBaseDados = reader["TipoBaseDados"].ToString();
-
-                                    objPar.PathBasesDados = reader["PathBasesDados"].ToString();
-                                }
-                                catch
-                                { }
+                                objPar.PathBasesDados = reader["PathBasesDados"].ToString();
 
                                 #endregion
 
                                 #region sync Token
-                                try
-                                {
-                                    objPar.DesabilitaMonitSyncToken = Convert.ToBoolean(reader["DesabilitaMonitSyncToken"].ToString());
-                                    objPar.IpSincToken = reader["IpSincToken"].ToString();
-                                    objPar.PortaSincToken = reader["PortaSincToken"].ToString();
-                                    objPar.TipoEventos = reader["TipoEventos"].ToString();
-                                }
-                                catch
-                                { }
+                                
+                                objPar.DesabilitaMonitSyncToken = Convert.ToBoolean(reader["DesabilitaMonitSyncToken"].ToString());
+                                objPar.IpSincToken = reader["IpSincToken"].ToString();
+                                objPar.PortaSincToken = reader["PortaSincToken"].ToString();
+                                objPar.TipoEventos = reader["TipoEventos"].ToString();
+                                
                                 #endregion
 
-                                try
-                                {
-                                    objPar.TimeoutPingTcp = Convert.ToInt32(reader["TimeoutPingTcp"].ToString());
-                                }
-                                catch
-                                { }
+                                objPar.TimeoutPingTcp = Convert.ToInt32(reader["TimeoutPingTcp"].ToString());
 
                                 #region sync BkpCalibragem
-                                try
-                                {
-                                    objPar.DesabilitaMonitSyncBkpCalibragem = Convert.ToBoolean(reader["DesabilitaMonitSyncBkpCalibragem"].ToString());
-                                    objPar.UrlSincBkpCalibragem = reader["UrlSincBkpCalibragem"].ToString();
-                                }
-                                catch
-                                { }
+                                
+                                objPar.DesabilitaMonitSyncBkpCalibragem = Convert.ToBoolean(reader["DesabilitaMonitSyncBkpCalibragem"].ToString());
+                                objPar.UrlSincBkpCalibragem = reader["UrlSincBkpCalibragem"].ToString();
+                                
                                 #endregion
 
                                 #region Recirculacao
-                                try
-                                {
-                                    objPar.HabilitarRecirculacao = Convert.ToBoolean(reader["HabilitarRecirculacao"].ToString());
-                                    objPar.DelayMonitRecirculacao = Convert.ToInt32(reader["DelayMonitRecirculacao"].ToString());
-                                }
-                                catch
-                                { }
-
+                                
+                                objPar.HabilitarRecirculacao = Convert.ToBoolean(reader["HabilitarRecirculacao"].ToString());
+                                objPar.DelayMonitRecirculacao = Convert.ToInt32(reader["DelayMonitRecirculacao"].ToString());
+                                
                                 #endregion
 
                                 #region Placa Movimentacao
-                                try
-                                {
-                                    objPar.Address_PlacaMov = Convert.ToInt32(reader["Address_PlacaMov"].ToString());
-                                    objPar.NomeDispositivo_PlacaMov = reader["NomeDispositivo_PlacaMov"].ToString();
-                                    objPar.DelayAlertaPlacaMov = Convert.ToInt32(reader["DelayAlertaPlacaMov"].ToString());
-                                    
-                                }
-                                catch
-                                { }
+                                
+                                objPar.Address_PlacaMov = Convert.ToInt32(reader["Address_PlacaMov"].ToString());
+                                objPar.NomeDispositivo_PlacaMov = reader["NomeDispositivo_PlacaMov"].ToString();
+                                objPar.DelayAlertaPlacaMov = Convert.ToInt32(reader["DelayAlertaPlacaMov"].ToString());
+                                
                                 #endregion
 
                                 #region RecirculacaoAuto
-                                try
-                                {
-                                    objPar.HabilitarRecirculacaoAuto = Convert.ToBoolean(reader["HabilitarRecirculacaoAuto"].ToString());
-                                    objPar.DelayMonitRecirculacaoAuto = Convert.ToInt32(reader["DelayMonitRecirculacaoAuto"].ToString());
-                                    objPar.DelayNotificacaotRecirculacaoAuto = Convert.ToInt32(reader["DelayNotificacaotRecirculacaoAuto"].ToString());
-                                    objPar.QtdNotificacaotRecirculacaoAuto = Convert.ToInt32(reader["QtdNotificacaotRecirculacaoAuto"].ToString());
-
-                                    
-
-
-                                }
-                                catch
-                                { }
+                                
+                                objPar.HabilitarRecirculacaoAuto = Convert.ToBoolean(reader["HabilitarRecirculacaoAuto"].ToString());
+                                objPar.DelayMonitRecirculacaoAuto = Convert.ToInt32(reader["DelayMonitRecirculacaoAuto"].ToString());
+                                objPar.DelayNotificacaotRecirculacaoAuto = Convert.ToInt32(reader["DelayNotificacaotRecirculacaoAuto"].ToString());
+                                objPar.QtdNotificacaotRecirculacaoAuto = Convert.ToInt32(reader["QtdNotificacaotRecirculacaoAuto"].ToString());
 
                                 #endregion
 
                                 #region LogBD
-                                try
-                                {
-                                    objPar.LogBD = Convert.ToBoolean(reader["LogBD"].ToString());
-                                }
-                                catch
-                                {
-                                }
+                                
+                                objPar.LogBD = Convert.ToBoolean(reader["LogBD"].ToString());
+                                
                                 #endregion
-                                try
-                                {
-                                    objPar.NameRemoteAccess = reader["NameRemoteAccess"].ToString();
-                                }
-                                catch
-                                { }
+                                
+                                objPar.NameRemoteAccess = reader["NameRemoteAccess"].ToString();
 
                                 try
                                 {
@@ -1002,9 +882,6 @@ namespace Percolore.IOConnect.Util
                                 catch
                                 { objPar.LogStatusMaquina = false; }
                                 
-
-
-
                                 break;
                             }
                             reader.Close();
@@ -1014,9 +891,10 @@ namespace Percolore.IOConnect.Util
                     }
                 }
             }
-            catch
-            {
-                objPar = null;
+			catch (Exception e)
+			{
+				LogManager.LogError($"Erro no módulo {typeof(ObjectParametros).Name}: ", e);
+			    objPar = null;
             }
         }
 
@@ -1050,13 +928,9 @@ namespace Percolore.IOConnect.Util
                     retorno.HabilitarPurgaIndividual = objPar.HabilitarPurgaIndividual;
                     retorno.HabilitarTouchScrenn = objPar.HabilitarTouchScrenn;
                     retorno.IdDispositivo2 = objPar.IdDispositivo2;
-                    //
                     retorno.NomeDispositivo = objPar.NomeDispositivo;
-                    //
                     retorno.NomeDispositivo2 = objPar.NomeDispositivo2;
-                    //
                     retorno.VersaoIoconnect = objPar.VersaoIoconnect;
-                    //
                     retorno.HabilitarDispensaSequencialP1 = objPar.HabilitarDispensaSequencialP1;
                     retorno.HabilitarDispensaSequencialP2 = objPar.HabilitarDispensaSequencialP2;
 
@@ -1073,8 +947,6 @@ namespace Percolore.IOConnect.Util
 
                     retorno.TipoDosagemExec = objPar.TipoDosagemExec;
                     
-
-
                     #endregion
 
                     #region DAT
@@ -1193,7 +1065,6 @@ namespace Percolore.IOConnect.Util
                     retorno.HabilitarLogAutomateTesterProt = objPar.HabilitarLogAutomateTesterProt;
                     retorno.LogAutomateBackup = objPar.LogAutomateBackup;
 
-
                     #endregion
 
                     #region Monitoramento dos circuitos
@@ -1224,23 +1095,16 @@ namespace Percolore.IOConnect.Util
                     #endregion
 
                     #region Sinc Formula
-                    try
-                    {
-                        retorno.DesabilitaMonitSincFormula = objPar.DesabilitaMonitSincFormula;
+                    
+                    retorno.DesabilitaMonitSincFormula = objPar.DesabilitaMonitSincFormula;
 
-                        retorno.PortaSincFormula = objPar.PortaSincFormula;
+                    retorno.PortaSincFormula = objPar.PortaSincFormula;
 
-                        retorno.IpSincFormula = objPar.IpSincFormula;
-
-                    }
-                    catch
-                    { }
+                    retorno.IpSincFormula = objPar.IpSincFormula;
 
                     #endregion
 
-
                     retorno.TimeoutPingTcp = objPar.TimeoutPingTcp;                    
-
 
                     #region Sync Token
                     retorno.DesabilitaMonitSyncToken = objPar.DesabilitaMonitSyncToken;
@@ -1257,55 +1121,35 @@ namespace Percolore.IOConnect.Util
                     #endregion
 
                     #region Base de Dados
-                    try
-                    {
-                        retorno.TipoBaseDados = objPar.TipoBaseDados;
+                    
+                    retorno.TipoBaseDados = objPar.TipoBaseDados;
 
-                        retorno.PathBasesDados = objPar.PathBasesDados;
-                    }
-                    catch
-                    { }
+                    retorno.PathBasesDados = objPar.PathBasesDados;
+                    
                     #endregion
 
                     #region Recirculacao
-                    try
-                    {
-                        retorno.HabilitarRecirculacao = objPar.HabilitarRecirculacao;
-                        retorno.DelayMonitRecirculacao = objPar.DelayMonitRecirculacao;
-                    }
-                    catch
-                    { }
-
+                    
+                    retorno.HabilitarRecirculacao = objPar.HabilitarRecirculacao;
+                    retorno.DelayMonitRecirculacao = objPar.DelayMonitRecirculacao;
+                    
                     #endregion
 
-                     
                     #region Placa Movimentacao
-                    try
-                    {
-                        retorno.Address_PlacaMov = objPar.Address_PlacaMov;
-                        retorno.NomeDispositivo_PlacaMov = objPar.NomeDispositivo_PlacaMov;
-                        retorno.DelayAlertaPlacaMov = objPar.DelayAlertaPlacaMov;
-                        
-
-                    }
-                    catch
-                    { }
+                    
+                    retorno.Address_PlacaMov = objPar.Address_PlacaMov;
+                    retorno.NomeDispositivo_PlacaMov = objPar.NomeDispositivo_PlacaMov;
+                    retorno.DelayAlertaPlacaMov = objPar.DelayAlertaPlacaMov;
+                    
                     #endregion
 
                     #region RecirculacaoAuto
-                    try
-                    {
-                        retorno.HabilitarRecirculacaoAuto = objPar.HabilitarRecirculacaoAuto;
-                        retorno.DelayMonitRecirculacaoAuto = objPar.DelayMonitRecirculacaoAuto;
-                        retorno.DelayNotificacaotRecirculacaoAuto = objPar.DelayNotificacaotRecirculacaoAuto;
-                        retorno.QtdNotificacaotRecirculacaoAuto = objPar.QtdNotificacaotRecirculacaoAuto;
-                        
-
-
-                    }
-                    catch
-                    { }
-
+                    
+                    retorno.HabilitarRecirculacaoAuto = objPar.HabilitarRecirculacaoAuto;
+                    retorno.DelayMonitRecirculacaoAuto = objPar.DelayMonitRecirculacaoAuto;
+                    retorno.DelayNotificacaotRecirculacaoAuto = objPar.DelayNotificacaotRecirculacaoAuto;
+                    retorno.QtdNotificacaotRecirculacaoAuto = objPar.QtdNotificacaotRecirculacaoAuto;
+                    
                     #endregion
 
                     #region LogBD
@@ -1321,11 +1165,12 @@ namespace Percolore.IOConnect.Util
                     retorno = null;
                 }
             }
-            catch
-            {
+			catch (Exception e)
+			{
+				LogManager.LogError($"Erro no módulo {typeof(ObjectParametros).Name}: ", e);
+			}
 
-            }
-            return retorno;
+			return retorno;
         }
 
         /// <summary>
@@ -1355,13 +1200,6 @@ namespace Percolore.IOConnect.Util
                 validacoes.AppendLine(Negocio.IdiomaResxExtensao.Parametros_Global_AceleracaoMaiorZero);
             }
 
-            #region [Desabilitado em 12/09/2016 por solicitação de Marcelo]
-
-            //if (p.PulsoReverso == 0)
-            //    validacoes.AppendLine("O pulso reverso global deve ser maior que zero.");   
-
-            #endregion
-
             #endregion
 
             #region Purga
@@ -1381,7 +1219,6 @@ namespace Percolore.IOConnect.Util
             #endregion
 
             #region DAT
-
 
             string diretorio = Path.GetDirectoryName(p.PathMonitoramentoDAT);
             if (!Directory.Exists(diretorio))
@@ -1459,8 +1296,6 @@ namespace Percolore.IOConnect.Util
             if (p.MonitPulsos == 0)
                 validacoes.AppendLine(Negocio.IdiomaResxExtensao.Parametros_Monit_PulsoMaiorZero);
 
-
-
             #endregion
 
             #region Unidade de medida
@@ -1524,11 +1359,13 @@ namespace Percolore.IOConnect.Util
                     }
                 }
             }
-            catch
-            {
+			catch (Exception e)
+			{
+				LogManager.LogError($"Erro no módulo {typeof(ObjectParametros).Name}: ", e);
                 throw;
-            }
-            return retorno;
+			}
+
+			return retorno;
         }
 
         public static void SetIdIdioma(int id)
@@ -1552,11 +1389,12 @@ namespace Percolore.IOConnect.Util
                     }
                 }
             }
-            catch
-            {
+			catch (Exception e)
+			{
+				LogManager.LogError($"Erro no módulo {typeof(ObjectParametros).Name}: ", e);
                 throw;
-            }
-        }
+			}
+		}
 
         private static string RetunStringFromTimespan(TimeSpan b)
         {
@@ -1584,7 +1422,6 @@ namespace Percolore.IOConnect.Util
                             sb.Append(" Aceleracao = '" + p.Aceleracao.ToString() + "', ");
                             sb.Append(" RevDelay = '" + p.DelayReverso.ToString() + "', ");
                             sb.Append(" RevPulsos = '" + p.PulsoReverso.ToString() + "', ");
-                            //sb.Append(" SomarRevPulsos = '" + (p.SomarPulsoReverso ? "True" : "False" ) + "', ");
                             sb.Append(" SomarRevPulsos = 'True', ");
                             sb.Append(" HabilitarTecladoVirtual = '" + (p.HabilitarTecladoVirtual ? "True" : "False") + "', ");
                             sb.Append(" HabilitarDispensaSequencial = '" + (p.HabilitarDispensaSequencial ? "True" : "False")  + "', ");
@@ -1594,7 +1431,6 @@ namespace Percolore.IOConnect.Util
                             sb.Append(" IdDispositivo = '" + p.IdDispositivo.ToString() + "', ");
                             sb.Append(" HabilitarPurgaIndividual = '" + (p.HabilitarPurgaIndividual ? "True" : "False") + "', ");
                             sb.Append(" HabilitarTouchScrenn = '" + (p.HabilitarTouchScrenn ? "True" : "False") + "', ");
-                            //sb.Append(" VersaoIoconnect = '" + p.VersaoIoconnect + "', ");
                             sb.Append(" IdDispositivo2 = '" + p.IdDispositivo2.ToString() + "', ");
                             sb.Append(" NomeDispositivo = '" + p.NomeDispositivo + "', ");
                             sb.Append(" NomeDispositivo2 = '" + p.NomeDispositivo2 + "', ");
@@ -1603,8 +1439,6 @@ namespace Percolore.IOConnect.Util
 
                             sb.Append(" TreinamentoCal = '" + (p.TreinamentoCal ? "True" : "False") + "', ");
                             sb.Append(" ViewMessageProc = '" + (p.ViewMessageProc ? "True" : "False") + "', ");
-
-                            
 
                             sb.Append(" QtdTentativasConexao = '" + p.QtdTentativasConexao + "', ");
                             sb.Append(" DelayEsponja = '" + p.DelayEsponja + "', ");
@@ -1615,9 +1449,7 @@ namespace Percolore.IOConnect.Util
 
                             sb.Append(" TipoDosagemExec = '" + p.TipoDosagemExec.ToString() + "', ");
                             
-
                             #endregion
-
 
                             #region DAT
 
@@ -1654,7 +1486,6 @@ namespace Percolore.IOConnect.Util
 
                             sb.Append(" Dat_06_BAS_Habilitado = '" + p.Dat_06_BAS_Habilitado.ToString() + "', ");
 
-
                             sb.Append(" Dat_05_UNT_Pref = '" + p.Dat_05_UNT_Pref + "', ");
                             sb.Append(" Dat_05_UNT_1_IsPonto = '" + p.Dat_05_UNT_1_IsPonto.ToString() + "', ");
                             sb.Append(" Dat_05_UNT_2_IsPonto = '" + p.Dat_05_UNT_2_IsPonto.ToString() + "', ");
@@ -1678,9 +1509,6 @@ namespace Percolore.IOConnect.Util
                             sb.Append(" ProcRemoveLataUDCP = '" + (p.ProcRemoveLataUDCP ? "True" : "False") + "', ");
 
                             sb.Append(" DisablePopUpDispDat = '" + (p.DisablePopUpDispDat ? "True" : "False") + "', ");
-
-
-
 
                             #endregion
 
@@ -1745,8 +1573,7 @@ namespace Percolore.IOConnect.Util
                             sb.Append(" UnidadeMedidaNivelColorante = '" + p.UnidadeMedidaNivelColorante.ToString() + "', ");
 
                             sb.Append(" ValorFraction = '" + p.ValorFraction.ToString() + "', ");
-                                                     
-
+                            
                             #endregion
 
                             #region Log
@@ -1759,7 +1586,6 @@ namespace Percolore.IOConnect.Util
                             sb.Append(" HabilitarLogAutomateTesterProt = '" + (p.HabilitarLogAutomateTesterProt ? "True" : "False") + "', ");
                             sb.Append(" LogAutomateBackup = '" + (p.LogAutomateBackup ? "True" : "False") + "', ");
                             
-
                             #endregion
 
                             #region Produção
@@ -1778,7 +1604,6 @@ namespace Percolore.IOConnect.Util
 
                             sb.Append(" TimeoutPingTcp = '" + p.TimeoutPingTcp.ToString() + "', ");
                             
-
                             #region Sinc Token
                             sb.Append(" DesabilitaMonitSyncToken = '" + (p.DesabilitaMonitSyncToken ? "True" : "False") + "', ");
                             sb.Append(" IpSincToken  = '" + p.IpSincToken + "', ");
@@ -1803,7 +1628,6 @@ namespace Percolore.IOConnect.Util
 
                             #endregion
 
-
                             #region RecirculacaoAuto
                             sb.Append(" HabilitarRecirculacaoAuto = '" + (p.HabilitarRecirculacaoAuto ? "True" : "False") + "', ");
                             sb.Append(" DelayMonitRecirculacaoAuto = '" + p.DelayMonitRecirculacaoAuto.ToString() + "', ");
@@ -1811,7 +1635,6 @@ namespace Percolore.IOConnect.Util
                             sb.Append(" QtdNotificacaotRecirculacaoAuto = '" + p.QtdNotificacaotRecirculacaoAuto.ToString() + "', ");
                             sb.Append(" TempoReciAuto = '" + p.TempoReciAuto.ToString() + "', ");
                             
-
                             #endregion
 
                             #region LogBD
@@ -1826,30 +1649,23 @@ namespace Percolore.IOConnect.Util
                             #endregion
                             sb.Append(" LogStatusMaquina = '" + (p.LogStatusMaquina ? "True" : "False")  + "'; ");
                             
-
-
-
-
-
                             cmd.CommandText = sb.ToString();
 
                             cmd.ExecuteNonQuery();
 
                             conn.Close();
-
                         }
                     }
 
                     gerarEventoALteradaConfiguacao(0, "");
-                }               
-
-
+                }
             }
-            catch
-            {
+			catch (Exception e)
+			{
+				LogManager.LogError($"Erro no módulo {typeof(ObjectParametros).Name}: ", e);
                 throw;
-            }
-        }
+			}
+		}
 
         public static void PersistInsert(ObjectParametros p)
         {
@@ -1888,7 +1704,6 @@ namespace Percolore.IOConnect.Util
                             sb.Append(" HabilitarDispensaSequencialP2, ");
 
                             #endregion
-
 
                             #region DAT
 
@@ -1968,8 +1783,7 @@ namespace Percolore.IOConnect.Util
                             sb.Append(" UnidadeMedidaNivelColorante, ");
 
                             sb.Append(" ValorFraction, ");
-                           
-
+                            
                             #endregion
 
                             #region Log
@@ -1978,9 +1792,7 @@ namespace Percolore.IOConnect.Util
                             sb.Append(" PathLogControleDispensa, ");
                             sb.Append(" HabilitarLogComunicacao, ");
                             sb.Append(" PathLogComunicacao, ");
-                            //sb.Append(" HabilitarLogAutomateTesterProt, ");
                             
-
                             #endregion
 
                             #region Produção
@@ -1992,7 +1804,6 @@ namespace Percolore.IOConnect.Util
 
                             #endregion
 
-                          
                             #region Sinc Formula
                             sb.Append(" DesabilitaMonitSincFormula, ");
                             sb.Append(" PortaSincFormula, ");
@@ -2000,14 +1811,7 @@ namespace Percolore.IOConnect.Util
 
                             #endregion
 
-                            #region  Base de Dados
-                            //sb.Append(" TipoBaseDados, ");
-                            //sb.Append(" PathBasesDados ");
-                            #endregion
-
-
                             //Values
-
                             sb.Append(") VALUES ( ");
 
                             #region Geral
@@ -2017,7 +1821,6 @@ namespace Percolore.IOConnect.Util
                             sb.Append("'" + p.Aceleracao.ToString() + "', ");
                             sb.Append("'" + p.DelayReverso.ToString() + "', ");
                             sb.Append("'" + p.PulsoReverso.ToString() + "', ");
-                            //sb.Append("'" + (p.SomarPulsoReverso ? "True" : "False") + "', ");
                             sb.Append("'True', ");
                             sb.Append("'" + (p.HabilitarTecladoVirtual ? "True" : "False") + "', ");
                             sb.Append("'" + (p.HabilitarDispensaSequencial ? "True" : "False") + "', ");
@@ -2114,7 +1917,6 @@ namespace Percolore.IOConnect.Util
 
                             sb.Append("'" + p.ValorFraction.ToString() + "', ");
 
-
 							#endregion
 
 							#region Log
@@ -2123,8 +1925,7 @@ namespace Percolore.IOConnect.Util
                             sb.Append("'" + p.PathLogControleDispensa + "', ");
                             sb.Append("'" + (p.HabilitarLogComunicacao ? "True" : "False") + "', ");
                             sb.Append("'" + p.PathLogComunicacao + "', ");
-                            //sb.Append("'" + (p.HabilitarLogAutomateTesterProt ? "True" : "False") + "', ");
-
+                            
                             #endregion
 
                             #region Produção
@@ -2136,19 +1937,12 @@ namespace Percolore.IOConnect.Util
 
                             #endregion
 
-
                             #region Sinc Formula
                             sb.Append("'" + (p.DesabilitaMonitSincFormula ? "True" : "False") + "', ");
                             sb.Append("'" + p.PortaSincFormula + "', ");
                             sb.Append("'" + p.IpSincFormula + "'); ");
 
                             #endregion
-
-                            #region  Base de Dados
-                            //sb.Append("'" + p.TipoBaseDados + "', ");
-                            //sb.Append("'" + p.PathBasesDados + "'); ");
-                            #endregion
-
 
                             cmd.CommandText = sb.ToString();
 
@@ -2159,16 +1953,13 @@ namespace Percolore.IOConnect.Util
                         }
                     }
                 }
-
-
             }
-            catch(Exception exc)
-            {
-                string msg = exc.Message;
+			catch (Exception e)
+			{
+				LogManager.LogError($"Erro no módulo {typeof(ObjectParametros).Name}: ", e);
                 throw;
-            }
-        }
-
+			}
+		}
 
         private static int gerarEventoALteradaConfiguacao(int result, string detalhes = "")
         {
@@ -2188,9 +1979,12 @@ namespace Percolore.IOConnect.Util
                 retorno = Util.ObjectEventos.InsertEvento(objEvt);
                 #endregion
             }
-            catch
-            { }
-            return retorno;
+			catch (Exception e)
+			{
+				LogManager.LogError($"Erro no módulo {typeof(ObjectParametros).Name}: ", e);
+			}
+
+			return retorno;
         }
 
         public static DataSet getTables()
@@ -2210,11 +2004,8 @@ namespace Percolore.IOConnect.Util
 
                         bool incluir = false;
 
-                        //foreach (DataRowCollection row in columnsTable.Rows)
-                        //for(int i = 0; i < columnsTable.Rows.Count; i++)
                         foreach (DataRow rownm in columnsTable.Rows)
                         {
-                            //DataRow rownm = columnsTable.Rows[i];
                             string colname = rownm["COLUMN_NAME"].ToString();
                             DataColumn col = new DataColumn(colname);
                             string data_type = rownm["DATA_TYPE"].ToString();
@@ -2236,7 +2027,6 @@ namespace Percolore.IOConnect.Util
                         {
                             ds.Tables.Add(tbl);
                         }
-
                     }
                     con.Close();
                 }

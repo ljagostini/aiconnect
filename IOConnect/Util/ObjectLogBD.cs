@@ -1,15 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using Percolore.Core.Logging;
 using System.Data.SQLite;
-using System.IO;
-using System.Linq;
 using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace Percolore.IOConnect.Util
 {
-    public class ObjectLogBD
+	public class ObjectLogBD
     {
         public static string PathFile = null;
         public static string FileName = null;
@@ -123,9 +118,11 @@ namespace Percolore.IOConnect.Util
                     }
                 }
             }
-            catch
-            { }
-        }
+			catch (Exception e)
+			{
+				LogManager.LogError($"Erro no módulo {typeof(ObjectLogBD).Name}: ", e);
+			}
+		}
 
         public static int InsertLog(ObjectLogBD objLog)
         {
@@ -154,11 +151,13 @@ namespace Percolore.IOConnect.Util
                         conn.Close();
                     }
                 }
-
             }
-            catch
-            { }
-            return retorno;
+			catch (Exception e)
+			{
+				LogManager.LogError($"Erro no módulo {typeof(ObjectLogBD).Name}: ", e);
+			}
+
+			return retorno;
         }
     }
 }

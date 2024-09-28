@@ -1,15 +1,11 @@
 ﻿using PaintMixer;
 using Percolore.Core;
-using Percolore.Core.Persistence.Xml;
+using Percolore.Core.Logging;
 using Percolore.IOConnect.Modbus;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading;
 
 namespace Percolore.IOConnect
 {
-    public class ModBusDispenser_P4 : IDispenser, IDisposable
+	public class ModBusDispenser_P4 : IDispenser, IDisposable
     {
         private PaintMixerInterface_P4 mixer;
         private Util.ObjectParametros parametros = null;
@@ -78,7 +74,6 @@ namespace Percolore.IOConnect
             get
             {
                 ushort inputs = mixer.Inputs;
-                //bool firstInput = (inputs & (1 << 0)) != 0;
                 bool firstInput = (inputs & (0x01)) != 0;
                 return firstInput;
             }
@@ -146,9 +141,12 @@ namespace Percolore.IOConnect
                 retorno.Input_3 = stI.Input_3;
                 retorno.Input_4 = stI.Input_4;
             }
-            catch
-            { }
-            return retorno;
+			catch (Exception e)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", e);
+			}
+
+			return retorno;
         }
 
         public void Connect()
@@ -494,12 +492,11 @@ namespace Percolore.IOConnect
 
                 }
             }
-            catch
-            {
-                // Disconnect();
-                throw;
-            }
-            finally
+			catch (Exception e)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", e);
+			}
+			finally
             {
                 //Status do dispensador
                 isBusy = false;
@@ -586,9 +583,12 @@ namespace Percolore.IOConnect
                 retorno.Circuito_23 = stV.Input_23;
                 retorno.Circuito_24 = stV.Input_24;
             }
-            catch
-            { }
-            return retorno;
+			catch (Exception e)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", e);
+			}
+
+			return retorno;
         }
 
         public void AcionaValvula(bool aVal, int circuito)

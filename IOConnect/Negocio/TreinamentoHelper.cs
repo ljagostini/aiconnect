@@ -1,13 +1,10 @@
 ﻿using Percolore.Core;
-using Percolore.Core.Persistence.Xml;
-using System;
+using Percolore.Core.Logging;
 using System.Diagnostics;
-using System.IO;
-using System.Linq;
 
 namespace Percolore.IOConnect
 {
-    public class TreinamentoHelper
+	public class TreinamentoHelper
     {
         public static bool RunTreinamento()
         {
@@ -66,10 +63,11 @@ namespace Percolore.IOConnect
 
                 return true;
             }
-            catch (Exception)
-            {
+			catch (Exception e)
+			{
+				LogManager.LogError($"Erro no módulo {typeof(TreinamentoHelper).Name}: ", e);
                 return false;
-            }
-        }
+			}
+		}
     }
 }

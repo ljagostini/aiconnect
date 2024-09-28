@@ -1,4 +1,5 @@
 ﻿using InTheHand.Net.Sockets;
+using Percolore.Core.Logging;
 using Percolore.IOConnect;
 using Percolore.IOConnect.Util;
 using System.IO.Ports;
@@ -74,13 +75,11 @@ namespace PaintMixer
         {
             get
             {
-                //ushort[] v = new ushort[1];
                 int[] v = new int[13];
               
                 ushort pollStart = (ushort)100;
                 if (!mb.SendFc3(slaveAddr, pollStart, 13, ref v))
                 {
-                    //throw new Exception("Could not read status register: " + wsmbs.GetLastErrorString());
                     throw new Exception("Could not read status register: " + mb.modbusStatusStr);
                 }
 
@@ -175,7 +174,6 @@ namespace PaintMixer
         public void Connect(int responseTimeout)
         {
             this.timeoutResp = responseTimeout;
-            //mb = ModBusRtu.getModBusRtu();
             bool bConnect = false;
             if (mb == null)
             {
@@ -189,14 +187,13 @@ namespace PaintMixer
                 try
                 {
                     portas = SerialPort.GetPortNames();
-                    //if(parametros.NomeDispositivo != "")
+                    
                     if (this.nomeDispositivo != "")
                     {
                         bool achouPorta = false;
                         string mPortaConfig = "";
                         foreach (string np in portas)
                         {
-                            //if(np.ToUpper() == parametros.NomeDispositivo.ToUpper())
                             if (np.ToUpper() == this.nomeDispositivo.ToUpper())
                             {
                                 mPortaConfig = np;
@@ -210,9 +207,11 @@ namespace PaintMixer
                         }
                     }
                 }
-                catch
-                { }
-                //bool bConnect = false;
+				catch (Exception e)
+				{
+					LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", e);
+				}
+				
                 if (portas == null || portas.LongLength == 0)
                 {
                     throw new Exception(
@@ -221,7 +220,6 @@ namespace PaintMixer
                 }
                 foreach (string porta in portas)
                 {
-                    //mb.Open(portas[0], 9600, 8, Parity.Even, StopBits.One);                    
                     mb.Open(porta, 9600, 8, Parity.Even, StopBits.One);
                     if (mb.isOpen())
                     {
@@ -244,14 +242,14 @@ namespace PaintMixer
 									Bluetooth.PairBluetoothDevices(devices);
 								}
                             }
-                            catch
-                            { }
-
-                        }
+							catch (Exception e)
+							{
+								LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", e);
+							}
+						}
                         else
                         {
                             this.counterConnect = 0;
-
                         }
                     }
                 }
@@ -272,35 +270,9 @@ namespace PaintMixer
         /// </summary>
         public void Disconnect()
         {
-            /*
-            if (wsmbs != null)
-            {
-                wsmbs.Disconnect();
-
-                if (parametros.HabilitarLogComunicacao)
-                {
-                    Log.Logar(
-                        TipoLog.Comunicacao, Percolore.IOConnect.Util.ObjectParametros.PathDiretorioSistema, "Conexão com dispositivo encerrada.");
-                }
-            }
-
-            wsmbs = null;
-            */
-
             if (mb != null)
             {
                 mb.CloseM();
-
-            }
-            else
-            {
-                /*
-                mb = ModBusRtu.getModBusRtu();
-                if (mb != null && mb.isOpen())
-                {
-                    mb.CloseM();
-                }
-                */
             }
         }
 
@@ -549,7 +521,6 @@ namespace PaintMixer
                 {
                     if (parametros.HabilitarLogComunicacao)
                     {
-
                         Log.Logar(
                         TipoLog.Comunicacao,
                         Percolore.IOConnect.Util.ObjectParametros.PathDiretorioSistema,
@@ -812,10 +783,6 @@ namespace PaintMixer
                 {
                     mb.CloseM();
                 }
-                /*
-                wsmbs.Disconnect();
-                wsmbs.Dispose();
-                */
             }
         }
 

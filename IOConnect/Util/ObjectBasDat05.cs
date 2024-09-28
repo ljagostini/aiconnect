@@ -1,15 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using Percolore.Core.Logging;
 using System.Data.SQLite;
-using System.IO;
-using System.Linq;
 using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace Percolore.IOConnect.Util
 {
-    public class ObjectBasDat05
+	public class ObjectBasDat05
     {
         public static readonly string PathFile = Path.Combine(Environment.CurrentDirectory, "BasDat05.db");
         public static readonly string FileName = Path.GetFileName(PathFile);
@@ -56,9 +51,12 @@ namespace Percolore.IOConnect.Util
                     }
                 }
             }
-            catch
-            { }
-        }
+			catch (Exception e)
+			{
+				LogManager.LogError($"Erro no módulo {typeof(ObjectBasDat05).Name}: ", e);
+			}
+		}
+
         public static ObjectBasDat05 Load(int Circuito)
         {
             ObjectBasDat05 basDat05 = null;
@@ -91,12 +89,12 @@ namespace Percolore.IOConnect.Util
 
                 return basDat05;
             }
-            catch
-            {
+			catch (Exception e)
+			{
+				LogManager.LogError($"Erro no módulo {typeof(ObjectBasDat05).Name}: ", e);
                 throw;
-            }
-        }
-
+			}
+		}
 
         public static List<ObjectBasDat05> List()
         {
@@ -127,12 +125,12 @@ namespace Percolore.IOConnect.Util
                     conn.Close();
                 }
             }
-            catch
-            {
+			catch (Exception e)
+			{
+				LogManager.LogError($"Erro no módulo {typeof(ObjectBasDat05).Name}: ", e);
+			}
 
-            }
-            return list;
-
+			return list;
         }
 
         public static void Persist(ObjectBasDat05 bDat05)
@@ -185,11 +183,12 @@ namespace Percolore.IOConnect.Util
                 }
 
             }
-            catch
-            {
+			catch (Exception e)
+			{
+				LogManager.LogError($"Erro no módulo {typeof(ObjectBasDat05).Name}: ", e);
                 throw;
-            }
-        }
+			}
+		}
 
         public static void Persist(List<ObjectBasDat05> lista)
         {
@@ -246,12 +245,12 @@ namespace Percolore.IOConnect.Util
                     }
                 }
             }
-            catch
-            {
+			catch (Exception e)
+			{
+				LogManager.LogError($"Erro no módulo {typeof(ObjectBasDat05).Name}: ", e);
                 throw;
-            }
-        }
-
+			}
+		}
 
         public static bool Validate(List<ObjectBasDat05> lista, out string outMsg)
         {
@@ -308,13 +307,13 @@ namespace Percolore.IOConnect.Util
                     }
                 }
             }
-            catch
-            {
+			catch (Exception e)
+			{
+				LogManager.LogError($"Erro no módulo {typeof(ObjectBasDat05).Name}: ", e);
                 throw;
-            }
-            return retorno;
+			}
+
+			return retorno;
         }
-
-
     }
 }

@@ -1,16 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using Percolore.Core.Logging;
 using System.Data.SQLite;
-using System.IO;
-using System.Linq;
 using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
 
 
 namespace Percolore.IOConnect.Util
 {
-    public class ObjectMensagem
+	public class ObjectMensagem
     {
 
         public static readonly string PathFile = Path.Combine(Environment.CurrentDirectory, "Mensagens.db");
@@ -51,9 +46,12 @@ namespace Percolore.IOConnect.Util
                     }
                 }
             }
-            catch
-            { }
-        }
+			catch (Exception e)
+			{
+				LogManager.LogError($"Erro no módulo {typeof(ObjectMensagem).Name}: ", e);
+			}
+		}
+
         public static void LoadMessage()
         {
             try
@@ -63,9 +61,11 @@ namespace Percolore.IOConnect.Util
                 SetConteudo(local);
                 
             }
-            catch
-            { }
-        }
+			catch (Exception e)
+			{
+				LogManager.LogError($"Erro no módulo {typeof(ObjectMensagem).Name}: ", e);
+			}
+		}
      
         public ObjectMensagem Load(int id)
         {
@@ -98,11 +98,12 @@ namespace Percolore.IOConnect.Util
 
                 return aux;
             }
-            catch
-            {
+			catch (Exception e)
+			{
+				LogManager.LogError($"Erro no módulo {typeof(ObjectMensagem).Name}: ", e);
                 throw;
-            }
-        }
+			}
+		}
 
         public static List<ObjectMensagem> List()
         {
@@ -134,11 +135,12 @@ namespace Percolore.IOConnect.Util
                     conn.Close();
                 }
             }
-            catch
-            {
+			catch (Exception e)
+			{
+				LogManager.LogError($"Erro no módulo {typeof(ObjectMensagem).Name}: ", e);
+			}
 
-            }
-            op = null;
+			op = null;
             return list;
 
         }
@@ -297,7 +299,6 @@ namespace Percolore.IOConnect.Util
                 case "PlacaMov_Realizar_Operacao": { Negocio.IdiomaResxExtensao.PlacaMov_Realizar_Operacao = aux.Conteudo; break; }
                 case "ValidadeManutencao_DataRedefinida": { Negocio.IdiomaResxExtensao.ValidadeManutencao_DataRedefinida = aux.Conteudo; break; }
 
-
                 case "Autenticacao_lblTitulo": { Negocio.IdiomaResxExtensao.Autenticacao_lblTitulo = aux.Conteudo; break; }
                 case "Autenticacao_rdbSenha": { Negocio.IdiomaResxExtensao.Autenticacao_rdbSenha = aux.Conteudo; break; }
                 case "Autenticacao_SenhaInvalida": { Negocio.IdiomaResxExtensao.Autenticacao_SenhaInvalida = aux.Conteudo; break; }
@@ -390,8 +391,7 @@ namespace Percolore.IOConnect.Util
                 case "Configuracoes_lblGeralTimeout": { Negocio.IdiomaResxExtensao.Configuracoes_lblGeralTimeout = aux.Conteudo; break; }
 
                 case "Configuracoes_lblQtdTentativasConexao": { Negocio.IdiomaResxExtensao.Configuracoes_lblQtdTentativasConexao = aux.Conteudo; break; }
-                    
-
+                
                 case "Configuracoes_lblGeralVelocidade": { Negocio.IdiomaResxExtensao.Configuracoes_lblGeralVelocidade = aux.Conteudo; break; }
                 case "Configuracoes_lblInicializacaoAceleracao": { Negocio.IdiomaResxExtensao.Configuracoes_lblInicializacaoAceleracao = aux.Conteudo; break; }
                 case "Configuracoes_lblInicializacaoPulsoInicial": { Negocio.IdiomaResxExtensao.Configuracoes_lblInicializacaoPulsoInicial = aux.Conteudo; break; }
@@ -936,12 +936,10 @@ namespace Percolore.IOConnect.Util
                 case "Configuracoes_cbTipoLimpBicosIntervalo": { Negocio.IdiomaResxExtensao.Configuracoes_cbTipoLimpBicosIntervalo = aux.Conteudo; break; }
                 case "Configuracoes_cbTipoLimpBicosConfig": { Negocio.IdiomaResxExtensao.Configuracoes_cbTipoLimpBicosConfig = aux.Conteudo; break; }
 
-
                 case "Configuracoes_gbBaseDados": { Negocio.IdiomaResxExtensao.Configuracoes_gbBaseDados = aux.Conteudo; break; }
                 case "Configuracoes_lblTipoBaseDados": { Negocio.IdiomaResxExtensao.Configuracoes_lblTipoBaseDados = aux.Conteudo; break; }
                 case "Configuracoes_lblPathBaseDados": { Negocio.IdiomaResxExtensao.Configuracoes_lblPathBaseDados = aux.Conteudo; break; }
                 case "Configuracoes_msgSalvarCalibracao":{ Negocio.IdiomaResxExtensao.Configuracoes_msgSalvarCalibracao = aux.Conteudo; break; }
-
 
                 case "Configuracoes_lblTipoDosagemExec": { Negocio.IdiomaResxExtensao.Configuracoes_lblTipoDosagemExec = aux.Conteudo; break; }
                 case "Configuracoes_TipoDosagemCircuito": { Negocio.IdiomaResxExtensao.Configuracoes_TipoDosagemCircuito = aux.Conteudo; break; }
@@ -958,7 +956,6 @@ namespace Percolore.IOConnect.Util
                 case "Configuracoes_Dat_Habilitado": { Negocio.IdiomaResxExtensao.Configuracoes_Dat_Habilitado = aux.Conteudo; break; }
                 case "Configuracoes_Dat_Separador": { Negocio.IdiomaResxExtensao.Configuracoes_Dat_Separador = aux.Conteudo; break; }
 
-
                 case "PainelControle_DesejaRecircularAuto": { Negocio.IdiomaResxExtensao.PainelControle_DesejaRecircularAuto = aux.Conteudo; break; }
                 case "PainelControle_CancelouRecircularAuto": { Negocio.IdiomaResxExtensao.PainelControle_CancelouRecircularAuto = aux.Conteudo; break; }
                 case "RecirculacaoAuto_Titulo": { Negocio.IdiomaResxExtensao.RecirculacaoAuto_Titulo = aux.Conteudo; break; }
@@ -968,7 +965,6 @@ namespace Percolore.IOConnect.Util
                 case "RecirculacaoAuto_Cancelado": { Negocio.IdiomaResxExtensao.RecirculacaoAuto_Cancelado = aux.Conteudo; break; }
                 case "RecirculacaoAuto_Abortada": { Negocio.IdiomaResxExtensao.RecirculacaoAuto_Abortada = aux.Conteudo; break; }
                 case "RecirculacaoAuto_Falha": { Negocio.IdiomaResxExtensao.RecirculacaoAuto_Falha = aux.Conteudo; break; }
-
 
                 case "Configuracoes_chkDesabilitarVolumeMinimoDat": { Negocio.IdiomaResxExtensao.Configuracoes_chkDesabilitarVolumeMinimoDat = aux.Conteudo; break; }
                 case "Configuracoes_lblVolumeMinimoDat": { Negocio.IdiomaResxExtensao.Configuracoes_lblVolumeMinimoDat = aux.Conteudo; break; }
@@ -998,19 +994,14 @@ namespace Percolore.IOConnect.Util
                     {
                         break;
                     }
-
             }
         }
-
-        //public string ProdutoBicoIndividual { get; set; } = string.Empty;
-        //public string ProdutoNivelBicoIndividual { get; set; } = string.Empty;
 
         private static void SetConteudo(List<ObjectMensagem> laux)
         {
             foreach (ObjectMensagem aux in laux)
             {
-                SetConteudoObj(aux);              
-
+                SetConteudoObj(aux);
             }
         }
 
@@ -1081,10 +1072,7 @@ namespace Percolore.IOConnect.Util
                     }
                     count++;
                 }
-
             }
         }
-
-
     }
 }

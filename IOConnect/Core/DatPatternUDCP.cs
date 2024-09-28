@@ -1,14 +1,10 @@
 ﻿using Percolore.Core;
-using System;
-using System.Collections.Generic;
+using Percolore.Core.Logging;
 using System.Globalization;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Percolore.IOConnect.Core
 {
-    public class DatPatternUDCP : IDat
+	public class DatPatternUDCP : IDat
     {
         private bool UTILIZAR_CORRESPONDENCIA;
         private List<ListCorrespondencia> LISTA_CORRESPONDENCIA;
@@ -154,9 +150,12 @@ namespace Percolore.IOConnect.Core
                     }
                 }
             }
-            catch
-            { }
-            this._codigoCor = this._linhaPRD + ";" + this._linhaCAN + ";" + this._linhaUNT + ";" + _linhaBAS + ";@CNX " + this._linhaFRM + ";";
+			catch (Exception e)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", e);
+			}
+
+			this._codigoCor = this._linhaPRD + ";" + this._linhaCAN + ";" + this._linhaUNT + ";" + _linhaBAS + ";@CNX " + this._linhaFRM + ";";
         }
 
         private void DesmontarExtKey(string strExtKey)
@@ -195,13 +194,12 @@ namespace Percolore.IOConnect.Core
                     }
                 }
             }
-            catch
-            {
+			catch (Exception e)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", e);
+			}
 
-            }
-
-            this._linhaExtKey += montando;
-
+			this._linhaExtKey += montando;
         }
 
         private void DesmontarCHECK_CNT(string strCheckCNT)
@@ -268,16 +266,16 @@ namespace Percolore.IOConnect.Core
                                     }
                                 }
                             }
-
                         }
                     }
-
                 }
             }
-            catch
-            {
-            }
-            this._linhaCheckFormula += montando;
+			catch (Exception e)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", e);
+			}
+
+			this._linhaCheckFormula += montando;
         }
 
         private void DesmontarCHECK_CNX(string strCheckCNX)
@@ -317,10 +315,12 @@ namespace Percolore.IOConnect.Core
                     }
                 }
             }
-            catch
-            {
-            }
-            this._linhaCheckFormula = montando;
+			catch (Exception e)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", e);
+			}
+
+			this._linhaCheckFormula = montando;
         }
 
         private void DesmontarFRM(string strFRM)
@@ -356,13 +356,14 @@ namespace Percolore.IOConnect.Core
                             }
                         }
                     }
-
                 }
             }
-            catch
-            {
-            }
-            this._linhaFRM += montando;
+			catch (Exception e)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", e);
+			}
+
+			this._linhaFRM += montando;
         }
 
         private void DesmontarFRMCodProd(string strFRM)
@@ -427,15 +428,16 @@ namespace Percolore.IOConnect.Core
                                     }
                                 }
                             }
-                            
                         }
                     }
                 }
             }
-            catch
-            {
-            }
-            this._linhaFRM += montando;
+			catch (Exception e)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", e);
+			}
+
+			this._linhaFRM += montando;
         }
 
         private void DesmontaBAS(string strBas)
@@ -462,9 +464,12 @@ namespace Percolore.IOConnect.Core
                 }
                 montando = strbasLimpo;
             }
-            catch
-            { }
-            this._linhaBAS = montando;
+			catch (Exception e)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", e);
+			}
+
+			this._linhaBAS = montando;
         }
 
         private void DesmontaCAN(string strCAN)
@@ -488,37 +493,34 @@ namespace Percolore.IOConnect.Core
                     double embdisp = -1;
                     for (int i = 2; !achou && i < controle.Length; i++)
                     {
-                        try
+                        if (controle[i] != null && controle[i].Length > 0)
                         {
-                            if (controle[i] != null && controle[i].Length > 0)
+                            //Ponto == 1 e vrigula == 0
+                            if (controle[i].Contains(","))
                             {
-                                //Ponto == 1 e vrigula == 0
-                                if (controle[i].Contains(","))
-                                {
-                                    embdisp = double.Parse(controle[i].Replace(",", "."), System.Globalization.CultureInfo.InvariantCulture);
-                                    achou = true;
-                                }
-                                else 
-                                {
-                                    embdisp = double.Parse(controle[i], System.Globalization.CultureInfo.InvariantCulture);
-                                    achou = true;
-                                }
+                                embdisp = double.Parse(controle[i].Replace(",", "."), System.Globalization.CultureInfo.InvariantCulture);
+                                achou = true;
+                            }
+                            else 
+                            {
+                                embdisp = double.Parse(controle[i], System.Globalization.CultureInfo.InvariantCulture);
+                                achou = true;
                             }
                         }
-                        catch
-                        { }
                     }
                     if (embdisp >= 0)
                     {
                         this.vEmbdisp = embdisp;
                         montando = strCAN;
                     }
-                    
                 }
             }
-            catch
-            { }
-            this._linhaCAN = montando;
+			catch (Exception e)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", e);
+			}
+
+			this._linhaCAN = montando;
         }
 
         private void DesmontarUNT(string strUNT)
@@ -567,12 +569,12 @@ namespace Percolore.IOConnect.Core
                     }
                 }
             }
-            catch
-            {
+			catch (Exception e)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", e);
+			}
 
-            }
-            this._linhaUNT = montando;
-
+			this._linhaUNT = montando;
         }
 
         private void DesmontarWHG(string strWHG)
@@ -600,12 +602,12 @@ namespace Percolore.IOConnect.Core
                     }                        
                 }
             }
-            catch
-            {
+			catch (Exception e)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", e);
+			}
 
-            }
-            this._linhaWHG = montando;
-
+			this._linhaWHG = montando;
         }
 
         private void DesmontarPRD(string strPRD)
@@ -627,25 +629,22 @@ namespace Percolore.IOConnect.Core
                 if (controle != null)
                 {
                     _codigoCor = controle[1];
-                    
                 }
                 montando = strPRDLimpo;
             }
-            catch
-            {
+			catch (Exception e)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", e);
+			}
 
-            }
-            this._linhaPRD = montando;
-
+			this._linhaPRD = montando;
         }
         
         public bool Validar()
         {
             bool retorno =
                 (!string.IsNullOrEmpty(_linhaUNT)
-                //&& !string.IsNullOrEmpty(_linhaCAN)
                 && !string.IsNullOrEmpty(_linhaFRM));
-            
 
             try
             {
@@ -655,10 +654,12 @@ namespace Percolore.IOConnect.Core
                     retorno = false;
                 }
             }
-            catch
-            { }
+			catch (Exception e)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", e);
+			}
 
-            return retorno;
+			return retorno;
         }
 
         public Dictionary<int, double> GetQuantidades()
@@ -677,13 +678,11 @@ namespace Percolore.IOConnect.Core
                 {
                     CIRCUITO = _lCorv.Circuito;
                     double SHOT = double.Parse(vShots[index + 1].Replace(",", "."), CultureInfo.InvariantCulture);
-                    //double.TryParse(vShots[index + 1], out SHOT);
+                    
                     //(ml) milimitros
                     if (this.defaultUnit == 0)
                     {
                         double QUANTIDADE = (this.vFatorUNT / this.vFracaoUNT) * SHOT;
-                        //double QUANTIDADE = 0.462 * SHOT;
-                        //double QUANTIDADE = SHOT;
                         qtdes.Add(CIRCUITO, QUANTIDADE);
                     }
                     //(gr) gramas

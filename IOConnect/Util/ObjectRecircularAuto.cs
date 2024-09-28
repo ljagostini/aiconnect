@@ -1,16 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using Percolore.Core.Logging;
 using System.Data.SQLite;
-using System.IO;
-using System.Linq;
 using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace Percolore.IOConnect.Util
 {
-    //Classe mantida para atualizar as antigas recirculações automáticas para a Classe ObjectRecircular
-    public class ObjectRecircularAuto
+	//Classe mantida para atualizar as antigas recirculações automáticas para a Classe ObjectRecircular
+	public class ObjectRecircularAuto
     {
         public static readonly string PathFile = Path.Combine(Environment.CurrentDirectory, "RecircularAuto.db");
         public static readonly string FileName = Path.GetFileName(PathFile);
@@ -59,9 +54,11 @@ namespace Percolore.IOConnect.Util
                     }
                 }
             }
-            catch
-            { }
-        }
+			catch (Exception e)
+			{
+				LogManager.LogError($"Erro no módulo {typeof(ObjectRecircularAuto).Name}: ", e);
+			}
+		}
 
         public static ObjectRecircularAuto Load(int Circuito)
         {
@@ -101,11 +98,12 @@ namespace Percolore.IOConnect.Util
 
                 return recircular;
             }
-            catch
-            {
+			catch (Exception e)
+			{
+				LogManager.LogError($"Erro no módulo {typeof(ObjectRecircularAuto).Name}: ", e);
                 throw;
-            }
-        }
+			}
+		}
 
         public static List<ObjectRecircularAuto> List()
         {
@@ -143,12 +141,12 @@ namespace Percolore.IOConnect.Util
                     conn.Close();
                 }
             }
-            catch
-            {
+			catch (Exception e)
+			{
+				LogManager.LogError($"Erro no módulo {typeof(ObjectRecircularAuto).Name}: ", e);
+			}
 
-            }
-            return list.OrderBy(o => o.Circuito).ToList();
-
+			return list.OrderBy(o => o.Circuito).ToList();
         }
 
         public static void Persist(ObjectRecircularAuto recircular)
@@ -208,11 +206,12 @@ namespace Percolore.IOConnect.Util
                 }
 
             }
-            catch
-            {
+			catch (Exception e)
+			{
+				LogManager.LogError($"Erro no módulo {typeof(ObjectRecircularAuto).Name}: ", e);
                 throw;
-            }
-        }
+			}
+		}
 
         public static void Persist(List<ObjectRecircularAuto> lista)
         {
@@ -275,11 +274,12 @@ namespace Percolore.IOConnect.Util
                     }
                 }
             }
-            catch
-            {
+			catch (Exception e)
+			{
+				LogManager.LogError($"Erro no módulo {typeof(ObjectRecircularAuto).Name}: ", e);
                 throw;
-            }
-        }
+			}
+		}
 
         public static bool Validate(List<ObjectRecircularAuto> lista, out string outMsg)
         {
@@ -316,11 +316,12 @@ namespace Percolore.IOConnect.Util
                     ObjectRecircularAuto.Persist(_rec);
                 }
             }
-            catch
-            {
+			catch (Exception e)
+			{
+				LogManager.LogError($"Erro no módulo {typeof(ObjectRecircularAuto).Name}: ", e);
                 throw;
-            }
-        }
+			}
+		}
 
         public static bool UpdateRessetDate(DateTime data_hora)
         {
@@ -343,12 +344,13 @@ namespace Percolore.IOConnect.Util
                     }
                 }
             }
-            catch
-            {
+			catch (Exception e)
+			{
+				LogManager.LogError($"Erro no módulo {typeof(ObjectRecircularAuto).Name}: ", e);
                 throw;
-            }
+			}
 
-            return retorno;
+			return retorno;
         }
 
         public static bool Delete(int circuito)
@@ -378,10 +380,12 @@ namespace Percolore.IOConnect.Util
                     }
                 }
             }
-            catch
-            { }
-            return retorno;
-        }
+			catch (Exception e)
+			{
+				LogManager.LogError($"Erro no módulo {typeof(ObjectRecircularAuto).Name}: ", e);
+			}
 
+			return retorno;
+        }
     }
 }

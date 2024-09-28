@@ -1,15 +1,8 @@
 ﻿using FluentFTP;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Net;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Percolore.IOConnect.Negocio
 {
-    public static class FTPClient
+	public static class FTPClient
     {
         /// <summary>
         /// Upload de arquivo
@@ -21,6 +14,7 @@ namespace Percolore.IOConnect.Negocio
         public static bool EnviarArquivoFTP(string arquivo, string url, string usuario, string senha, ref string strError)
         {
             bool retorno = false;
+
             try
             {
                 strError = "";
@@ -37,6 +31,7 @@ namespace Percolore.IOConnect.Negocio
             {
                 strError = ex.Message;
             }
+
             return retorno;
         }
 
@@ -48,7 +43,7 @@ namespace Percolore.IOConnect.Negocio
         /// <param name="senha"></param>
         public static bool ExisteArquivoFTP(string url, string usuario, string senha)
         {
-            bool retorno = false;
+            bool retorno;
 
             try
             {
@@ -57,8 +52,10 @@ namespace Percolore.IOConnect.Negocio
 				retorno = ftpClient.FileExists(url);
             }
             catch
-            {               
+            {
+                retorno = false;
             }
+
             return retorno;
         }
     }

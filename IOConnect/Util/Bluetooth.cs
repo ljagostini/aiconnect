@@ -1,5 +1,6 @@
 ﻿using InTheHand.Net.Bluetooth;
 using InTheHand.Net.Sockets;
+using Percolore.Core.Logging;
 
 namespace Percolore.IOConnect.Util
 {
@@ -30,14 +31,9 @@ namespace Percolore.IOConnect.Util
 								"Dispositivo Pareando Bluetooth: " + d.DeviceName
 								);
 
-							try
-							{
-								bool state = true;
-								foreach (var service in d.InstalledServices)
-									d.SetServiceState(service, state);
-							}
-							catch
-							{ }
+							bool state = true;
+							foreach (var service in d.InstalledServices)
+								d.SetServiceState(service, state);
 						}
 						else if (d.DeviceName.Contains("HC-06-"))
 						{
@@ -51,20 +47,16 @@ namespace Percolore.IOConnect.Util
 									"Dispositivo Pareando Bluetooth: " + d.DeviceName
 									);
 
-								try
-								{
-									bool state = true;
-									foreach (var service in d.InstalledServices)
-										d.SetServiceState(service, state);
-								}
-								catch
-								{ }
+								bool state = true;
+								foreach (var service in d.InstalledServices)
+									d.SetServiceState(service, state);
 							}
 						}
 					}
 				}
-				catch
+				catch (Exception e)
 				{
+					LogManager.LogError($"Erro no módulo {typeof(Bluetooth).Name}: ", e);
 				}
 			}
 		}

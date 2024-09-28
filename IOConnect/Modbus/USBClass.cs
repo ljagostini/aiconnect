@@ -1,13 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using Percolore.Core.Logging;
 using System.Runtime.InteropServices;
-using System.IO;
-using Microsoft.Win32.SafeHandles;
 
 namespace Percolore.IOConnect.Modbus
 {
-    public class USBClass
+	public class USBClass
     {
         const Int64 INVALID_HANDLE_VALUE = -1;
         const int BUFFER_SIZE = 1024;
@@ -59,14 +55,7 @@ namespace Percolore.IOConnect.Modbus
                 public const string COMPORT = "86E0D1E0-8089-11D0-9CE4-08003E301F73";
                 public const string PARALLEL = "97F76EF0-F883-11D0-AF1F-0000F800845C";
             }
-            /*public const string GUID_DEVINTERFACE_DISK = "53f56307-b6bf-11d0-94f2-00a0c91efb8b";
-            public const string GUID_DEVINTERFACE_HUBCONTROLLER = "3abf6f2d-71c4-462a-8a92-1e6861e6af27";
-            public const string GUID_DEVINTERFACE_MODEM = "2C7089AA-2E0E-11D1-B114-00C04FC2AAE4";
-            public const string GUID_DEVINTERFACE_SERENUM_BUS_ENUMERATOR = "4D36E978-E325-11CE-BFC1-08002BE10318";
-            public const string GUID_DEVINTERFACE_COMPORT = "86E0D1E0-8089-11D0-9CE4-08003E301F73";
-            public const string GUID_DEVINTERFACE_PARALLEL = "97F76EF0-F883-11D0-AF1F-0000F800845C";*/
-            // Win32 constants
-            //private const int BROADCAST_QUERY_DENY = 0x424D5144;
+            
             public const int WM_DEVICECHANGE = 0x0219;
 
             [Flags]
@@ -868,8 +857,6 @@ namespace Percolore.IOConnect.Modbus
             [DllImport("advapi32.dll", SetLastError = true)]
             public static extern int RegCloseKey(
                 IntPtr hKey);
-
-
         }
 
         //Delegate for event handler to handle the device events 
@@ -994,11 +981,15 @@ namespace Percolore.IOConnect.Modbus
                 m_oFile.EndRead(iResult);	// call end read : this throws any exceptions that happened during the read
                 BeginAsyncRead();	// when all that is done, kick off another read for the next report
             }
-            catch // if we got an IO exception, the device was removed
+            catch (IOException e) // if we got an IO exception, the device was removed
             {
-                
-            }
-        }
+				LogManager.LogError($"Dispositivo removido no módulo {this.GetType().Name}: ", e);
+			}
+			catch (Exception e)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", e);
+			}
+		}
         /// <summary>
         /// Write an output report to the device.
         /// </summary>
@@ -1012,9 +1003,10 @@ namespace Percolore.IOConnect.Modbus
             }
             catch (Exception exx)
             {
-                Console.WriteLine(exx.ToString());
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", exx);
+				Console.WriteLine(exx.ToString());
             }
-        }
+		}
 
         public void ProcessWindowsMessage(int Msg, IntPtr WParam, IntPtr LParam, ref bool handled)//ref Message m)
         {
@@ -1043,12 +1035,6 @@ namespace Percolore.IOConnect.Modbus
                         {
                             handled = true;
                             USBDeviceEventArgs e = new USBDeviceEventArgs();
-                            /*Win32Wrapper.DEV_BROADCAST_DEVICEINTERFACE deviceInterface = new Win32Wrapper.DEV_BROADCAST_DEVICEINTERFACE();
-
-                            int size = Marshal.SizeOf(deviceInterface);
-                            deviceInterface.dbcc_size = size;
-                            Marshal.PtrToStructure(m.LParam, typeof(Win32Wrapper.DEV_BROADCAST_DEVICEINTERFACE));*/
-
                             USBDeviceQueryRemove(this, e);
                         }
                         break;
@@ -1080,118 +1066,6 @@ namespace Percolore.IOConnect.Modbus
             public string COMPort;
         }
 
-        /*public static bool GetDeviceByClass(String DeviceInterfaceGUID)
-        {
-            IntPtr IntPtrBuffer = Marshal.AllocHGlobal(BUFFER_SIZE);
-            Win32Wrapper.WinErrors LastError;
-            bool Status = false;
-            Guid DeviceGUID = new Guid(DeviceInterfaceGUID);
-
-            try
-            {
-                //Get a handle to a device information set that contains all installed devices that support the Device Infomation Interface (GUID)
-                IntPtr h = Win32Wrapper.SetupDiGetClassDevs(ref DeviceGUID, IntPtr.Zero, IntPtr.Zero, (uint)(Win32Wrapper.DIGCF.DIGCF_PRESENT | Win32Wrapper.DIGCF.DIGCF_DEVICEINTERFACE));
-                if (h.ToInt32() != INVALID_HANDLE_VALUE)
-                {
-                    bool Success = true;
-                    uint i = 0;
-                    UInt32 RequiredSize = 0;
-
-                    while (Success)
-                    {
-                        //Create a Device Interface Data structure
-                        Win32Wrapper.SP_DEVICE_INTERFACE_DATA DeviceInterfaceData = new Win32Wrapper.SP_DEVICE_INTERFACE_DATA();
-                        DeviceInterfaceData.cbSize = (uint)Marshal.SizeOf(DeviceInterfaceData);
-
-                        //Start the enumeration
-                        Success = Win32Wrapper.SetupDiEnumDeviceInterfaces(h, IntPtr.Zero, ref DeviceGUID, i, ref DeviceInterfaceData);
-                        if (!Success)
-                        {
-                            LastError = (Win32Wrapper.WinErrors)Marshal.GetLastWin32Error();
-                            if (LastError == Win32Wrapper.WinErrors.ERROR_NO_MORE_ITEMS)
-                            {
-                                Status = false;
-                                break;
-                            }
-                            else
-                            {
-                                throw new Exception("Error enumerating devices!");
-                            }
-                        }
-
-                        //Create a Device Info Data structure
-                        Win32Wrapper.SP_DEVINFO_DATA DeviceInfoData = new Win32Wrapper.SP_DEVINFO_DATA();
-                        DeviceInfoData.cbSize = (uint)Marshal.SizeOf(DeviceInfoData);
-
-                        //Success = Win32Wrapper.SetupDiGetDeviceInterfaceDetail(h, ref DeviceInterfaceData, ref IntPtr.Zero, 0, out RequiredSize, ref IntPtr.Zero);
-                        //Create a Device Interface Detail Data structure
-                        Win32Wrapper.SP_DEVICE_INTERFACE_DETAIL_DATA DeviceInterfaceDetailData = new Win32Wrapper.SP_DEVICE_INTERFACE_DETAIL_DATA();
-                        if (IntPtr.Size == 8) //For 64 bit operating systems
-                            DeviceInterfaceDetailData.cbSize = 8;
-                        else
-                            DeviceInterfaceDetailData.cbSize = (uint)(4 + Marshal.SystemDefaultCharSize); //For 32 bit systems
-
-                        Success = Win32Wrapper.SetupDiGetDeviceInterfaceDetail(h, ref DeviceInterfaceData, ref DeviceInterfaceDetailData, BUFFER_SIZE, out RequiredSize, ref DeviceInfoData);
-
-                        if (!Success)
-                        {
-                            throw new Exception("Error enumerating devices!");
-                        }
-                        
-                        //Is this Port a USB Port? Ask the parent, then it's parent and so on
-                        UInt32 StartingDevice = DeviceInfoData.DevInst;
-                        Win32Wrapper.CRErrorCodes CRResult;
-                        bool IsRemainDevices = true;
-
-                        while(IsRemainDevices)
-                        {
-                            UInt32 hParentDevice = 0;
-
-                            CRResult = (Win32Wrapper.CRErrorCodes)Win32Wrapper.CM_Get_Parent(out hParentDevice, StartingDevice, 0);
-
-                            if (CRResult == Win32Wrapper.CRErrorCodes.CR_NO_SUCH_DEVNODE)
-                            {
-                                IsRemainDevices = true;//We hit the top of the PNP tree
-                                break;
-                            }
-                            if (CRResult != Win32Wrapper.CRErrorCodes.CR_SUCCESS)
-                            {
-                                throw new Exception("Error calling CM_Get_Parent: " + CRResult.ToString());
-                            }
-                            if (IsRemainDevices)
-                            {
-                                CRResult = (Win32Wrapper.CRErrorCodes)Win32Wrapper.CM_Get_Device_ID(hParentDevice, IntPtrBuffer, BUFFER_SIZE, 0);
-                                if (CRResult != Win32Wrapper.CRErrorCodes.CR_SUCCESS)
-                                {
-                                    throw new Exception("Error calling CM_Get_Device_ID: " + CRResult.ToString());
-                                }
-
-                                String DeviceID = Marshal.PtrToStringAuto(IntPtrBuffer);
-                                if (DeviceID.StartsWith("USB\\"))
-                                {
-                                    Status = true;
-                                }
-                            }
-                            //Do the next parent
-                            StartingDevice = hParentDevice;
-                        } //End of while(IsRemainDevices)
-                        i++;
-                    } //End of while (Success)
-                } //End of if (h.ToInt32() != INVALID_HANDLE_VALUE)
-                Win32Wrapper.SetupDiDestroyDeviceInfoList(h); //Clean up the old structure we no longer need.
-
-                return Status;
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-            finally
-            {
-                Marshal.FreeHGlobal(IntPtrBuffer);
-            }
-        }*/
-
         /// <summary>
         /// Enumerate all USB devices and look for the device whose VID and PID are provided.
         /// </summary>
@@ -1207,7 +1081,6 @@ namespace Percolore.IOConnect.Modbus
             IntPtr h = IntPtr.Zero;
             Win32Wrapper.WinErrors LastError;
             DeviceProperties DP = new DeviceProperties();
-            //bool Status = false;
 
             ListOfDP.Clear(); //Make sure the list of devices is empty
             try
@@ -1252,11 +1125,6 @@ namespace Percolore.IOConnect.Modbus
                                 LastError = (Win32Wrapper.WinErrors)Marshal.GetLastWin32Error();
                                 if (LastError == Win32Wrapper.WinErrors.ERROR_INSUFFICIENT_BUFFER)
                                 {
-                                    /*if (RequiredSize > BUFFER_SIZE)
-                                    {
-                                        Status = false;
-                                    }
-                                    else*/
                                     if (RequiredSize <= BUFFER_SIZE)
                                     {
                                         if (Win32Wrapper.SetupDiGetDeviceRegistryProperty(h, ref DevInfoData, (UInt32)Win32Wrapper.SPDRP.SPDRP_HARDWAREID, ref RegType, IntPtrBuffer, BUFFER_SIZE, ref RequiredSize))
@@ -1272,8 +1140,6 @@ namespace Percolore.IOConnect.Modbus
                                                     )
                                                 )
                                             {
-                                                //Status = true; //Found device
-
                                                 DP.FriendlyName = String.Empty;
                                                 if (Win32Wrapper.SetupDiGetDeviceRegistryProperty(h, ref DevInfoData, (UInt32)Win32Wrapper.SPDRP.SPDRP_FRIENDLYNAME, ref RegType, IntPtrBuffer, BUFFER_SIZE, ref RequiredSize))
                                                 {
@@ -1332,7 +1198,7 @@ namespace Percolore.IOConnect.Modbus
                                                     if (hDeviceRegistryKey.ToInt32() == INVALID_HANDLE_VALUE)
                                                     {
                                                         LastError = (Win32Wrapper.WinErrors)Marshal.GetLastWin32Error();
-                                                        break; //throw new Exception("Error opening the Registry: " + LastError.ToString());
+                                                        break;
                                                     }
                                                     else
                                                     {
@@ -1353,34 +1219,28 @@ namespace Percolore.IOConnect.Modbus
                                                 }
 
                                                 ListOfDP.Add(DP); //Add details of the found device in the list
-                                                //break;
-                                            } //End of if (HardwareID.Contains(ExpectedDeviceID) && ...)
-                                            //else
-                                            //{
-                                            //    Status = false;
-                                            //} 
+                                            } 
                                         }
-                                    } //End of if (RequiredSize <= BUFFER_SIZE) //if (RequiredSize > BUFFER_SIZE)
-                                } //End of if (LastError == Win32Wrapper.WinErrors.ERROR_INSUFFICIENT_BUFFER)
-                            } // End of if (Success)
-                        } // End of if (Success)
+                                    }
+                                }
+                            }
+                        }
                         else
                         {
                             LastError = (Win32Wrapper.WinErrors)Marshal.GetLastWin32Error();
-                            //Status = false;
                         }
                         i++;
-                    } // End of while (Success)
-                } //End of if (h.ToInt32() != INVALID_HANDLE_VALUE)
+                    }
+                }
 
                 return (ListOfDP.Count > 0);
-                //return Status;
             }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-            finally
+			catch (Exception e)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", e);
+                throw;
+			}
+			finally
             {
                 Win32Wrapper.SetupDiDestroyDeviceInfoList(h); //Clean up the old structure we no longer need.
                 Marshal.FreeHGlobal(IntPtrBuffer);

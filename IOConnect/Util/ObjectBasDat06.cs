@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Percolore.Core.Logging;
+using System;
 using System.Collections.Generic;
 using System.Data.SQLite;
 using System.IO;
@@ -56,9 +57,11 @@ namespace Percolore.IOConnect.Util
                     }
                 }
             }
-            catch
-            { }
-        }
+			catch (Exception e)
+			{
+				LogManager.LogError($"Erro no módulo {typeof(ObjectBasDat06).Name}: ", e);
+			}
+		}
 
         public static ObjectBasDat06 Load(int Circuito)
         {
@@ -92,11 +95,12 @@ namespace Percolore.IOConnect.Util
 
                 return basDat06;
             }
-            catch
-            {
+			catch (Exception e)
+			{
+				LogManager.LogError($"Erro no módulo {typeof(ObjectBasDat06).Name}: ", e);
                 throw;
-            }
-        }
+			}
+		}
 
 
         public static List<ObjectBasDat06> List()
@@ -128,12 +132,12 @@ namespace Percolore.IOConnect.Util
                     conn.Close();
                 }
             }
-            catch
-            {
+			catch (Exception e)
+			{
+				LogManager.LogError($"Erro no módulo {typeof(ObjectBasDat06).Name}: ", e);
+			}
 
-            }
-            return list;
-
+			return list;
         }
 
         public static void Persist(ObjectBasDat06 bDat06)
@@ -186,11 +190,12 @@ namespace Percolore.IOConnect.Util
                 }
 
             }
-            catch
-            {
+			catch (Exception e)
+			{
+				LogManager.LogError($"Erro no módulo {typeof(ObjectBasDat06).Name}: ", e);
                 throw;
-            }
-        }
+			}
+		}
 
         public static void Persist(List<ObjectBasDat06> lista)
         {
@@ -247,12 +252,12 @@ namespace Percolore.IOConnect.Util
                     }
                 }
             }
-            catch
-            {
+			catch (Exception e)
+			{
+				LogManager.LogError($"Erro no módulo {typeof(ObjectBasDat06).Name}: ", e);
                 throw;
-            }
-        }
-
+			}
+		}
 
         public static bool Validate(List<ObjectBasDat06> lista, out string outMsg)
         {
@@ -309,24 +314,13 @@ namespace Percolore.IOConnect.Util
                     }
                 }
             }
-            catch
-            {
+			catch (Exception e)
+			{
+				LogManager.LogError($"Erro no módulo {typeof(ObjectBasDat06).Name}: ", e);
                 throw;
-            }
-            return retorno;
+			}
+
+			return retorno;
         }
-
-
-
-
-
-
-
-
-
-
-
-
-
     }
 }

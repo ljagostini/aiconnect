@@ -1,15 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net.NetworkInformation;
+﻿using Percolore.Core.Logging;
 using System.Net.Sockets;
 using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace Percolore.IOConnect.Negocio
 {
-    public class TCPProducao
+	public class TCPProducao
     {
         private Util.ObjectParametros _parametros = null;
         TcpClient tcpcliente = new TcpClient();
@@ -19,7 +14,6 @@ namespace Percolore.IOConnect.Negocio
         public TCPProducao(Util.ObjectParametros _par)
         {
             this._parametros = _par;
-
         }
         public bool SendProducaoToTCP(string imei, string msgC)
         {
@@ -39,24 +33,16 @@ namespace Percolore.IOConnect.Negocio
             {
                 if (this.tcpcliente.Connected)
                 {
-                    try
-                    {
-                        this.tcpcliente.Close();
-                        this.tcpcliente.Dispose();
-                    }
-                    catch
-                    {
-
-                    }
+                    this.tcpcliente.Close();
+                    this.tcpcliente.Dispose();
                 }
             }
-            catch
-            { }
-        }
+			catch (Exception e)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", e);
+			}
+		}
 
-       
-
-         
         #region Metodos Producao
 
         private bool isWriteTCP(byte[] pacoteMsg, string simCard)
@@ -88,44 +74,38 @@ namespace Percolore.IOConnect.Negocio
                                 break;
                             }
                         }
-                        try
+                        
+                        if (this.tcpcliente.Available > 0)
                         {
-                            if (this.tcpcliente.Available > 0)
-                            {
-                                int tamanho = 0;
-                                tamanho = this.tcpcliente.Available;
-                                Byte[] bytes = new Byte[tamanho];
-                                int i = netWriteread.Read(bytes, 0, tamanho);
+                            int tamanho = 0;
+                            tamanho = this.tcpcliente.Available;
+                            Byte[] bytes = new Byte[tamanho];
+                            int i = netWriteread.Read(bytes, 0, tamanho);
 
-                                StringBuilder sb = new StringBuilder();
-                                for (int k = 0; k < i; k++)
+                            StringBuilder sb = new StringBuilder();
+                            for (int k = 0; k < i; k++)
+                            {
+                                byte b = bytes[k];
+                                sb.Append(b.ToString("X2"));
+                                if ((k - 1) < i)
                                 {
-                                    byte b = bytes[k];
-                                    sb.Append(b.ToString("X2"));
-                                    if ((k - 1) < i)
-                                    {
-                                        sb.Append("-");
-                                    }
-                                }
-                                if (DesmontarPacoteTCP(sb.ToString(), simCard))
-                                {
-                                    retorno = true;
+                                    sb.Append("-");
                                 }
                             }
-                        }
-                        catch
-                        {
-                            
+                            if (DesmontarPacoteTCP(sb.ToString(), simCard))
+                            {
+                                retorno = true;
+                            }
                         }
                     }
                 }
             }
-            catch
-            {
+			catch (Exception e)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", e);
+			}
 
-            }
-
-            return retorno;
+			return retorno;
         }
 
         public bool DesmontarPacoteTCP(string msgHex, string codSim)

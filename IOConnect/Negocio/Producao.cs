@@ -1,15 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Percolore.Core.Logging;
 using System.Data.SQLite;
-using System.IO;
-using System.Threading;
 
 namespace Percolore.IOConnect.Negocio
 {
-    public class Producao
+	public class Producao
     {
         private string percProducao = "percProducao.db";
         private string percHistProd = "percHistProducao.DB";
@@ -74,9 +68,11 @@ namespace Percolore.IOConnect.Negocio
                     }
                 }
             }
-            catch
-            { }
-        }
+			catch (Exception e)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", e);
+			}
+		}
         
         public int insertProducao(string msg, string DATAHORA)
         {
@@ -108,10 +104,12 @@ namespace Percolore.IOConnect.Negocio
                     }
                 }
             }
-            catch
-            {
-            }
-            return retorno;
+			catch (Exception e)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", e);
+			}
+
+			return retorno;
         }
 
         public bool upDateProducaoIntegracao(string id, bool integraddo)
@@ -147,11 +145,12 @@ namespace Percolore.IOConnect.Negocio
                     }
                 }
             }
-            catch
-            {
+			catch (Exception e)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", e);
+			}
 
-            }
-            return retorno;
+			return retorno;
         }
 
         public bool upDateProducaoIntegracao(string id, int integraddo)
@@ -181,11 +180,12 @@ namespace Percolore.IOConnect.Negocio
                     }
                 }
             }
-            catch
-            {
+			catch (Exception e)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", e);
+			}
 
-            }
-            return retorno;
+			return retorno;
         }
 
         public List<ProducaoBD> getListProducaoIntegrado(bool integrado)
@@ -234,11 +234,12 @@ namespace Percolore.IOConnect.Negocio
                     }
                 }
             }
-            catch
-            {
+			catch (Exception e)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", e);
+			}
 
-            }
-            return retorno;
+			return retorno;
         }
 
         public List<ProducaoBD> getListProducaoIntegrado(int integrado)
@@ -281,11 +282,12 @@ namespace Percolore.IOConnect.Negocio
                     }
                 }
             }
-            catch
-            {
+			catch (Exception e)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", e);
+			}
 
-            }
-            return retorno;
+			return retorno;
         }
 
         public bool deleteProducaoIntegrado(string id)
@@ -315,11 +317,12 @@ namespace Percolore.IOConnect.Negocio
                     }
                 }
             }
-            catch
-            {
+			catch (Exception e)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", e);
+			}
 
-            }
-            return retorno;
+			return retorno;
         }
 
         public int insertHistProducao(string msg, string DATAHORA)
@@ -351,10 +354,12 @@ namespace Percolore.IOConnect.Negocio
                     }
                 }
             }
-            catch
-            {
-            }
-            return retorno;
+			catch (Exception e)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", e);
+			}
+
+			return retorno;
         }
 
 

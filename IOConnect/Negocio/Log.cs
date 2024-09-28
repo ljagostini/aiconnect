@@ -1,11 +1,10 @@
-﻿using Percolore.Core.Persistence.WindowsRegistry;
+﻿using Percolore.Core.Logging;
+using Percolore.Core.Persistence.WindowsRegistry;
 using Percolore.Core.Util;
-using System;
-using System.IO;
 
 namespace Percolore.IOConnect
 {
-    public enum TipoLog
+	public enum TipoLog
     {
         Processo = 1,
         ControleDispensa = 2,
@@ -171,9 +170,11 @@ namespace Percolore.IOConnect
 
                 File.AppendAllText(path, log);
             }
-            catch
-            { }
-        }
+			catch (Exception e)
+			{
+				LogManager.LogError($"Erro no módulo {typeof(Log).Name}: ", e);
+			}
+		}
 
         private static void LogarControleDispensa(string path, string[] mensagens)
         {
@@ -232,9 +233,11 @@ namespace Percolore.IOConnect
 
                 File.AppendAllText(path, log);
             }
-            catch
-            { }
-        }
+			catch (Exception e)
+			{
+				LogManager.LogError($"Erro no módulo {typeof(Log).Name}: ", e);
+			}
+		}
 
         private static void LogarErro(string path, string[] mensagens)
         {
@@ -284,9 +287,11 @@ namespace Percolore.IOConnect
 
                 File.AppendAllText(path, log);
             }
-            catch
-            { }
-        }
+			catch (Exception e)
+			{
+				LogManager.LogError($"Erro no módulo {typeof(Log).Name}: ", e);
+			}
+		}
 
         private static void LogarComunicacao(string path, string[] mensagens)
         {
@@ -334,11 +339,11 @@ namespace Percolore.IOConnect
 
                 File.AppendAllText(path, log);
             }
-            catch
-            {
-
-            }
-        }
+			catch (Exception e)
+			{
+				LogManager.LogError($"Erro no módulo {typeof(Log).Name}: ", e);
+			}
+		}
 
         #endregion
     }

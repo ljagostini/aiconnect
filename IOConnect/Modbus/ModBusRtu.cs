@@ -1,16 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using Percolore.Core.Logging;
 using System.IO.Ports;
-using System.Threading;
 using System.Reflection;
-using System.IO;
 
 namespace Percolore.IOConnect
 {
-    class ModBusRtu
+	class ModBusRtu
     {
-        //private SerialPort sp = new SerialPort();
         private SerialPort sp = null;
         public string modbusStatusStr;
         public bool modbusStatus;
@@ -27,7 +22,6 @@ namespace Percolore.IOConnect
         
         public ModBusRtu()
         {
-            // mdb = new ModBusRtu();
             mdb = this;
         }
 
@@ -62,17 +56,9 @@ namespace Percolore.IOConnect
                 //These timeouts are default and cannot be editted through the class at this point:
                 sp.ReadTimeout = 2000;
                 sp.WriteTimeout = 2000;
-                // sp.ReadBufferSize = 2048;
-
-
-                //sp.Handshake = Handshake.None;
-                //sp.RtsEnable = true;
-
-               
 
                 try
                 {
-                   
                     sp.Open();
                   
                     sp.DataReceived += new SerialDataReceivedEventHandler(DataReceivedHandler);
@@ -81,6 +67,7 @@ namespace Percolore.IOConnect
                 catch (Exception err)
                 {
                     modbusStatusStr = "Error opening " + portName + ": " + err.Message;
+                    LogManager.LogError(modbusStatusStr, err);
                     modbusStatus = false;
                     return false;
                 }
@@ -117,10 +104,12 @@ namespace Percolore.IOConnect
 						sp.Close();
 						sp.Dispose();
 					}
-                    catch
-                    { }                 
-                    
-                    GC.Collect();
+					catch (Exception e)
+					{
+						LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", e);
+					}
+
+					GC.Collect();
                     sp = null;
                     modbusStatusStr = portname + " closed successfully";
                     modbusStatus = true;
@@ -139,10 +128,12 @@ namespace Percolore.IOConnect
 						sp.Close();
 						sp.Dispose();
 					}
-                    catch
-                    { }
-                    
-                    GC.Collect();
+					catch (Exception e)
+					{
+						LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", e);
+					}
+
+					GC.Collect();
                     string portname = sp.PortName;
                     sp = null;
                     modbusStatusStr = portname + " is not open";
@@ -169,20 +160,13 @@ namespace Percolore.IOConnect
                 GC.SuppressFinalize(port);
                 GC.SuppressFinalize(internalSerialStream);
 
-                try
-                {
-                    internalSerialStream.Close();
-                }
-                catch
-                {
-                    
-                }
+                internalSerialStream.Close();
             }
-            catch
-            {
-                
-            }
-        }
+			catch (Exception e)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", e);
+			}
+		}
 
         static void ShutdownEventLoopHandler(Stream internalSerialStream)
         {
@@ -243,11 +227,11 @@ namespace Percolore.IOConnect
                     }
                 }
             }
-            catch
-            {
-                
-            }
-        }
+			catch (Exception e)
+			{
+				LogManager.LogError($"Erro no módulo {typeof(ModBusRtu).Name}: ", e);
+			}
+		}
 
         #endregion
 
@@ -261,11 +245,12 @@ namespace Percolore.IOConnect
                     retorno = this.sp.IsOpen;
                 }
             }
-            catch
-            {
+			catch (Exception e)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", e);
+			}
 
-            }
-            return retorno;
+			return retorno;
         }
 
         private void LogSerialEvt(byte[] message, string tipoM, int tamanho)
@@ -294,17 +279,18 @@ namespace Percolore.IOConnect
                     Percolore.IOConnect.Modbus.Constantes.listLogSerial.RemoveAt(0);
                 }
             }
-            catch
-            { }
-        }
+			catch (Exception e)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", e);
+			}
+		}
 
         private void DataReceivedHandler(
                         object sender,
                         SerialDataReceivedEventArgs e)
         {
-            //string indata = sp.ReadExisting();
             Console.WriteLine("Data Received:");
-            //Console.Write(indata);
+            
             try
             {
                 SerialPort sp2 = (SerialPort)sender;
@@ -315,15 +301,13 @@ namespace Percolore.IOConnect
                 {
                     isTerminouRead = true;
                     LogSerialEvt(readBytes, "Read", tamanho_read);
-
-
                 }
             }
-            catch
-            {
-
-            }
-        }
+			catch (Exception err)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", err);
+			}
+		}
 
         #region CRC Computation
         private void GetCRC(byte[] message, ref byte[] CRC)
@@ -424,11 +408,12 @@ namespace Percolore.IOConnect
                     sp.DiscardInBuffer();
                     Thread.Sleep(10);
                 }
-                catch
-                {
+				catch (Exception e)
+				{
+					LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", e);
+				}
 
-                }
-                readBytes = new byte[2048];
+				readBytes = new byte[2048];
                 //Message is 1 addr + 1 fcn + 2 start + 2 reg + 1 count + 2 * reg vals + 2 CRC
                 byte[] message = new byte[9 + (2 * registers)];
                 //Function 16 response is fixed at 8 bytes
@@ -451,16 +436,7 @@ namespace Percolore.IOConnect
                     this.isTerminouRead = false;
                     this.inicio_reader = 0;
                     this.tamanho_read = 8;
-                    /*
-                    for (int k = 0; k < message.Length; k++)
-                    {
-                        sp.Write(message, k, 1);
-                        Thread.Sleep(1);
-                    }
-                    */
-                    //string ret = "";
-                    //ConvertBytesToHex(message, ref ret);
-
+                    
                     sp.Write(message, 0, message.Length);
                     LogSerialEvt(message, "Write", message.Length);
                     Thread.Sleep(20);
@@ -470,6 +446,7 @@ namespace Percolore.IOConnect
                 catch (Exception err)
                 {
                     modbusStatusStr = "Error in write event: " + err.Message;
+                    LogManager.LogError(modbusStatusStr, err);
                     modbusStatus = false;
                     return false;
                 }
@@ -539,13 +516,7 @@ namespace Percolore.IOConnect
                     this.isTerminouRead = false;
                     this.inicio_reader = 0;
                     this.tamanho_read = 8;
-                    /*
-                    for (int k = 0; k < message.Length; k++)
-                    {
-                        sp.Write(message, k, 1);
-                        Thread.Sleep(1);
-                    }
-                    */
+                    
                     sp.Write(message, 0, message.Length);
                     LogSerialEvt(message, "Write", message.Length);
                     Thread.Sleep(20);
@@ -555,6 +526,7 @@ namespace Percolore.IOConnect
                 catch (Exception err)
                 {
                     modbusStatusStr = "Error in write event: " + err.Message;
+                    LogManager.LogError(modbusStatusStr, err);
                     modbusStatus = false;
                     return false;
                 }
@@ -594,11 +566,12 @@ namespace Percolore.IOConnect
                     sp.DiscardInBuffer();
                     Thread.Sleep(10);
                 }
-                catch
-                {
+				catch (Exception e)
+				{
+					LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", e);
+				}
 
-                }
-                readBytes = new byte[2048];
+				readBytes = new byte[2048];
                 //Function 3 request is always 8 bytes:
                 byte[] message = new byte[8];
                 //Function 3 response buffer:
@@ -611,13 +584,7 @@ namespace Percolore.IOConnect
                     this.isTerminouRead = false;
                     this.inicio_reader = 0;
                     this.tamanho_read = response.Length;
-                    /*
-                    for (int k = 0; k < message.Length; k++)
-                    {
-                        sp.Write(message, k, 1);
-                        Thread.Sleep(1);
-                    }
-                    */
+                    
                     sp.Write(message, 0, message.Length);
                     LogSerialEvt(message, "Write", message.Length);
                     Thread.Sleep(20);
@@ -627,9 +594,11 @@ namespace Percolore.IOConnect
                 catch (Exception err)
                 {
                     modbusStatusStr = "Error in read event: " + err.Message;
+                    LogManager.LogError(modbusStatusStr, err);
                     modbusStatus = false;
                     return false;
                 }
+
                 //Evaluate message:
                 if (CheckResponse(response))
                 {
@@ -657,26 +626,7 @@ namespace Percolore.IOConnect
                 modbusStatus = true;
                 return false;
             }
-
         }
         #endregion
-
-        //private bool ConvertBytesToHex(byte[] message, ref string messageRetorno)
-        //{
-        //    bool retorno = false;
-        //    StringBuilder sb = new StringBuilder();
-        //    try
-        //    {
-        //        for(int i = 0; message != null && i < message.Length; i++)
-        //        {
-        //            sb.Append(message[i].ToString("X2"));
-        //            sb.Append("-");
-        //        }
-        //        messageRetorno = sb.ToString();
-        //    }
-        //    catch
-        //    { }
-        //    return retorno;
-        //}
     }
 }

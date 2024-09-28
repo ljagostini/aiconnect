@@ -1,15 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using Percolore.Core.Logging;
 using System.Data.SQLite;
-using System.IO;
-using System.Linq;
 using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace Percolore.IOConnect.Util
 {
-    public class ObjectEventos
+	public class ObjectEventos
     {
         public static readonly string PathFile = Path.Combine(Environment.CurrentDirectory, "Eventos.db");
         public static readonly string FileName = Path.GetFileName(PathFile);
@@ -27,7 +22,7 @@ namespace Percolore.IOConnect.Util
 
         public ObjectEventos() 
         {
-            //CreateBD();
+            
         }
 
         public static void CreateBD()
@@ -107,9 +102,11 @@ namespace Percolore.IOConnect.Util
                     }
                 }
             }
-            catch
-            { }
-        }
+			catch (Exception e)
+			{
+				LogManager.LogError($"Erro no módulo {typeof(ObjectEventos).Name}: ", e);
+			}
+		}
 
         public static int InsertEvento(ObjectEventos objEvt)
         {
@@ -144,9 +141,12 @@ namespace Percolore.IOConnect.Util
                 }
 
             }
-            catch
-            { }
-            return retorno;
+			catch (Exception e)
+			{
+				LogManager.LogError($"Erro no módulo {typeof(ObjectEventos).Name}: ", e);
+			}
+
+			return retorno;
         }
 
         public static bool UpdateEventoIntegrado(int idEvento, bool integrado)
@@ -178,9 +178,12 @@ namespace Percolore.IOConnect.Util
                     }
                 }
             }
-            catch
-            { }
-            return retorno;
+			catch (Exception e)
+			{
+				LogManager.LogError($"Erro no módulo {typeof(ObjectEventos).Name}: ", e);
+			}
+
+			return retorno;
         }
 
         public static bool UpdateEventoIntegrado(int idEvento, int integrado)
@@ -206,9 +209,12 @@ namespace Percolore.IOConnect.Util
                     }
                 }
             }
-            catch
-            { }
-            return retorno;
+			catch (Exception e)
+			{
+				LogManager.LogError($"Erro no módulo {typeof(ObjectEventos).Name}: ", e);
+			}
+
+			return retorno;
         }
 
         public static List<ObjectEventos> getListEventosIntegrado(bool integrado)
@@ -232,7 +238,6 @@ namespace Percolore.IOConnect.Util
                             {
                                 cmd.CommandText = "SELECT * FROM Eventos WHERE INTEGRADO = '0'";
                             }
-
 
                             using (SQLiteDataReader reader = cmd.ExecuteReader())
                             {
@@ -258,11 +263,12 @@ namespace Percolore.IOConnect.Util
                     }
                 }
             }
-            catch
-            {
+			catch (Exception e)
+			{
+				LogManager.LogError($"Erro no módulo {typeof(ObjectEventos).Name}: ", e);
+			}
 
-            }
-            return retorno;
+			return retorno;
         }
 
         public static bool UpdateEventosNumeroSerie(string numeroSerie)
@@ -288,9 +294,12 @@ namespace Percolore.IOConnect.Util
                     }
                 }
             }
-            catch
-            { }
-            return retorno;
+			catch (Exception e)
+			{
+				LogManager.LogError($"Erro no módulo {typeof(ObjectEventos).Name}: ", e);
+			}
+
+			return retorno;
         }
 
         public static void GenerateBkp()
@@ -333,12 +342,11 @@ namespace Percolore.IOConnect.Util
                         CreateBD();
                     }
                 }
-
             }
-            catch
-            { }
-        }
-
-
+			catch (Exception e)
+			{
+				LogManager.LogError($"Erro no módulo {typeof(ObjectEventos).Name}: ", e);
+			}
+		}
     }
 }

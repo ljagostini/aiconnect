@@ -1,14 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using Percolore.Core.Logging;
 using System.IO.Ports;
-using System.Linq;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace Percolore.IOConnect.Negocio
 {
-    public class Balanca_ToledoPG503S : InterfaceBalanca
+	public class Balanca_ToledoPG503S : InterfaceBalanca
     {
         #region Serial Port
         public double CargaMaximaBalanca_Gramas { get; set; } = 510;
@@ -82,12 +77,13 @@ namespace Percolore.IOConnect.Negocio
                     sp.DataReceived += new SerialDataReceivedEventHandler(DataReceivedHandler);
                     this.isDataReceived = true;
                 }
-                catch
-                {
+				catch (Exception e)
+				{
+					LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", e);
                     return false;
-                }
+				}
 
-                return true;
+				return true;
             }
             else
             {
@@ -117,10 +113,12 @@ namespace Percolore.IOConnect.Negocio
 						sp.Close();
 						sp.Dispose();
 					}
-                    catch
-                    { }
-                    
-                    GC.Collect();
+					catch (Exception e)
+					{
+						LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", e);
+					}
+
+					GC.Collect();
 
                     sp = null;
 
@@ -140,10 +138,12 @@ namespace Percolore.IOConnect.Negocio
 						sp.Close();
 						sp.Dispose();
 					}
-                    catch
-                    { }
-                    
-                    GC.Collect();
+					catch (Exception e)
+					{
+						LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", e);
+					}
+
+					GC.Collect();
                     string portname = sp.PortName;
                     sp = null;
 
@@ -173,10 +173,11 @@ namespace Percolore.IOConnect.Negocio
                 _arrWS[_arrWS.Length - 1] = (byte)10;
                 this.sp.Write(_arrWS, 0, _arrWS.Length);
             }
-            catch
-            {
-            }
-        }
+			catch (Exception e)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", e);
+			}
+		}
 
         public void WriteSerialPortTara(byte[] arrWS)
         {
@@ -196,10 +197,11 @@ namespace Percolore.IOConnect.Negocio
                 //this.sp.Write(arrWS, 0, arrWS.Length);
                 Thread.Sleep(10000);
             }
-            catch
-            {
-            }
-        }
+			catch (Exception e)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", e);
+			}
+		}
 
         private void DataReceivedHandler(
                       object sender,
@@ -219,11 +221,11 @@ namespace Percolore.IOConnect.Negocio
                     isTerminouRead = true;
                 }
             }
-            catch
-            {
-
-            }
-        }
+			catch (Exception ex)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+			}
+		}
 
         public bool IsOpenSerial()
         {
@@ -235,11 +237,12 @@ namespace Percolore.IOConnect.Negocio
                     retorno = true;
                 }
             }
-            catch
-            {
+			catch (Exception e)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", e);
+			}
 
-            }
-            return retorno;
+			return retorno;
         }
 
         #region Get Response
@@ -331,13 +334,14 @@ namespace Percolore.IOConnect.Negocio
                 {
                     if (isThrow)
                     {
-                        throw new Exception("Balança Toledo Error :" + " Erro Valores incorretos!");
+                        throw new Exception("Balança Toledo Error : Erro Valores incorretos!");
                     }
                 }
             }
-            catch
-            {
-                throw new Exception("Balança Toledo Error :" + " Erro de Comunicação!");
+            catch (Exception e)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", e);
+			    throw new Exception("Balança Toledo Error : Erro de Comunicação!");
             }
         }
     }

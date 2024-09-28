@@ -1,15 +1,11 @@
 ﻿using PaintMixer;
 using Percolore.Core;
-using Percolore.Core.Persistence.Xml;
+using Percolore.Core.Logging;
 using Percolore.IOConnect.Modbus;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading;
 
 namespace Percolore.IOConnect
 {
-    public class ModBusDispenser_P2 : IDispenser, IDisposable
+	public class ModBusDispenser_P2 : IDispenser, IDisposable
     {
         private PaintMixerInterface_P2 mixer;
         private Util.ObjectParametros parametros = null;
@@ -77,7 +73,6 @@ namespace Percolore.IOConnect
             get
             {
                 ushort inputs = mixer.Inputs;
-                //bool firstInput = (inputs & (1 << 0)) != 0;
                 bool firstInput = (inputs & (0x01)) != 0;
                 return firstInput;
             }
@@ -493,12 +488,11 @@ namespace Percolore.IOConnect
 
                 }
             }
-            catch
-            {
-               // Disconnect();
-                throw;
-            }
-            finally
+			catch (Exception e)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", e);
+			}
+			finally
             {
                 //Status do dispensador
                 isBusy = false;
@@ -535,9 +529,12 @@ namespace Percolore.IOConnect
                 mixer.RessetHard();
                 retorno = true;
             }
-            catch
-            { }
-            return retorno;
+			catch (Exception e)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", e);
+			}
+
+			return retorno;
         }
 
         public string GetVersion()
@@ -547,10 +544,12 @@ namespace Percolore.IOConnect
             {
                 retorno = mixer.GetVersion();
             }
-            catch
-            {
-            }
-            return retorno;
+			catch (Exception e)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", e);
+			}
+
+			return retorno;
         }
 
 
@@ -577,9 +576,12 @@ namespace Percolore.IOConnect
                 retorno.Circuito_15 = stV.Input_15;
                 retorno.Circuito_16 = stV.Input_16;
             }
-            catch
-            { }
-            return retorno;
+			catch (Exception e)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", e);
+			}
+
+			return retorno;
         }
 
         public void AcionaValvula(bool aVal, int circuito)
@@ -653,7 +655,6 @@ namespace Percolore.IOConnect
 
             //1111 1111 1111 1111
             AcionaValvulas(nval);
-            
         }
 
         public void AcionaValvulasRecirculacao(List<int> lcircuito)
@@ -730,7 +731,6 @@ namespace Percolore.IOConnect
 
             //1111 1111 1111 1111
             AcionaValvulas(nval);
-
         }
 
         public void AcionaValvulas(bool allVal)

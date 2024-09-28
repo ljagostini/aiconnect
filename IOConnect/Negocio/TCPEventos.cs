@@ -1,15 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net.NetworkInformation;
+﻿using Percolore.Core.Logging;
 using System.Net.Sockets;
 using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace Percolore.IOConnect.Negocio
 {
-    public class TCPEventos
+	public class TCPEventos
     {
         private Util.ObjectParametros _parametros = null;
         TcpClient tcpcliente = new TcpClient();
@@ -59,7 +54,8 @@ namespace Percolore.IOConnect.Negocio
             catch(Exception exc)
             {
                 msgRetrun = Negocio.IdiomaResxExtensao.ValidadeManutencao_OnLine_Fail_Connect + " :" + exc.Message;
-            }
+				LogManager.LogError(msgRetrun, exc);
+			}
 
             return retorno;
         }
@@ -81,15 +77,19 @@ namespace Percolore.IOConnect.Negocio
                     }
                 }
             }
-            catch
-            { }
-        }
+			catch (Exception e)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", e);
+			}
+		}
+
         #region Metodos Online
 
         private bool isWriteTCP(byte[] pacoteMsg, string simCard, ref string _MsgRet)
         {
             bool retorno = false;
             _MsgRet = "";
+            
             try
             {
                 if (this.testeConnect || CheckInternet.TestInternet(_parametros.IpSincToken, _parametros.TimeoutPingTcp))
@@ -159,39 +159,20 @@ namespace Percolore.IOConnect.Negocio
                         catch (Exception exc1)
                         {
                             _MsgRet = exc1.Message;
-                            // throw;
-                        }
+							LogManager.LogError(_MsgRet, exc1);
+						}
                     }
                 }
-
             }
             catch (Exception exc)
             {
                 _MsgRet = exc.Message;
-            }
+				LogManager.LogError(_MsgRet, exc);
+			}
 
-
-            return retorno;
+			return retorno;
         }
-        //private bool TestInternet()
-        //{
-        //    bool retorno = false;
-        //    try
-        //    {
-        //        Ping myPing = new Ping();
-        //        String host = _parametros.IpSincToken;
-        //        byte[] buffer = new byte[32];
-        //        int timeout = 5000;
-        //        PingOptions pingOptions = new PingOptions();
-        //        PingReply reply = myPing.Send(host, timeout, buffer, pingOptions);
-        //        retorno = (reply.Status == IPStatus.Success);
-        //    }
-        //    catch (Exception)
-        //    {
-
-        //    }
-        //    return retorno;
-        //}
+        
         public bool DesmontarPacoteTCP(string msgHex, string codSim, ref string retornoLicense)
         {
             bool retorno = false;

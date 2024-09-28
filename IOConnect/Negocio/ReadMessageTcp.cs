@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Percolore.Core.Logging;
 
 namespace Percolore.IOConnect.Negocio
 {
-    public class ReadMessageTcp
+	public class ReadMessageTcp
     {
         public byte Header;
         public int NumeroBytes;
@@ -101,11 +97,12 @@ namespace Percolore.IOConnect.Negocio
                     }
                 }
             }
-            catch
-            {
-                // TODO: handle exception
-            }
-            return retorno;
+			catch (Exception e)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", e);
+			}
+
+			return retorno;
         }
     }
 }

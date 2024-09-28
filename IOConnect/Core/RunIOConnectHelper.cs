@@ -1,14 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using Percolore.Core.Logging;
 using System.Diagnostics;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Percolore.IOConnect.Core
 {
-    public static class RunIOConnectHelper
+	public static class RunIOConnectHelper
     {
         const string PROCESS_NAME = "RunIOConnect";
         public static string PATH_DIRECTORY = @"C:\Percolore\IOConnect\RunIOConnect";
@@ -23,17 +18,15 @@ namespace Percolore.IOConnect.Core
 
         public static bool isRunIOConnect()
         {
-            bool retorno = false;
             try
             {
-                if(GetProcess() != null)
-                {
-                    retorno = true;
-                }
+                return (GetProcess() != null);
             }
-            catch
-            { }
-            return retorno;
+			catch (Exception e)
+			{
+				LogManager.LogError($"Erro no módulo {typeof(RunIOConnectHelper).Name}: ", e);
+                return false;
+			}
         }
 
         /// <summary>
@@ -71,11 +64,12 @@ namespace Percolore.IOConnect.Core
                 //Verifica se processo foi iniciado com sucesso
                 return (GetProcess() != null);
             }
-            catch (Exception)
-            {
+			catch (Exception e)
+			{
+				LogManager.LogError($"Erro no módulo {typeof(RunIOConnectHelper).Name}: ", e);
                 return false;
-            }
-        }
+			}
+		}
 
         /// <summary>
         /// Encerra execução do IOConnect
@@ -95,11 +89,12 @@ namespace Percolore.IOConnect.Core
                     ioconnect.CloseMainWindow();
                 }
             }
-            catch
-            {
-                //throw;
-            }
-            return retorno;
+			catch (Exception e)
+			{
+				LogManager.LogError($"Erro no módulo {typeof(RunIOConnectHelper).Name}: ", e);
+			}
+
+			return retorno;
         }
     }
 }

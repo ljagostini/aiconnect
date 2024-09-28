@@ -1,15 +1,11 @@
 ﻿using PaintMixer;
 using Percolore.Core;
-using Percolore.Core.Persistence.Xml;
+using Percolore.Core.Logging;
 using Percolore.IOConnect.Modbus;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading;
 
 namespace Percolore.IOConnect
 {
-    public class ModBusDispenserMover_P3 : IDispenser, IMover, IDisposable
+	public class ModBusDispenserMover_P3 : IDispenser, IMover, IDisposable
     {
         private PaintMixerInterface_P2 mixer;
         private PaintMoverInterface_P3 mover;
@@ -80,7 +76,6 @@ namespace Percolore.IOConnect
                 {
                     return !mixer.Status.Busy;
                 }
-                //return !mixer.Status.Busy;
             }
         }
       
@@ -121,7 +116,6 @@ namespace Percolore.IOConnect
             get
             {
                 ushort inputs = mixer.Inputs;
-                //bool firstInput = (inputs & (1 << 0)) != 0;
                 bool firstInput = (inputs & (0x01)) != 0;
                 return firstInput;
             }
@@ -567,12 +561,11 @@ namespace Percolore.IOConnect
 
                 }
             }
-            catch
-            {
-                // Disconnect();
-                throw;
-            }
-            finally
+			catch (Exception e)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", e);
+			}
+			finally
             {
                 //Status do dispensador
                 isBusy = false;
@@ -614,14 +607,12 @@ namespace Percolore.IOConnect
                             {
                                 Thread.Sleep(500);
                             }
-                            
                         }
                         if (isSubiu)
                         {
                             Thread.Sleep(100);
                             this.MovimentarManual(1, true);
                         }
-
                     }
                     else
                     {
@@ -633,11 +624,13 @@ namespace Percolore.IOConnect
                 {
                     this.MovimentarManual(1, true);
                 }
-            }catch
-            {
-
             }
-            this.mover.TerminouProcessoDuplo = true;
+			catch (Exception e)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", e);
+			}
+
+			this.mover.TerminouProcessoDuplo = true;
         }
 
         public void FecharGaveta(bool? _descerBico = null)
@@ -708,16 +701,18 @@ namespace Percolore.IOConnect
                                 {
                                     Thread.Sleep(500);
                                 }
-
                             }
-
                         }
                     }
                 }
 
-            }catch
-            { }
-            this.mover.TerminouProcessoDuplo = true;
+            }
+			catch (Exception e)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", e);
+			}
+
+			this.mover.TerminouProcessoDuplo = true;
         }
 
         public void ValvulaPosicaoDosagem()
@@ -985,4 +980,3 @@ namespace Percolore.IOConnect
         }
     }
 }
-

@@ -1,14 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using Percolore.Core.Logging;
 using System.IO.Ports;
-using System.Linq;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace Percolore.IOConnect.Negocio
 {
-    public class Balanca_BEL: InterfaceBalanca
+	public class Balanca_BEL: InterfaceBalanca
     {
         #region Serial Port
         public double CargaMaximaBalanca_Gramas { get; set; } = 400;
@@ -42,9 +37,11 @@ namespace Percolore.IOConnect.Negocio
                 CloseSerial();
                 this.IsOpen = OpenSerial(_str_Serial, 9600, 8, Parity.None, StopBits.One);
             }
-            catch
+            catch (Exception e)
             {
-                if (sp != null)
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", e);
+
+				if (sp != null)
                 {
                     this.IsOpen = sp.IsOpen;
                 }
@@ -53,7 +50,7 @@ namespace Percolore.IOConnect.Negocio
                     this.IsOpen = false;
                 }
             }
-        }
+		}
 
         public bool OpenSerial(string portName, int baudRate, int databits, Parity parity, StopBits stopBits)
         {
@@ -80,12 +77,13 @@ namespace Percolore.IOConnect.Negocio
                     sp.DataReceived += new SerialDataReceivedEventHandler(DataReceivedHandler);
                     this.isDataReceived = true;
                 }
-                catch
-                {
+				catch (Exception e)
+				{
+					LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", e);
                     return false;
-                }
+				}
 
-                return true;
+				return true;
             }
             else
             {
@@ -103,7 +101,6 @@ namespace Percolore.IOConnect.Negocio
 
                     string portname = sp.PortName;
 
-
                     try
                     {
                         if (this.isDataReceived)
@@ -114,10 +111,12 @@ namespace Percolore.IOConnect.Negocio
 						sp.Close();
 						sp.Dispose();
 					}
-                    catch
-                    { }
-                    
-                    GC.Collect();
+					catch (Exception e)
+					{
+						LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", e);
+					}
+
+					GC.Collect();
                     sp = null;
 
                     this.isDataReceived = false;
@@ -136,10 +135,12 @@ namespace Percolore.IOConnect.Negocio
 						sp.Close();
 						sp.Dispose();
 					}
-                    catch
-                    { }
-                    
-                    GC.Collect();
+					catch (Exception e)
+					{
+						LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", e);
+					}
+
+					GC.Collect();
                     string portname = sp.PortName;
                     sp = null;
 
@@ -162,10 +163,11 @@ namespace Percolore.IOConnect.Negocio
                 this.inicio_reader = 0;
                 this.sp.Write(arrWS, 0, arrWS.Length);
             }
-            catch
-            {
-            }
-        }
+			catch (Exception e)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", e);
+			}
+		}
 
         public void WriteSerialPortTara(byte[] arrWS)
         {
@@ -177,18 +179,18 @@ namespace Percolore.IOConnect.Negocio
                 this.sp.Write(arrWS, 0, arrWS.Length);
                 Thread.Sleep(10000);
             }
-            catch
-            {
-            }
-        }
+			catch (Exception e)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", e);
+			}
+		}
 
         private void DataReceivedHandler(
                       object sender,
                       SerialDataReceivedEventArgs e)
         {
-            //string indata = sp.ReadExisting();
             Console.WriteLine("Data Received:");
-            //Console.Write(indata);
+
             try
             {
                 SerialPort sp2 = (SerialPort)sender;
@@ -200,11 +202,11 @@ namespace Percolore.IOConnect.Negocio
                     isTerminouRead = true;
                 }
             }
-            catch
-            {
-
-            }
-        }
+			catch (Exception ex)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+			}
+		}
 
         public bool IsOpenSerial()
         {
@@ -216,11 +218,12 @@ namespace Percolore.IOConnect.Negocio
                     retorno = true;
                 }
             }
-            catch
-            {
+			catch (Exception e)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", e);
+			}
 
-            }
-            return retorno;
+			return retorno;
         }
 
         #region Get Response
@@ -251,7 +254,6 @@ namespace Percolore.IOConnect.Negocio
                     }
                 }
             }
-
         }
         #endregion
 
@@ -307,10 +309,11 @@ namespace Percolore.IOConnect.Negocio
                     }
                 }
             }
-            catch
-            {
-                throw new Exception("Balança Bel Error :" + " Erro de Comunicação!");
+            catch (Exception e)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", e);
+				throw new Exception("Balança Bel Error : Erro de Comunicação!");
             }
-        }
+		}
     }
 }

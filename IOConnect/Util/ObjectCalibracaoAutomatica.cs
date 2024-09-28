@@ -1,18 +1,13 @@
 ﻿using Percolore.Core;
+using Percolore.Core.Logging;
 using Percolore.IOConnect.Negocio;
-using System;
-using System.Collections.Generic;
 using System.Data.SQLite;
 using System.Globalization;
-using System.IO;
-using System.Linq;
 using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace Percolore.IOConnect.Util
 {
-    public class ObjectCalibracaoAutomatica
+	public class ObjectCalibracaoAutomatica
     {
         public static readonly string PathFile = Path.Combine(Environment.CurrentDirectory, "CalibragemAuto.db");
         public static readonly string FileName = Path.GetFileName(PathFile);
@@ -76,9 +71,11 @@ namespace Percolore.IOConnect.Util
                 }
 
             }
-            catch
-            { }
-        }
+			catch (Exception e)
+			{
+				LogManager.LogError($"Erro no módulo {typeof(ObjectCalibracaoAutomatica).Name}: ", e);
+			}
+		}
 
         public static ObjectCalibracaoAutomatica Load(int motor)
         {
@@ -102,12 +99,7 @@ namespace Percolore.IOConnect.Util
                                 c.MaxMassaAdmRecipiente = double.Parse(reader["MaxMassaAdmRecipiente"].ToString(), CultureInfo.InvariantCulture);
                                 c.VolumeMaxRecipiente = double.Parse(reader["VolumeMaxRecipiente"].ToString(), CultureInfo.InvariantCulture);
                                 c.NumeroMaxTentativaRec = int.Parse(reader["NumeroMaxTentativaRec"].ToString());
-                                try
-                                {
-                                    c.MinMassaAdmRecipiente = double.Parse(reader["MinMassaAdmRecipiente"].ToString(), CultureInfo.InvariantCulture);
-                                }
-                                catch
-                                { }
+                                c.MinMassaAdmRecipiente = double.Parse(reader["MinMassaAdmRecipiente"].ToString(), CultureInfo.InvariantCulture);
                                 c.listOperacaoAutomatica = new List<OperacaoAutomatica>();
                                 break;
                             }
@@ -131,7 +123,6 @@ namespace Percolore.IOConnect.Util
                                 while (reader.Read())
                                 {
                                     OperacaoAutomatica valores = new OperacaoAutomatica();
-
                                   
                                     int _Motor = 0;
                                     int _IsPrimeiraCalibracao = 0;
@@ -142,21 +133,15 @@ namespace Percolore.IOConnect.Util
                                     int _IsRealizarMediaMedicao = 0;
                                     int _NumeroDosagemTomadaMedia = 0;
 
-                                    try
-                                    {
-                                        _Motor = int.Parse(reader["Motor"].ToString());
-                                        _IsPrimeiraCalibracao = int.Parse(reader["IsPrimeiraCalibracao"].ToString());
-                                        _Volume = double.Parse(reader["Volume"].ToString(), CultureInfo.InvariantCulture);
-                                        _DesvioAdmissivel = double.Parse(reader["DesvioAdmissivel"].ToString(), CultureInfo.InvariantCulture);
-                                        _IsCalibracaoAutomatica = int.Parse(reader["IsCalibracaoAutomatica"].ToString());
-                                        _NumeroMaxTentativa = int.Parse(reader["NumeroMaxTentativa"].ToString());
-                                        _IsRealizarMediaMedicao = int.Parse(reader["IsRealizarMediaMedicao"].ToString());
-                                        _NumeroDosagemTomadaMedia = int.Parse(reader["NumeroDosagemTomadaMedia"].ToString());
-                                    }
-                                    catch
-                                    {
+                                    _Motor = int.Parse(reader["Motor"].ToString());
+                                    _IsPrimeiraCalibracao = int.Parse(reader["IsPrimeiraCalibracao"].ToString());
+                                    _Volume = double.Parse(reader["Volume"].ToString(), CultureInfo.InvariantCulture);
+                                    _DesvioAdmissivel = double.Parse(reader["DesvioAdmissivel"].ToString(), CultureInfo.InvariantCulture);
+                                    _IsCalibracaoAutomatica = int.Parse(reader["IsCalibracaoAutomatica"].ToString());
+                                    _NumeroMaxTentativa = int.Parse(reader["NumeroMaxTentativa"].ToString());
+                                    _IsRealizarMediaMedicao = int.Parse(reader["IsRealizarMediaMedicao"].ToString());
+                                    _NumeroDosagemTomadaMedia = int.Parse(reader["NumeroDosagemTomadaMedia"].ToString());
 
-                                    }
                                     valores.Motor = _Motor;
                                     valores.IsPrimeiraCalibracao = _IsPrimeiraCalibracao;
                                     valores.Volume = _Volume;
@@ -229,27 +214,14 @@ namespace Percolore.IOConnect.Util
                                     int PulsoReverso = 0;
                                     int Aceleracao = 0;
 
-                                    try
-                                    {
-                                        PulsoHorario = int.Parse(reader["Pulsos"].ToString());
-                                        Velocidade = int.Parse(reader["Velocidade"].ToString());
-                                        Delay = int.Parse(reader["ReverseDelay"].ToString());
-                                        Volume = double.Parse(reader["Volume"].ToString(), CultureInfo.InvariantCulture);
-                                        MassaMedia = double.Parse(reader["MassaMedia"].ToString(), CultureInfo.InvariantCulture);
-                                        DesvioMedio = double.Parse(reader["DesvioMedio"].ToString(), CultureInfo.InvariantCulture);
-
-                                    }
-                                    catch
-                                    {
-
-                                    }
-                                    try
-                                    {
-                                        PulsoReverso = int.Parse(reader["PulsoReverso"].ToString());
-                                        Aceleracao = int.Parse(reader["Aceleracao"].ToString());
-                                    }
-                                    catch
-                                    { }
+                                    PulsoHorario = int.Parse(reader["Pulsos"].ToString());
+                                    Velocidade = int.Parse(reader["Velocidade"].ToString());
+                                    Delay = int.Parse(reader["ReverseDelay"].ToString());
+                                    Volume = double.Parse(reader["Volume"].ToString(), CultureInfo.InvariantCulture);
+                                    MassaMedia = double.Parse(reader["MassaMedia"].ToString(), CultureInfo.InvariantCulture);
+                                    DesvioMedio = double.Parse(reader["DesvioMedio"].ToString(), CultureInfo.InvariantCulture);
+                                    PulsoReverso = int.Parse(reader["PulsoReverso"].ToString());
+                                    Aceleracao = int.Parse(reader["Aceleracao"].ToString());
 
                                     valores.Volume = Volume;
                                     valores.PulsoHorario = PulsoHorario;
@@ -270,11 +242,12 @@ namespace Percolore.IOConnect.Util
            
                 return c;
             }
-            catch
-            {
+			catch (Exception e)
+			{
+				LogManager.LogError($"Erro no módulo {typeof(ObjectCalibracaoAutomatica).Name}: ", e);
                 throw;
-            }
-        }      
+			}
+		}      
 
         public static void Add(ObjectCalibracaoAutomatica c, bool _att = false)
         {
@@ -434,12 +407,12 @@ namespace Percolore.IOConnect.Util
                 }
 
             }
-            catch (Exception)
-            {
-
+			catch (Exception e)
+			{
+				LogManager.LogError($"Erro no módulo {typeof(ObjectCalibracaoAutomatica).Name}: ", e);
                 throw;
-            }
-        }
+			}
+		}
 
         public static void Update(ObjectCalibracaoAutomatica c, bool _att = false)
         {
@@ -512,11 +485,12 @@ namespace Percolore.IOConnect.Util
                     }
                 }
             }
-            catch
-            {
+			catch (Exception e)
+			{
+				LogManager.LogError($"Erro no módulo {typeof(ObjectCalibracaoAutomatica).Name}: ", e);
                 throw;
-            }
-        }
+			}
+		}
 
         public static void InsertOperacao(int motor, OperacaoAutomatica _val)
         {
@@ -548,11 +522,12 @@ namespace Percolore.IOConnect.Util
                 }
 
             }
-            catch
-            {
+			catch (Exception e)
+			{
+				LogManager.LogError($"Erro no módulo {typeof(ObjectCalibracaoAutomatica).Name}: ", e);
                 throw;
-            }
-        }
+			}
+		}
 
         public static bool Delete(int motor, double volume)
         {
@@ -607,7 +582,6 @@ namespace Percolore.IOConnect.Util
             }
             return retorno;
         }
-
 
         #endregion
     }

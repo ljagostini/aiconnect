@@ -1,15 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using Percolore.Core.Logging;
 using System.Data.SQLite;
-using System.IO;
-using System.Linq;
 using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace Percolore.IOConnect.Util
 {
-    public class ObjectAbastecimento
+	public class ObjectAbastecimento
     {
         public static readonly string PathFile = Path.Combine(Environment.CurrentDirectory, "Abastecimento.db");
         public static readonly string FileName = Path.GetFileName(PathFile);
@@ -55,9 +50,11 @@ namespace Percolore.IOConnect.Util
                     }
                 }
             }
-            catch
-            { }
-        }
+			catch (Exception e)
+			{
+				LogManager.LogError($"Erro no módulo {typeof(ObjectAbastecimento).Name}: ", e);
+			}
+		}
 
         public static ObjectAbastecimento Load(int id)
         {
@@ -88,14 +85,14 @@ namespace Percolore.IOConnect.Util
                     conn.Close();
                 }
 
-
                 return aux;
             }
-            catch
-            {
+			catch (Exception e)
+			{
+				LogManager.LogError($"Erro no módulo {typeof(ObjectAbastecimento).Name}: ", e);
                 throw;
-            }
-        }
+			}
+		}
 
         public static List<ObjectAbastecimento> List()
         {
@@ -127,12 +124,12 @@ namespace Percolore.IOConnect.Util
                     conn.Close();
                 }
             }
-            catch
-            {
+			catch (Exception e)
+			{
+				LogManager.LogError($"Erro no módulo {typeof(ObjectAbastecimento).Name}: ", e);
+			}
 
-            }
-            return list;
-
+			return list;
         }
 
         public static void Persist(ObjectAbastecimento abast)
@@ -192,11 +189,12 @@ namespace Percolore.IOConnect.Util
                 }
 
             }
-            catch
-            {
+			catch (Exception e)
+			{
+				LogManager.LogError($"Erro no módulo {typeof(ObjectAbastecimento).Name}: ", e);
                 throw;
-            }
-        }
+			}
+		}
 
         public static bool Abastecimento_Delete(int id)
         {
@@ -220,10 +218,12 @@ namespace Percolore.IOConnect.Util
 
                 retorno = true;
             }
-            catch
-            {
-            }
-            return retorno;
+			catch (Exception e)
+			{
+				LogManager.LogError($"Erro no módulo {typeof(ObjectAbastecimento).Name}: ", e);
+			}
+
+			return retorno;
         }
 
         #endregion

@@ -1,15 +1,11 @@
 ﻿using Percolore.Core;
-using System;
-using System.Collections.Generic;
+using Percolore.Core.Logging;
 using System.Globalization;
-using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Percolore.IOConnect.Core
 {
-    public class DatPattern06 : IDat
+	public class DatPattern06 : IDat
     {
         private bool UTILIZAR_CORRESPONDENCIA;
         private List<ListCorrespondencia> LISTA_CORRESPONDENCIA;
@@ -32,9 +28,6 @@ namespace Percolore.IOConnect.Core
         private int vCircuitoBas = -1;
 
         private double vEmbref = -1;
-
-        
-
 
         private string _codigoCor = string.Empty;
         private string _quantidades = string.Empty;
@@ -97,15 +90,16 @@ namespace Percolore.IOConnect.Core
                     }
                 }
             }
-            catch
-            { }
-            this._codigoCor = this._linhaCAN + ";" + this._linhaCLR.Replace("|", "/") + ";" + _linhaBAS + ";" + this._linhaAllFRM + ";"+ this._linhaUNT + ";";
+			catch (Exception e)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", e);
+			}
+			this._codigoCor = this._linhaCAN + ";" + this._linhaCLR.Replace("|", "/") + ";" + _linhaBAS + ";" + this._linhaAllFRM + ";"+ this._linhaUNT + ";";
             if(this._linhaSV != String.Empty)
             {
                 this._codigoCor += this._linhaSV + ";";
                 AssemblyInfo info = new AssemblyInfo(Assembly.GetExecutingAssembly());
                 this._codigoCor += "IO " + info.AssemblyComercialVersion + ";";
-
             }
         }
 
@@ -137,18 +131,17 @@ namespace Percolore.IOConnect.Core
                                 montando = trabalho;
                                 this._linhaAllFRM = strfrmLimpo;
                             }
-
                         }
 
                     }
                 }
             }
-            catch
-            {
+			catch (Exception e)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", e);
+			}
 
-            }
-           
-            this._linhaFRM = montando;
+			this._linhaFRM = montando;
 
         }
 
@@ -183,12 +176,14 @@ namespace Percolore.IOConnect.Core
                                 }
                             }
                         }
-                        
                     }
                 }
             }
             catch
-            { }
+            (Exception e)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", e);
+			}
             this._linhaBAS = montando;
         }
 
@@ -213,25 +208,20 @@ namespace Percolore.IOConnect.Core
                         double embdisp = -1;
                         for (int i = 1; !achou && i < controle.Length;i++ )
                         {
-                            try
+                            if (controle[i] != null && controle[i].Length > 0)
                             {
-                                if (controle[i] != null && controle[i].Length > 0)
+                                //Ponto == 1 e vrigula == 0
+                                if (this._parametro.Dat_06_CAN_1_IsPonto == 1 && !controle[i].Contains(","))
                                 {
-                                    //Ponto == 1 e vrigula == 0
-                                    if (this._parametro.Dat_06_CAN_1_IsPonto == 1 && !controle[i].Contains(","))
-                                    {
-                                        embdisp = double.Parse(controle[i].Replace(",", "."), System.Globalization.CultureInfo.InvariantCulture);
-                                        achou = true;
-                                    }
-                                    else if (this._parametro.Dat_06_CAN_1_IsPonto == 0 && !controle[i].Contains("."))
-                                    {
-                                        embdisp = double.Parse(controle[i].Replace(",", "."), System.Globalization.CultureInfo.InvariantCulture);
-                                        achou = true;
-                                    }
+                                    embdisp = double.Parse(controle[i].Replace(",", "."), System.Globalization.CultureInfo.InvariantCulture);
+                                    achou = true;
+                                }
+                                else if (this._parametro.Dat_06_CAN_1_IsPonto == 0 && !controle[i].Contains("."))
+                                {
+                                    embdisp = double.Parse(controle[i].Replace(",", "."), System.Globalization.CultureInfo.InvariantCulture);
+                                    achou = true;
                                 }
                             }
-                            catch
-                            { }
                         }
                         if(embdisp >=0)
                         {
@@ -241,9 +231,11 @@ namespace Percolore.IOConnect.Core
                     }
                 }
             }
-            catch
-            { }
-            this._linhaCAN = montando;
+			catch (Exception e)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", e);
+			}
+			this._linhaCAN = montando;
         }
 
         private void DesmontarUNT(string strUNT)
@@ -293,17 +285,14 @@ namespace Percolore.IOConnect.Core
                             this.vFatorUNT = fator;
                             montando = "@UNT " + fator.ToString().Replace(",", ".") + "," + fracao.ToString().Replace(",", ".");
                         }
-
-
                     }
                 }
             }
-            catch
-            {
-
-            }
-            this._linhaUNT = montando;
-
+			catch (Exception e)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", e);
+			}
+			this._linhaUNT = montando;
         }
 
         private void DesmontarSV(string strSV)
@@ -351,17 +340,14 @@ namespace Percolore.IOConnect.Core
                                 montando += " " + controle[i];
                             }
                         }
-                        
                     }
-                        
                 }
             }
-            catch
-            {
-
-            }
-            this._linhaSV = montando;
-
+			catch (Exception e)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", e);
+			}
+			this._linhaSV = montando;
         }
 
         public bool Validar()
@@ -383,10 +369,12 @@ namespace Percolore.IOConnect.Core
                     retorno = false;
                 }
             }
-            catch
-            { }
+			catch (Exception e)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", e);
+			}
 
-            return retorno;
+			return retorno;
         }
 
         public Dictionary<int, double> GetQuantidades()
@@ -405,13 +393,10 @@ namespace Percolore.IOConnect.Core
                 {
                     CIRCUITO = _lCorv.Circuito;
                     double SHOT = double.Parse(vShots[index + 1].Replace(",", "."), CultureInfo.InvariantCulture);
-                    //double.TryParse(vShots[index + 1], out SHOT);
-
-                  
+                    
                     double QUANTIDADE = (this.vFatorUNT / this.vFracaoUNT) * (this.vEmbdisp / this.vEmbref) * SHOT ;
                     qtdes.Add(CIRCUITO, QUANTIDADE);
                 }
-                
             }
             if (this._parametro.Dat_06_BAS_Habilitado == 1)
             {

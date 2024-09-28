@@ -1,15 +1,9 @@
-﻿using Percolore.IOConnect.Util;
-using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
+﻿using Percolore.Core.Logging;
+using Percolore.IOConnect.Util;
 
 namespace Percolore.IOConnect.Negocio
 {
-    public class TouchGrid
+	public class TouchGrid
     {
         private readonly DataGridView _View;
         int startDragRowHandle = -1;
@@ -54,11 +48,7 @@ namespace Percolore.IOConnect.Negocio
         }
         void _View_Layout(object sender, LayoutEventArgs e)
         {
-            try
-            {
-                IsDragging = false;
-            }
-            catch { }
+            IsDragging = false;
         }
 
         private void DoScroll(int delta)
@@ -86,8 +76,12 @@ namespace Percolore.IOConnect.Negocio
                 IsDragging = false;
 
             }
-            catch { }
-        }
+			catch (Exception ex)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+			}
+		}
+
         private void _View_MouseMove(object sender, MouseEventArgs e)
         {
             try
@@ -101,8 +95,11 @@ namespace Percolore.IOConnect.Negocio
                     DoScroll(delta);
                 }
             }
-            catch { }
-        }
+			catch (Exception ex)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+			}
+		}
 
         private void _View_MouseDown(object sender, MouseEventArgs e)
         {
@@ -113,7 +110,10 @@ namespace Percolore.IOConnect.Negocio
                 startDragRowHandle = GetRowUnderCursor(e.Location);
                 topRowIndex = _View.FirstDisplayedScrollingRowIndex;
             }
-            catch { }
-        }
+			catch (Exception ex)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+			}
+		}
     }
 }

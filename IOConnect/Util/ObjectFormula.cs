@@ -1,15 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using Percolore.Core.Logging;
 using System.Data.SQLite;
-using System.IO;
-using System.Linq;
 using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace Percolore.IOConnect.Util
 {
-    public class ObjectFormula
+	public class ObjectFormula
     {
         public static readonly string PathFile = Path.Combine(Environment.CurrentDirectory, "Formulas.db");
         public static readonly string FileName = Path.GetFileName(PathFile);
@@ -72,9 +67,11 @@ namespace Percolore.IOConnect.Util
                     }
                 }
             }
-            catch
-            { }
-        }
+			catch (Exception e)
+			{
+				LogManager.LogError($"Erro no módulo {typeof(ObjectFormula).Name}: ", e);
+			}
+		}
 
         public static void Persist(ObjectFormula formula)
         {
@@ -89,11 +86,11 @@ namespace Percolore.IOConnect.Util
                     Update(formula);
                 }
             }
-            catch
-            {
-                throw;
-            }
-        }
+			catch (Exception e)
+			{
+				LogManager.LogError($"Erro no módulo {typeof(ObjectFormula).Name}: ", e);
+			}
+		}
 
         public static void Delete(int id)
         {
@@ -123,80 +120,77 @@ namespace Percolore.IOConnect.Util
                     }
                 }
             }
-            catch { throw; }
-        }
+			catch (Exception e)
+			{
+				LogManager.LogError($"Erro no módulo {typeof(ObjectFormula).Name}: ", e);
+                throw;
+			}
+		}
 
         public static ObjectFormula Load(int id)
         {
             ObjectFormula formula = null;
             try
             {
-                try
+                using (SQLiteConnection conn = Util.SQLite.CreateSQLiteConnection(PathFile, false))
                 {
+                    using (SQLiteCommand cmd = new SQLiteCommand(conn))
+                    {
+                        conn.Open();
+
+                        cmd.CommandText = "SELECT * FROM Formula WHERE Id = '" + id.ToString() + "';";
+
+                        using (SQLiteDataReader reader = cmd.ExecuteReader())
+                        {
+                            while (reader.Read())
+                            {
+                                formula = new ObjectFormula();
+                                formula.Id = int.Parse(reader["Id"].ToString());
+                                formula.Nome = reader["Nome"].ToString();
+                                   
+                                break;
+                            }
+                            reader.Close();
+                        }
+                    }
+                    conn.Close();
+                }
+
+                if (formula != null)
+                {
+                    formula.Itens = new List<ObjectFormulaItem>();
                     using (SQLiteConnection conn = Util.SQLite.CreateSQLiteConnection(PathFile, false))
                     {
                         using (SQLiteCommand cmd = new SQLiteCommand(conn))
                         {
                             conn.Open();
 
-                            cmd.CommandText = "SELECT * FROM Formula WHERE Id = '" + id.ToString() + "';";
+                            cmd.CommandText = "SELECT * FROM FormulaItem WHERE IdFormula = '" + id.ToString() + "';";
 
                             using (SQLiteDataReader reader = cmd.ExecuteReader())
                             {
                                 while (reader.Read())
                                 {
-                                    formula = new ObjectFormula();
-                                    formula.Id = int.Parse(reader["Id"].ToString());
-                                    formula.Nome = reader["Nome"].ToString();
-                                   
-                                    break;
+                                    ObjectFormulaItem item = new ObjectFormulaItem();
+                                    item.IdColorante = int.Parse(reader["IdCorante"].ToString());
+                                    item.Mililitros = double.Parse(reader["Volume"].ToString(),  System.Globalization.CultureInfo.InvariantCulture);
+                                    item.Colorante = Util.ObjectColorante.Load(item.IdColorante);
+                                    formula.Itens.Add(item);
                                 }
-                                reader.Close();
                             }
                         }
                         conn.Close();
                     }
-
-                    if (formula != null)
-                    {
-                        formula.Itens = new List<ObjectFormulaItem>();
-                        using (SQLiteConnection conn = Util.SQLite.CreateSQLiteConnection(PathFile, false))
-                        {
-                            using (SQLiteCommand cmd = new SQLiteCommand(conn))
-                            {
-                                conn.Open();
-
-                                cmd.CommandText = "SELECT * FROM FormulaItem WHERE IdFormula = '" + id.ToString() + "';";
-
-                                using (SQLiteDataReader reader = cmd.ExecuteReader())
-                                {
-                                    while (reader.Read())
-                                    {
-                                        ObjectFormulaItem item = new ObjectFormulaItem();
-                                        item.IdColorante = int.Parse(reader["IdCorante"].ToString());
-                                        item.Mililitros = double.Parse(reader["Volume"].ToString(),  System.Globalization.CultureInfo.InvariantCulture);
-                                        item.Colorante = Util.ObjectColorante.Load(item.IdColorante);
-                                        formula.Itens.Add(item);
-
-                                        //break;
-                                    }
-                                }
-                            }
-                            conn.Close();
-                        }
-
-                    }
-
-                }
-                catch
-                {
-                    throw;
                 }
                
                 return formula;
             }
-            catch { throw; }
-            finally { formula = null; }
+			catch (Exception e)
+			{
+				LogManager.LogError($"Erro no módulo {typeof(ObjectFormula).Name}: ", e);
+                throw;
+			}
+			finally { formula = null; }
         }
 
         public static List<ObjectFormula> List()
@@ -205,75 +199,68 @@ namespace Percolore.IOConnect.Util
 
             try
             {
-                try
+                using (SQLiteConnection conn = Util.SQLite.CreateSQLiteConnection(PathFile, false))
                 {
-                    using (SQLiteConnection conn = Util.SQLite.CreateSQLiteConnection(PathFile, false))
+                    using (SQLiteCommand cmd = new SQLiteCommand(conn))
                     {
-                        using (SQLiteCommand cmd = new SQLiteCommand(conn))
+                        conn.Open();
+
+                        cmd.CommandText = "SELECT * FROM Formula;;";
+
+                        using (SQLiteDataReader reader = cmd.ExecuteReader())
                         {
-                            conn.Open();
-
-                            cmd.CommandText = "SELECT * FROM Formula;;";
-
-                            using (SQLiteDataReader reader = cmd.ExecuteReader())
+                            while (reader.Read())
                             {
-                                while (reader.Read())
-                                {
-                                    ObjectFormula formula = new ObjectFormula();
-                                    formula.Id = int.Parse(reader["Id"].ToString());
-                                    formula.Nome = reader["Nome"].ToString();
-                                    list.Add(formula);
-                                }
-                                reader.Close();
+                                ObjectFormula formula = new ObjectFormula();
+                                formula.Id = int.Parse(reader["Id"].ToString());
+                                formula.Nome = reader["Nome"].ToString();
+                                list.Add(formula);
                             }
+                            reader.Close();
                         }
-                        conn.Close();
                     }
-
-                    if (list != null && list.Count > 0)
-                    {
-                        foreach (ObjectFormula formula in list)
-                        {
-                            formula.Itens = new List<ObjectFormulaItem>();
-                            using (SQLiteConnection conn = Util.SQLite.CreateSQLiteConnection(PathFile, false))
-                            {
-                                using (SQLiteCommand cmd = new SQLiteCommand(conn))
-                                {
-                                    conn.Open();
-
-                                    cmd.CommandText = "SELECT * FROM FormulaItem WHERE IdFormula = '" + formula.Id.ToString() + "';";
-
-                                    using (SQLiteDataReader reader = cmd.ExecuteReader())
-                                    {
-                                        while (reader.Read())
-                                        {
-                                            ObjectFormulaItem item = new ObjectFormulaItem();
-                                            item.IdColorante = int.Parse(reader["IdCorante"].ToString());
-                                            item.Mililitros = double.Parse(reader["Volume"].ToString(), System.Globalization.CultureInfo.InvariantCulture);
-                                            item.Colorante = Util.ObjectColorante.Load(item.IdColorante);
-                                            formula.Itens.Add(item);
-
-                                            //break;
-                                        }
-                                        reader.Close();
-                                    }
-                                }
-                                conn.Close();
-                            }
-                        }
-
-                    }
-
+                    conn.Close();
                 }
-                catch
+
+                if (list != null && list.Count > 0)
                 {
-                    throw;
+                    foreach (ObjectFormula formula in list)
+                    {
+                        formula.Itens = new List<ObjectFormulaItem>();
+                        using (SQLiteConnection conn = Util.SQLite.CreateSQLiteConnection(PathFile, false))
+                        {
+                            using (SQLiteCommand cmd = new SQLiteCommand(conn))
+                            {
+                                conn.Open();
+
+                                cmd.CommandText = "SELECT * FROM FormulaItem WHERE IdFormula = '" + formula.Id.ToString() + "';";
+
+                                using (SQLiteDataReader reader = cmd.ExecuteReader())
+                                {
+                                    while (reader.Read())
+                                    {
+                                        ObjectFormulaItem item = new ObjectFormulaItem();
+                                        item.IdColorante = int.Parse(reader["IdCorante"].ToString());
+                                        item.Mililitros = double.Parse(reader["Volume"].ToString(), System.Globalization.CultureInfo.InvariantCulture);
+                                        item.Colorante = Util.ObjectColorante.Load(item.IdColorante);
+                                        formula.Itens.Add(item);
+                                    }
+                                    reader.Close();
+                                }
+                            }
+                            conn.Close();
+                        }
+                    }
                 }
 
                 return list;
             }
-            catch { throw; }
-            finally { list = null; }
+			catch (Exception e)
+			{
+				LogManager.LogError($"Erro no módulo {typeof(ObjectFormula).Name}: ", e);
+                throw;
+			}
+			finally { list = null; }
         }
         #endregion
 

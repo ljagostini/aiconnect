@@ -1,19 +1,14 @@
 ﻿using Percolore.Core;
+using Percolore.Core.Logging;
 using Percolore.Core.Persistence.WindowsRegistry;
-using System;
-using System.Collections.Generic;
 using System.Data.SQLite;
 using System.Globalization;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.IO.Compression;
-using System.Threading;
+using System.Text;
 
 namespace Percolore.IOConnect.Util
 {
-    public class ObjectCalibragem
+	public class ObjectCalibragem
     {
         public static readonly string PathFile = Path.Combine(Environment.CurrentDirectory, "Calibragem.db");
         public static readonly string FileName = Path.GetFileName(PathFile);
@@ -69,9 +64,11 @@ namespace Percolore.IOConnect.Util
                     }
                 }
             }
-            catch
-            { }
-        }
+			catch (Exception e)
+			{
+				LogManager.LogError($"Erro no módulo {typeof(ObjectCalibragem).Name}: ", e);
+			}
+		}
 
         public static ObjectCalibragem Load(int motor)
         {
@@ -93,13 +90,7 @@ namespace Percolore.IOConnect.Util
                                 c = new ObjectCalibragem();
                                 c.Motor = int.Parse(reader["Motor"].ToString());
                                 c.UltimoPulsoReverso = int.Parse(reader["UltimoPulsoReverso"].ToString());
-                                try
-                                {
-                                    c.MinimoFaixas = int.Parse(reader["MinimoFaixas"].ToString());
-                                }
-                                catch
-                                { }
-
+                                c.MinimoFaixas = int.Parse(reader["MinimoFaixas"].ToString());
                                 c.Valores = new List<ValoresVO>();
                                 break;
                             }
@@ -133,27 +124,14 @@ namespace Percolore.IOConnect.Util
                                     int PulsoReverso = 0;
                                     int Aceleracao = 0;
 
-                                    try
-                                    {
-                                        PulsoHorario = int.Parse(reader["Pulsos"].ToString());
-                                        Velocidade = int.Parse(reader["Velocidade"].ToString());
-                                        Delay = int.Parse(reader["ReverseDelay"].ToString());
-                                        Volume = double.Parse(reader["Volume"].ToString(),  CultureInfo.InvariantCulture);
-                                        MassaMedia = double.Parse(reader["MassaMedia"].ToString(), CultureInfo.InvariantCulture);
-                                        DesvioMedio = double.Parse(reader["DesvioMedio"].ToString(), CultureInfo.InvariantCulture);
-                                    }
-                                    catch
-                                    {
-
-                                    }
-                                    try
-                                    {
-                                        PulsoReverso = int.Parse(reader["PulsoReverso"].ToString());
-                                        Aceleracao = int.Parse(reader["Aceleracao"].ToString());
-                                    }
-                                    catch
-                                    { }
-
+                                    PulsoHorario = int.Parse(reader["Pulsos"].ToString());
+                                    Velocidade = int.Parse(reader["Velocidade"].ToString());
+                                    Delay = int.Parse(reader["ReverseDelay"].ToString());
+                                    Volume = double.Parse(reader["Volume"].ToString(),  CultureInfo.InvariantCulture);
+                                    MassaMedia = double.Parse(reader["MassaMedia"].ToString(), CultureInfo.InvariantCulture);
+                                    DesvioMedio = double.Parse(reader["DesvioMedio"].ToString(), CultureInfo.InvariantCulture);
+                                    PulsoReverso = int.Parse(reader["PulsoReverso"].ToString());
+                                    Aceleracao = int.Parse(reader["Aceleracao"].ToString());
                                     
                                     valores.Volume = Volume;
                                     valores.PulsoHorario = PulsoHorario;
@@ -173,11 +151,12 @@ namespace Percolore.IOConnect.Util
                 }
                 return c;
             }
-            catch
-            {
+			catch (Exception e)
+			{
+				LogManager.LogError($"Erro no módulo {typeof(ObjectCalibragem).Name}: ", e);
                 throw;
-            }
-        }
+			}
+		}
 
         public static List<ObjectCalibragem> List()
         {
@@ -200,13 +179,7 @@ namespace Percolore.IOConnect.Util
                                 c = new ObjectCalibragem();
                                 c.Motor = int.Parse(reader["Motor"].ToString());
                                 c.UltimoPulsoReverso = int.Parse(reader["UltimoPulsoReverso"].ToString());
-                                try
-                                {
-                                    c.MinimoFaixas = int.Parse(reader["MinimoFaixas"].ToString());
-                                }
-                                catch
-                                { }
-
+                                c.MinimoFaixas = int.Parse(reader["MinimoFaixas"].ToString());
                                 c.Valores = new List<ValoresVO>();
                                 retorno.Add(c);                                
                             }
@@ -242,28 +215,15 @@ namespace Percolore.IOConnect.Util
                                         int PulsoReverso = 0;
                                         int Aceleracao = 0;
 
-                                        try
-                                        {
-                                            PulsoHorario = int.Parse(reader["Pulsos"].ToString());
-                                            Velocidade = int.Parse(reader["Velocidade"].ToString());
-                                            Delay = int.Parse(reader["ReverseDelay"].ToString());
-                                            Volume = double.Parse(reader["Volume"].ToString(), CultureInfo.InvariantCulture);
-                                            MassaMedia = double.Parse(reader["MassaMedia"].ToString(), CultureInfo.InvariantCulture);
-                                            DesvioMedio = double.Parse(reader["DesvioMedio"].ToString(), CultureInfo.InvariantCulture);
-                                        }
-                                        catch
-                                        {
-
-                                        }
-                                        try
-                                        {
-                                            PulsoReverso = int.Parse(reader["PulsoReverso"].ToString());
-                                            Aceleracao = int.Parse(reader["Aceleracao"].ToString());
-                                        }
-                                        catch
-                                        { }
-
-
+                                        PulsoHorario = int.Parse(reader["Pulsos"].ToString());
+                                        Velocidade = int.Parse(reader["Velocidade"].ToString());
+                                        Delay = int.Parse(reader["ReverseDelay"].ToString());
+                                        Volume = double.Parse(reader["Volume"].ToString(), CultureInfo.InvariantCulture);
+                                        MassaMedia = double.Parse(reader["MassaMedia"].ToString(), CultureInfo.InvariantCulture);
+                                        DesvioMedio = double.Parse(reader["DesvioMedio"].ToString(), CultureInfo.InvariantCulture);
+                                        PulsoReverso = int.Parse(reader["PulsoReverso"].ToString());
+                                        Aceleracao = int.Parse(reader["Aceleracao"].ToString());
+                                        
                                         valores.Volume = Volume;
                                         valores.PulsoHorario = PulsoHorario;
                                         valores.Velocidade = Velocidade;
@@ -282,12 +242,13 @@ namespace Percolore.IOConnect.Util
                     }
                 }
             }
-            catch
-            {
+			catch (Exception e)
+			{
+				LogManager.LogError($"Erro no módulo {typeof(ObjectCalibragem).Name}: ", e);
                 throw;
-            }
+			}
 
-            return retorno.OrderBy(o=>o.Motor).ToList();
+			return retorno.OrderBy(o=>o.Motor).ToList();
         }
 
         public static bool Validate(ObjectCalibragem c, out string outMsg)
@@ -327,46 +288,11 @@ namespace Percolore.IOConnect.Util
                     {
                         validacao.AppendLine(Negocio.IdiomaResxExtensao.Calibragem_VelocidadeMaiorZero);
                     }
-                    else
-                    {
-                        /*
-                        //[A velocidade não pode ser maior que a velocidade para o volume 
-                        //na posição imediatamente acima]
-                        if (i > 0)
-                        {
-                            int limite = c.Valores[i - 1].Velocidade;
-                            if (valores.Velocidade > limite)
-                            {
-                                string texto =
-                                    string.Format(Properties.UI.Calibragem_VelocidadeMenorIgual, limite.ToString());
-                                validacao.AppendLine(texto);
-                            }
-                        }
-                        */
-
-                    }
 
                     //Delay
                     if (valores.Delay < 0)
                     {
                         validacao.AppendLine(Negocio.IdiomaResxExtensao.Calibragem_DelayMaiorZero);
-                    }
-                    else
-                    {
-                        /*
-                        //[A velocidade não pode ser maior que a velocidade para o volume 
-                        //na posição imediatamente acima]
-                        if (i > 0)
-                        {
-                            int limite = c.Valores[i - 1].Delay;
-                            if (valores.Delay > limite)
-                            {
-                                string texto =
-                                  string.Format(Properties.UI.Calibragem_DelayMenorIgual, limite.ToString());
-                                validacao.AppendLine(texto);
-                            }
-                        }
-                        */
                     }
 
                     if (validacao.Length > 0)
@@ -381,11 +307,12 @@ namespace Percolore.IOConnect.Util
                 outMsg = validacoes.ToString();
                 return (validacoes.Length == 0);
             }
-            catch (Exception)
-            {
+			catch (Exception e)
+			{
+				LogManager.LogError($"Erro no módulo {typeof(ObjectCalibragem).Name}: ", e);
                 throw;
-            }
-            finally
+			}
+			finally
             {
                 validacoes = null;
                 validacao = null;
@@ -423,33 +350,6 @@ namespace Percolore.IOConnect.Util
                         foreach(ValoresVO val in c.Valores)
                         {
                             InsertValores(c.Motor, val);
-                            /*
-                            sb = new StringBuilder();
-                            using (SQLiteConnection conn = Util.SQLite.CreateSQLiteConnection(PathFile, false))
-                            {
-                                using (SQLiteCommand cmd = new SQLiteCommand(conn))
-                                {
-                                    conn.Open();
-                                    sb.Append("INSERT INTO Valores (Motor, Volume, Pulsos, Velocidade, ReverseDelay, MassaMedia, DesvioMedio, PulsoReverso, Aceleracao) VALUES (");
-                                    sb.Append("'" + c.Motor.ToString() + "', ");
-                                    sb.Append("'" + val.Volume.ToString().Replace(",",".") + "', ");
-                                    sb.Append("'" + val.PulsoHorario.ToString() + "', ");
-                                    sb.Append("'" + val.Velocidade.ToString() + "', ");
-                                    sb.Append("'" + val.Delay.ToString() + "', ");
-                                    sb.Append("'" + val.MassaMedia.ToString().Replace(",", ".") + "', ");
-                                    sb.Append("'" + val.DesvioMedio.ToString().Replace(",", ".") + "', ");                                   
-                                    sb.Append("'" + val.PulsoReverso.ToString() + "', ");
-                                    sb.Append("'" + val.Aceleracao.ToString() + "' ");
-                                    sb.Append(");");
-
-                                    cmd.CommandText = sb.ToString();
-
-                                    cmd.ExecuteNonQuery();
-
-                                    conn.Close();
-                                }
-                            }
-                            */
                         }
 
                         gerarEventoAlterarCalibracao(0, "Circuito inserido:" + c.Motor.ToString());
@@ -517,12 +417,12 @@ namespace Percolore.IOConnect.Util
                 }
 
             }
-            catch (Exception)
-            {
-
+			catch (Exception e)
+			{
+				LogManager.LogError($"Erro no módulo {typeof(ObjectCalibragem).Name}: ", e);
                 throw;
-            }
-        }
+			}
+		}
 
         private static bool ExisteAlteracao(ObjectCalibragem c_last, ObjectCalibragem c_new)
         {
@@ -561,12 +461,12 @@ namespace Percolore.IOConnect.Util
                             break;
                         }
                     }
-                    
                 }
             }
-            catch
-            {
-                retorno = true;
+			catch (Exception e)
+			{
+				LogManager.LogError($"Erro no módulo {typeof(ObjectCalibragem).Name}: ", e);
+			    retorno = true;
             }
 
             return retorno;
@@ -605,11 +505,12 @@ namespace Percolore.IOConnect.Util
                     }
                 }
             }
-            catch
-            {
+			catch (Exception e)
+			{
+				LogManager.LogError($"Erro no módulo {typeof(ObjectCalibragem).Name}: ", e);
                 throw;
-            }
-        }
+			}
+		}
 
         private static void InsertValores(int motor, ValoresVO _val)
         {
@@ -654,11 +555,12 @@ namespace Percolore.IOConnect.Util
                 gerarEventoAlterarCalibracao(0, "Circuito inserido:" + motor.ToString());
 
             }
-            catch
-            {
+			catch (Exception e)
+			{
+				LogManager.LogError($"Erro no módulo {typeof(ObjectCalibragem).Name}: ", e);
                 throw;
-            }
-        }
+			}
+		}
 
         public static void UpdatePulsosRev(int motor, int pulsosRev)
         {
@@ -683,11 +585,12 @@ namespace Percolore.IOConnect.Util
                 }
                
             }
-            catch
-            {
+			catch (Exception e)
+			{
+				LogManager.LogError($"Erro no módulo {typeof(ObjectCalibragem).Name}: ", e);
                 throw;
-            }
-        }
+			}
+		}
 
         public static void UpdateMinimoFaixas(int motor, int MinimoFaixas)
         {
@@ -712,11 +615,11 @@ namespace Percolore.IOConnect.Util
                 }
 
             }
-            catch
-            {
-                //throw;
-            }
-        }
+			catch (Exception e)
+			{
+				LogManager.LogError($"Erro no módulo {typeof(ObjectCalibragem).Name}: ", e);
+			}
+		}
 
         public static bool Delete(int motor)
         {
@@ -804,9 +707,12 @@ namespace Percolore.IOConnect.Util
                 retorno = Util.ObjectEventos.InsertEvento(objEvt);
                 #endregion
             }
-            catch
-            { }
-            return retorno;
+			catch (Exception e)
+			{
+				LogManager.LogError($"Erro no módulo {typeof(ObjectCalibragem).Name}: ", e);
+			}
+
+			return retorno;
         }
 
         public static void gerarBkpCalibragem()
@@ -819,8 +725,7 @@ namespace Percolore.IOConnect.Util
                     n_serial = percRegistry.GetSerialNumber();
                 }
                 string local_bkp = zipPath + n_serial + "_Calibragem_" + string.Format("{0:dd_MM_yyyy_HH_mm_ss_fff}", DateTime.Now) + ".zip";
-                //ZipFile.CreateFromDirectory(PathFile, local_bkp);
-
+                
                 using (FileStream fs = new FileStream(local_bkp, FileMode.Create))
                 {
                     using (ZipArchive arch = new ZipArchive(fs, ZipArchiveMode.Create))
@@ -831,10 +736,11 @@ namespace Percolore.IOConnect.Util
                 }
 
             }
-            catch
-            {               
-            }
-        }
+			catch (Exception e)
+			{
+				LogManager.LogError($"Erro no módulo {typeof(ObjectCalibragem).Name}: ", e);
+			}
+		}
 
         #endregion
 

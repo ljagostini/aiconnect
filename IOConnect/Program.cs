@@ -104,13 +104,9 @@ namespace Percolore.IOConnect
                 retorno.HabilitarPurgaIndividual = objPar.HabilitarPurgaIndividual;
                 retorno.HabilitarTouchScrenn = objPar.HabilitarTouchScrenn;
                 retorno.IdDispositivo2 = objPar.IdDispositivo2;
-                //
                 retorno.NomeDispositivo = objPar.NomeDispositivo;
-                //
                 retorno.NomeDispositivo2 = objPar.NomeDispositivo2;
-                //
                 retorno.VersaoIoconnect = objPar.VersaoIoconnect;
-                //
                 retorno.HabilitarDispensaSequencialP1 = objPar.HabilitarDispensaSequencialP1;
                 retorno.HabilitarDispensaSequencialP2 = objPar.HabilitarDispensaSequencialP2;
 
@@ -224,12 +220,14 @@ namespace Percolore.IOConnect
                     retorno.IpSincFormula = objPar.IpSincFormula;
 
                 }
-                catch
-                { }
+				catch (Exception e)
+				{
+					LogManager.LogError($"Erro no módulo {typeof(Program).Name}: ", e);
+				}
 
-                #endregion
+				#endregion
 
-                Util.ObjectParametros.PersistInsert(retorno);
+				Util.ObjectParametros.PersistInsert(retorno);
 
                 Util.ObjectParametros.InitLoad();
 
@@ -332,9 +330,10 @@ namespace Percolore.IOConnect
                         Calibragem cal = Calibragem.Load(i);
                         lCal.Add(cal);
                     }
-                    catch
-                    {
-
+                    catch (Exception e)
+					{
+						LogManager.LogError($"Erro no módulo {typeof(Program).Name}: ", e);
+					
                         if (i > 16)
                         {
                             try
@@ -344,10 +343,11 @@ namespace Percolore.IOConnect
                                 lCal.Add(cal);
 
                             }
-                            catch
-                            { }
-                        }
-
+							catch (Exception ex)
+							{
+								LogManager.LogError($"Erro no módulo {typeof(Program).Name}: ", ex);
+							}
+						}
                     }
                 }
                 foreach (Calibragem cal in lCal)
@@ -525,7 +525,6 @@ namespace Percolore.IOConnect
                 White_.Volume = 0.935;
 
                 Util.ObjectBasDat05.Persist(White_);
-
             }
 
 
@@ -577,24 +576,20 @@ namespace Percolore.IOConnect
                 {
                     Util.ObjectMensagem.CreateBD();
                 }
+
                 Util.ObjectMensagem.LoadMessage();
 
-            }
-            catch
-            { }
-
-            try
-            {
                 if (!File.Exists(Util.ObjectLimpBicos.PathFile))
                 {
                     Util.ObjectLimpBicos.CreateBD();
                 }
             }
-            catch
-            { }
+			catch (Exception e)
+			{
+				LogManager.LogError($"Erro no módulo {typeof(Program).Name}: ", e);
+			}
 
-
-            if (!Init.AtualizacaoBD())
+			if (!Init.AtualizacaoBD())
             {
                 #region Erro ao atualizar o processo de atualização
 
@@ -728,12 +723,12 @@ namespace Percolore.IOConnect
                 Util.ObjectEventos.InsertEvento(objEvt);
                 #endregion
             }
-            catch
-            { }
+			catch (Exception e)
+			{
+				LogManager.LogError($"Erro no módulo {typeof(Program)}: ", e);
+			}
 
-            //Init.RegUDCP_OK(parametros);
-
-            parametros = null;
+			parametros = null;
 
             #endregion  
             try
@@ -743,19 +738,20 @@ namespace Percolore.IOConnect
                     Directory.CreateDirectory(Environment.CurrentDirectory + Path.DirectorySeparatorChar + "bkp");
                 }
             }
-            catch
-            { }
+			catch (Exception e)
+			{
+				LogManager.LogError($"Erro no módulo {typeof(Program).Name}: ", e);
+			}
 
-            #region excluindo 48 Motores
-            #region Colorantes
-            List<Util.ObjectColorante> l_Col_exc = Util.ObjectColorante.List();
+			#region excluindo 48 Motores
+			#region Colorantes
+			List<Util.ObjectColorante> l_Col_exc = Util.ObjectColorante.List();
             if (l_Col_exc.Count > 32)
             {
                 for(int i = 33; i<= l_Col_exc.Count; i++)
                 {
                     Util.ObjectColorante.Delete(i);
                 }
-
             }
             #endregion
             #region Calibragem
