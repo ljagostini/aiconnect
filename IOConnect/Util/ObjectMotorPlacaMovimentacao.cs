@@ -1,9 +1,15 @@
-﻿using System.Data.SQLite;
+﻿using System;
+using System.Collections.Generic;
+using System.Data.SQLite;
+using System.IO;
+using System.Linq;
 using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace Percolore.IOConnect.Util
 {
-	public class ObjectMotorPlacaMovimentacao
+    public class ObjectMotorPlacaMovimentacao
     {
         public static readonly string PathFile = Path.Combine(Environment.CurrentDirectory, "PlMov.db");
         public static readonly string FileName = Path.GetFileName(PathFile);
@@ -24,229 +30,264 @@ namespace Percolore.IOConnect.Util
 
         public static void CreateBD()
         {
-            if (!File.Exists(PathFile))
+            try
             {
-                StringBuilder sb = new StringBuilder();
-                sb.Append("CREATE TABLE IF NOT EXISTS [PlacaMovimentacao] (Circuito TEXT NULL, Habilitado TEXT NULL, NameTag TEXT NULL, Pulsos TEXT NULL, Velocidade TEXT NULL, Aceleracao TEXT NULL, Delay TEXT NULL, TipoMotor TEXT NULL);");
-
-                string createQuery = sb.ToString();
-
-                SQLiteConnection connectCreate = Util.SQLite.CreateSQLiteConnection(PathFile, false);
-                connectCreate.Open();
-				// Open connection to create DB if not exists.
-				connectCreate.Close();
-                Thread.Sleep(2000);
-                if (File.Exists(PathFile))
+                if (!File.Exists(PathFile))
                 {
-                    using (SQLiteConnection conn = Util.SQLite.CreateSQLiteConnection(PathFile, false))
+                    StringBuilder sb = new StringBuilder();
+                    sb.Append("CREATE TABLE IF NOT EXISTS [PlacaMovimentacao] (Circuito TEXT NULL, Habilitado TEXT NULL, NameTag TEXT NULL, Pulsos TEXT NULL, Velocidade TEXT NULL, Aceleracao TEXT NULL, Delay TEXT NULL, TipoMotor TEXT NULL);");
+
+                    string createQuery = sb.ToString();
+
+                    SQLiteConnection connectCreate = Util.SQLite.CreateSQLiteConnection(PathFile, false);
+                    connectCreate.Open();
+					// Open connection to create DB if not exists.
+					connectCreate.Close();
+                    Thread.Sleep(2000);
+                    if (File.Exists(PathFile))
                     {
-                        using (SQLiteCommand cmd = new SQLiteCommand(conn))
+                        using (SQLiteConnection conn = Util.SQLite.CreateSQLiteConnection(PathFile, false))
                         {
-                            conn.Open();
-                            cmd.CommandText = createQuery;
-                            cmd.ExecuteNonQuery();
-                            conn.Close();
+                            using (SQLiteCommand cmd = new SQLiteCommand(conn))
+                            {
+                                conn.Open();
+                                cmd.CommandText = createQuery;
+                                cmd.ExecuteNonQuery();
+                                conn.Close();
+                            }
                         }
                     }
                 }
             }
+            catch
+            { }
         }
 
         public static ObjectMotorPlacaMovimentacao Load(int Circuito)
         {
             ObjectMotorPlacaMovimentacao pMPMOV = null;
-            
-            using (SQLiteConnection conn = Util.SQLite.CreateSQLiteConnection(PathFile, false))
+            try
             {
-                using (SQLiteCommand cmd = new SQLiteCommand(conn))
+                using (SQLiteConnection conn = Util.SQLite.CreateSQLiteConnection(PathFile, false))
                 {
-                    conn.Open();
-
-                    cmd.CommandText = "SELECT * FROM PlacaMovimentacao WHERE Circuito = '" + Circuito.ToString() + "';";
-
-                    using (SQLiteDataReader reader = cmd.ExecuteReader())
+                    using (SQLiteCommand cmd = new SQLiteCommand(conn))
                     {
-                        while (reader.Read())
+                        conn.Open();
+
+                        cmd.CommandText = "SELECT * FROM PlacaMovimentacao WHERE Circuito = '" + Circuito.ToString() + "';";
+
+                        using (SQLiteDataReader reader = cmd.ExecuteReader())
                         {
-                            pMPMOV = new ObjectMotorPlacaMovimentacao();
-                            pMPMOV.Circuito = int.Parse(reader["Circuito"].ToString());
-                            pMPMOV.Habilitado = Convert.ToBoolean(reader["Habilitado"].ToString());
-                            pMPMOV.Aceleracao = Convert.ToInt32(reader["Aceleracao"].ToString());
-                            pMPMOV.Delay = Convert.ToInt32(reader["Delay"].ToString());
-                            pMPMOV.NameTag = reader["NameTag"].ToString();
-                            pMPMOV.Pulsos = Convert.ToInt32(reader["Pulsos"].ToString());
-                            pMPMOV.TipoMotor = Convert.ToInt32(reader["TipoMotor"].ToString());
-                            pMPMOV.Velocidade = Convert.ToInt32(reader["Velocidade"].ToString());
-                            break;
+                            while (reader.Read())
+                            {
+                                pMPMOV = new ObjectMotorPlacaMovimentacao();
+                                pMPMOV.Circuito = int.Parse(reader["Circuito"].ToString());
+                                pMPMOV.Habilitado = Convert.ToBoolean(reader["Habilitado"].ToString());
+                                pMPMOV.Aceleracao = Convert.ToInt32(reader["Aceleracao"].ToString());
+                                pMPMOV.Delay = Convert.ToInt32(reader["Delay"].ToString());
+                                pMPMOV.NameTag = reader["NameTag"].ToString();
+                                pMPMOV.Pulsos = Convert.ToInt32(reader["Pulsos"].ToString());
+                                pMPMOV.TipoMotor = Convert.ToInt32(reader["TipoMotor"].ToString());
+                                pMPMOV.Velocidade = Convert.ToInt32(reader["Velocidade"].ToString());
+
+
+                                break;
+                            }
                         }
                     }
+                    conn.Close();
                 }
-                conn.Close();
-            }
 
-            return pMPMOV;
+
+                return pMPMOV;
+            }
+            catch
+            {
+                throw;
+            }
         }
 
         public static List<ObjectMotorPlacaMovimentacao> List()
         {
             List<ObjectMotorPlacaMovimentacao> list = new List<ObjectMotorPlacaMovimentacao>();
 
-            using (SQLiteConnection conn = Util.SQLite.CreateSQLiteConnection(PathFile, false))
+            try
             {
-                using (SQLiteCommand cmd = new SQLiteCommand(conn))
+                using (SQLiteConnection conn = Util.SQLite.CreateSQLiteConnection(PathFile, false))
                 {
-                    conn.Open();
-
-                    cmd.CommandText = "SELECT * FROM PlacaMovimentacao;";
-
-                    using (SQLiteDataReader reader = cmd.ExecuteReader())
+                    using (SQLiteCommand cmd = new SQLiteCommand(conn))
                     {
-                        while (reader.Read())
+                        conn.Open();
+
+                        cmd.CommandText = "SELECT * FROM PlacaMovimentacao;";
+
+                        using (SQLiteDataReader reader = cmd.ExecuteReader())
                         {
-                            ObjectMotorPlacaMovimentacao pMPMOV = new ObjectMotorPlacaMovimentacao();
-                            pMPMOV = new ObjectMotorPlacaMovimentacao();
-                            pMPMOV.Circuito = int.Parse(reader["Circuito"].ToString());
-                            pMPMOV.Habilitado = Convert.ToBoolean(reader["Habilitado"].ToString());
-                            pMPMOV.Aceleracao = Convert.ToInt32(reader["Aceleracao"].ToString());
-                            pMPMOV.Delay = Convert.ToInt32(reader["Delay"].ToString());
-                            pMPMOV.NameTag = reader["NameTag"].ToString();
-                            pMPMOV.Pulsos = Convert.ToInt32(reader["Pulsos"].ToString());
-                            pMPMOV.TipoMotor = Convert.ToInt32(reader["TipoMotor"].ToString());
-                            pMPMOV.Velocidade = Convert.ToInt32(reader["Velocidade"].ToString());
-                            list.Add(pMPMOV);
+                            while (reader.Read())
+                            {
+                                ObjectMotorPlacaMovimentacao pMPMOV = new ObjectMotorPlacaMovimentacao();
+                                pMPMOV = new ObjectMotorPlacaMovimentacao();
+                                pMPMOV.Circuito = int.Parse(reader["Circuito"].ToString());
+                                pMPMOV.Habilitado = Convert.ToBoolean(reader["Habilitado"].ToString());
+                                pMPMOV.Aceleracao = Convert.ToInt32(reader["Aceleracao"].ToString());
+                                pMPMOV.Delay = Convert.ToInt32(reader["Delay"].ToString());
+                                pMPMOV.NameTag = reader["NameTag"].ToString();
+                                pMPMOV.Pulsos = Convert.ToInt32(reader["Pulsos"].ToString());
+                                pMPMOV.TipoMotor = Convert.ToInt32(reader["TipoMotor"].ToString());
+                                pMPMOV.Velocidade = Convert.ToInt32(reader["Velocidade"].ToString());
+                                list.Add(pMPMOV);
+                            }
                         }
                     }
+                    conn.Close();
                 }
-                conn.Close();
             }
+            catch
+            {
 
+            }
             return list.OrderBy(o=>o.Circuito).ToList();
+
         }
 
         public static void Persist(ObjectMotorPlacaMovimentacao pMMOV)
         {
-            ObjectMotorPlacaMovimentacao objc = Load(pMMOV.Circuito);
-            
-            //Insert
-            if (objc == null)
+            try
             {
-                StringBuilder sb = new StringBuilder();
-                using (SQLiteConnection conn = Util.SQLite.CreateSQLiteConnection(PathFile, false))
+                ObjectMotorPlacaMovimentacao objc = Load(pMMOV.Circuito);
+                //Insert
+                if (objc == null)
                 {
-                    using (SQLiteCommand cmd = new SQLiteCommand(conn))
+                    StringBuilder sb = new StringBuilder();
+                    using (SQLiteConnection conn = Util.SQLite.CreateSQLiteConnection(PathFile, false))
                     {
-                        conn.Open();
-                        sb.Append("INSERT INTO PlacaMovimentacao (Circuito, Habilitado, NameTag, Pulsos, Velocidade, Aceleracao, Delay, TipoMotor) VALUES (");
-                        sb.Append("'" + pMMOV.Circuito.ToString() + "', ");
-                        sb.Append("'" + (pMMOV.Habilitado ? "True" : "False") + "', ");
-                        sb.Append("'" + pMMOV.NameTag + "', ");
-                        sb.Append("'" + pMMOV.Pulsos.ToString() + "', ");
-                        sb.Append("'" + pMMOV.Velocidade.ToString() + "', ");
-                        sb.Append("'" + pMMOV.Aceleracao.ToString() + "', ");
-                        sb.Append("'" + pMMOV.Delay.ToString() + "', ");
-                        sb.Append("'" + pMMOV.TipoMotor.ToString() + "' ");
-                        sb.Append(");");
+                        using (SQLiteCommand cmd = new SQLiteCommand(conn))
+                        {
+                            conn.Open();
+                            sb.Append("INSERT INTO PlacaMovimentacao (Circuito, Habilitado, NameTag, Pulsos, Velocidade, Aceleracao, Delay, TipoMotor) VALUES (");
+                            sb.Append("'" + pMMOV.Circuito.ToString() + "', ");
+                            sb.Append("'" + (pMMOV.Habilitado ? "True" : "False") + "', ");
+                            sb.Append("'" + pMMOV.NameTag + "', ");
+                            sb.Append("'" + pMMOV.Pulsos.ToString() + "', ");
+                            sb.Append("'" + pMMOV.Velocidade.ToString() + "', ");
+                            sb.Append("'" + pMMOV.Aceleracao.ToString() + "', ");
+                            sb.Append("'" + pMMOV.Delay.ToString() + "', ");
+                            sb.Append("'" + pMMOV.TipoMotor.ToString() + "' ");
+                            sb.Append(");");
 
-                        cmd.CommandText = sb.ToString();
+                            cmd.CommandText = sb.ToString();
 
-                        cmd.ExecuteNonQuery();
+                            cmd.ExecuteNonQuery();
 
-                        conn.Close();
+                            conn.Close();
+                        }
                     }
                 }
+                //Update
+                else
+                {
+                    StringBuilder sb = new StringBuilder();
+                    using (SQLiteConnection conn = Util.SQLite.CreateSQLiteConnection(PathFile, false))
+                    {
+                        using (SQLiteCommand cmd = new SQLiteCommand(conn))
+                        {
+                            conn.Open();
+                            sb.Append("UPDATE PlacaMovimentacao SET "); // Circuito, Habilitado, VolumeDin, Dias, VolumeRecircular, DtInicio;
+                            sb.Append("Habilitado = '" + (pMMOV.Habilitado ? "True" : "False") + "', ");
+                            sb.Append("NameTag = '" + pMMOV.NameTag + "', ");
+                            sb.Append("Pulsos ='" + pMMOV.Pulsos.ToString() + "', ");
+                            sb.Append("Velocidade = '" + pMMOV.Velocidade.ToString() + "', ");
+                            sb.Append("Aceleracao = '" + pMMOV.Aceleracao.ToString() + "', ");
+                            sb.Append("Delay = '" + pMMOV.Delay.ToString() + "', ");
+                            sb.Append("TipoMotor = '" + pMMOV.TipoMotor.ToString() + "' ");
+                            sb.Append(" WHERE Circuito = '" + pMMOV.Circuito.ToString() + "';");
+
+                            cmd.CommandText = sb.ToString();
+
+                            cmd.ExecuteNonQuery();
+
+                            conn.Close();
+                        }
+                    }
+                }
+
             }
-            //Update
-            else
+            catch
             {
-                StringBuilder sb = new StringBuilder();
-                using (SQLiteConnection conn = Util.SQLite.CreateSQLiteConnection(PathFile, false))
-                {
-                    using (SQLiteCommand cmd = new SQLiteCommand(conn))
-                    {
-                        conn.Open();
-                        sb.Append("UPDATE PlacaMovimentacao SET "); // Circuito, Habilitado, VolumeDin, Dias, VolumeRecircular, DtInicio;
-                        sb.Append("Habilitado = '" + (pMMOV.Habilitado ? "True" : "False") + "', ");
-                        sb.Append("NameTag = '" + pMMOV.NameTag + "', ");
-                        sb.Append("Pulsos ='" + pMMOV.Pulsos.ToString() + "', ");
-                        sb.Append("Velocidade = '" + pMMOV.Velocidade.ToString() + "', ");
-                        sb.Append("Aceleracao = '" + pMMOV.Aceleracao.ToString() + "', ");
-                        sb.Append("Delay = '" + pMMOV.Delay.ToString() + "', ");
-                        sb.Append("TipoMotor = '" + pMMOV.TipoMotor.ToString() + "' ");
-                        sb.Append(" WHERE Circuito = '" + pMMOV.Circuito.ToString() + "';");
-
-                        cmd.CommandText = sb.ToString();
-
-                        cmd.ExecuteNonQuery();
-
-                        conn.Close();
-                    }
-                }
+                throw;
             }
         }
 
         public static void Persist(List<ObjectMotorPlacaMovimentacao> lista)
         {
-            if (lista != null && lista.Count > 0)
+            try
             {
-                foreach (ObjectMotorPlacaMovimentacao pMMOV in lista)
+                if (lista != null && lista.Count > 0)
                 {
-                    ObjectMotorPlacaMovimentacao objc = Load(pMMOV.Circuito);
-                    //Insert
-                    if (objc == null)
+                    foreach (ObjectMotorPlacaMovimentacao pMMOV in lista)
                     {
-                        StringBuilder sb = new StringBuilder();
-                        using (SQLiteConnection conn = Util.SQLite.CreateSQLiteConnection(PathFile, false))
+                        ObjectMotorPlacaMovimentacao objc = Load(pMMOV.Circuito);
+                        //Insert
+                        if (objc == null)
                         {
-                            using (SQLiteCommand cmd = new SQLiteCommand(conn))
+                            StringBuilder sb = new StringBuilder();
+                            using (SQLiteConnection conn = Util.SQLite.CreateSQLiteConnection(PathFile, false))
                             {
-                                conn.Open();
-                                sb.Append("INSERT INTO PlacaMovimentacao (Circuito, Habilitado, NameTag, Pulsos, Velocidade, Aceleracao, Delay, TipoMotor) VALUES (");
-                                sb.Append("'" + pMMOV.Circuito.ToString() + "', ");
-                                sb.Append("'" + (pMMOV.Habilitado ? "True" : "False") + "', ");
-                                sb.Append("'" + pMMOV.NameTag + "', ");
-                                sb.Append("'" + pMMOV.Pulsos.ToString() + "', ");
-                                sb.Append("'" + pMMOV.Velocidade.ToString() + "', ");
-                                sb.Append("'" + pMMOV.Aceleracao.ToString() + "', ");
-                                sb.Append("'" + pMMOV.Delay.ToString() + "', ");
-                                sb.Append("'" + pMMOV.TipoMotor.ToString() + "' ");
-                                sb.Append(");");
+                                using (SQLiteCommand cmd = new SQLiteCommand(conn))
+                                {
+                                    conn.Open();
+                                    sb.Append("INSERT INTO PlacaMovimentacao (Circuito, Habilitado, NameTag, Pulsos, Velocidade, Aceleracao, Delay, TipoMotor) VALUES (");
+                                    sb.Append("'" + pMMOV.Circuito.ToString() + "', ");
+                                    sb.Append("'" + (pMMOV.Habilitado ? "True" : "False") + "', ");
+                                    sb.Append("'" + pMMOV.NameTag + "', ");
+                                    sb.Append("'" + pMMOV.Pulsos.ToString() + "', ");
+                                    sb.Append("'" + pMMOV.Velocidade.ToString() + "', ");
+                                    sb.Append("'" + pMMOV.Aceleracao.ToString() + "', ");
+                                    sb.Append("'" + pMMOV.Delay.ToString() + "', ");
+                                    sb.Append("'" + pMMOV.TipoMotor.ToString() + "' ");
+                                    sb.Append(");");
 
-                                cmd.CommandText = sb.ToString();
+                                    cmd.CommandText = sb.ToString();
 
-                                cmd.ExecuteNonQuery();
+                                    cmd.ExecuteNonQuery();
 
-                                conn.Close();
+                                    conn.Close();
+                                }
                             }
                         }
-                    }
-                    //Update
-                    else
-                    {
-                        StringBuilder sb = new StringBuilder();
-                        using (SQLiteConnection conn = Util.SQLite.CreateSQLiteConnection(PathFile, false))
+                        //Update
+                        else
                         {
-                            using (SQLiteCommand cmd = new SQLiteCommand(conn))
+                            StringBuilder sb = new StringBuilder();
+                            using (SQLiteConnection conn = Util.SQLite.CreateSQLiteConnection(PathFile, false))
                             {
-                                conn.Open();
-                                sb.Append("UPDATE PlacaMovimentacao SET "); // Circuito, Habilitado, VolumeDin, Dias, VolumeRecircular, DtInicio;
-                                sb.Append("Habilitado = '" + (pMMOV.Habilitado ? "True" : "False") + "', ");
-                                sb.Append("NameTag = '" + pMMOV.NameTag + "', ");
-                                sb.Append("Pulsos ='" + pMMOV.Pulsos.ToString() + "', ");
-                                sb.Append("Velocidade = '" + pMMOV.Velocidade.ToString() + "', ");
-                                sb.Append("Aceleracao = '" + pMMOV.Aceleracao.ToString() + "', ");
-                                sb.Append("Delay = '" + pMMOV.Delay.ToString() + "', ");
-                                sb.Append("TipoMotor = '" + pMMOV.TipoMotor.ToString() + "' ");
-                                sb.Append(" WHERE Circuito = '" + pMMOV.Circuito.ToString() + "';");
+                                using (SQLiteCommand cmd = new SQLiteCommand(conn))
+                                {
+                                    conn.Open();
+                                    sb.Append("UPDATE PlacaMovimentacao SET "); // Circuito, Habilitado, VolumeDin, Dias, VolumeRecircular, DtInicio;
+                                    sb.Append("Habilitado = '" + (pMMOV.Habilitado ? "True" : "False") + "', ");
+                                    sb.Append("NameTag = '" + pMMOV.NameTag + "', ");
+                                    sb.Append("Pulsos ='" + pMMOV.Pulsos.ToString() + "', ");
+                                    sb.Append("Velocidade = '" + pMMOV.Velocidade.ToString() + "', ");
+                                    sb.Append("Aceleracao = '" + pMMOV.Aceleracao.ToString() + "', ");
+                                    sb.Append("Delay = '" + pMMOV.Delay.ToString() + "', ");
+                                    sb.Append("TipoMotor = '" + pMMOV.TipoMotor.ToString() + "' ");
+                                    sb.Append(" WHERE Circuito = '" + pMMOV.Circuito.ToString() + "';");
 
-                                cmd.CommandText = sb.ToString();
+                                    cmd.CommandText = sb.ToString();
 
-                                cmd.ExecuteNonQuery();
+                                    cmd.ExecuteNonQuery();
 
-                                conn.Close();
+                                    conn.Close();
+                                }
                             }
                         }
                     }
                 }
+            }
+            catch
+            {
+                throw;
             }
         }
 
@@ -292,5 +333,6 @@ namespace Percolore.IOConnect.Util
 
             return retorno;
         }
+
     }
 }

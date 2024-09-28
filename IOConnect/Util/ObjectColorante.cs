@@ -1,10 +1,17 @@
-﻿using System.Data;
+﻿using System;
+using System.Collections.Generic;
+using System.Data;
 using System.Data.SQLite;
+using System.Drawing;
+using System.IO;
+using System.Linq;
 using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace Percolore.IOConnect.Util
 {
-	public class ObjectColorante
+    public class ObjectColorante
     {
         public static readonly string PathFile = Path.Combine(Environment.CurrentDirectory, "Colorantes.db");
         public static readonly string FileName = Path.GetFileName(PathFile);
@@ -37,195 +44,238 @@ namespace Percolore.IOConnect.Util
         public bool IsBicoIndividual { get; set; } = false;
         public double VolumeBicoIndividual { get; set; } = 0;
 
+
+
         public ObjectColorante() { }
 
         public static void CreateBD()
         {
-            if (!File.Exists(PathFile))
+            try
             {
-                StringBuilder sb = new StringBuilder();
-                sb.Append("CREATE TABLE IF NOT EXISTS [Corantes] (Motor TEXT NULL, Nome TEXT NULL, MassaEspecifica TEXT NULL, Habilitado TEXT NULL, ");
-                sb.Append("Volume TEXT NULL, Correspondencia TEXT NULL, Dispositivo TEXT NULL, NivelMinimo TEXT NULL, NivelMaximo TEXT NULL, IsBase TEXT NULL, ");
-                sb.Append("Seguidor TEXT NULL, Step TEXT NULL, VolumePurga TEXT NULL, ColorRGB TEXT NULL, IsBicoIndividual TEXT NULL, VolumeBicoIndividual TEXT NULL);");
-
-                string createQuery = sb.ToString();
-
-                SQLiteConnection connectCreate = Util.SQLite.CreateSQLiteConnection(PathFile, false);
-                connectCreate.Open();
-				// Open connection to create DB if not exists.
-				connectCreate.Close();
-                Thread.Sleep(2000);
-                if (File.Exists(PathFile))
+                if (!File.Exists(PathFile))
                 {
-                    using (SQLiteConnection conn = Util.SQLite.CreateSQLiteConnection(PathFile, false))
+                    StringBuilder sb = new StringBuilder();
+                    sb.Append("CREATE TABLE IF NOT EXISTS [Corantes] (Motor TEXT NULL, Nome TEXT NULL, MassaEspecifica TEXT NULL, Habilitado TEXT NULL, ");
+                    sb.Append("Volume TEXT NULL, Correspondencia TEXT NULL, Dispositivo TEXT NULL, NivelMinimo TEXT NULL, NivelMaximo TEXT NULL, IsBase TEXT NULL, ");
+                    sb.Append("Seguidor TEXT NULL, Step TEXT NULL, VolumePurga TEXT NULL, ColorRGB TEXT NULL, IsBicoIndividual TEXT NULL, VolumeBicoIndividual TEXT NULL);");
+
+                    string createQuery = sb.ToString();
+
+                    SQLiteConnection connectCreate = Util.SQLite.CreateSQLiteConnection(PathFile, false);
+                    connectCreate.Open();
+					// Open connection to create DB if not exists.
+					connectCreate.Close();
+                    Thread.Sleep(2000);
+                    if (File.Exists(PathFile))
                     {
-                        using (SQLiteCommand cmd = new SQLiteCommand(conn))
+                        using (SQLiteConnection conn = Util.SQLite.CreateSQLiteConnection(PathFile, false))
                         {
-                            conn.Open();
-                            cmd.CommandText = createQuery;
-                            cmd.ExecuteNonQuery();
-                            conn.Close();
+                            using (SQLiteCommand cmd = new SQLiteCommand(conn))
+                            {
+                                conn.Open();
+                                cmd.CommandText = createQuery;
+                                cmd.ExecuteNonQuery();
+                                conn.Close();
+                            }
                         }
                     }
                 }
             }
+            catch
+            { }
         }
 
         public static ObjectColorante Load(int Circuito)
         {
             ObjectColorante colorante = null;
-            
-            using (SQLiteConnection conn = Util.SQLite.CreateSQLiteConnection(PathFile, false))
+            try
             {
-                using (SQLiteCommand cmd = new SQLiteCommand(conn))
+                using (SQLiteConnection conn = Util.SQLite.CreateSQLiteConnection(PathFile, false))
                 {
-                    conn.Open();
-
-                    cmd.CommandText = "SELECT * FROM Corantes WHERE Motor = '" + Circuito.ToString() + "';";
-
-                    using (SQLiteDataReader reader = cmd.ExecuteReader())
+                    using (SQLiteCommand cmd = new SQLiteCommand(conn))
                     {
-                        while (reader.Read())
+                        conn.Open();
+
+                        cmd.CommandText = "SELECT * FROM Corantes WHERE Motor = '" + Circuito.ToString() + "';";
+
+                        using (SQLiteDataReader reader = cmd.ExecuteReader())
                         {
-                            colorante = new ObjectColorante();
-                            colorante.Circuito = int.Parse(reader["Motor"].ToString());
-                            colorante.Nome = reader["Nome"].ToString();
-                            colorante.MassaEspecifica = double.Parse(reader["MassaEspecifica"].ToString(), System.Globalization.CultureInfo.InvariantCulture);
-                            colorante.Habilitado = Convert.ToBoolean(reader["Habilitado"].ToString());
-                            colorante.Volume = double.Parse(reader["Volume"].ToString(), System.Globalization.CultureInfo.InvariantCulture);
-                            colorante.Correspondencia = Convert.ToInt32(reader["Correspondencia"].ToString());
-                            colorante.Dispositivo = Convert.ToInt32(reader["Dispositivo"].ToString());
-                            colorante.NivelMinimo = double.Parse(reader["NivelMinimo"].ToString(), System.Globalization.CultureInfo.InvariantCulture);
-                            colorante.NivelMaximo = double.Parse(reader["NivelMaximo"].ToString(), System.Globalization.CultureInfo.InvariantCulture);
-                            colorante.IsBase = Convert.ToBoolean(reader["IsBase"].ToString());
-                            colorante.Seguidor = Convert.ToInt32(reader["Seguidor"].ToString());
-                            colorante.Step = Convert.ToInt32(reader["Step"].ToString());
-                            
-                            try
+                            while (reader.Read())
                             {
-                                colorante.VolumePurga = double.Parse(reader["VolumePurga"].ToString(), System.Globalization.CultureInfo.InvariantCulture);
-                            }
-                            catch
-                            {
-                                colorante.VolumePurga = 1;
-                            }
-
-                            try
-                            {
-                                colorante.ColorRGB = reader["ColorRGB"].ToString();
-                                int red = 255;
-                                int green = 255;
-                                int blue = 255;
-                                if (colorante.ColorRGB.Contains(";"))
+                                colorante = new ObjectColorante();
+                                colorante.Circuito = int.Parse(reader["Motor"].ToString());
+                                colorante.Nome = reader["Nome"].ToString();
+                                colorante.MassaEspecifica = double.Parse(reader["MassaEspecifica"].ToString(), System.Globalization.CultureInfo.InvariantCulture);
+                                colorante.Habilitado = Convert.ToBoolean(reader["Habilitado"].ToString());
+                                colorante.Volume = double.Parse(reader["Volume"].ToString(), System.Globalization.CultureInfo.InvariantCulture);
+                                colorante.Correspondencia = Convert.ToInt32(reader["Correspondencia"].ToString());
+                                colorante.Dispositivo = Convert.ToInt32(reader["Dispositivo"].ToString());
+                                colorante.NivelMinimo = double.Parse(reader["NivelMinimo"].ToString(), System.Globalization.CultureInfo.InvariantCulture);
+                                colorante.NivelMaximo = double.Parse(reader["NivelMaximo"].ToString(), System.Globalization.CultureInfo.InvariantCulture);
+                                colorante.IsBase = Convert.ToBoolean(reader["IsBase"].ToString());
+                                colorante.Seguidor = Convert.ToInt32(reader["Seguidor"].ToString());
+                                colorante.Step = Convert.ToInt32(reader["Step"].ToString());
+                                try
                                 {
-                                    string[] _arr = colorante.ColorRGB.Split(';');
-                                    if (_arr.Length > 2)
-                                    {
-                                        red = Convert.ToInt32(_arr[0]);
-                                        green = Convert.ToInt32(_arr[1]);
-                                        blue = Convert.ToInt32(_arr[2]);
-                                    }
+                                    colorante.VolumePurga = double.Parse(reader["VolumePurga"].ToString(), System.Globalization.CultureInfo.InvariantCulture);
                                 }
-                                colorante.corCorante = Color.FromArgb(red, green, blue);
-                            }
-                            catch
-                            {
-                                colorante.ColorRGB = "255;255;255;";
-                                colorante.corCorante =Color.White;
-                            }
+                                catch
+                                {
+                                    colorante.VolumePurga = 1;
+                                }
 
-                            colorante.VolumeBicoIndividual = double.Parse(reader["VolumeBicoIndividual"].ToString(), System.Globalization.CultureInfo.InvariantCulture);
-                            colorante.IsBicoIndividual = Convert.ToBoolean(reader["IsBicoIndividual"].ToString());
-                            break;
+                                try
+                                {
+                                    colorante.ColorRGB = reader["ColorRGB"].ToString();
+                                    int red = 255;
+                                    int green = 255;
+                                    int blue = 255;
+                                    if (colorante.ColorRGB.Contains(";"))
+                                    {
+                                        string[] _arr = colorante.ColorRGB.Split(';');
+                                        if (_arr.Length > 2)
+                                        {
+                                            try
+                                            {
+                                                red = Convert.ToInt32(_arr[0]);
+                                                green = Convert.ToInt32(_arr[1]);
+                                                blue = Convert.ToInt32(_arr[2]);
+                                            }
+                                            catch
+                                            { }
+                                        }
+
+                                    }
+                                    colorante.corCorante = Color.FromArgb(red, green, blue);
+                                }
+                                catch
+                                {
+                                    colorante.ColorRGB = "255;255;255;";
+                                    colorante.corCorante =Color.White;
+                                }
+
+                                try
+                                {
+                                    colorante.VolumeBicoIndividual = double.Parse(reader["VolumeBicoIndividual"].ToString(), System.Globalization.CultureInfo.InvariantCulture);
+                                    colorante.IsBicoIndividual = Convert.ToBoolean(reader["IsBicoIndividual"].ToString());
+                                }
+                                catch
+                                { }
+                                break;
+                            }
                         }
                     }
+                    conn.Close();
                 }
-                conn.Close();
-            }
 
-            return colorante;
+
+                return colorante;
+            }
+            catch
+            {
+                throw;
+            }
         }
 
         public static List<ObjectColorante> List()
         {
             List<ObjectColorante> list = new List<ObjectColorante>();
 
-            using (SQLiteConnection conn = Util.SQLite.CreateSQLiteConnection(PathFile, false))
+            try
             {
-                using (SQLiteCommand cmd = new SQLiteCommand(conn))
+                using (SQLiteConnection conn = Util.SQLite.CreateSQLiteConnection(PathFile, false))
                 {
-                    conn.Open();
-
-                    cmd.CommandText = "SELECT * FROM Corantes;";
-
-                    using (SQLiteDataReader reader = cmd.ExecuteReader())
+                    using (SQLiteCommand cmd = new SQLiteCommand(conn))
                     {
-                        while (reader.Read())
+                        conn.Open();
+
+                        cmd.CommandText = "SELECT * FROM Corantes;";
+
+                        using (SQLiteDataReader reader = cmd.ExecuteReader())
                         {
-                            ObjectColorante colorante = new ObjectColorante();
-                            colorante.Circuito = int.Parse(reader["Motor"].ToString());
-                            colorante.Nome = reader["Nome"].ToString();
-                            colorante.MassaEspecifica = double.Parse(reader["MassaEspecifica"].ToString(),  System.Globalization.CultureInfo.InvariantCulture);
-
-                            colorante.Habilitado = Convert.ToBoolean(reader["Habilitado"].ToString());
-
-                            colorante.Volume = double.Parse(reader["Volume"].ToString(), System.Globalization.CultureInfo.InvariantCulture);
-
-                            colorante.Correspondencia = Convert.ToInt32(reader["Correspondencia"].ToString());
-
-                            colorante.Dispositivo = Convert.ToInt32(reader["Dispositivo"].ToString());
-
-                            colorante.NivelMinimo = double.Parse(reader["NivelMinimo"].ToString(), System.Globalization.CultureInfo.InvariantCulture);
-
-                            colorante.NivelMaximo = double.Parse(reader["NivelMaximo"].ToString(), System.Globalization.CultureInfo.InvariantCulture);
-                            colorante.IsBase = Convert.ToBoolean(reader["IsBase"].ToString());
-                            colorante.Seguidor = Convert.ToInt32(reader["Seguidor"].ToString());
-                            colorante.Step = Convert.ToInt32(reader["Step"].ToString());
-                            try
+                            while (reader.Read())
                             {
-                                colorante.VolumePurga = double.Parse(reader["VolumePurga"].ToString(), System.Globalization.CultureInfo.InvariantCulture);
-                            }
-                            catch
-                            { 
-                                colorante.VolumePurga = 1; 
-                            }
+                                ObjectColorante colorante = new ObjectColorante();
+                                colorante.Circuito = int.Parse(reader["Motor"].ToString());
+                                colorante.Nome = reader["Nome"].ToString();
+                                colorante.MassaEspecifica = double.Parse(reader["MassaEspecifica"].ToString(),  System.Globalization.CultureInfo.InvariantCulture);
 
-                            try
-                            {
-                                colorante.ColorRGB = reader["ColorRGB"].ToString();
-                                int red = 255;
-                                int green = 255;
-                                int blue = 255;
-                                if (colorante.ColorRGB.Contains(";"))
+                                colorante.Habilitado = Convert.ToBoolean(reader["Habilitado"].ToString());
+
+                                colorante.Volume = double.Parse(reader["Volume"].ToString(), System.Globalization.CultureInfo.InvariantCulture);
+
+                                colorante.Correspondencia = Convert.ToInt32(reader["Correspondencia"].ToString());
+
+                                colorante.Dispositivo = Convert.ToInt32(reader["Dispositivo"].ToString());
+
+                                colorante.NivelMinimo = double.Parse(reader["NivelMinimo"].ToString(), System.Globalization.CultureInfo.InvariantCulture);
+
+                                colorante.NivelMaximo = double.Parse(reader["NivelMaximo"].ToString(), System.Globalization.CultureInfo.InvariantCulture);
+                                colorante.IsBase = Convert.ToBoolean(reader["IsBase"].ToString());
+                                colorante.Seguidor = Convert.ToInt32(reader["Seguidor"].ToString());
+                                colorante.Step = Convert.ToInt32(reader["Step"].ToString());
+                                try
                                 {
-                                    string[] _arr = colorante.ColorRGB.Split(';');
-                                    if(_arr.Length > 2)
+                                    colorante.VolumePurga = double.Parse(reader["VolumePurga"].ToString(), System.Globalization.CultureInfo.InvariantCulture);
+                                }
+                                catch
+                                { 
+                                    colorante.VolumePurga = 1; 
+                                }
+
+                                try
+                                {
+                                    colorante.ColorRGB = reader["ColorRGB"].ToString();
+                                    int red = 255;
+                                    int green = 255;
+                                    int blue = 255;
+                                    if (colorante.ColorRGB.Contains(";"))
                                     {
-                                        red = Convert.ToInt32(_arr[0]);
-                                        green = Convert.ToInt32(_arr[1]);
-                                        blue = Convert.ToInt32(_arr[2]);
+                                        string[] _arr = colorante.ColorRGB.Split(';');
+                                        if(_arr.Length > 2)
+                                        {
+                                            try
+                                            {
+                                                red = Convert.ToInt32(_arr[0]);
+                                                green = Convert.ToInt32(_arr[1]);
+                                                blue = Convert.ToInt32(_arr[2]);
+                                            }
+                                            catch
+                                            { }
+                                        }
+
                                     }
+                                    colorante.corCorante = Color.FromArgb(red, green, blue);
+
 
                                 }
-                                colorante.corCorante = Color.FromArgb(red, green, blue);
-                            }
-                            catch
-                            {
-                                colorante.ColorRGB = "255;255;255;";
-                                colorante.corCorante = Color.White;
-                            }
+                                catch
+                                {
+                                    colorante.ColorRGB = "255;255;255;";
+                                    colorante.corCorante = Color.White;
+                                }
 
-                            colorante.VolumeBicoIndividual = double.Parse(reader["VolumeBicoIndividual"].ToString(), System.Globalization.CultureInfo.InvariantCulture);
-                            colorante.IsBicoIndividual = Convert.ToBoolean(reader["IsBicoIndividual"].ToString());
+                                try
+                                {
+                                    colorante.VolumeBicoIndividual = double.Parse(reader["VolumeBicoIndividual"].ToString(), System.Globalization.CultureInfo.InvariantCulture);
+                                    colorante.IsBicoIndividual = Convert.ToBoolean(reader["IsBicoIndividual"].ToString());
+                                }
+                                catch
+                                { }
 
-                            list.Add(colorante);
+                                list.Add(colorante);
+                            }
                         }
                     }
+                    conn.Close();
                 }
-                conn.Close();
             }
+            catch
+            {
 
+            }
             return list.OrderBy(o=>o.Circuito).ToList();
+
         }
 
         public static bool Validate(List<ObjectColorante> lista, out string outMsg)
@@ -273,157 +323,171 @@ namespace Percolore.IOConnect.Util
 
         public static void Persist(ObjectColorante colorante)
         {
-            ObjectColorante objc = Load(colorante.Circuito);
-            
-            //Insert
-            if (objc == null)
+            try
             {
-                StringBuilder sb = new StringBuilder();
-                using (SQLiteConnection conn = Util.SQLite.CreateSQLiteConnection(PathFile, false))
+                ObjectColorante objc = Load(colorante.Circuito);
+                //Insert
+                if (objc == null)
                 {
-                    using (SQLiteCommand cmd = new SQLiteCommand(conn))
+                    StringBuilder sb = new StringBuilder();
+                    using (SQLiteConnection conn = Util.SQLite.CreateSQLiteConnection(PathFile, false))
                     {
-                        conn.Open();
-                        sb.Append("INSERT INTO Corantes (Motor, Nome, MassaEspecifica, Habilitado, Volume, Correspondencia, Dispositivo, NivelMinimo, NivelMaximo, IsBase, Seguidor, Step, VolumePurga) VALUES (");
-                        sb.Append("'" + colorante.Circuito.ToString() + "', ");
-                        sb.Append("'" + colorante.Nome.ToString() + "', ");
-                        sb.Append("'" + colorante.MassaEspecifica.ToString().Replace(",", ".") + "', ");
-                        sb.Append("'" + (colorante.Habilitado ? "True" : "False") + "', ");
-                        sb.Append("'" + colorante.Volume.ToString().Replace(",", ".") + "', ");
-                        sb.Append("'" + colorante.Correspondencia.ToString() + "', ");
-                        sb.Append("'" + colorante.Dispositivo.ToString() + "', ");
-                        sb.Append("'" + colorante.NivelMinimo.ToString().Replace(",", ".") + "', ");
-                        sb.Append("'" + colorante.NivelMaximo.ToString().Replace(",", ".") + "', ");
-                        sb.Append("'" + (colorante.IsBase ? "True" : "False") + "', ");
-                        sb.Append("'" + colorante.Seguidor.ToString() + "', ");
-                        sb.Append("'" + colorante.Step.ToString() + "', ");
-                        sb.Append("'" + colorante.VolumePurga.ToString().Replace(",", ".") + "' ");
-                        sb.Append(");");
+                        using (SQLiteCommand cmd = new SQLiteCommand(conn))
+                        {
+                            conn.Open();
+                            sb.Append("INSERT INTO Corantes (Motor, Nome, MassaEspecifica, Habilitado, Volume, Correspondencia, Dispositivo, NivelMinimo, NivelMaximo, IsBase, Seguidor, Step, VolumePurga) VALUES (");
+                            sb.Append("'" + colorante.Circuito.ToString() + "', ");
+                            sb.Append("'" + colorante.Nome.ToString() + "', ");
+                            sb.Append("'" + colorante.MassaEspecifica.ToString().Replace(",", ".") + "', ");
+                            sb.Append("'" + (colorante.Habilitado ? "True" : "False") + "', ");
+                            sb.Append("'" + colorante.Volume.ToString().Replace(",", ".") + "', ");
+                            sb.Append("'" + colorante.Correspondencia.ToString() + "', ");
+                            sb.Append("'" + colorante.Dispositivo.ToString() + "', ");
+                            sb.Append("'" + colorante.NivelMinimo.ToString().Replace(",", ".") + "', ");
+                            sb.Append("'" + colorante.NivelMaximo.ToString().Replace(",", ".") + "', ");
+                            sb.Append("'" + (colorante.IsBase ? "True" : "False") + "', ");
+                            sb.Append("'" + colorante.Seguidor.ToString() + "', ");
+                            sb.Append("'" + colorante.Step.ToString() + "', ");
+                            sb.Append("'" + colorante.VolumePurga.ToString().Replace(",", ".") + "' ");
+                            sb.Append(");");
 
-                        cmd.CommandText = sb.ToString();
+                            cmd.CommandText = sb.ToString();
 
-                        cmd.ExecuteNonQuery();
+                            cmd.ExecuteNonQuery();
 
-                        conn.Close();
+                            conn.Close();
+                        }
                     }
                 }
+                //Update
+                else
+                {
+                    StringBuilder sb = new StringBuilder();
+                    using (SQLiteConnection conn = Util.SQLite.CreateSQLiteConnection(PathFile, false))
+                    {
+                        using (SQLiteCommand cmd = new SQLiteCommand(conn))
+                        {
+                            conn.Open();
+                            sb.Append("UPDATE Corantes SET "); // (Motor, Nome, MassaEspecifica, Habilitado, Volume, Correspondencia, Dispositivo, NivelMinimo, NivelMaximo) VALUES (");
+                            sb.Append("Motor = '" + colorante.Circuito.ToString() + "', ");
+                            sb.Append("Nome = '" + colorante.Nome.ToString() + "', ");
+                            sb.Append("MassaEspecifica = '" + colorante.MassaEspecifica.ToString().Replace(",", ".") + "', ");
+                            sb.Append("Habilitado ='" + (colorante.Habilitado ? "True" : "False") + "', ");
+                            sb.Append("Volume = '" + colorante.Volume.ToString().Replace(",", ".") + "', ");
+                            sb.Append("Correspondencia = '" + colorante.Correspondencia.ToString() + "', ");
+                            sb.Append("Dispositivo = '" + colorante.Dispositivo.ToString() + "', ");
+                            sb.Append("NivelMinimo = '" + colorante.NivelMinimo.ToString().Replace(",", ".") + "', ");
+                            sb.Append("NivelMaximo = '" + colorante.NivelMaximo.ToString().Replace(",", ".") + "', ");
+                            sb.Append("IsBase = '" + (colorante.IsBase ? "True" : "False") + "', ");
+                            sb.Append("Seguidor = '" + colorante.Seguidor.ToString() + "', ");
+                            sb.Append("Step = '" + colorante.Step.ToString() + "', ");
+                            sb.Append("VolumePurga = '" + colorante.VolumePurga.ToString().Replace(",", ".") + "', ");
+                            sb.Append("ColorRGB = '" + colorante.ColorRGB + "', ");
+                            sb.Append("IsBicoIndividual = '" + (colorante.IsBicoIndividual ? "True" : "False") + "', ");
+                            sb.Append("VolumeBicoIndividual = '" + colorante.VolumeBicoIndividual.ToString().Replace(",", ".") + "' ");
+                            sb.Append(" WHERE Motor = '" + colorante.Circuito.ToString() + "';");
+
+                            cmd.CommandText = sb.ToString();
+
+                            cmd.ExecuteNonQuery();
+
+                            conn.Close();
+                        }
+                    }
+                }
+               
             }
-            //Update
-            else
+            catch
             {
-                StringBuilder sb = new StringBuilder();
-                using (SQLiteConnection conn = Util.SQLite.CreateSQLiteConnection(PathFile, false))
-                {
-                    using (SQLiteCommand cmd = new SQLiteCommand(conn))
-                    {
-                        conn.Open();
-                        sb.Append("UPDATE Corantes SET "); // (Motor, Nome, MassaEspecifica, Habilitado, Volume, Correspondencia, Dispositivo, NivelMinimo, NivelMaximo) VALUES (");
-                        sb.Append("Motor = '" + colorante.Circuito.ToString() + "', ");
-                        sb.Append("Nome = '" + colorante.Nome.ToString() + "', ");
-                        sb.Append("MassaEspecifica = '" + colorante.MassaEspecifica.ToString().Replace(",", ".") + "', ");
-                        sb.Append("Habilitado ='" + (colorante.Habilitado ? "True" : "False") + "', ");
-                        sb.Append("Volume = '" + colorante.Volume.ToString().Replace(",", ".") + "', ");
-                        sb.Append("Correspondencia = '" + colorante.Correspondencia.ToString() + "', ");
-                        sb.Append("Dispositivo = '" + colorante.Dispositivo.ToString() + "', ");
-                        sb.Append("NivelMinimo = '" + colorante.NivelMinimo.ToString().Replace(",", ".") + "', ");
-                        sb.Append("NivelMaximo = '" + colorante.NivelMaximo.ToString().Replace(",", ".") + "', ");
-                        sb.Append("IsBase = '" + (colorante.IsBase ? "True" : "False") + "', ");
-                        sb.Append("Seguidor = '" + colorante.Seguidor.ToString() + "', ");
-                        sb.Append("Step = '" + colorante.Step.ToString() + "', ");
-                        sb.Append("VolumePurga = '" + colorante.VolumePurga.ToString().Replace(",", ".") + "', ");
-                        sb.Append("ColorRGB = '" + colorante.ColorRGB + "', ");
-                        sb.Append("IsBicoIndividual = '" + (colorante.IsBicoIndividual ? "True" : "False") + "', ");
-                        sb.Append("VolumeBicoIndividual = '" + colorante.VolumeBicoIndividual.ToString().Replace(",", ".") + "' ");
-                        sb.Append(" WHERE Motor = '" + colorante.Circuito.ToString() + "';");
-
-                        cmd.CommandText = sb.ToString();
-
-                        cmd.ExecuteNonQuery();
-
-                        conn.Close();
-                    }
-                }
+                throw;
             }
         }
 
         public static void Persist(List<ObjectColorante> lista)
         {
-            if (lista != null && lista.Count > 0)
+            try
             {
-                foreach (ObjectColorante colorante in lista)
+                if (lista != null && lista.Count > 0)
                 {
-                    ObjectColorante objc = Load(colorante.Circuito);
-                    //Insert
-                    if (objc == null)
+                    foreach (ObjectColorante colorante in lista)
                     {
-                        StringBuilder sb = new StringBuilder();
-                        using (SQLiteConnection conn = Util.SQLite.CreateSQLiteConnection(PathFile, false))
+                        ObjectColorante objc = Load(colorante.Circuito);
+                        //Insert
+                        if (objc == null)
                         {
-                            using (SQLiteCommand cmd = new SQLiteCommand(conn))
+                            StringBuilder sb = new StringBuilder();
+                            using (SQLiteConnection conn = Util.SQLite.CreateSQLiteConnection(PathFile, false))
                             {
-                                conn.Open();
-                                sb.Append("INSERT INTO Corantes (Motor, Nome, MassaEspecifica, Habilitado, Volume, Correspondencia, Dispositivo, NivelMinimo, NivelMaximo, IsBase, Seguidor, Step, VolumePurga) VALUES (");
-                                sb.Append("'" + colorante.Circuito.ToString() + "', ");
-                                sb.Append("'" + colorante.Nome.ToString() + "', ");
-                                sb.Append("'" + colorante.MassaEspecifica.ToString().Replace(",", ".") + "', ");
-                                sb.Append("'" + (colorante.Habilitado ? "True" : "False") + "', ");
-                                sb.Append("'" + colorante.Volume.ToString().Replace(",", ".") + "', ");
-                                sb.Append("'" + colorante.Correspondencia.ToString() + "', ");
-                                sb.Append("'" + colorante.Dispositivo.ToString() + "', ");
-                                sb.Append("'" + colorante.NivelMinimo.ToString().Replace(",", ".") + "', ");
-                                sb.Append("'" + colorante.NivelMaximo.ToString().Replace(",", ".") + "', ");
-                                sb.Append("'" + (colorante.IsBase ? "True" : "False") + "', ");
-                                sb.Append("'" + colorante.Seguidor.ToString() + "', ");
-                                sb.Append("'" + colorante.Step.ToString() + "', ");
-                                sb.Append("'" + colorante.VolumePurga.ToString().Replace(",", ".") + "' ");
-                                sb.Append(");");
+                                using (SQLiteCommand cmd = new SQLiteCommand(conn))
+                                {
+                                    conn.Open();
+                                    sb.Append("INSERT INTO Corantes (Motor, Nome, MassaEspecifica, Habilitado, Volume, Correspondencia, Dispositivo, NivelMinimo, NivelMaximo, IsBase, Seguidor, Step, VolumePurga) VALUES (");
+                                    sb.Append("'" + colorante.Circuito.ToString() + "', ");
+                                    sb.Append("'" + colorante.Nome.ToString() + "', ");
+                                    sb.Append("'" + colorante.MassaEspecifica.ToString().Replace(",", ".") + "', ");
+                                    sb.Append("'" + (colorante.Habilitado ? "True" : "False") + "', ");
+                                    sb.Append("'" + colorante.Volume.ToString().Replace(",", ".") + "', ");
+                                    sb.Append("'" + colorante.Correspondencia.ToString() + "', ");
+                                    sb.Append("'" + colorante.Dispositivo.ToString() + "', ");
+                                    sb.Append("'" + colorante.NivelMinimo.ToString().Replace(",", ".") + "', ");
+                                    sb.Append("'" + colorante.NivelMaximo.ToString().Replace(",", ".") + "', ");
+                                    sb.Append("'" + (colorante.IsBase ? "True" : "False") + "', ");
+                                    sb.Append("'" + colorante.Seguidor.ToString() + "', ");
+                                    sb.Append("'" + colorante.Step.ToString() + "', ");
+                                    sb.Append("'" + colorante.VolumePurga.ToString().Replace(",", ".") + "' ");
+                                    sb.Append(");");
 
-                                cmd.CommandText = sb.ToString();
+                                    cmd.CommandText = sb.ToString();
 
-                                cmd.ExecuteNonQuery();
+                                    cmd.ExecuteNonQuery();
 
-                                conn.Close();
+                                    conn.Close();
+                                }
                             }
                         }
-                    }
-                    //Update
-                    else
-                    {
-                        StringBuilder sb = new StringBuilder();
-                        using (SQLiteConnection conn = Util.SQLite.CreateSQLiteConnection(PathFile, false))
+                        //Update
+                        else
                         {
-                            using (SQLiteCommand cmd = new SQLiteCommand(conn))
+                            StringBuilder sb = new StringBuilder();
+                            using (SQLiteConnection conn = Util.SQLite.CreateSQLiteConnection(PathFile, false))
                             {
-                                conn.Open();
-                                sb.Append("UPDATE Corantes SET "); // (Motor, Nome, MassaEspecifica, Habilitado, Volume, Correspondencia, Dispositivo, NivelMinimo, NivelMaximo) VALUES (");
-                                sb.Append("Motor = '" + colorante.Circuito.ToString() + "', ");
-                                sb.Append("Nome = '" + colorante.Nome.ToString() + "', ");
-                                sb.Append("MassaEspecifica = '" + colorante.MassaEspecifica.ToString().Replace(",", ".") + "', ");
-                                sb.Append("Habilitado ='" + (colorante.Habilitado ? "True" : "False") + "', ");
-                                sb.Append("Volume = '" + colorante.Volume.ToString().Replace(",", ".") + "', ");
-                                sb.Append("Correspondencia = '" + colorante.Correspondencia.ToString() + "', ");
-                                sb.Append("Dispositivo = '" + colorante.Dispositivo.ToString() + "', ");
-                                sb.Append("NivelMinimo = '" + colorante.NivelMinimo.ToString().Replace(",", ".") + "', ");
-                                sb.Append("NivelMaximo = '" + colorante.NivelMaximo.ToString().Replace(",", ".") + "', ");
-                                sb.Append("IsBase = '" + (colorante.IsBase ? "True" : "False") + "', ");
-                                sb.Append("Seguidor = '" + colorante.Seguidor.ToString() + "', ");
-                                sb.Append("Step = '" + colorante.Step.ToString() + "', ");
-                                sb.Append("VolumePurga = '" + colorante.VolumePurga.ToString().Replace(",", ".") + "', ");
+                                using (SQLiteCommand cmd = new SQLiteCommand(conn))
+                                {
+                                    conn.Open();
+                                    sb.Append("UPDATE Corantes SET "); // (Motor, Nome, MassaEspecifica, Habilitado, Volume, Correspondencia, Dispositivo, NivelMinimo, NivelMaximo) VALUES (");
+                                    sb.Append("Motor = '" + colorante.Circuito.ToString() + "', ");
+                                    sb.Append("Nome = '" + colorante.Nome.ToString() + "', ");
+                                    sb.Append("MassaEspecifica = '" + colorante.MassaEspecifica.ToString().Replace(",", ".") + "', ");
+                                    sb.Append("Habilitado ='" + (colorante.Habilitado ? "True" : "False") + "', ");
+                                    sb.Append("Volume = '" + colorante.Volume.ToString().Replace(",", ".") + "', ");
+                                    sb.Append("Correspondencia = '" + colorante.Correspondencia.ToString() + "', ");
+                                    sb.Append("Dispositivo = '" + colorante.Dispositivo.ToString() + "', ");
+                                    sb.Append("NivelMinimo = '" + colorante.NivelMinimo.ToString().Replace(",", ".") + "', ");
+                                    sb.Append("NivelMaximo = '" + colorante.NivelMaximo.ToString().Replace(",", ".") + "', ");
+                                    sb.Append("IsBase = '" + (colorante.IsBase ? "True" : "False") + "', ");
+                                    sb.Append("Seguidor = '" + colorante.Seguidor.ToString() + "', ");
+                                    sb.Append("Step = '" + colorante.Step.ToString() + "', ");
+                                    sb.Append("VolumePurga = '" + colorante.VolumePurga.ToString().Replace(",", ".") + "', ");
 
-                                sb.Append("ColorRGB = '" + colorante.ColorRGB + "', ");
-                                sb.Append("IsBicoIndividual = '" + (colorante.IsBicoIndividual ? "True" : "False") + "', ");
-                                sb.Append("VolumeBicoIndividual = '" + colorante.VolumeBicoIndividual.ToString().Replace(",", ".") + "' ");
-                                sb.Append(" WHERE Motor = '" + colorante.Circuito.ToString() + "';");
+                                    sb.Append("ColorRGB = '" + colorante.ColorRGB + "', ");
+                                    sb.Append("IsBicoIndividual = '" + (colorante.IsBicoIndividual ? "True" : "False") + "', ");
+                                    sb.Append("VolumeBicoIndividual = '" + colorante.VolumeBicoIndividual.ToString().Replace(",", ".") + "' ");
+                                    sb.Append(" WHERE Motor = '" + colorante.Circuito.ToString() + "';");
 
-                                cmd.CommandText = sb.ToString();
+                                    cmd.CommandText = sb.ToString();
 
-                                cmd.ExecuteNonQuery();
+                                    cmd.ExecuteNonQuery();
 
-                                conn.Close();
+                                    conn.Close();
+                                }
                             }
                         }
                     }
                 }
+            }
+            catch
+            {
+                throw;
             }
         }
 
@@ -482,31 +546,34 @@ namespace Percolore.IOConnect.Util
         public static bool Delete(int motor)
         {
             bool retorno = false;
-            
-            var commands = new[]
+            try
             {
-                "DELETE FROM Corantes WHERE Motor = '" + motor +"';"
-            };
+                var commands = new[] {
+                            "DELETE FROM Corantes WHERE Motor = '" + motor +"';"
+                        };
 
-            using (SQLiteConnection conn = Util.SQLite.CreateSQLiteConnection(PathFile, false))
-            {
-                using (SQLiteCommand cmd = new SQLiteCommand(conn))
+                using (SQLiteConnection conn = Util.SQLite.CreateSQLiteConnection(PathFile, false))
                 {
-                    conn.Open();
-                    foreach (var command in commands)
+                    using (SQLiteCommand cmd = new SQLiteCommand(conn))
                     {
-                        StringBuilder sb = new StringBuilder();
-                        sb.Append(command);
-                        string createQuery = sb.ToString();
-                        cmd.CommandText = createQuery;
-                        retorno = cmd.ExecuteNonQuery() > 0;
-                        retorno = true;
+                        conn.Open();
+                        foreach (var command in commands)
+                        {
+                            StringBuilder sb = new StringBuilder();
+                            sb.Append(command);
+                            string createQuery = sb.ToString();
+                            cmd.CommandText = createQuery;
+                            cmd.ExecuteNonQuery();
+                            retorno = true;
+                        }
+                        conn.Close();
                     }
-                    conn.Close();
                 }
             }
-
+            catch
+            { }
             return retorno;
         }
     }
+       
 }

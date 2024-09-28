@@ -1,9 +1,15 @@
-﻿using System.Data.SQLite;
+﻿using System;
+using System.Collections.Generic;
+using System.Data.SQLite;
+using System.IO;
+using System.Linq;
 using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace Percolore.IOConnect.Util
 {
-	public class ObjectLogBD
+    public class ObjectLogBD
     {
         public static string PathFile = null;
         public static string FileName = null;
@@ -30,44 +36,70 @@ namespace Percolore.IOConnect.Util
 
         public static void CreateBD()
         {
-            string createQuery =
-                @"CREATE TABLE IF NOT EXISTS [Logs] (
-                    [Id]     INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
-                    [DATAHORA]   TEXT NULL,
-                    [DETALHES] TEXT NULL)";
-
-            if (File.Exists(PathFile))
+            try
             {
-                Util.ObjectParametros _par = Util.ObjectParametros.Load();
-                bool existeFile = true;
-                if (_par.LogAutomateBackup)
+                string createQuery =
+                        @"CREATE TABLE IF NOT EXISTS [Logs] (
+                            [Id]     INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+                            [DATAHORA]   TEXT NULL,
+                            [DETALHES] TEXT NULL)";
+
+                if (File.Exists(PathFile))
                 {
-                    FileInfo info = new FileInfo(PathFile);
-                    double length = (info.Length / 1048576.0);
-                    if (length > 20.0)
+                    Util.ObjectParametros _par = Util.ObjectParametros.Load();
+                    bool existeFile = true;
+                    if (_par.LogAutomateBackup)
                     {
-                        string[] arrayPath = PathFile.Split(Path.DirectorySeparatorChar);
-                        if (arrayPath.Length > 0)
+                        FileInfo info = new FileInfo(PathFile);
+                        double length = (info.Length / 1048576.0);
+                        if (length > 20.0)
                         {
-                            string nameFile = string.Format("{0:dd-MM-yyyy}", DateTime.Now) + "_" + arrayPath[arrayPath.Length - 1];
-                            string nPathFile = "";
-                            for (int i = 0; i < arrayPath.Length - 1; i++)
+                            string[] arrayPath = PathFile.Split(Path.DirectorySeparatorChar);
+                            if (arrayPath.Length > 0)
                             {
-                                if (arrayPath[i].Length > 0)
+                                string nameFile = string.Format("{0:dd-MM-yyyy}", DateTime.Now) + "_" + arrayPath[arrayPath.Length - 1];
+                                string nPathFile = "";
+                                for (int i = 0; i < arrayPath.Length - 1; i++)
                                 {
-                                    nPathFile += arrayPath[i] + Path.DirectorySeparatorChar;
+                                    if (arrayPath[i].Length > 0)
+                                    {
+                                        nPathFile += arrayPath[i] + Path.DirectorySeparatorChar;
+                                    }
+                                }
+                                if (nPathFile.Length > 0)
+                                {
+                                    nPathFile += nameFile;
+                                }
+                                File.Move(PathFile, nPathFile);
+                                existeFile = false;
+                            }
+                        }
+                    }
+                    if(!existeFile)
+                    {
+                        StringBuilder sb = new StringBuilder();
+
+                        SQLiteConnection connectCreate = Util.SQLite.CreateSQLiteConnection(PathFile, false);
+                        connectCreate.Open();
+						// Open connection to create DB if not exists.
+						connectCreate.Close();
+                        Thread.Sleep(2000);
+                        if (File.Exists(PathFile))
+                        {
+                            using (SQLiteConnection conn = Util.SQLite.CreateSQLiteConnection(PathFile, false))
+                            {
+                                using (SQLiteCommand cmd = new SQLiteCommand(conn))
+                                {
+                                    conn.Open();
+                                    cmd.CommandText = createQuery;
+                                    cmd.ExecuteNonQuery();
+                                    conn.Close();
                                 }
                             }
-                            if (nPathFile.Length > 0)
-                            {
-                                nPathFile += nameFile;
-                            }
-                            File.Move(PathFile, nPathFile);
-                            existeFile = false;
                         }
                     }
                 }
-                if(!existeFile)
+                else
                 {
                     StringBuilder sb = new StringBuilder();
 
@@ -91,58 +123,41 @@ namespace Percolore.IOConnect.Util
                     }
                 }
             }
-            else
-            {
-                StringBuilder sb = new StringBuilder();
-
-                SQLiteConnection connectCreate = Util.SQLite.CreateSQLiteConnection(PathFile, false);
-                connectCreate.Open();
-				// Open connection to create DB if not exists.
-				connectCreate.Close();
-                Thread.Sleep(2000);
-                if (File.Exists(PathFile))
-                {
-                    using (SQLiteConnection conn = Util.SQLite.CreateSQLiteConnection(PathFile, false))
-                    {
-                        using (SQLiteCommand cmd = new SQLiteCommand(conn))
-                        {
-                            conn.Open();
-                            cmd.CommandText = createQuery;
-                            cmd.ExecuteNonQuery();
-                            conn.Close();
-                        }
-                    }
-                }
-            }
+            catch
+            { }
         }
 
         public static int InsertLog(ObjectLogBD objLog)
         {
             int retorno = 0;
-            
-            StringBuilder sb = new StringBuilder();
-            using (SQLiteConnection conn = Util.SQLite.CreateSQLiteConnection(PathFile, false))
+            try
             {
-                using (SQLiteCommand cmd = new SQLiteCommand(conn))
+                StringBuilder sb = new StringBuilder();
+                using (SQLiteConnection conn = Util.SQLite.CreateSQLiteConnection(PathFile, false))
                 {
-                    conn.Open();
-                    sb.Append("INSERT INTO Logs (DETALHES, DATAHORA) VALUES (");
+                    using (SQLiteCommand cmd = new SQLiteCommand(conn))
+                    {
+                        conn.Open();
+                        sb.Append("INSERT INTO Logs (DETALHES, DATAHORA) VALUES (");
                       
-                    sb.Append("'" + objLog.DETALHES + "', ");
-                    sb.Append("'" + string.Format("{0:yyyy-MM-dd HH:mm:ss}", objLog.DATAHORA) + "'");
-                    sb.Append(");");
-                    cmd.CommandText = sb.ToString();
+                        sb.Append("'" + objLog.DETALHES + "', ");
+                        sb.Append("'" + string.Format("{0:yyyy-MM-dd HH:mm:ss}", objLog.DATAHORA) + "'");
+                        sb.Append(");");
+                        cmd.CommandText = sb.ToString();
 
-                    cmd.ExecuteNonQuery();
+                        cmd.ExecuteNonQuery();
 
-                    cmd.CommandText = "SELECT last_insert_rowid();";
-                    Int64 LastRowID64 = (Int64)cmd.ExecuteScalar();
-                    retorno = (int)LastRowID64;
+                        cmd.CommandText = "SELECT last_insert_rowid();";
+                        Int64 LastRowID64 = (Int64)cmd.ExecuteScalar();
+                        retorno = (int)LastRowID64;
 
-                    conn.Close();
+                        conn.Close();
+                    }
                 }
-            }
 
+            }
+            catch
+            { }
             return retorno;
         }
     }

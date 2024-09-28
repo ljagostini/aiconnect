@@ -1,9 +1,15 @@
-﻿using System.Data.SQLite;
+﻿using System;
+using System.Collections.Generic;
+using System.Data.SQLite;
+using System.IO;
+using System.Linq;
 using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace Percolore.IOConnect.Util
 {
-	public class ObjectUser
+    public class ObjectUser
     {
         public static readonly string PathFile = Path.Combine(Environment.CurrentDirectory, "Users.db");
         public static readonly string FileName = Path.GetFileName(PathFile);
@@ -12,138 +18,168 @@ namespace Percolore.IOConnect.Util
         public string Nome { get; set; }
         public string Senha { get; set; }
         public bool Tecnico { get; set; }
-		/// <summary>
-		/// Tipo de usuario: 0 = Operador | 1 = Gerente | 2 = Tecnico
-		/// </summary>
-		public int Tipo { get; set; }
+        public int Tipo { get; set; }
+
+        //Tipo
+        //0 = Operador
+        //1 = Gerente
+        //2 = Tecnico
+
 
         public ObjectUser() { }
+
 
         #region Métodos
         public static void CreateBD()
         {
-            if (!File.Exists(PathFile))
+            try
             {
-
-                SQLiteConnection connectCreate = Util.SQLite.CreateSQLiteConnection(PathFile, false);
-                connectCreate.Open();
-				// Open connection to create DB if not exists.
-				connectCreate.Close();
-                Thread.Sleep(2000);
-                if (File.Exists(PathFile))
+                if (!File.Exists(PathFile))
                 {
-                    StringBuilder sb = new StringBuilder();
-                    sb.Append("CREATE TABLE IF NOT EXISTS [User] (Id INTEGER PRIMARY KEY, Nome TEXT NULL, Senha TEXT NULL, Tecnico TEXT NULL, Tipo TEXT NULL);");
-                    string createQuery = sb.ToString();
-                    using (SQLiteConnection conn = Util.SQLite.CreateSQLiteConnection(PathFile, false))
+
+                    SQLiteConnection connectCreate = Util.SQLite.CreateSQLiteConnection(PathFile, false);
+                    connectCreate.Open();
+					// Open connection to create DB if not exists.
+					connectCreate.Close();
+                    Thread.Sleep(2000);
+                    if (File.Exists(PathFile))
                     {
-                        using (SQLiteCommand cmd = new SQLiteCommand(conn))
+                        StringBuilder sb = new StringBuilder();
+                        sb.Append("CREATE TABLE IF NOT EXISTS [User] (Id INTEGER PRIMARY KEY, Nome TEXT NULL, Senha TEXT NULL, Tecnico TEXT NULL, Tipo TEXT NULL);");
+                        string createQuery = sb.ToString();
+                        using (SQLiteConnection conn = Util.SQLite.CreateSQLiteConnection(PathFile, false))
                         {
-                            conn.Open();
-                            cmd.CommandText = createQuery;
-                            cmd.ExecuteNonQuery();
-                            conn.Close();
+                            using (SQLiteCommand cmd = new SQLiteCommand(conn))
+                            {
+                                conn.Open();
+                                cmd.CommandText = createQuery;
+                                cmd.ExecuteNonQuery();
+                                conn.Close();
+                            }
                         }
-                    }
                        
+                    }
                 }
             }
+            catch
+            { }
         }
 
         public static ObjectUser Load(int id)
         {
             ObjectUser user = null;
-            
-            using (SQLiteConnection conn = Util.SQLite.CreateSQLiteConnection(PathFile, false))
+            try
             {
-                using (SQLiteCommand cmd = new SQLiteCommand(conn))
+                using (SQLiteConnection conn = Util.SQLite.CreateSQLiteConnection(PathFile, false))
                 {
-                    conn.Open();
-
-                    cmd.CommandText = "SELECT * FROM User WHERE Id = " + id.ToString() + ";";
-
-                    using (SQLiteDataReader reader = cmd.ExecuteReader())
+                    using (SQLiteCommand cmd = new SQLiteCommand(conn))
                     {
-                        while (reader.Read())
+                        conn.Open();
+
+                        cmd.CommandText = "SELECT * FROM User WHERE Id = " + id.ToString() + ";";
+
+                        using (SQLiteDataReader reader = cmd.ExecuteReader())
                         {
-                            user = new ObjectUser();
-                            user.Id = int.Parse(reader["Id"].ToString());
-                            user.Nome = reader["Nome"].ToString();
-                            user.Senha = reader["Senha"].ToString();
-                            user.Tecnico = Convert.ToBoolean(reader["Tecnico"].ToString());
-                            user.Tipo = int.Parse(reader["Tipo"].ToString());
-                            break;
+                            while (reader.Read())
+                            {
+                                user = new ObjectUser();
+                                user.Id = int.Parse(reader["Id"].ToString());
+                                user.Nome = reader["Nome"].ToString();
+                                user.Senha = reader["Senha"].ToString();
+                                user.Tecnico = Convert.ToBoolean(reader["Tecnico"].ToString());
+                                user.Tipo = int.Parse(reader["Tipo"].ToString());
+                                break;
+                            }
                         }
                     }
+                    conn.Close();
                 }
-                conn.Close();
-            }
 
-            return user;
+
+                return user;
+            }
+            catch
+            {
+                throw;
+            }
         }
 
         public static ObjectUser Load(string nome, string senha)
         {
             ObjectUser user = null;
-            
-            using (SQLiteConnection conn = Util.SQLite.CreateSQLiteConnection(PathFile, false))
+            try
             {
-                using (SQLiteCommand cmd = new SQLiteCommand(conn))
+                using (SQLiteConnection conn = Util.SQLite.CreateSQLiteConnection(PathFile, false))
                 {
-                    conn.Open();
-
-                    cmd.CommandText = "SELECT * FROM User WHERE Nome = '" + nome + "' AND Senha = '" + senha +"';";
-
-                    using (SQLiteDataReader reader = cmd.ExecuteReader())
+                    using (SQLiteCommand cmd = new SQLiteCommand(conn))
                     {
-                        while (reader.Read())
+                        conn.Open();
+
+                        cmd.CommandText = "SELECT * FROM User WHERE Nome = '" + nome + "' AND Senha = '" + senha +"';";
+
+                        using (SQLiteDataReader reader = cmd.ExecuteReader())
                         {
-                            user = new ObjectUser();
-                            user.Id = int.Parse(reader["Id"].ToString());
-                            user.Nome = reader["Nome"].ToString();
-                            user.Senha = reader["Senha"].ToString();
-                            user.Tecnico = Convert.ToBoolean(reader["Tecnico"].ToString());
-                            user.Tipo = int.Parse(reader["Tipo"].ToString());
-                            break;
+                            while (reader.Read())
+                            {
+                                user = new ObjectUser();
+                                user.Id = int.Parse(reader["Id"].ToString());
+                                user.Nome = reader["Nome"].ToString();
+                                user.Senha = reader["Senha"].ToString();
+                                user.Tecnico = Convert.ToBoolean(reader["Tecnico"].ToString());
+                                user.Tipo = int.Parse(reader["Tipo"].ToString());
+                                break;
+                            }
                         }
                     }
+                    conn.Close();
                 }
-                conn.Close();
-            }
 
-            return user;
+
+                return user;
+            }
+            catch
+            {
+                throw;
+            }
         }
 
         public static List<ObjectUser> List()
         {
             List<ObjectUser> list = new List<ObjectUser>();
 
-            using (SQLiteConnection conn = Util.SQLite.CreateSQLiteConnection(PathFile, false))
+            try
             {
-                using (SQLiteCommand cmd = new SQLiteCommand(conn))
+                using (SQLiteConnection conn = Util.SQLite.CreateSQLiteConnection(PathFile, false))
                 {
-                    conn.Open();
-
-                    cmd.CommandText = "SELECT * FROM User;";
-
-                    using (SQLiteDataReader reader = cmd.ExecuteReader())
+                    using (SQLiteCommand cmd = new SQLiteCommand(conn))
                     {
-                        while (reader.Read())
+                        conn.Open();
+
+                        cmd.CommandText = "SELECT * FROM User;";
+
+                        using (SQLiteDataReader reader = cmd.ExecuteReader())
                         {
-                            ObjectUser user = new ObjectUser();
-                            user.Id = int.Parse(reader["Id"].ToString());
-                            user.Nome = reader["Nome"].ToString();
-                            user.Senha = reader["Senha"].ToString();
-                            user.Tecnico = Convert.ToBoolean(reader["Tecnico"].ToString());
-                            user.Tipo = int.Parse(reader["Tipo"].ToString());
-                            list.Add(user);
+                            while (reader.Read())
+                            {
+                                ObjectUser user = new ObjectUser();
+                                user.Id = int.Parse(reader["Id"].ToString());
+                                user.Nome = reader["Nome"].ToString();
+                                user.Senha = reader["Senha"].ToString();
+                                user.Tecnico = Convert.ToBoolean(reader["Tecnico"].ToString());
+                                user.Tipo = int.Parse(reader["Tipo"].ToString());
+                                list.Add(user);
+                            }
                         }
                     }
+                    conn.Close();
                 }
-                conn.Close();
             }
+            catch
+            {
 
+            }
             return list;
+
         }
 
         public static bool Validate(List<ObjectUser> lista, out string outMsg)
@@ -167,6 +203,8 @@ namespace Percolore.IOConnect.Util
                 if (string.IsNullOrEmpty(user.Senha))
                     validaItem.AppendLine(Negocio.IdiomaResxExtensao.Usuario_SenhaObrigatorio);
 
+                
+
                 if (validaItem.Length > 0)
                 {
                     string texto = string.Format(Negocio.IdiomaResxExtensao.Usuario_NomeMsg, user.Nome);
@@ -182,145 +220,164 @@ namespace Percolore.IOConnect.Util
 
         public static void Persist(ObjectUser user)
         {
-            ObjectUser objc = null;
-            
-            if (user.Id > 0)
+            try
             {
-                objc = Load(user.Id);
-            }
-            
-            //Insert
-            if (objc == null)
-            {
-                StringBuilder sb = new StringBuilder();
-                using (SQLiteConnection conn = Util.SQLite.CreateSQLiteConnection(PathFile, false))
+                ObjectUser objc = null;
+                if (user.Id > 0)
                 {
-                    using (SQLiteCommand cmd = new SQLiteCommand(conn))
+                    objc = Load(user.Id);
+                }
+                //Insert
+                if (objc == null)
+                {
+                    StringBuilder sb = new StringBuilder();
+                    using (SQLiteConnection conn = Util.SQLite.CreateSQLiteConnection(PathFile, false))
                     {
-                        conn.Open();
-                        sb.Append("INSERT INTO User (Nome, Senha, Tecnico, Tipo) VALUES (");                           
-                        sb.Append("'" + user.Nome.ToString() + "', ");
-                        sb.Append("'" + user.Senha + "', ");
-                        sb.Append("'" + (user.Tecnico ? "True" : "False") + "', ");
-                        sb.Append("'" + user.Tipo.ToString() + "' ");
-                        sb.Append(");");
+                        using (SQLiteCommand cmd = new SQLiteCommand(conn))
+                        {
+                            conn.Open();
+                            sb.Append("INSERT INTO User (Nome, Senha, Tecnico, Tipo) VALUES (");                           
+                            sb.Append("'" + user.Nome.ToString() + "', ");
+                            sb.Append("'" + user.Senha + "', ");
+                            sb.Append("'" + (user.Tecnico ? "True" : "False") + "', ");
+                            sb.Append("'" + user.Tipo.ToString() + "' ");
+                            sb.Append(");");
 
-                        cmd.CommandText = sb.ToString();
+                            cmd.CommandText = sb.ToString();
 
-                        cmd.ExecuteNonQuery();
+                            cmd.ExecuteNonQuery();
 
-                        conn.Close();
+                            conn.Close();
+                        }
                     }
                 }
-            }
-            //Update
-            else
-            {
-                StringBuilder sb = new StringBuilder();
-                using (SQLiteConnection conn = Util.SQLite.CreateSQLiteConnection(PathFile, false))
+                //Update
+                else
                 {
-                    using (SQLiteCommand cmd = new SQLiteCommand(conn))
+                    StringBuilder sb = new StringBuilder();
+                    using (SQLiteConnection conn = Util.SQLite.CreateSQLiteConnection(PathFile, false))
                     {
-                        conn.Open();
-                        sb.Append("UPDATE User SET "); // (Motor, Nome, MassaEspecifica, Habilitado, Volume, Correspondencia, Dispositivo, NivelMinimo, NivelMaximo) VALUES (");
-                        sb.Append("Nome = '" + user.Nome + "', ");
-                        sb.Append("Senha = '" + user.Senha + "', ");
-                        sb.Append("Tecnico ='" + (user.Tecnico ? "True" : "False") + "', ");
-                        sb.Append("Tipo = '" + user.Tipo.ToString() + "' ");
-                        sb.Append(" WHERE Id = " + user.Id.ToString() + ";");
+                        using (SQLiteCommand cmd = new SQLiteCommand(conn))
+                        {
+                            conn.Open();
+                            sb.Append("UPDATE User SET "); // (Motor, Nome, MassaEspecifica, Habilitado, Volume, Correspondencia, Dispositivo, NivelMinimo, NivelMaximo) VALUES (");
+                            sb.Append("Nome = '" + user.Nome + "', ");
+                            sb.Append("Senha = '" + user.Senha + "', ");
+                            sb.Append("Tecnico ='" + (user.Tecnico ? "True" : "False") + "', ");
+                            sb.Append("Tipo = '" + user.Tipo.ToString() + "' ");
+                            sb.Append(" WHERE Id = " + user.Id.ToString() + ";");
 
-                        cmd.CommandText = sb.ToString();
+                            cmd.CommandText = sb.ToString();
 
-                        cmd.ExecuteNonQuery();
+                            cmd.ExecuteNonQuery();
 
-                        conn.Close();
+                            conn.Close();
+                        }
                     }
                 }
+
+            }
+            catch
+            {
+                throw;
             }
         }
 
         public static void Persist(List<ObjectUser> lista)
         {
-            if (lista != null && lista.Count > 0)
+            try
             {
-                foreach (ObjectUser user in lista)
+                if (lista != null && lista.Count > 0)
                 {
-                    ObjectUser objc = null;
-                    if (user.Id > 0)
+                    foreach (ObjectUser user in lista)
                     {
-                        objc = Load(user.Id);
-                    }
-                    
-                    //Insert
-                    if (objc == null)
-                    {
-                        StringBuilder sb = new StringBuilder();
-                        using (SQLiteConnection conn = Util.SQLite.CreateSQLiteConnection(PathFile, false))
+                        ObjectUser objc = null;
+                        if (user.Id > 0)
                         {
-                            using (SQLiteCommand cmd = new SQLiteCommand(conn))
+                            objc = Load(user.Id);
+                        }
+                        //Insert
+                        if (objc == null)
+                        {
+                            StringBuilder sb = new StringBuilder();
+                            using (SQLiteConnection conn = Util.SQLite.CreateSQLiteConnection(PathFile, false))
                             {
-                                conn.Open();
-                                sb.Append("INSERT INTO User  Nome, Senha, Tecnico, Tipo) VALUES (");                                    
-                                sb.Append("'" + user.Nome.ToString() + "', ");
-                                sb.Append("'" + user.Senha + "', ");
-                                sb.Append("'" + (user.Tecnico ? "True" : "False") + "', ");
-                                sb.Append("'" + user.Tipo.ToString() + "' ");
-                                sb.Append(");");
+                                using (SQLiteCommand cmd = new SQLiteCommand(conn))
+                                {
+                                    conn.Open();
+                                    sb.Append("INSERT INTO User  Nome, Senha, Tecnico, Tipo) VALUES (");                                    
+                                    sb.Append("'" + user.Nome.ToString() + "', ");
+                                    sb.Append("'" + user.Senha + "', ");
+                                    sb.Append("'" + (user.Tecnico ? "True" : "False") + "', ");
+                                    sb.Append("'" + user.Tipo.ToString() + "' ");
+                                    sb.Append(");");
 
-                                cmd.CommandText = sb.ToString();
+                                    cmd.CommandText = sb.ToString();
 
-                                cmd.ExecuteNonQuery();
+                                    cmd.ExecuteNonQuery();
 
-                                conn.Close();
+                                    conn.Close();
+                                }
                             }
                         }
-                    }
-                    //Update
-                    else
-                    {
-                        StringBuilder sb = new StringBuilder();
-                        using (SQLiteConnection conn = Util.SQLite.CreateSQLiteConnection(PathFile, false))
+                        //Update
+                        else
                         {
-                            using (SQLiteCommand cmd = new SQLiteCommand(conn))
+                            StringBuilder sb = new StringBuilder();
+                            using (SQLiteConnection conn = Util.SQLite.CreateSQLiteConnection(PathFile, false))
                             {
-                                conn.Open();
-                                sb.Append("UPDATE User SET "); // (Motor, Nome, MassaEspecifica, Habilitado, Volume, Correspondencia, Dispositivo, NivelMinimo, NivelMaximo) VALUES (");
-                                sb.Append("Nome = '" + user.Nome + "', ");
-                                sb.Append("Senha = '" + user.Senha + "', ");
-                                sb.Append("Tecnico ='" + (user.Tecnico ? "True" : "False") + "', ");
-                                sb.Append("Tipo = '" + user.Tipo.ToString() + "' ");
-                                sb.Append(" WHERE Id = " + user.Id.ToString() + ";");
+                                using (SQLiteCommand cmd = new SQLiteCommand(conn))
+                                {
+                                    conn.Open();
+                                    sb.Append("UPDATE User SET "); // (Motor, Nome, MassaEspecifica, Habilitado, Volume, Correspondencia, Dispositivo, NivelMinimo, NivelMaximo) VALUES (");
+                                    sb.Append("Nome = '" + user.Nome + "', ");
+                                    sb.Append("Senha = '" + user.Senha + "', ");
+                                    sb.Append("Tecnico ='" + (user.Tecnico ? "True" : "False") + "', ");
+                                    sb.Append("Tipo = '" + user.Tipo.ToString() + "' ");
+                                    sb.Append(" WHERE Id = " + user.Id.ToString() + ";");
 
-                                cmd.CommandText = sb.ToString();
+                                    cmd.CommandText = sb.ToString();
 
-                                cmd.ExecuteNonQuery();
+                                    cmd.ExecuteNonQuery();
 
-                                conn.Close();
+                                    conn.Close();
+                                }
                             }
                         }
                     }
                 }
+            }
+            catch
+            {
+                throw;
             }
         }
 
         public static bool User_Delete(int id)
         {
             bool retorno = false;
-            
-            StringBuilder sb = new StringBuilder();
-            using (SQLiteConnection conn = Util.SQLite.CreateSQLiteConnection(PathFile, false))
+            try
             {
-                using (SQLiteCommand cmd = new SQLiteCommand(conn))
+                StringBuilder sb = new StringBuilder();
+                using (SQLiteConnection conn = Util.SQLite.CreateSQLiteConnection(PathFile, false))
                 {
-                    conn.Open();
-                    sb.Append("Delete From User WHERE Id = "  + id.ToString() + ";");
-                    cmd.CommandText = sb.ToString();
+                    using (SQLiteCommand cmd = new SQLiteCommand(conn))
+                    {
+                        conn.Open();
+                        sb.Append("Delete From User WHERE Id = "  + id.ToString() + ";");
+                        cmd.CommandText = sb.ToString();
 
-                    retorno = cmd.ExecuteNonQuery() > 0;
-                    conn.Close();
+                        cmd.ExecuteNonQuery();
+
+                        conn.Close();
+                    }
                 }
+               
+                retorno = true;
             }
-
+            catch
+            {
+            }
             return retorno;
         }
         #endregion

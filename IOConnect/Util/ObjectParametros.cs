@@ -1,12 +1,18 @@
 ﻿using Percolore.Core;
 using Percolore.Core.Persistence.WindowsRegistry;
+using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Data.SQLite;
+using System.IO;
+using System.Linq;
 using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace Percolore.IOConnect.Util
 {
-	public class ObjectParametros
+    public class ObjectParametros
     {
         public static readonly string PathFile = Path.Combine(Environment.CurrentDirectory, "Parametros.db");
         public static readonly string FileName = Path.GetFileName(PathFile);
@@ -269,214 +275,219 @@ namespace Percolore.IOConnect.Util
 
         public static void CreateBD()
         {
-            if (!File.Exists(PathFile))
+            try
             {
-                StringBuilder sb = new StringBuilder();
-                sb.Append("CREATE TABLE IF NOT EXISTS [Parametros](");
-                #region Geral
-                sb.Append(" ResponseTimeout TEXT NULL,");
-                sb.Append(" Velocidade TEXT NULL,");
-                sb.Append(" Aceleracao TEXT NULL,");
-                sb.Append(" RevDelay TEXT NULL,");
-                sb.Append(" RevPulsos TEXT NULL,");
-                sb.Append(" SomarRevPulsos TEXT NULL,");
-                sb.Append(" HabilitarTecladoVirtual TEXT NULL,");
-                sb.Append(" HabilitarDispensaSequencial TEXT NULL,");
-                sb.Append(" HabilitarFormulaPersonalizada TEXT NULL,");
-                sb.Append(" HabilitarTesteRecipiente TEXT NULL,");
-				sb.Append(" HabilitarIdentificacaoCopo TEXT NULL,");
-				sb.Append(" IdIdioma TEXT NULL,");
-                sb.Append(" IdDispositivo TEXT NULL,");
-                sb.Append(" HabilitarPurgaIndividual TEXT NULL,");
-                sb.Append(" HabilitarTouchScrenn TEXT NULL,");
-                sb.Append(" IdDispositivo2 TEXT NULL,");
-                sb.Append(" NomeDispositivo TEXT NULL,");
-                sb.Append(" NomeDispositivo2 TEXT NULL,");
-                sb.Append(" VersaoIoconnect TEXT NULL,");
-                sb.Append(" HabilitarDispensaSequencialP1 TEXT NULL,");
-                sb.Append(" HabilitarDispensaSequencialP2 TEXT NULL,");
-				sb.Append(" TreinamentoCal TEXT NULL,");
-				sb.Append(" ViewMessageProc TEXT NULL,");
-				sb.Append(" QtdTentativasConexao TEXT NULL,");
-				sb.Append(" DelayEsponja TEXT NULL,");
-				sb.Append(" HabLimpBicos TEXT NULL,");
-				sb.Append(" DelayLimpBicos TEXT NULL,");
-				sb.Append(" TipoLimpBicos TEXT NULL,");
-				sb.Append(" TipoDosagemExec TEXT NULL,");
-
-				#endregion
-				#region DAT
-				sb.Append(" PathDAT TEXT NULL,");
-                sb.Append(" PathRepositorioDAT TEXT NULL,");
-                sb.Append(" PadraoConteudoDAT TEXT NULL,");
-                sb.Append(" BasePosicaoCircuitoDAT TEXT NULL,");
-                sb.Append(" UtilizarCorrespondenciaDAT TEXT NULL,");
-                sb.Append(" DesabilitarInterfaceDispensaSequencial TEXT NULL,");
-                sb.Append(" DesabilitarInterfaceDispensaSimultanea TEXT NULL,");
-                sb.Append(" DesabilitarInterfaceInicializacaoCircuito TEXT NULL,");
-                sb.Append(" DesabilitarInterfacePurga TEXT NULL,");
-
-                sb.Append(" PathFilaDAT TEXT NULL,");
-                sb.Append(" DesabilitarMonitoramentoFilaDAT TEXT NULL,");
-                sb.Append(" DelayMonitoramentoFilaDAT TEXT NULL,");
-                sb.Append(" DesabilitarVolumeMinimoDat TEXT NULL,");
-                sb.Append(" VolumeMinimoDat TEXT NULL,");
-
-				sb.Append(" Dat_06_UNT_Pref TEXT NULL,");
-				sb.Append(" Dat_06_UNT_1_IsPonto  TEXT NULL,");
-				sb.Append(" Dat_06_UNT_2_IsPonto TEXT NULL,");
-				sb.Append(" Dat_06_CAN_Pref TEXT NULL,");
-				sb.Append(" Dat_06_CAN_1_IsPonto TEXT NULL,");
-				sb.Append(" Dat_06_FRM_Pref TEXT NULL,");
-				sb.Append(" Dat_06_FRM_SEP TEXT NULL,");
-				sb.Append(" Dat_06_FRM_1_IsPonto TEXT NULL,");
-				sb.Append(" Dat_06_BAS_Pref TEXT NULL,");
-				sb.Append(" Dat_06_BAS_1_IsPonto TEXT NULL,");
-				sb.Append(" Dat_06_BAS_Habilitado TEXT NULL,");
-				sb.Append(" Dat_05_UNT_Pref TEXT NULL,");
-				sb.Append(" Dat_05_UNT_1_IsPonto TEXT NULL,");
-				sb.Append(" Dat_05_UNT_2_IsPonto TEXT NULL,");
-				sb.Append(" Dat_05_CAN_Pref TEXT NULL,");
-				sb.Append(" Dat_05_CAN_1_IsPonto TEXT NULL,");
-				sb.Append(" Dat_05_FRM_Pref TEXT NULL,");
-				sb.Append(" Dat_05_FRM_SEP TEXT NULL,");
-				sb.Append(" Dat_05_FRM_1_IsPonto TEXT NULL,");
-				sb.Append(" Dat_05_BAS_Pref TEXT NULL,");
-				sb.Append(" Dat_05_BAS_1_IsPonto TEXT NULL,");
-				sb.Append(" Dat_05_BAS_Habilitado TEXT NULL,");
-				sb.Append(" ExtFileTmpUDCP TEXT NULL,");
-				sb.Append(" CreateFileTmpUDCP TEXT NULL,");
-				sb.Append(" DelayUDCP TEXT NULL,");
-				sb.Append(" ProcRemoveLataUDCP TEXT NULL,");
-				sb.Append(" DisablePopUpDispDat TEXT NULL,");
-
-				#endregion
-				#region Purga
-				sb.Append(" PrazoExecucaoPurga TEXT NULL,");
-                sb.Append(" DataExecucaoPurga TEXT NULL,");
-                sb.Append(" VolumePurga TEXT NULL,");
-                sb.Append(" VelocidadePurga TEXT NULL,");
-                sb.Append(" AceleracaoPurga TEXT NULL,");
-                sb.Append(" DelayPurga TEXT NULL,");
-                sb.Append(" ControlarExecucaoPurga TEXT NULL,");
-                sb.Append(" ExigirExecucaoPurga TEXT NULL,");
-                sb.Append(" PurgaSequencial TEXT NULL,");
-
-                #endregion
-                #region Controle de volume
-
-                sb.Append(" VolumeMinimo TEXT NULL,");
-                sb.Append(" VolumeMaximo TEXT NULL,");
-                sb.Append(" ControlarVolume TEXT NULL,");
-
-                #endregion
-                #region Inicilização dos circuitos
-                sb.Append(" IniPulsoInicial TEXT NULL,");
-                sb.Append(" IniPulsoLimite TEXT NULL,");
-                sb.Append(" IniVariacaoPulso TEXT NULL,");
-                sb.Append(" IniStepVariacao TEXT NULL,");
-                sb.Append(" IniVelocidade TEXT NULL,");
-                sb.Append(" IniAceleracao TEXT NULL,");
-                sb.Append(" IniMovimentoReverso TEXT NULL,");
-                sb.Append(" InicializarCircuitosPurga TEXT NULL,");
-                sb.Append(" InicializarCircuitosPurgaIndividual TEXT NULL,");
-                sb.Append(" QtdeCircuitoGrupo TEXT NULL,");
-
-				#endregion
-				#region Unidade de medida
-				sb.Append(" ValorShot TEXT NULL,");
-                sb.Append(" HabilitarShot TEXT NULL,");
-                sb.Append(" HabilitarOnca TEXT NULL,");
-                sb.Append(" HabilitarMililitro TEXT NULL,");
-                sb.Append(" HabilitarGrama TEXT NULL,");
-                sb.Append(" UnidadeMedidaNivelColorante TEXT NULL,");
-                sb.Append(" ValorFraction TEXT NULL,");
-
-				#endregion
-				#region Log
-				sb.Append(" PathLogProcessoDispensa TEXT NULL,");
-                sb.Append(" PathLogControleDispensa TEXT NULL,");
-                sb.Append(" HabilitarLogComunicacao TEXT NULL,");
-                sb.Append(" PathLogComunicacao TEXT NULL,");
-				sb.Append(" HabilitarLogAutomateTesterProt TEXT NULL,");
-				sb.Append(" LogAutomateBackup TEXT NULL,");
-
-				#endregion
-				#region Monitoramento dos circuitos
-				sb.Append(" QtdeMonitCircuitoGrupo TEXT NULL,");
-				sb.Append(" MonitVelocidade TEXT NULL,");
-                sb.Append(" MonitAceleracao TEXT NULL,");
-                sb.Append(" MonitDelay TEXT NULL,");
-                sb.Append(" MonitTimerDelay TEXT NULL,");
-                sb.Append(" MonitTimerDelayIni TEXT NULL,");
-                sb.Append(" DesabilitarInterfaceMonitCircuito TEXT NULL,");
-                sb.Append(" DesabilitarProcessoMonitCircuito TEXT NULL,");
-                sb.Append(" MonitMovimentoReverso TEXT NULL,");
-                sb.Append(" MonitPulsos TEXT NULL,");
-
-                #endregion
-                #region Producao
-                sb.Append(" TipoProducao TEXT NULL,");
-                sb.Append(" IpProducao TEXT NULL,");
-                sb.Append(" PortaProducao TEXT NULL,");
-                sb.Append(" DesabilitaMonitProcessoProducao TEXT NULL,");
-                #endregion
-                    
-                #region Sinc Formula
-                sb.Append(" DesabilitaMonitSincFormula TEXT NULL,");
-                sb.Append(" PortaSincFormula TEXT NULL,");
-                sb.Append(" IpSincFormula TEXT NULL,");
-				#endregion
-
-				#region Miscelanea
-				sb.Append(" TimeoutPingTcp TEXT NULL,");
-				sb.Append(" DesabilitaMonitSyncToken TEXT NULL,");
-				sb.Append(" IpSincToken TEXT NULL,");
-				sb.Append(" PortaSincToken TEXT NULL,");
-				sb.Append(" TipoEventos TEXT NULL,");
-				sb.Append(" DesabilitaMonitSyncBkpCalibragem TEXT NULL,");
-				sb.Append(" UrlSincBkpCalibragem TEXT NULL,");
-				sb.Append(" HabilitarRecirculacao TEXT NULL,");
-				sb.Append(" DelayMonitRecirculacao TEXT NULL,");
-				sb.Append(" Address_PlacaMov TEXT NULL,");
-				sb.Append(" NomeDispositivo_PlacaMov TEXT NULL,");
-				sb.Append(" DelayAlertaPlacaMov TEXT NULL,");
-				sb.Append(" HabilitarRecirculacaoAuto TEXT NULL,");
-				sb.Append(" DelayMonitRecirculacaoAuto TEXT NULL,");
-				sb.Append(" DelayNotificacaotRecirculacaoAuto TEXT NULL,");
-				sb.Append(" QtdNotificacaotRecirculacaoAuto TEXT NULL,");
-				sb.Append(" TempoReciAuto TEXT NULL,");
-				sb.Append(" LogBD TEXT NULL,");
-				sb.Append(" NameRemoteAccess TEXT NULL,");
-				sb.Append(" TipoBaseDados TEXT NULL,");
-				sb.Append(" PathBasesDados TEXT NULL,");
-				sb.Append(" LogStatusMaquina TEXT NULL");
-
-				#endregion
-
-				sb.Append(");");
-
-                string createQuery = sb.ToString();
-
-                SQLiteConnection connectCreate = Util.SQLite.CreateSQLiteConnection(PathFile, false);
-                connectCreate.Open();
-				// Open connection to create DB if not exists.
-				connectCreate.Close();
-                Thread.Sleep(2000);
-                if (File.Exists(PathFile))
+                if (!File.Exists(PathFile))
                 {
-                    using (SQLiteConnection conn = Util.SQLite.CreateSQLiteConnection(PathFile, false))
+                    StringBuilder sb = new StringBuilder();
+                    sb.Append("CREATE TABLE IF NOT EXISTS [Parametros](");
+                    #region Geral
+                    sb.Append(" ResponseTimeout TEXT NULL,");
+                    sb.Append(" Velocidade TEXT NULL,");
+                    sb.Append(" Aceleracao TEXT NULL,");
+                    sb.Append(" RevDelay TEXT NULL,");
+                    sb.Append(" RevPulsos TEXT NULL,");
+                    sb.Append(" SomarRevPulsos TEXT NULL,");
+                    sb.Append(" HabilitarTecladoVirtual TEXT NULL,");
+                    sb.Append(" HabilitarDispensaSequencial TEXT NULL,");
+                    sb.Append(" HabilitarFormulaPersonalizada TEXT NULL,");
+                    sb.Append(" HabilitarTesteRecipiente TEXT NULL,");
+					sb.Append(" HabilitarIdentificacaoCopo TEXT NULL,");
+					sb.Append(" IdIdioma TEXT NULL,");
+                    sb.Append(" IdDispositivo TEXT NULL,");
+                    sb.Append(" HabilitarPurgaIndividual TEXT NULL,");
+                    sb.Append(" HabilitarTouchScrenn TEXT NULL,");
+                    sb.Append(" IdDispositivo2 TEXT NULL,");
+                    sb.Append(" NomeDispositivo TEXT NULL,");
+                    sb.Append(" NomeDispositivo2 TEXT NULL,");
+                    sb.Append(" VersaoIoconnect TEXT NULL,");
+                    sb.Append(" HabilitarDispensaSequencialP1 TEXT NULL,");
+                    sb.Append(" HabilitarDispensaSequencialP2 TEXT NULL,");
+					sb.Append(" TreinamentoCal TEXT NULL,");
+					sb.Append(" ViewMessageProc TEXT NULL,");
+					sb.Append(" QtdTentativasConexao TEXT NULL,");
+					sb.Append(" DelayEsponja TEXT NULL,");
+					sb.Append(" HabLimpBicos TEXT NULL,");
+					sb.Append(" DelayLimpBicos TEXT NULL,");
+					sb.Append(" TipoLimpBicos TEXT NULL,");
+					sb.Append(" TipoDosagemExec TEXT NULL,");
+
+					#endregion
+					#region DAT
+					sb.Append(" PathDAT TEXT NULL,");
+                    sb.Append(" PathRepositorioDAT TEXT NULL,");
+                    sb.Append(" PadraoConteudoDAT TEXT NULL,");
+                    sb.Append(" BasePosicaoCircuitoDAT TEXT NULL,");
+                    sb.Append(" UtilizarCorrespondenciaDAT TEXT NULL,");
+                    sb.Append(" DesabilitarInterfaceDispensaSequencial TEXT NULL,");
+                    sb.Append(" DesabilitarInterfaceDispensaSimultanea TEXT NULL,");
+                    sb.Append(" DesabilitarInterfaceInicializacaoCircuito TEXT NULL,");
+                    sb.Append(" DesabilitarInterfacePurga TEXT NULL,");
+
+                    sb.Append(" PathFilaDAT TEXT NULL,");
+                    sb.Append(" DesabilitarMonitoramentoFilaDAT TEXT NULL,");
+                    sb.Append(" DelayMonitoramentoFilaDAT TEXT NULL,");
+                    sb.Append(" DesabilitarVolumeMinimoDat TEXT NULL,");
+                    sb.Append(" VolumeMinimoDat TEXT NULL,");
+
+					sb.Append(" Dat_06_UNT_Pref TEXT NULL,");
+					sb.Append(" Dat_06_UNT_1_IsPonto  TEXT NULL,");
+					sb.Append(" Dat_06_UNT_2_IsPonto TEXT NULL,");
+					sb.Append(" Dat_06_CAN_Pref TEXT NULL,");
+					sb.Append(" Dat_06_CAN_1_IsPonto TEXT NULL,");
+					sb.Append(" Dat_06_FRM_Pref TEXT NULL,");
+					sb.Append(" Dat_06_FRM_SEP TEXT NULL,");
+					sb.Append(" Dat_06_FRM_1_IsPonto TEXT NULL,");
+					sb.Append(" Dat_06_BAS_Pref TEXT NULL,");
+					sb.Append(" Dat_06_BAS_1_IsPonto TEXT NULL,");
+					sb.Append(" Dat_06_BAS_Habilitado TEXT NULL,");
+					sb.Append(" Dat_05_UNT_Pref TEXT NULL,");
+					sb.Append(" Dat_05_UNT_1_IsPonto TEXT NULL,");
+					sb.Append(" Dat_05_UNT_2_IsPonto TEXT NULL,");
+					sb.Append(" Dat_05_CAN_Pref TEXT NULL,");
+					sb.Append(" Dat_05_CAN_1_IsPonto TEXT NULL,");
+					sb.Append(" Dat_05_FRM_Pref TEXT NULL,");
+					sb.Append(" Dat_05_FRM_SEP TEXT NULL,");
+					sb.Append(" Dat_05_FRM_1_IsPonto TEXT NULL,");
+					sb.Append(" Dat_05_BAS_Pref TEXT NULL,");
+					sb.Append(" Dat_05_BAS_1_IsPonto TEXT NULL,");
+					sb.Append(" Dat_05_BAS_Habilitado TEXT NULL,");
+					sb.Append(" ExtFileTmpUDCP TEXT NULL,");
+					sb.Append(" CreateFileTmpUDCP TEXT NULL,");
+					sb.Append(" DelayUDCP TEXT NULL,");
+					sb.Append(" ProcRemoveLataUDCP TEXT NULL,");
+					sb.Append(" DisablePopUpDispDat TEXT NULL,");
+
+					#endregion
+					#region Purga
+					sb.Append(" PrazoExecucaoPurga TEXT NULL,");
+                    sb.Append(" DataExecucaoPurga TEXT NULL,");
+                    sb.Append(" VolumePurga TEXT NULL,");
+                    sb.Append(" VelocidadePurga TEXT NULL,");
+                    sb.Append(" AceleracaoPurga TEXT NULL,");
+                    sb.Append(" DelayPurga TEXT NULL,");
+                    sb.Append(" ControlarExecucaoPurga TEXT NULL,");
+                    sb.Append(" ExigirExecucaoPurga TEXT NULL,");
+                    sb.Append(" PurgaSequencial TEXT NULL,");
+
+                    #endregion
+                    #region Controle de volume
+
+                    sb.Append(" VolumeMinimo TEXT NULL,");
+                    sb.Append(" VolumeMaximo TEXT NULL,");
+                    sb.Append(" ControlarVolume TEXT NULL,");
+
+                    #endregion
+                    #region Inicilização dos circuitos
+                    sb.Append(" IniPulsoInicial TEXT NULL,");
+                    sb.Append(" IniPulsoLimite TEXT NULL,");
+                    sb.Append(" IniVariacaoPulso TEXT NULL,");
+                    sb.Append(" IniStepVariacao TEXT NULL,");
+                    sb.Append(" IniVelocidade TEXT NULL,");
+                    sb.Append(" IniAceleracao TEXT NULL,");
+                    sb.Append(" IniMovimentoReverso TEXT NULL,");
+                    sb.Append(" InicializarCircuitosPurga TEXT NULL,");
+                    sb.Append(" InicializarCircuitosPurgaIndividual TEXT NULL,");
+                    sb.Append(" QtdeCircuitoGrupo TEXT NULL,");
+
+					#endregion
+					#region Unidade de medida
+					sb.Append(" ValorShot TEXT NULL,");
+                    sb.Append(" HabilitarShot TEXT NULL,");
+                    sb.Append(" HabilitarOnca TEXT NULL,");
+                    sb.Append(" HabilitarMililitro TEXT NULL,");
+                    sb.Append(" HabilitarGrama TEXT NULL,");
+                    sb.Append(" UnidadeMedidaNivelColorante TEXT NULL,");
+                    sb.Append(" ValorFraction TEXT NULL,");
+
+					#endregion
+					#region Log
+					sb.Append(" PathLogProcessoDispensa TEXT NULL,");
+                    sb.Append(" PathLogControleDispensa TEXT NULL,");
+                    sb.Append(" HabilitarLogComunicacao TEXT NULL,");
+                    sb.Append(" PathLogComunicacao TEXT NULL,");
+					sb.Append(" HabilitarLogAutomateTesterProt TEXT NULL,");
+					sb.Append(" LogAutomateBackup TEXT NULL,");
+
+					#endregion
+					#region Monitoramento dos circuitos
+					sb.Append(" QtdeMonitCircuitoGrupo TEXT NULL,");
+					sb.Append(" MonitVelocidade TEXT NULL,");
+                    sb.Append(" MonitAceleracao TEXT NULL,");
+                    sb.Append(" MonitDelay TEXT NULL,");
+                    sb.Append(" MonitTimerDelay TEXT NULL,");
+                    sb.Append(" MonitTimerDelayIni TEXT NULL,");
+                    sb.Append(" DesabilitarInterfaceMonitCircuito TEXT NULL,");
+                    sb.Append(" DesabilitarProcessoMonitCircuito TEXT NULL,");
+                    sb.Append(" MonitMovimentoReverso TEXT NULL,");
+                    sb.Append(" MonitPulsos TEXT NULL,");
+
+                    #endregion
+                    #region Producao
+                    sb.Append(" TipoProducao TEXT NULL,");
+                    sb.Append(" IpProducao TEXT NULL,");
+                    sb.Append(" PortaProducao TEXT NULL,");
+                    sb.Append(" DesabilitaMonitProcessoProducao TEXT NULL,");
+                    #endregion
+                    
+                    #region Sinc Formula
+                    sb.Append(" DesabilitaMonitSincFormula TEXT NULL,");
+                    sb.Append(" PortaSincFormula TEXT NULL,");
+                    sb.Append(" IpSincFormula TEXT NULL,");
+					#endregion
+
+					#region Miscelanea
+					sb.Append(" TimeoutPingTcp TEXT NULL,");
+					sb.Append(" DesabilitaMonitSyncToken TEXT NULL,");
+					sb.Append(" IpSincToken TEXT NULL,");
+					sb.Append(" PortaSincToken TEXT NULL,");
+					sb.Append(" TipoEventos TEXT NULL,");
+					sb.Append(" DesabilitaMonitSyncBkpCalibragem TEXT NULL,");
+					sb.Append(" UrlSincBkpCalibragem TEXT NULL,");
+					sb.Append(" HabilitarRecirculacao TEXT NULL,");
+					sb.Append(" DelayMonitRecirculacao TEXT NULL,");
+					sb.Append(" Address_PlacaMov TEXT NULL,");
+					sb.Append(" NomeDispositivo_PlacaMov TEXT NULL,");
+					sb.Append(" DelayAlertaPlacaMov TEXT NULL,");
+					sb.Append(" HabilitarRecirculacaoAuto TEXT NULL,");
+					sb.Append(" DelayMonitRecirculacaoAuto TEXT NULL,");
+					sb.Append(" DelayNotificacaotRecirculacaoAuto TEXT NULL,");
+					sb.Append(" QtdNotificacaotRecirculacaoAuto TEXT NULL,");
+					sb.Append(" TempoReciAuto TEXT NULL,");
+					sb.Append(" LogBD TEXT NULL,");
+					sb.Append(" NameRemoteAccess TEXT NULL,");
+					sb.Append(" TipoBaseDados TEXT NULL,");
+					sb.Append(" PathBasesDados TEXT NULL,");
+					sb.Append(" LogStatusMaquina TEXT NULL");
+
+					#endregion
+
+					sb.Append(");");
+
+                    string createQuery = sb.ToString();
+
+                    SQLiteConnection connectCreate = Util.SQLite.CreateSQLiteConnection(PathFile, false);
+                    connectCreate.Open();
+					// Open connection to create DB if not exists.
+					connectCreate.Close();
+                    Thread.Sleep(2000);
+                    if (File.Exists(PathFile))
                     {
-                        using (SQLiteCommand cmd = new SQLiteCommand(conn))
+                        using (SQLiteConnection conn = Util.SQLite.CreateSQLiteConnection(PathFile, false))
                         {
-                            conn.Open();
-                            cmd.CommandText = createQuery;
-                            cmd.ExecuteNonQuery();
-                            conn.Close();
+                            using (SQLiteCommand cmd = new SQLiteCommand(conn))
+                            {
+                                conn.Open();
+                                cmd.CommandText = createQuery;
+                                cmd.ExecuteNonQuery();
+                                conn.Close();
+                            }
                         }
                     }
                 }
             }
+            catch
+            { }
         }
 
         public static void InitLoad()
@@ -512,9 +523,28 @@ namespace Percolore.IOConnect.Util
                                 objPar.HabilitarDispensaSequencial = Convert.ToBoolean(reader["HabilitarDispensaSequencial"].ToString());
                                 objPar.HabilitarFormulaPersonalizada = Convert.ToBoolean(reader["HabilitarFormulaPersonalizada"].ToString());
                                 objPar.HabilitarTesteRecipiente = Convert.ToBoolean(reader["HabilitarTesteRecipiente"].ToString());
-                                objPar.HabilitarIdentificacaoCopo = Convert.ToBoolean(reader["HabilitarIdentificacaoCopo"].ToString());
-                                objPar.TreinamentoCal = Convert.ToBoolean(reader["TreinamentoCal"].ToString());
-                                objPar.DelayEsponja = Convert.ToInt32(reader["DelayEsponja"].ToString());
+
+                                try
+                                {
+                                    objPar.HabilitarIdentificacaoCopo = Convert.ToBoolean(reader["HabilitarIdentificacaoCopo"].ToString());
+                                }
+                                catch
+                                {
+                                }
+
+                                try
+                                {
+                                    objPar.TreinamentoCal = Convert.ToBoolean(reader["TreinamentoCal"].ToString());                                    
+                                }
+                                catch
+                                { }
+
+                                try
+                                {
+                                    objPar.DelayEsponja = Convert.ToInt32(reader["DelayEsponja"].ToString());
+                                }
+                                catch
+                                { }
 
                                 try
                                 {
@@ -525,8 +555,14 @@ namespace Percolore.IOConnect.Util
                                     objPar.IdIdioma = 1;
 
                                 }
+                                try
+                                {
+                                    objPar.ViewMessageProc = Convert.ToBoolean(reader["ViewMessageProc"].ToString());
+                                }
+                                catch
+                                { }
+
                                 
-                                objPar.ViewMessageProc = Convert.ToBoolean(reader["ViewMessageProc"].ToString());
                                 objPar.IdDispositivo = Convert.ToInt32(reader["IdDispositivo"].ToString());                                
                                 objPar.HabilitarPurgaIndividual = Convert.ToBoolean(reader["HabilitarPurgaIndividual"].ToString());
                                 objPar.HabilitarTouchScrenn = Convert.ToBoolean(reader["HabilitarTouchScrenn"].ToString());
@@ -576,8 +612,12 @@ namespace Percolore.IOConnect.Util
                                     objPar.TipoLimpBicos = 1;
                                 }
 
-                                objPar.TipoDosagemExec = Convert.ToInt32(reader["TipoDosagemExec"].ToString());
-
+                                try
+                                {
+                                    objPar.TipoDosagemExec = Convert.ToInt32(reader["TipoDosagemExec"].ToString()); 
+                                }
+                                catch
+                                { }
                                 #endregion
 
                                 #region DAT
@@ -593,49 +633,72 @@ namespace Percolore.IOConnect.Util
                                 objPar.DesabilitarInterfacePurga = Convert.ToBoolean(reader["DesabilitarInterfacePurga"].ToString());
 
                                 //Versão 19
-                                objPar.PathMonitoramentoFilaDAT = reader["PathFilaDAT"].ToString();
-                                objPar.DesabilitarMonitoramentoFilaDAT = Convert.ToBoolean(reader["DesabilitarMonitoramentoFilaDAT"].ToString());
-                                objPar.DelayMonitoramentoFilaDAT = Convert.ToInt32(reader["DelayMonitoramentoFilaDAT"].ToString());
-
+                                try
+                                {
+                                    objPar.PathMonitoramentoFilaDAT = reader["PathFilaDAT"].ToString();
+                                    objPar.DesabilitarMonitoramentoFilaDAT = Convert.ToBoolean(reader["DesabilitarMonitoramentoFilaDAT"].ToString());
+                                    objPar.DelayMonitoramentoFilaDAT = Convert.ToInt32(reader["DelayMonitoramentoFilaDAT"].ToString());
+                                }
+                                catch
+                                { }
                                 //Versão 25
-                                objPar.DesabilitarVolumeMinimoDat = Convert.ToBoolean(reader["DesabilitarVolumeMinimoDat"].ToString());
-                                objPar.VolumeMinimoDat = double.Parse(reader["VolumeMinimoDat"].ToString(), System.Globalization.CultureInfo.InvariantCulture);
+                                try
+                                {
+                                    objPar.DesabilitarVolumeMinimoDat = Convert.ToBoolean(reader["DesabilitarVolumeMinimoDat"].ToString());
+                                    objPar.VolumeMinimoDat = double.Parse(reader["VolumeMinimoDat"].ToString(), System.Globalization.CultureInfo.InvariantCulture);                                    
+                                }
+                                catch
+                                { }
 
                                 //Versão 29
-                                objPar.Dat_06_BAS_Pref = reader["Dat_06_BAS_Pref"].ToString();
-                                objPar.Dat_06_CAN_Pref = reader["Dat_06_CAN_Pref"].ToString();
-                                objPar.Dat_06_FRM_Pref = reader["Dat_06_FRM_Pref"].ToString();
-                                objPar.Dat_06_FRM_SEP = reader["Dat_06_FRM_SEP"].ToString();
-                                objPar.Dat_06_UNT_Pref = reader["Dat_06_UNT_Pref"].ToString();
-                                objPar.Dat_06_CAN_1_IsPonto = reader["Dat_06_CAN_1_IsPonto"].ToString() == "0" ? 0 : 1 ;
-                                objPar.Dat_06_FRM_1_IsPonto= reader["Dat_06_FRM_1_IsPonto"].ToString() == "0" ? 0 : 1;
-                                objPar.Dat_06_UNT_1_IsPonto = reader["Dat_06_UNT_1_IsPonto"].ToString() == "0" ? 0 : 1;
-                                objPar.Dat_06_UNT_2_IsPonto= reader["Dat_06_UNT_2_IsPonto"].ToString() == "0" ? 0 : 1;
-                                objPar.Dat_06_BAS_1_IsPonto = reader["Dat_06_BAS_1_IsPonto"].ToString() == "0" ? 0 : 1;
-                                objPar.Dat_06_BAS_Habilitado = reader["Dat_06_BAS_Habilitado"].ToString() == "0" ? 0 : 1;
+                                try
+                                {
+                                    objPar.Dat_06_BAS_Pref = reader["Dat_06_BAS_Pref"].ToString();
+                                    objPar.Dat_06_CAN_Pref = reader["Dat_06_CAN_Pref"].ToString();
+                                    objPar.Dat_06_FRM_Pref = reader["Dat_06_FRM_Pref"].ToString();
+                                    objPar.Dat_06_FRM_SEP = reader["Dat_06_FRM_SEP"].ToString();
+                                    objPar.Dat_06_UNT_Pref = reader["Dat_06_UNT_Pref"].ToString();
+
+                                    objPar.Dat_06_CAN_1_IsPonto = reader["Dat_06_CAN_1_IsPonto"].ToString() == "0" ? 0 : 1 ;
+                                    objPar.Dat_06_FRM_1_IsPonto= reader["Dat_06_FRM_1_IsPonto"].ToString() == "0" ? 0 : 1;
+                                    objPar.Dat_06_UNT_1_IsPonto = reader["Dat_06_UNT_1_IsPonto"].ToString() == "0" ? 0 : 1;
+                                    objPar.Dat_06_UNT_2_IsPonto= reader["Dat_06_UNT_2_IsPonto"].ToString() == "0" ? 0 : 1;
+                                    objPar.Dat_06_BAS_1_IsPonto = reader["Dat_06_BAS_1_IsPonto"].ToString() == "0" ? 0 : 1;
+
+                                    objPar.Dat_06_BAS_Habilitado = reader["Dat_06_BAS_Habilitado"].ToString() == "0" ? 0 : 1;
+
+                                }
+                                catch
+                                { }
 
                                 //Versão 32
-                                objPar.Dat_05_BAS_Pref = reader["Dat_05_BAS_Pref"].ToString();
-                                objPar.Dat_05_CAN_Pref = reader["Dat_05_CAN_Pref"].ToString();
-                                objPar.Dat_05_FRM_Pref = reader["Dat_05_FRM_Pref"].ToString();
-                                objPar.Dat_05_FRM_SEP = reader["Dat_05_FRM_SEP"].ToString();
-                                objPar.Dat_05_UNT_Pref = reader["Dat_05_UNT_Pref"].ToString();
-                                objPar.Dat_05_CAN_1_IsPonto = reader["Dat_05_CAN_1_IsPonto"].ToString() == "0" ? 0 : 1;
-                                objPar.Dat_05_FRM_1_IsPonto = reader["Dat_05_FRM_1_IsPonto"].ToString() == "0" ? 0 : 1;
-                                objPar.Dat_05_UNT_1_IsPonto = reader["Dat_05_UNT_1_IsPonto"].ToString() == "0" ? 0 : 1;
-                                objPar.Dat_05_UNT_2_IsPonto = reader["Dat_05_UNT_2_IsPonto"].ToString() == "0" ? 0 : 1;
-                                objPar.Dat_05_BAS_1_IsPonto = reader["Dat_05_BAS_1_IsPonto"].ToString() == "0" ? 0 : 1;
-                                objPar.Dat_05_BAS_Habilitado = reader["Dat_05_BAS_Habilitado"].ToString() == "0" ? 0 : 1;
+                                try
+                                {
+                                    objPar.Dat_05_BAS_Pref = reader["Dat_05_BAS_Pref"].ToString();
+                                    objPar.Dat_05_CAN_Pref = reader["Dat_05_CAN_Pref"].ToString();
+                                    objPar.Dat_05_FRM_Pref = reader["Dat_05_FRM_Pref"].ToString();
+                                    objPar.Dat_05_FRM_SEP = reader["Dat_05_FRM_SEP"].ToString();
+                                    objPar.Dat_05_UNT_Pref = reader["Dat_05_UNT_Pref"].ToString();
+
+                                    objPar.Dat_05_CAN_1_IsPonto = reader["Dat_05_CAN_1_IsPonto"].ToString() == "0" ? 0 : 1;
+                                    objPar.Dat_05_FRM_1_IsPonto = reader["Dat_05_FRM_1_IsPonto"].ToString() == "0" ? 0 : 1;
+                                    objPar.Dat_05_UNT_1_IsPonto = reader["Dat_05_UNT_1_IsPonto"].ToString() == "0" ? 0 : 1;
+                                    objPar.Dat_05_UNT_2_IsPonto = reader["Dat_05_UNT_2_IsPonto"].ToString() == "0" ? 0 : 1;
+                                    objPar.Dat_05_BAS_1_IsPonto = reader["Dat_05_BAS_1_IsPonto"].ToString() == "0" ? 0 : 1;
+
+                                    objPar.Dat_05_BAS_Habilitado = reader["Dat_05_BAS_Habilitado"].ToString() == "0" ? 0 : 1;
+
+                                }
+                                catch
+                                { }
 
                                 #region Version 56
-                                
                                 try
                                 {
                                     objPar.DisablePopUpDispDat = Convert.ToBoolean(reader["DisablePopUpDispDat"].ToString());
                                 }
                                 catch
                                 { objPar.DisablePopUpDispDat = true; }
-
                                 #endregion
                                 #endregion
 
@@ -657,13 +720,14 @@ namespace Percolore.IOConnect.Util
                                 }
                                 #endregion
 
+                                
+
                                 #region Purga
 
                                 if (TimeSpan.TryParse(reader["PrazoExecucaoPurga"].ToString(), out ts))
                                 {
                                     objPar.PrazoExecucaoPurga = ts;
                                 }
-
                                 try
                                 {
                                     objPar.DataExecucaoPurga = DateTime.Parse(reader["DataExecucaoPurga"].ToString());
@@ -758,9 +822,21 @@ namespace Percolore.IOConnect.Util
 
                                 objPar.PathLogComunicacao = reader["PathLogComunicacao"].ToString();
 
-                                objPar.HabilitarLogAutomateTesterProt = Convert.ToBoolean(reader["HabilitarLogAutomateTesterProt"].ToString());
+                                try
+                                {
+                                    objPar.HabilitarLogAutomateTesterProt = Convert.ToBoolean(reader["HabilitarLogAutomateTesterProt"].ToString());
+                                }
+                                catch
+                                { }
 
-                                objPar.LogAutomateBackup = Convert.ToBoolean(reader["LogAutomateBackup"].ToString());
+                                try
+                                {
+                                    objPar.LogAutomateBackup = Convert.ToBoolean(reader["LogAutomateBackup"].ToString());
+                                }
+                                catch
+                                { }
+
+                                
 
                                 #endregion
 
@@ -786,6 +862,7 @@ namespace Percolore.IOConnect.Util
 
                                 objPar.MonitPulsos = Convert.ToInt32(reader["MonitPulsos"].ToString());
 
+
                                 #endregion
 
                                 #region Producao
@@ -794,70 +871,122 @@ namespace Percolore.IOConnect.Util
 
                                 objPar.IpProducao = reader["IpProducao"].ToString();
 
+
                                 objPar.PortaProducao = reader["PortaProducao"].ToString();
+
 
                                 objPar.DesabilitaMonitProcessoProducao = Convert.ToBoolean(reader["DesabilitaMonitProcessoProducao"].ToString());
 
                                 #endregion
 
                                 #region Sinc Formula
-                                
-                                objPar.DesabilitaMonitSincFormula = Convert.ToBoolean(reader["DesabilitaMonitSincFormula"].ToString());
-                                objPar.PortaSincFormula = reader["PortaSincFormula"].ToString();
-                                objPar.IpSincFormula = reader["IpSincFormula"].ToString();
-                                objPar.TipoBaseDados = reader["TipoBaseDados"].ToString();
-                                objPar.PathBasesDados = reader["PathBasesDados"].ToString();
+                                try
+                                {
+                                    objPar.DesabilitaMonitSincFormula = Convert.ToBoolean(reader["DesabilitaMonitSincFormula"].ToString());
+
+                                    objPar.PortaSincFormula = reader["PortaSincFormula"].ToString();
+
+                                    objPar.IpSincFormula = reader["IpSincFormula"].ToString();
+
+                                }
+                                catch
+                                { }
+
+                                try
+                                {
+                                    objPar.TipoBaseDados = reader["TipoBaseDados"].ToString();
+
+                                    objPar.PathBasesDados = reader["PathBasesDados"].ToString();
+                                }
+                                catch
+                                { }
 
                                 #endregion
 
                                 #region sync Token
-                                
-                                objPar.DesabilitaMonitSyncToken = Convert.ToBoolean(reader["DesabilitaMonitSyncToken"].ToString());
-                                objPar.IpSincToken = reader["IpSincToken"].ToString();
-                                objPar.PortaSincToken = reader["PortaSincToken"].ToString();
-                                objPar.TipoEventos = reader["TipoEventos"].ToString();                                
-
+                                try
+                                {
+                                    objPar.DesabilitaMonitSyncToken = Convert.ToBoolean(reader["DesabilitaMonitSyncToken"].ToString());
+                                    objPar.IpSincToken = reader["IpSincToken"].ToString();
+                                    objPar.PortaSincToken = reader["PortaSincToken"].ToString();
+                                    objPar.TipoEventos = reader["TipoEventos"].ToString();
+                                }
+                                catch
+                                { }
                                 #endregion
 
-                                objPar.TimeoutPingTcp = Convert.ToInt32(reader["TimeoutPingTcp"].ToString());
+                                try
+                                {
+                                    objPar.TimeoutPingTcp = Convert.ToInt32(reader["TimeoutPingTcp"].ToString());
+                                }
+                                catch
+                                { }
 
                                 #region sync BkpCalibragem
-                                
-                                objPar.DesabilitaMonitSyncBkpCalibragem = Convert.ToBoolean(reader["DesabilitaMonitSyncBkpCalibragem"].ToString());
-                                objPar.UrlSincBkpCalibragem = reader["UrlSincBkpCalibragem"].ToString();
-                                
+                                try
+                                {
+                                    objPar.DesabilitaMonitSyncBkpCalibragem = Convert.ToBoolean(reader["DesabilitaMonitSyncBkpCalibragem"].ToString());
+                                    objPar.UrlSincBkpCalibragem = reader["UrlSincBkpCalibragem"].ToString();
+                                }
+                                catch
+                                { }
                                 #endregion
 
                                 #region Recirculacao
-                                
-                                objPar.HabilitarRecirculacao = Convert.ToBoolean(reader["HabilitarRecirculacao"].ToString());
-                                objPar.DelayMonitRecirculacao = Convert.ToInt32(reader["DelayMonitRecirculacao"].ToString());
+                                try
+                                {
+                                    objPar.HabilitarRecirculacao = Convert.ToBoolean(reader["HabilitarRecirculacao"].ToString());
+                                    objPar.DelayMonitRecirculacao = Convert.ToInt32(reader["DelayMonitRecirculacao"].ToString());
+                                }
+                                catch
+                                { }
 
                                 #endregion
 
                                 #region Placa Movimentacao
-                                
-                                objPar.Address_PlacaMov = Convert.ToInt32(reader["Address_PlacaMov"].ToString());
-                                objPar.NomeDispositivo_PlacaMov = reader["NomeDispositivo_PlacaMov"].ToString();
-                                objPar.DelayAlertaPlacaMov = Convert.ToInt32(reader["DelayAlertaPlacaMov"].ToString());
-
+                                try
+                                {
+                                    objPar.Address_PlacaMov = Convert.ToInt32(reader["Address_PlacaMov"].ToString());
+                                    objPar.NomeDispositivo_PlacaMov = reader["NomeDispositivo_PlacaMov"].ToString();
+                                    objPar.DelayAlertaPlacaMov = Convert.ToInt32(reader["DelayAlertaPlacaMov"].ToString());
+                                    
+                                }
+                                catch
+                                { }
                                 #endregion
 
                                 #region RecirculacaoAuto
-                                
-                                objPar.HabilitarRecirculacaoAuto = Convert.ToBoolean(reader["HabilitarRecirculacaoAuto"].ToString());
-                                objPar.DelayMonitRecirculacaoAuto = Convert.ToInt32(reader["DelayMonitRecirculacaoAuto"].ToString());
-                                objPar.DelayNotificacaotRecirculacaoAuto = Convert.ToInt32(reader["DelayNotificacaotRecirculacaoAuto"].ToString());
-                                objPar.QtdNotificacaotRecirculacaoAuto = Convert.ToInt32(reader["QtdNotificacaotRecirculacaoAuto"].ToString());
+                                try
+                                {
+                                    objPar.HabilitarRecirculacaoAuto = Convert.ToBoolean(reader["HabilitarRecirculacaoAuto"].ToString());
+                                    objPar.DelayMonitRecirculacaoAuto = Convert.ToInt32(reader["DelayMonitRecirculacaoAuto"].ToString());
+                                    objPar.DelayNotificacaotRecirculacaoAuto = Convert.ToInt32(reader["DelayNotificacaotRecirculacaoAuto"].ToString());
+                                    objPar.QtdNotificacaotRecirculacaoAuto = Convert.ToInt32(reader["QtdNotificacaotRecirculacaoAuto"].ToString());
+
+                                    
+
+
+                                }
+                                catch
+                                { }
 
                                 #endregion
 
                                 #region LogBD
-                                
-                                objPar.LogBD = Convert.ToBoolean(reader["LogBD"].ToString());
-
+                                try
+                                {
+                                    objPar.LogBD = Convert.ToBoolean(reader["LogBD"].ToString());
+                                }
+                                catch
+                                {
+                                }
                                 #endregion
-                                objPar.NameRemoteAccess = reader["NameRemoteAccess"].ToString();
+                                try
+                                {
+                                    objPar.NameRemoteAccess = reader["NameRemoteAccess"].ToString();
+                                }
+                                catch
+                                { }
 
                                 try
                                 {
@@ -872,6 +1001,9 @@ namespace Percolore.IOConnect.Util
                                 }
                                 catch
                                 { objPar.LogStatusMaquina = false; }
+                                
+
+
 
                                 break;
                             }
@@ -891,270 +1023,308 @@ namespace Percolore.IOConnect.Util
         public static ObjectParametros Load()
         {
             ObjectParametros retorno = new ObjectParametros();
-            
-            if(objPar == null)
+            try
             {
-                InitLoad();
-            }
+                if(objPar == null)
+                {
+                    InitLoad();
+                }
+                if(objPar != null)
+                {
+                    #region Geral
 
-            if(objPar != null)
+                    retorno.ResponseTimeout = objPar.ResponseTimeout;
+                    retorno.Velocidade  = objPar.Velocidade;
+
+                    retorno.Aceleracao = objPar.Aceleracao;
+                    retorno.DelayReverso = objPar.DelayReverso;
+                    retorno.PulsoReverso = objPar.PulsoReverso;
+                    retorno.SomarPulsoReverso = objPar.SomarPulsoReverso;
+                    retorno.HabilitarTecladoVirtual = objPar.HabilitarTecladoVirtual;
+                    retorno.HabilitarDispensaSequencial = objPar.HabilitarDispensaSequencial;
+                    retorno.HabilitarFormulaPersonalizada = objPar.HabilitarFormulaPersonalizada;
+                    retorno.HabilitarTesteRecipiente = objPar.HabilitarTesteRecipiente;
+                    retorno.HabilitarIdentificacaoCopo = objPar.HabilitarIdentificacaoCopo;
+                    retorno.IdIdioma = objPar.IdIdioma;
+                    retorno.IdDispositivo = objPar.IdDispositivo;
+                    retorno.HabilitarPurgaIndividual = objPar.HabilitarPurgaIndividual;
+                    retorno.HabilitarTouchScrenn = objPar.HabilitarTouchScrenn;
+                    retorno.IdDispositivo2 = objPar.IdDispositivo2;
+                    //
+                    retorno.NomeDispositivo = objPar.NomeDispositivo;
+                    //
+                    retorno.NomeDispositivo2 = objPar.NomeDispositivo2;
+                    //
+                    retorno.VersaoIoconnect = objPar.VersaoIoconnect;
+                    //
+                    retorno.HabilitarDispensaSequencialP1 = objPar.HabilitarDispensaSequencialP1;
+                    retorno.HabilitarDispensaSequencialP2 = objPar.HabilitarDispensaSequencialP2;
+
+                    retorno.QtdTentativasConexao = objPar.QtdTentativasConexao;
+
+                    retorno.DelayEsponja = objPar.DelayEsponja;
+
+                    retorno.TreinamentoCal = objPar.TreinamentoCal;
+                    retorno.ViewMessageProc = objPar.ViewMessageProc;
+
+                    retorno.DelayLimpBicos = objPar.DelayLimpBicos;
+                    retorno.HabLimpBicos = objPar.HabLimpBicos;
+                    retorno.TipoLimpBicos = objPar.TipoLimpBicos;
+
+                    retorno.TipoDosagemExec = objPar.TipoDosagemExec;
+                    
+
+
+                    #endregion
+
+                    #region DAT
+
+                    retorno.PathMonitoramentoDAT = objPar.PathMonitoramentoDAT;
+                    retorno.PathRepositorioDAT = objPar.PathRepositorioDAT;
+                    retorno.PadraoConteudoDAT = objPar.PadraoConteudoDAT;
+                    retorno.BasePosicaoCircuitoDAT = objPar.BasePosicaoCircuitoDAT;
+                    retorno.UtilizarCorrespondenciaDAT = objPar.UtilizarCorrespondenciaDAT;
+                    retorno.DesabilitarInterfaceDispensaSequencial = objPar.DesabilitarInterfaceDispensaSequencial;
+                    retorno.DesabilitarInterfaceDispensaSimultanea = objPar.DesabilitarInterfaceDispensaSimultanea;
+                    retorno.DesabilitarInterfaceInicializacaoCircuito = objPar.DesabilitarInterfaceInicializacaoCircuito;
+                    retorno.DesabilitarInterfacePurga = objPar.DesabilitarInterfacePurga;
+
+                    retorno.PathMonitoramentoFilaDAT = objPar.PathMonitoramentoFilaDAT;
+                    retorno.DesabilitarMonitoramentoFilaDAT = objPar.DesabilitarMonitoramentoFilaDAT;
+                    retorno.DelayMonitoramentoFilaDAT = objPar.DelayMonitoramentoFilaDAT;
+
+                    retorno.DesabilitarVolumeMinimoDat = objPar.DesabilitarVolumeMinimoDat;
+                    retorno.VolumeMinimoDat = objPar.VolumeMinimoDat;
+
+                    retorno.Dat_06_BAS_Pref = objPar.Dat_06_BAS_Pref;
+                    retorno.Dat_06_CAN_Pref = objPar.Dat_06_CAN_Pref;
+                    retorno.Dat_06_FRM_Pref = objPar.Dat_06_FRM_Pref;
+                    retorno.Dat_06_FRM_SEP = objPar.Dat_06_FRM_SEP;
+                    retorno.Dat_06_UNT_Pref = objPar.Dat_06_UNT_Pref;
+
+                    retorno.Dat_06_CAN_1_IsPonto = objPar.Dat_06_CAN_1_IsPonto;
+                    retorno.Dat_06_FRM_1_IsPonto = objPar.Dat_06_FRM_1_IsPonto;
+                    retorno.Dat_06_UNT_1_IsPonto = objPar.Dat_06_UNT_1_IsPonto;
+                    retorno.Dat_06_UNT_2_IsPonto = objPar.Dat_06_UNT_2_IsPonto;
+                    retorno.Dat_06_BAS_1_IsPonto = objPar.Dat_06_BAS_1_IsPonto;
+
+                    retorno.Dat_06_BAS_Habilitado = objPar.Dat_06_BAS_Habilitado;
+
+                    retorno.Dat_05_BAS_Pref = objPar.Dat_05_BAS_Pref;
+                    retorno.Dat_05_CAN_Pref = objPar.Dat_05_CAN_Pref;
+                    retorno.Dat_05_FRM_Pref = objPar.Dat_05_FRM_Pref;
+                    retorno.Dat_05_FRM_SEP = objPar.Dat_05_FRM_SEP;
+                    retorno.Dat_05_UNT_Pref = objPar.Dat_05_UNT_Pref;
+
+                    retorno.Dat_05_CAN_1_IsPonto = objPar.Dat_05_CAN_1_IsPonto;
+                    retorno.Dat_05_FRM_1_IsPonto = objPar.Dat_05_FRM_1_IsPonto;
+                    retorno.Dat_05_UNT_1_IsPonto = objPar.Dat_05_UNT_1_IsPonto;
+                    retorno.Dat_05_UNT_2_IsPonto = objPar.Dat_05_UNT_2_IsPonto;
+                    retorno.Dat_05_BAS_1_IsPonto = objPar.Dat_05_BAS_1_IsPonto;
+
+                    retorno.Dat_05_BAS_Habilitado = objPar.Dat_05_BAS_Habilitado;
+
+                    retorno.ExtFileTmpUDCP = objPar.ExtFileTmpUDCP;
+                    retorno.CreateFileTmpUDCP = objPar.CreateFileTmpUDCP;
+                    retorno.DelayUDCP = objPar.DelayUDCP;
+                    retorno.ProcRemoveLataUDCP = objPar.ProcRemoveLataUDCP;
+
+                    retorno.DisablePopUpDispDat = objPar.DisablePopUpDispDat;
+
+                    #endregion
+
+                    #region Purga
+
+                    retorno.PrazoExecucaoPurga = objPar.PrazoExecucaoPurga;
+                    retorno.DataExecucaoPurga = objPar.DataExecucaoPurga;
+                    retorno.VolumePurga = objPar.VolumePurga;
+                    retorno.VelocidadePurga = objPar.VelocidadePurga;
+                    retorno.AceleracaoPurga = objPar.AceleracaoPurga;
+                    retorno.DelayPurga = objPar.DelayPurga;
+                    retorno.ControlarExecucaoPurga = objPar.ControlarExecucaoPurga;
+                    retorno.ExigirExecucaoPurga = objPar.ExigirExecucaoPurga;
+                    retorno.PurgaSequencial = objPar.PurgaSequencial;
+
+                    #endregion
+
+                    #region Controle de volume
+
+                    retorno.VolumeMinimo = objPar.VolumeMinimo;
+                    retorno.VolumeMaximo = objPar.VolumeMaximo;
+                    retorno.ControlarNivel = objPar.ControlarNivel;
+
+                    #endregion
+
+                    #region Inicialização dos circuitos
+
+                    retorno.IniPulsoInicial = objPar.IniPulsoInicial;
+                    retorno.IniPulsoLimite = objPar.IniPulsoLimite;
+                    retorno.IniVariacaoPulso = objPar.IniVariacaoPulso;
+                    retorno.IniStepVariacao = objPar.IniStepVariacao;
+                    retorno.IniVelocidade = objPar.IniVelocidade;
+                    retorno.IniAceleracao = objPar.IniAceleracao;
+                    retorno.IniMovimentoReverso = objPar.IniMovimentoReverso;
+                    retorno.InicializarCircuitosPurga = objPar.InicializarCircuitosPurga;
+                    retorno.InicializarCircuitosPurgaIndividual = objPar.InicializarCircuitosPurgaIndividual;
+                    retorno.QtdeCircuitoGrupo = objPar.QtdeCircuitoGrupo;
+
+                    #endregion
+
+                    #region Unidade de medida
+
+                    retorno.ValorShot = objPar.ValorShot;
+                    retorno.HabilitarShot = objPar.HabilitarShot;
+                    retorno.HabilitarOnca = objPar.HabilitarOnca;
+                    retorno.HabilitarMililitro = objPar.HabilitarMililitro;
+                    retorno.HabilitarGrama = objPar.HabilitarGrama;
+                    retorno.UnidadeMedidaNivelColorante = objPar.UnidadeMedidaNivelColorante;
+
+                    retorno.ValorFraction = objPar.ValorFraction;
+
+                    #endregion
+
+                    #region Log
+
+                    retorno.PathLogProcessoDispensa = objPar.PathLogProcessoDispensa;
+                    retorno.PathLogControleDispensa = objPar.PathLogControleDispensa;
+                    retorno.HabilitarLogComunicacao = objPar.HabilitarLogComunicacao;
+                    retorno.PathLogComunicacao = objPar.PathLogComunicacao;
+
+                    retorno.HabilitarLogAutomateTesterProt = objPar.HabilitarLogAutomateTesterProt;
+                    retorno.LogAutomateBackup = objPar.LogAutomateBackup;
+
+
+                    #endregion
+
+                    #region Monitoramento dos circuitos
+
+                    retorno.QtdeMonitCircuitoGrupo = objPar.QtdeMonitCircuitoGrupo;
+                    retorno.MonitVelocidade = objPar.MonitVelocidade;
+                    retorno.MonitAceleracao = objPar.MonitAceleracao;
+                    retorno.MonitDelay = objPar.MonitDelay;
+                    retorno.MonitTimerDelay = objPar.MonitTimerDelay;
+                    retorno.MonitTimerDelayIni = objPar.MonitTimerDelayIni;
+                    retorno.DesabilitarInterfaceMonitCircuito = objPar.DesabilitarInterfaceMonitCircuito;
+                    retorno.DesabilitarProcessoMonitCircuito = objPar.DesabilitarProcessoMonitCircuito;
+                    retorno.MonitMovimentoReverso = objPar.MonitMovimentoReverso;
+                    retorno.MonitPulsos = objPar.MonitPulsos;
+
+                    #endregion
+
+                    #region Producao
+
+                    retorno.TipoProducao = objPar.TipoProducao;
+
+                    retorno.IpProducao = objPar.IpProducao;
+
+                    retorno.PortaProducao = objPar.PortaProducao;
+
+                    retorno.DesabilitaMonitProcessoProducao = objPar.DesabilitaMonitProcessoProducao;
+
+                    #endregion
+
+                    #region Sinc Formula
+                    try
+                    {
+                        retorno.DesabilitaMonitSincFormula = objPar.DesabilitaMonitSincFormula;
+
+                        retorno.PortaSincFormula = objPar.PortaSincFormula;
+
+                        retorno.IpSincFormula = objPar.IpSincFormula;
+
+                    }
+                    catch
+                    { }
+
+                    #endregion
+
+
+                    retorno.TimeoutPingTcp = objPar.TimeoutPingTcp;                    
+
+
+                    #region Sync Token
+                    retorno.DesabilitaMonitSyncToken = objPar.DesabilitaMonitSyncToken;
+
+                    retorno.IpSincToken = objPar.IpSincToken;
+
+                    retorno.PortaSincToken = objPar.PortaSincToken;
+                    retorno.TipoEventos = objPar.TipoEventos;
+                    #endregion
+
+                    #region Sync BkpCalibragem
+                    retorno.DesabilitaMonitSyncBkpCalibragem = objPar.DesabilitaMonitSyncBkpCalibragem;
+                    retorno.UrlSincBkpCalibragem = objPar.UrlSincBkpCalibragem;
+                    #endregion
+
+                    #region Base de Dados
+                    try
+                    {
+                        retorno.TipoBaseDados = objPar.TipoBaseDados;
+
+                        retorno.PathBasesDados = objPar.PathBasesDados;
+                    }
+                    catch
+                    { }
+                    #endregion
+
+                    #region Recirculacao
+                    try
+                    {
+                        retorno.HabilitarRecirculacao = objPar.HabilitarRecirculacao;
+                        retorno.DelayMonitRecirculacao = objPar.DelayMonitRecirculacao;
+                    }
+                    catch
+                    { }
+
+                    #endregion
+
+                     
+                    #region Placa Movimentacao
+                    try
+                    {
+                        retorno.Address_PlacaMov = objPar.Address_PlacaMov;
+                        retorno.NomeDispositivo_PlacaMov = objPar.NomeDispositivo_PlacaMov;
+                        retorno.DelayAlertaPlacaMov = objPar.DelayAlertaPlacaMov;
+                        
+
+                    }
+                    catch
+                    { }
+                    #endregion
+
+                    #region RecirculacaoAuto
+                    try
+                    {
+                        retorno.HabilitarRecirculacaoAuto = objPar.HabilitarRecirculacaoAuto;
+                        retorno.DelayMonitRecirculacaoAuto = objPar.DelayMonitRecirculacaoAuto;
+                        retorno.DelayNotificacaotRecirculacaoAuto = objPar.DelayNotificacaotRecirculacaoAuto;
+                        retorno.QtdNotificacaotRecirculacaoAuto = objPar.QtdNotificacaotRecirculacaoAuto;
+                        
+
+
+                    }
+                    catch
+                    { }
+
+                    #endregion
+
+                    #region LogBD
+                    retorno.LogBD = objPar.LogBD;
+                    #endregion
+                    retorno.NameRemoteAccess = objPar.NameRemoteAccess;
+                    retorno.TempoReciAuto = objPar.TempoReciAuto;
+
+                    retorno.LogStatusMaquina = objPar.LogStatusMaquina;
+                }
+                else
+                {
+                    retorno = null;
+                }
+            }
+            catch
             {
-                #region Geral
 
-                retorno.ResponseTimeout = objPar.ResponseTimeout;
-                retorno.Velocidade  = objPar.Velocidade;
-                retorno.Aceleracao = objPar.Aceleracao;
-                retorno.DelayReverso = objPar.DelayReverso;
-                retorno.PulsoReverso = objPar.PulsoReverso;
-                retorno.SomarPulsoReverso = objPar.SomarPulsoReverso;
-                retorno.HabilitarTecladoVirtual = objPar.HabilitarTecladoVirtual;
-                retorno.HabilitarDispensaSequencial = objPar.HabilitarDispensaSequencial;
-                retorno.HabilitarFormulaPersonalizada = objPar.HabilitarFormulaPersonalizada;
-                retorno.HabilitarTesteRecipiente = objPar.HabilitarTesteRecipiente;
-                retorno.HabilitarIdentificacaoCopo = objPar.HabilitarIdentificacaoCopo;
-                retorno.IdIdioma = objPar.IdIdioma;
-                retorno.IdDispositivo = objPar.IdDispositivo;
-                retorno.HabilitarPurgaIndividual = objPar.HabilitarPurgaIndividual;
-                retorno.HabilitarTouchScrenn = objPar.HabilitarTouchScrenn;
-                retorno.IdDispositivo2 = objPar.IdDispositivo2;
-                //
-                retorno.NomeDispositivo = objPar.NomeDispositivo;
-                //
-                retorno.NomeDispositivo2 = objPar.NomeDispositivo2;
-                //
-                retorno.VersaoIoconnect = objPar.VersaoIoconnect;
-                //
-                retorno.HabilitarDispensaSequencialP1 = objPar.HabilitarDispensaSequencialP1;
-                retorno.HabilitarDispensaSequencialP2 = objPar.HabilitarDispensaSequencialP2;
-
-                retorno.QtdTentativasConexao = objPar.QtdTentativasConexao;
-
-                retorno.DelayEsponja = objPar.DelayEsponja;
-
-                retorno.TreinamentoCal = objPar.TreinamentoCal;
-                retorno.ViewMessageProc = objPar.ViewMessageProc;
-
-                retorno.DelayLimpBicos = objPar.DelayLimpBicos;
-                retorno.HabLimpBicos = objPar.HabLimpBicos;
-                retorno.TipoLimpBicos = objPar.TipoLimpBicos;
-
-                retorno.TipoDosagemExec = objPar.TipoDosagemExec;
-
-                #endregion
-
-                #region DAT
-
-                retorno.PathMonitoramentoDAT = objPar.PathMonitoramentoDAT;
-                retorno.PathRepositorioDAT = objPar.PathRepositorioDAT;
-                retorno.PadraoConteudoDAT = objPar.PadraoConteudoDAT;
-                retorno.BasePosicaoCircuitoDAT = objPar.BasePosicaoCircuitoDAT;
-                retorno.UtilizarCorrespondenciaDAT = objPar.UtilizarCorrespondenciaDAT;
-                retorno.DesabilitarInterfaceDispensaSequencial = objPar.DesabilitarInterfaceDispensaSequencial;
-                retorno.DesabilitarInterfaceDispensaSimultanea = objPar.DesabilitarInterfaceDispensaSimultanea;
-                retorno.DesabilitarInterfaceInicializacaoCircuito = objPar.DesabilitarInterfaceInicializacaoCircuito;
-                retorno.DesabilitarInterfacePurga = objPar.DesabilitarInterfacePurga;
-
-                retorno.PathMonitoramentoFilaDAT = objPar.PathMonitoramentoFilaDAT;
-                retorno.DesabilitarMonitoramentoFilaDAT = objPar.DesabilitarMonitoramentoFilaDAT;
-                retorno.DelayMonitoramentoFilaDAT = objPar.DelayMonitoramentoFilaDAT;
-
-                retorno.DesabilitarVolumeMinimoDat = objPar.DesabilitarVolumeMinimoDat;
-                retorno.VolumeMinimoDat = objPar.VolumeMinimoDat;
-
-                retorno.Dat_06_BAS_Pref = objPar.Dat_06_BAS_Pref;
-                retorno.Dat_06_CAN_Pref = objPar.Dat_06_CAN_Pref;
-                retorno.Dat_06_FRM_Pref = objPar.Dat_06_FRM_Pref;
-                retorno.Dat_06_FRM_SEP = objPar.Dat_06_FRM_SEP;
-                retorno.Dat_06_UNT_Pref = objPar.Dat_06_UNT_Pref;
-
-                retorno.Dat_06_CAN_1_IsPonto = objPar.Dat_06_CAN_1_IsPonto;
-                retorno.Dat_06_FRM_1_IsPonto = objPar.Dat_06_FRM_1_IsPonto;
-                retorno.Dat_06_UNT_1_IsPonto = objPar.Dat_06_UNT_1_IsPonto;
-                retorno.Dat_06_UNT_2_IsPonto = objPar.Dat_06_UNT_2_IsPonto;
-                retorno.Dat_06_BAS_1_IsPonto = objPar.Dat_06_BAS_1_IsPonto;
-
-                retorno.Dat_06_BAS_Habilitado = objPar.Dat_06_BAS_Habilitado;
-
-                retorno.Dat_05_BAS_Pref = objPar.Dat_05_BAS_Pref;
-                retorno.Dat_05_CAN_Pref = objPar.Dat_05_CAN_Pref;
-                retorno.Dat_05_FRM_Pref = objPar.Dat_05_FRM_Pref;
-                retorno.Dat_05_FRM_SEP = objPar.Dat_05_FRM_SEP;
-                retorno.Dat_05_UNT_Pref = objPar.Dat_05_UNT_Pref;
-
-                retorno.Dat_05_CAN_1_IsPonto = objPar.Dat_05_CAN_1_IsPonto;
-                retorno.Dat_05_FRM_1_IsPonto = objPar.Dat_05_FRM_1_IsPonto;
-                retorno.Dat_05_UNT_1_IsPonto = objPar.Dat_05_UNT_1_IsPonto;
-                retorno.Dat_05_UNT_2_IsPonto = objPar.Dat_05_UNT_2_IsPonto;
-                retorno.Dat_05_BAS_1_IsPonto = objPar.Dat_05_BAS_1_IsPonto;
-
-                retorno.Dat_05_BAS_Habilitado = objPar.Dat_05_BAS_Habilitado;
-
-                retorno.ExtFileTmpUDCP = objPar.ExtFileTmpUDCP;
-                retorno.CreateFileTmpUDCP = objPar.CreateFileTmpUDCP;
-                retorno.DelayUDCP = objPar.DelayUDCP;
-                retorno.ProcRemoveLataUDCP = objPar.ProcRemoveLataUDCP;
-
-                retorno.DisablePopUpDispDat = objPar.DisablePopUpDispDat;
-
-                #endregion
-
-                #region Purga
-
-                retorno.PrazoExecucaoPurga = objPar.PrazoExecucaoPurga;
-                retorno.DataExecucaoPurga = objPar.DataExecucaoPurga;
-                retorno.VolumePurga = objPar.VolumePurga;
-                retorno.VelocidadePurga = objPar.VelocidadePurga;
-                retorno.AceleracaoPurga = objPar.AceleracaoPurga;
-                retorno.DelayPurga = objPar.DelayPurga;
-                retorno.ControlarExecucaoPurga = objPar.ControlarExecucaoPurga;
-                retorno.ExigirExecucaoPurga = objPar.ExigirExecucaoPurga;
-                retorno.PurgaSequencial = objPar.PurgaSequencial;
-
-                #endregion
-
-                #region Controle de volume
-
-                retorno.VolumeMinimo = objPar.VolumeMinimo;
-                retorno.VolumeMaximo = objPar.VolumeMaximo;
-                retorno.ControlarNivel = objPar.ControlarNivel;
-
-                #endregion
-
-                #region Inicialização dos circuitos
-
-                retorno.IniPulsoInicial = objPar.IniPulsoInicial;
-                retorno.IniPulsoLimite = objPar.IniPulsoLimite;
-                retorno.IniVariacaoPulso = objPar.IniVariacaoPulso;
-                retorno.IniStepVariacao = objPar.IniStepVariacao;
-                retorno.IniVelocidade = objPar.IniVelocidade;
-                retorno.IniAceleracao = objPar.IniAceleracao;
-                retorno.IniMovimentoReverso = objPar.IniMovimentoReverso;
-                retorno.InicializarCircuitosPurga = objPar.InicializarCircuitosPurga;
-                retorno.InicializarCircuitosPurgaIndividual = objPar.InicializarCircuitosPurgaIndividual;
-                retorno.QtdeCircuitoGrupo = objPar.QtdeCircuitoGrupo;
-
-                #endregion
-
-                #region Unidade de medida
-
-                retorno.ValorShot = objPar.ValorShot;
-                retorno.HabilitarShot = objPar.HabilitarShot;
-                retorno.HabilitarOnca = objPar.HabilitarOnca;
-                retorno.HabilitarMililitro = objPar.HabilitarMililitro;
-                retorno.HabilitarGrama = objPar.HabilitarGrama;
-                retorno.UnidadeMedidaNivelColorante = objPar.UnidadeMedidaNivelColorante;
-
-                retorno.ValorFraction = objPar.ValorFraction;
-
-                #endregion
-
-                #region Log
-
-                retorno.PathLogProcessoDispensa = objPar.PathLogProcessoDispensa;
-                retorno.PathLogControleDispensa = objPar.PathLogControleDispensa;
-                retorno.HabilitarLogComunicacao = objPar.HabilitarLogComunicacao;
-                retorno.PathLogComunicacao = objPar.PathLogComunicacao;
-
-                retorno.HabilitarLogAutomateTesterProt = objPar.HabilitarLogAutomateTesterProt;
-                retorno.LogAutomateBackup = objPar.LogAutomateBackup;
-
-                #endregion
-
-                #region Monitoramento dos circuitos
-
-                retorno.QtdeMonitCircuitoGrupo = objPar.QtdeMonitCircuitoGrupo;
-                retorno.MonitVelocidade = objPar.MonitVelocidade;
-                retorno.MonitAceleracao = objPar.MonitAceleracao;
-                retorno.MonitDelay = objPar.MonitDelay;
-                retorno.MonitTimerDelay = objPar.MonitTimerDelay;
-                retorno.MonitTimerDelayIni = objPar.MonitTimerDelayIni;
-                retorno.DesabilitarInterfaceMonitCircuito = objPar.DesabilitarInterfaceMonitCircuito;
-                retorno.DesabilitarProcessoMonitCircuito = objPar.DesabilitarProcessoMonitCircuito;
-                retorno.MonitMovimentoReverso = objPar.MonitMovimentoReverso;
-                retorno.MonitPulsos = objPar.MonitPulsos;
-
-                #endregion
-
-                #region Producao
-
-                retorno.TipoProducao = objPar.TipoProducao;
-
-                retorno.IpProducao = objPar.IpProducao;
-
-                retorno.PortaProducao = objPar.PortaProducao;
-
-                retorno.DesabilitaMonitProcessoProducao = objPar.DesabilitaMonitProcessoProducao;
-
-                #endregion
-
-                #region Sinc Formula
-                
-                retorno.DesabilitaMonitSincFormula = objPar.DesabilitaMonitSincFormula;
-                retorno.PortaSincFormula = objPar.PortaSincFormula;
-                retorno.IpSincFormula = objPar.IpSincFormula;
-
-                #endregion
-
-                retorno.TimeoutPingTcp = objPar.TimeoutPingTcp;                    
-
-                #region Sync Token
-                retorno.DesabilitaMonitSyncToken = objPar.DesabilitaMonitSyncToken;
-
-                retorno.IpSincToken = objPar.IpSincToken;
-
-                retorno.PortaSincToken = objPar.PortaSincToken;
-                retorno.TipoEventos = objPar.TipoEventos;
-                #endregion
-
-                #region Sync BkpCalibragem
-                retorno.DesabilitaMonitSyncBkpCalibragem = objPar.DesabilitaMonitSyncBkpCalibragem;
-                retorno.UrlSincBkpCalibragem = objPar.UrlSincBkpCalibragem;
-                #endregion
-
-                #region Base de Dados
-                
-                retorno.TipoBaseDados = objPar.TipoBaseDados;
-                retorno.PathBasesDados = objPar.PathBasesDados;
-
-                #endregion
-
-                #region Recirculacao
-                
-                retorno.HabilitarRecirculacao = objPar.HabilitarRecirculacao;
-                retorno.DelayMonitRecirculacao = objPar.DelayMonitRecirculacao;
-
-                #endregion
-
-                #region Placa Movimentacao
-                
-                retorno.Address_PlacaMov = objPar.Address_PlacaMov;
-                retorno.NomeDispositivo_PlacaMov = objPar.NomeDispositivo_PlacaMov;
-                retorno.DelayAlertaPlacaMov = objPar.DelayAlertaPlacaMov;
-
-                #endregion
-
-                #region RecirculacaoAuto
-                
-                retorno.HabilitarRecirculacaoAuto = objPar.HabilitarRecirculacaoAuto;
-                retorno.DelayMonitRecirculacaoAuto = objPar.DelayMonitRecirculacaoAuto;
-                retorno.DelayNotificacaotRecirculacaoAuto = objPar.DelayNotificacaotRecirculacaoAuto;
-                retorno.QtdNotificacaotRecirculacaoAuto = objPar.QtdNotificacaotRecirculacaoAuto;
-
-                #endregion
-
-                #region LogBD
-                retorno.LogBD = objPar.LogBD;
-                #endregion
-                retorno.NameRemoteAccess = objPar.NameRemoteAccess;
-                retorno.TempoReciAuto = objPar.TempoReciAuto;
-
-                retorno.LogStatusMaquina = objPar.LogStatusMaquina;
             }
-            else
-            {
-                retorno = null;
-            }
-
             return retorno;
         }
 
@@ -1289,6 +1459,8 @@ namespace Percolore.IOConnect.Util
             if (p.MonitPulsos == 0)
                 validacoes.AppendLine(Negocio.IdiomaResxExtensao.Parametros_Monit_PulsoMaiorZero);
 
+
+
             #endregion
 
             #region Unidade de medida
@@ -1332,44 +1504,57 @@ namespace Percolore.IOConnect.Util
         public static bool SetExecucaoPurga(DateTime data_hora)
         {
             bool retorno = false;
-            
-            if (File.Exists(PathFile))
-            {
-                using (SQLiteConnection conn = Util.SQLite.CreateSQLiteConnection(PathFile, false))
+            try
+            {               
+                if (File.Exists(PathFile))
                 {
-                    using (SQLiteCommand cmd = new SQLiteCommand(conn))
+                    using (SQLiteConnection conn = Util.SQLite.CreateSQLiteConnection(PathFile, false))
                     {
-                        conn.Open();
+                        using (SQLiteCommand cmd = new SQLiteCommand(conn))
+                        {
+                            conn.Open();
 
-                        cmd.CommandText = "UPDATE Parametros SET DataExecucaoPurga = '" + string.Format("{0:yyyy-MM-dd HH:mm:ss}", data_hora) + "';";
+                            cmd.CommandText = "UPDATE Parametros SET DataExecucaoPurga = '" + string.Format("{0:yyyy-MM-dd HH:mm:ss}", data_hora) + "';";
                             
-                        retorno = cmd.ExecuteNonQuery() > 0;
+                            cmd.ExecuteNonQuery();
 
-                        conn.Close();
+                            conn.Close();
+                            retorno = true;
+                        }
                     }
                 }
             }
-
+            catch
+            {
+                throw;
+            }
             return retorno;
         }
 
         public static void SetIdIdioma(int id)
         {
-            if (File.Exists(PathFile))
+            try
             {
-                using (SQLiteConnection conn = Util.SQLite.CreateSQLiteConnection(PathFile, false))
+                if (File.Exists(PathFile))
                 {
-                    using (SQLiteCommand cmd = new SQLiteCommand(conn))
+                    using (SQLiteConnection conn = Util.SQLite.CreateSQLiteConnection(PathFile, false))
                     {
-                        conn.Open();
+                        using (SQLiteCommand cmd = new SQLiteCommand(conn))
+                        {
+                            conn.Open();
 
-                        cmd.CommandText = "UPDATE Parametros SET IdIdioma = '" + id.ToString() + "';";
+                            cmd.CommandText = "UPDATE Parametros SET IdIdioma = '" + id.ToString() + "';";
 
-                        cmd.ExecuteNonQuery();
+                            cmd.ExecuteNonQuery();
 
-                        conn.Close();
+                            conn.Close();
+                        }
                     }
                 }
+            }
+            catch
+            {
+                throw;
             }
         }
 
@@ -1381,579 +1566,630 @@ namespace Percolore.IOConnect.Util
 
         public static void Persist(ObjectParametros p)
         {
-            if (File.Exists(PathFile))
+            try
             {
-                StringBuilder sb = new StringBuilder();
-                using (SQLiteConnection conn = Util.SQLite.CreateSQLiteConnection(PathFile, false))
+                if (File.Exists(PathFile))
                 {
-                    using (SQLiteCommand cmd = new SQLiteCommand(conn))
+                    StringBuilder sb = new StringBuilder();
+                    using (SQLiteConnection conn = Util.SQLite.CreateSQLiteConnection(PathFile, false))
                     {
-                        conn.Open();
-                        sb.Append("UPDATE Parametros SET ");
-                        #region Geral
+                        using (SQLiteCommand cmd = new SQLiteCommand(conn))
+                        {
+                            conn.Open();
+                            sb.Append("UPDATE Parametros SET ");
+                            #region Geral
 
-                        sb.Append(" ResponseTimeout = '"+ p.ResponseTimeout.ToString() + "', " );
-                        sb.Append(" Velocidade = '" + p.Velocidade.ToString() + "', ");
-                        sb.Append(" Aceleracao = '" + p.Aceleracao.ToString() + "', ");
-                        sb.Append(" RevDelay = '" + p.DelayReverso.ToString() + "', ");
-                        sb.Append(" RevPulsos = '" + p.PulsoReverso.ToString() + "', ");
-                        //sb.Append(" SomarRevPulsos = '" + (p.SomarPulsoReverso ? "True" : "False" ) + "', ");
-                        sb.Append(" SomarRevPulsos = 'True', ");
-                        sb.Append(" HabilitarTecladoVirtual = '" + (p.HabilitarTecladoVirtual ? "True" : "False") + "', ");
-                        sb.Append(" HabilitarDispensaSequencial = '" + (p.HabilitarDispensaSequencial ? "True" : "False")  + "', ");
-                        sb.Append(" HabilitarFormulaPersonalizada = '" +(p.HabilitarFormulaPersonalizada ? "True" : "False")  + "', ");
-                        sb.Append(" HabilitarTesteRecipiente = '" + (p.HabilitarTesteRecipiente ? "True" : "False") + "', ");
-                        sb.Append(" HabilitarIdentificacaoCopo = '" + (p.HabilitarIdentificacaoCopo? "True" : "False") + "', ");
-                        sb.Append(" IdDispositivo = '" + p.IdDispositivo.ToString() + "', ");
-                        sb.Append(" HabilitarPurgaIndividual = '" + (p.HabilitarPurgaIndividual ? "True" : "False") + "', ");
-                        sb.Append(" HabilitarTouchScrenn = '" + (p.HabilitarTouchScrenn ? "True" : "False") + "', ");
-                        //sb.Append(" VersaoIoconnect = '" + p.VersaoIoconnect + "', ");
-                        sb.Append(" IdDispositivo2 = '" + p.IdDispositivo2.ToString() + "', ");
-                        sb.Append(" NomeDispositivo = '" + p.NomeDispositivo + "', ");
-                        sb.Append(" NomeDispositivo2 = '" + p.NomeDispositivo2 + "', ");
-                        sb.Append(" HabilitarDispensaSequencialP1 = '" + (p.HabilitarDispensaSequencialP1 ? "True" : "False") + "', ");
-                        sb.Append(" HabilitarDispensaSequencialP2 = '" + (p.HabilitarDispensaSequencialP2 ? "True" : "False") + "', ");
+                            sb.Append(" ResponseTimeout = '"+ p.ResponseTimeout.ToString() + "', " );
+                            sb.Append(" Velocidade = '" + p.Velocidade.ToString() + "', ");
+                            sb.Append(" Aceleracao = '" + p.Aceleracao.ToString() + "', ");
+                            sb.Append(" RevDelay = '" + p.DelayReverso.ToString() + "', ");
+                            sb.Append(" RevPulsos = '" + p.PulsoReverso.ToString() + "', ");
+                            //sb.Append(" SomarRevPulsos = '" + (p.SomarPulsoReverso ? "True" : "False" ) + "', ");
+                            sb.Append(" SomarRevPulsos = 'True', ");
+                            sb.Append(" HabilitarTecladoVirtual = '" + (p.HabilitarTecladoVirtual ? "True" : "False") + "', ");
+                            sb.Append(" HabilitarDispensaSequencial = '" + (p.HabilitarDispensaSequencial ? "True" : "False")  + "', ");
+                            sb.Append(" HabilitarFormulaPersonalizada = '" +(p.HabilitarFormulaPersonalizada ? "True" : "False")  + "', ");
+                            sb.Append(" HabilitarTesteRecipiente = '" + (p.HabilitarTesteRecipiente ? "True" : "False") + "', ");
+                            sb.Append(" HabilitarIdentificacaoCopo = '" + (p.HabilitarIdentificacaoCopo? "True" : "False") + "', ");
+                            sb.Append(" IdDispositivo = '" + p.IdDispositivo.ToString() + "', ");
+                            sb.Append(" HabilitarPurgaIndividual = '" + (p.HabilitarPurgaIndividual ? "True" : "False") + "', ");
+                            sb.Append(" HabilitarTouchScrenn = '" + (p.HabilitarTouchScrenn ? "True" : "False") + "', ");
+                            //sb.Append(" VersaoIoconnect = '" + p.VersaoIoconnect + "', ");
+                            sb.Append(" IdDispositivo2 = '" + p.IdDispositivo2.ToString() + "', ");
+                            sb.Append(" NomeDispositivo = '" + p.NomeDispositivo + "', ");
+                            sb.Append(" NomeDispositivo2 = '" + p.NomeDispositivo2 + "', ");
+                            sb.Append(" HabilitarDispensaSequencialP1 = '" + (p.HabilitarDispensaSequencialP1 ? "True" : "False") + "', ");
+                            sb.Append(" HabilitarDispensaSequencialP2 = '" + (p.HabilitarDispensaSequencialP2 ? "True" : "False") + "', ");
 
-                        sb.Append(" TreinamentoCal = '" + (p.TreinamentoCal ? "True" : "False") + "', ");
-                        sb.Append(" ViewMessageProc = '" + (p.ViewMessageProc ? "True" : "False") + "', ");
+                            sb.Append(" TreinamentoCal = '" + (p.TreinamentoCal ? "True" : "False") + "', ");
+                            sb.Append(" ViewMessageProc = '" + (p.ViewMessageProc ? "True" : "False") + "', ");
 
-                        sb.Append(" QtdTentativasConexao = '" + p.QtdTentativasConexao + "', ");
-                        sb.Append(" DelayEsponja = '" + p.DelayEsponja + "', ");
-
-                        sb.Append(" HabLimpBicos = '" + (p.HabLimpBicos ? "True" : "False") + "', ");
-                        sb.Append(" DelayLimpBicos = '" + p.DelayLimpBicos.ToString() + "', ");
-                        sb.Append(" TipoLimpBicos = '" + p.TipoLimpBicos.ToString() + "', ");
-
-                        sb.Append(" TipoDosagemExec = '" + p.TipoDosagemExec.ToString() + "', ");
-                        
-                        #endregion
-
-                        #region DAT
-
-                        sb.Append(" PathDAT = '" + p.PathMonitoramentoDAT + "', ");
-                        sb.Append(" PathRepositorioDAT = '" + p.PathRepositorioDAT + "', ");
-                        sb.Append(" PadraoConteudoDAT = '" + p.PadraoConteudoDAT.ToString() + "', ");
-                        sb.Append(" BasePosicaoCircuitoDAT = '" + p.BasePosicaoCircuitoDAT.ToString() + "', ");
-                        sb.Append(" UtilizarCorrespondenciaDAT = '" + (p.UtilizarCorrespondenciaDAT ? "True" : "False") + "', ");
-                        sb.Append(" DesabilitarInterfaceDispensaSequencial = '" + (p.DesabilitarInterfaceDispensaSequencial ? "True" : "False") + "', ");
-                        sb.Append(" DesabilitarInterfaceDispensaSimultanea = '" + (p.DesabilitarInterfaceDispensaSimultanea ? "True" : "False") + "', ");
-                        sb.Append(" DesabilitarInterfaceInicializacaoCircuito = '" + (p.DesabilitarInterfaceInicializacaoCircuito ? "True" : "False") + "', ");
-                        sb.Append(" DesabilitarInterfacePurga = '" + (p.DesabilitarInterfacePurga ? "True" : "False") + "', ");
-
-                        sb.Append(" PathFilaDAT = '" + p.PathMonitoramentoFilaDAT + "', ");
-                        sb.Append(" DesabilitarMonitoramentoFilaDAT = '" + (p.DesabilitarMonitoramentoFilaDAT ? "True" : "False") + "', ");
-                        sb.Append(" DelayMonitoramentoFilaDAT = '" + p.DelayMonitoramentoFilaDAT.ToString() + "', ");
-
-                        sb.Append(" DesabilitarVolumeMinimoDat = '" + (p.DesabilitarVolumeMinimoDat ? "True" : "False") + "', ");
-                        sb.Append(" VolumeMinimoDat = '" + p.VolumeMinimoDat.ToString().Replace(",", ".") + "', ");
-
-                        sb.Append(" Dat_06_UNT_Pref = '" + p.Dat_06_UNT_Pref+ "', ");
-                        sb.Append(" Dat_06_UNT_1_IsPonto = '" + p.Dat_06_UNT_1_IsPonto.ToString() + "', ");
-                        sb.Append(" Dat_06_UNT_2_IsPonto = '" + p.Dat_06_UNT_2_IsPonto.ToString() + "', ");
-
-                        sb.Append(" Dat_06_CAN_Pref = '" + p.Dat_06_CAN_Pref + "', ");
-                        sb.Append(" Dat_06_CAN_1_IsPonto = '" + p.Dat_06_CAN_1_IsPonto.ToString() + "', ");
-
-                        sb.Append(" Dat_06_FRM_Pref = '" + p.Dat_06_FRM_Pref + "', ");
-                        sb.Append(" Dat_06_FRM_SEP = '" + p.Dat_06_FRM_SEP + "', ");
-                        sb.Append(" Dat_06_FRM_1_IsPonto = '" + p.Dat_06_FRM_1_IsPonto.ToString() + "', ");
-
-                        sb.Append(" Dat_06_BAS_Pref = '" + p.Dat_06_BAS_Pref + "', ");
-                        sb.Append(" Dat_06_BAS_1_IsPonto = '" + p.Dat_06_BAS_1_IsPonto.ToString() + "', ");
-
-                        sb.Append(" Dat_06_BAS_Habilitado = '" + p.Dat_06_BAS_Habilitado.ToString() + "', ");
-
-                        sb.Append(" Dat_05_UNT_Pref = '" + p.Dat_05_UNT_Pref + "', ");
-                        sb.Append(" Dat_05_UNT_1_IsPonto = '" + p.Dat_05_UNT_1_IsPonto.ToString() + "', ");
-                        sb.Append(" Dat_05_UNT_2_IsPonto = '" + p.Dat_05_UNT_2_IsPonto.ToString() + "', ");
-
-                        sb.Append(" Dat_05_CAN_Pref = '" + p.Dat_05_CAN_Pref + "', ");
-                        sb.Append(" Dat_05_CAN_1_IsPonto  = '" + p.Dat_05_CAN_1_IsPonto.ToString() + "', ");
-
-                        sb.Append(" Dat_05_FRM_Pref = '" + p.Dat_05_FRM_Pref + "', ");
-                        sb.Append(" Dat_05_FRM_SEP = '" + p.Dat_05_FRM_SEP + "', ");
-                        sb.Append(" Dat_05_FRM_1_IsPonto = '" + p.Dat_05_FRM_1_IsPonto.ToString() + "', ");
-
-                        sb.Append(" Dat_05_BAS_Pref = '" + p.Dat_05_BAS_Pref + "', ");
-                        sb.Append(" Dat_05_BAS_1_IsPonto = '" + p.Dat_05_BAS_1_IsPonto.ToString() + "', ");
-
-                        sb.Append(" Dat_05_BAS_Habilitado = '" + p.Dat_05_BAS_Habilitado.ToString() + "', ");
-
-                        sb.Append(" ExtFileTmpUDCP = '" + p.ExtFileTmpUDCP.ToString() + "', ");
-                        sb.Append(" CreateFileTmpUDCP = '" + p.CreateFileTmpUDCP.ToString() + "', ");
-                        sb.Append(" DelayUDCP = '" + p.DelayUDCP.ToString() + "', ");
-
-                        sb.Append(" ProcRemoveLataUDCP = '" + (p.ProcRemoveLataUDCP ? "True" : "False") + "', ");
-
-                        sb.Append(" DisablePopUpDispDat = '" + (p.DisablePopUpDispDat ? "True" : "False") + "', ");
-
-                        #endregion
-
-                        #region Purga
-
-                        sb.Append(" PrazoExecucaoPurga = '" + RetunStringFromTimespan(p.PrazoExecucaoPurga) + "', ");
-                        sb.Append(" VolumePurga = '" + p.VolumePurga.ToString().Replace(",", ".") + "', ");
-                        sb.Append(" VelocidadePurga = '" + p.VelocidadePurga.ToString() + "', ");
-                        sb.Append(" AceleracaoPurga = '" + p.AceleracaoPurga.ToString() + "', ");
-                        sb.Append(" DelayPurga = '" + p.DelayPurga.ToString() + "', ");
-                        sb.Append(" ControlarExecucaoPurga = '" + (p.ControlarExecucaoPurga ? "True" : "False") + "', ");
-                        sb.Append(" ExigirExecucaoPurga = '" + (p.ExigirExecucaoPurga ? "True" : "False") + "', ");
-                        sb.Append(" PurgaSequencial = '" + (p.PurgaSequencial ? "True" : "False") + "', ");
-
-                        #endregion
-
-                        #region Controle de volume
-
-                        sb.Append(" VolumeMinimo = '" + p.VolumeMinimo.ToString().Replace(",", ".") + "', ");
-                        sb.Append(" VolumeMaximo = '" + p.VolumeMaximo.ToString().Replace(",", ".") + "', ");
-                        sb.Append(" ControlarVolume = '" + (p.ControlarNivel ? "True" : "False") + "', ");
-
-                        #endregion
-
-                        #region Inicialização de circuitos
-
-                        sb.Append(" IniPulsoInicial = '" + p.IniPulsoInicial.ToString() + "', ");
-                        sb.Append(" IniPulsoLimite = '" + p.IniPulsoLimite.ToString() + "', ");
-                        sb.Append(" IniVariacaoPulso = '" + p.IniVariacaoPulso.ToString() + "', ");
-                        sb.Append(" IniStepVariacao = '" + p.IniStepVariacao.ToString().Replace(",", ".") + "', ");
-                        sb.Append(" IniVelocidade = '" + p.IniVelocidade.ToString() + "', ");
-                        sb.Append(" IniAceleracao = '" + p.IniAceleracao.ToString() + "', ");
-                        sb.Append(" IniMovimentoReverso = '" + (p.IniMovimentoReverso ? "True" : "False") + "', ");
-                        sb.Append(" InicializarCircuitosPurga = '" + (p.InicializarCircuitosPurga ? "True" : "False") + "', ");
-                        sb.Append(" InicializarCircuitosPurgaIndividual = '" + (p.InicializarCircuitosPurgaIndividual ? "True" : "False") + "', ");
-                        sb.Append(" QtdeCircuitoGrupo = '" + p.QtdeCircuitoGrupo.ToString() + "', ");
-
-                        #endregion
-
-                        #region Monitoramento dos circuitos
-
-                        sb.Append(" QtdeMonitCircuitoGrupo = '" + p.QtdeMonitCircuitoGrupo.ToString() + "', ");
-                        sb.Append(" DesabilitarInterfaceMonitCircuito = '" + (p.DesabilitarInterfaceMonitCircuito ? "True" : "False") + "', ");
-                        sb.Append(" DesabilitarProcessoMonitCircuito = '" + (p.DesabilitarProcessoMonitCircuito ? "True" : "False") + "', ");
-                        sb.Append(" MonitMovimentoReverso = '" + (p.MonitMovimentoReverso ? "True" : "False") + "', ");
-                        sb.Append(" MonitVelocidade = '" + p.MonitVelocidade.ToString() + "', ");
-                        sb.Append(" MonitAceleracao = '" + p.MonitAceleracao.ToString() + "', ");
-                        sb.Append(" MonitDelay = '" + p.MonitDelay.ToString() + "', ");
-                        sb.Append(" MonitTimerDelay = '" + p.MonitTimerDelay.ToString() + "', ");
-                        sb.Append(" MonitTimerDelayIni = '" + p.MonitTimerDelayIni.ToString() + "', ");
-                        sb.Append(" MonitPulsos = '" + p.MonitPulsos.ToString() + "', ");
-
-                        #endregion
-
-                        #region Unidade de medida
-
-                        sb.Append(" ValorShot = '" + p.ValorShot.ToString().Replace(",", ".") + "', ");
-                        sb.Append(" HabilitarShot = '" + (p.HabilitarShot ? "True" : "False") + "', ");
-                        sb.Append(" HabilitarOnca = '" + (p.HabilitarOnca ? "True" : "False") + "', ");
-                        sb.Append(" HabilitarMililitro = '" + (p.HabilitarMililitro ? "True" : "False") + "', ");
-                        sb.Append(" HabilitarGrama = '" + (p.HabilitarGrama ? "True" : "False") + "', ");
-                        sb.Append(" UnidadeMedidaNivelColorante = '" + p.UnidadeMedidaNivelColorante.ToString() + "', ");
-
-                        sb.Append(" ValorFraction = '" + p.ValorFraction.ToString() + "', ");
-                        
-                        #endregion
-
-                        #region Log
-
-                        sb.Append(" PathLogProcessoDispensa = '" + p.PathLogProcessoDispensa + "', ");
-                        sb.Append(" PathLogControleDispensa = '" + p.PathLogControleDispensa + "', ");
-                        sb.Append(" HabilitarLogComunicacao = '" + (p.HabilitarLogComunicacao ? "True" : "False") + "', ");
-                        sb.Append(" PathLogComunicacao = '" + p.PathLogComunicacao + "', ");
-
-                        sb.Append(" HabilitarLogAutomateTesterProt = '" + (p.HabilitarLogAutomateTesterProt ? "True" : "False") + "', ");
-                        sb.Append(" LogAutomateBackup = '" + (p.LogAutomateBackup ? "True" : "False") + "', ");
-                        
-                        #endregion
-
-                        #region Produção
-
-                        sb.Append(" TipoProducao = '" + p.TipoProducao + "', ");
-                        sb.Append(" IpProducao = '" + p.IpProducao + "', ");
-                        sb.Append(" PortaProducao = '" + p.PortaProducao + "', ");
-                        sb.Append(" DesabilitaMonitProcessoProducao = '" + (p.DesabilitaMonitProcessoProducao ? "True" : "False") + "', ");
-                        #endregion
-
-                        #region Sinc Formula
-                        sb.Append(" DesabilitaMonitSincFormula = '" + ( p.DesabilitaMonitSincFormula ? "True" : "False") + "', ");
-                        sb.Append(" PortaSincFormula = '" + p.PortaSincFormula + "', ");
-                        sb.Append(" IpSincFormula = '" + p.IpSincFormula + "', ");
-                        #endregion
-
-                        sb.Append(" TimeoutPingTcp = '" + p.TimeoutPingTcp.ToString() + "', ");
-                        
-                        #region Sinc Token
-                        sb.Append(" DesabilitaMonitSyncToken = '" + (p.DesabilitaMonitSyncToken ? "True" : "False") + "', ");
-                        sb.Append(" IpSincToken  = '" + p.IpSincToken + "', ");
-                        sb.Append(" PortaSincToken = '" + p.PortaSincToken + "', ");
-                        sb.Append(" TipoEventos = '" + p.TipoEventos + "', ");
-                        #endregion
-
-                        #region Sinc BkpCalibragem
-                        sb.Append(" DesabilitaMonitSyncBkpCalibragem = '" + (p.DesabilitaMonitSyncBkpCalibragem ? "True" : "False") + "', ");
-                        sb.Append(" UrlSincBkpCalibragem  = '" + p.UrlSincBkpCalibragem + "', ");
-                        #endregion
-
-                        #region Recirculacao
-                        sb.Append(" HabilitarRecirculacao = '" + (p.HabilitarRecirculacao ? "True" : "False") + "', ");
-                        sb.Append(" DelayMonitRecirculacao = '" + p.DelayMonitRecirculacao.ToString() + "', ");
-                        #endregion
-
-                        #region Placa Movimentacao
-                        sb.Append(" Address_PlacaMov = '" + p.Address_PlacaMov.ToString() + "', ");
-                        sb.Append(" NomeDispositivo_PlacaMov = '" + p.NomeDispositivo_PlacaMov.ToString() + "', ");
-                        sb.Append(" DelayAlertaPlacaMov = '" + p.DelayAlertaPlacaMov.ToString() + "', ");
-
-                        #endregion
-
-                        #region RecirculacaoAuto
-                        sb.Append(" HabilitarRecirculacaoAuto = '" + (p.HabilitarRecirculacaoAuto ? "True" : "False") + "', ");
-                        sb.Append(" DelayMonitRecirculacaoAuto = '" + p.DelayMonitRecirculacaoAuto.ToString() + "', ");
-                        sb.Append(" DelayNotificacaotRecirculacaoAuto = '" + p.DelayNotificacaotRecirculacaoAuto.ToString() + "', ");
-                        sb.Append(" QtdNotificacaotRecirculacaoAuto = '" + p.QtdNotificacaotRecirculacaoAuto.ToString() + "', ");
-                        sb.Append(" TempoReciAuto = '" + p.TempoReciAuto.ToString() + "', ");
-                        
-                        #endregion
-
-                        #region LogBD
-                        sb.Append(" LogBD = '" + (p.LogBD ? "True" : "False") + "', ");
-                        #endregion
-
-                        sb.Append(" NameRemoteAccess = '" + p.NameRemoteAccess + "', ");
                             
-                        #region  Base de Dados
-                        sb.Append(" TipoBaseDados = '" + p.TipoBaseDados + "', ");
-                        sb.Append(" PathBasesDados = '" + p.PathBasesDados + "', ");
-                        #endregion
-                        sb.Append(" LogStatusMaquina = '" + (p.LogStatusMaquina ? "True" : "False")  + "'; ");
-                        
-                        cmd.CommandText = sb.ToString();
 
-                        cmd.ExecuteNonQuery();
+                            sb.Append(" QtdTentativasConexao = '" + p.QtdTentativasConexao + "', ");
+                            sb.Append(" DelayEsponja = '" + p.DelayEsponja + "', ");
 
-                        conn.Close();
+                            sb.Append(" HabLimpBicos = '" + (p.HabLimpBicos ? "True" : "False") + "', ");
+                            sb.Append(" DelayLimpBicos = '" + p.DelayLimpBicos.ToString() + "', ");
+                            sb.Append(" TipoLimpBicos = '" + p.TipoLimpBicos.ToString() + "', ");
+
+                            sb.Append(" TipoDosagemExec = '" + p.TipoDosagemExec.ToString() + "', ");
+                            
+
+                            #endregion
+
+
+                            #region DAT
+
+                            sb.Append(" PathDAT = '" + p.PathMonitoramentoDAT + "', ");
+                            sb.Append(" PathRepositorioDAT = '" + p.PathRepositorioDAT + "', ");
+                            sb.Append(" PadraoConteudoDAT = '" + p.PadraoConteudoDAT.ToString() + "', ");
+                            sb.Append(" BasePosicaoCircuitoDAT = '" + p.BasePosicaoCircuitoDAT.ToString() + "', ");
+                            sb.Append(" UtilizarCorrespondenciaDAT = '" + (p.UtilizarCorrespondenciaDAT ? "True" : "False") + "', ");
+                            sb.Append(" DesabilitarInterfaceDispensaSequencial = '" + (p.DesabilitarInterfaceDispensaSequencial ? "True" : "False") + "', ");
+                            sb.Append(" DesabilitarInterfaceDispensaSimultanea = '" + (p.DesabilitarInterfaceDispensaSimultanea ? "True" : "False") + "', ");
+                            sb.Append(" DesabilitarInterfaceInicializacaoCircuito = '" + (p.DesabilitarInterfaceInicializacaoCircuito ? "True" : "False") + "', ");
+                            sb.Append(" DesabilitarInterfacePurga = '" + (p.DesabilitarInterfacePurga ? "True" : "False") + "', ");
+
+                            sb.Append(" PathFilaDAT = '" + p.PathMonitoramentoFilaDAT + "', ");
+                            sb.Append(" DesabilitarMonitoramentoFilaDAT = '" + (p.DesabilitarMonitoramentoFilaDAT ? "True" : "False") + "', ");
+                            sb.Append(" DelayMonitoramentoFilaDAT = '" + p.DelayMonitoramentoFilaDAT.ToString() + "', ");
+
+                            sb.Append(" DesabilitarVolumeMinimoDat = '" + (p.DesabilitarVolumeMinimoDat ? "True" : "False") + "', ");
+                            sb.Append(" VolumeMinimoDat = '" + p.VolumeMinimoDat.ToString().Replace(",", ".") + "', ");
+
+                            sb.Append(" Dat_06_UNT_Pref = '" + p.Dat_06_UNT_Pref+ "', ");
+                            sb.Append(" Dat_06_UNT_1_IsPonto = '" + p.Dat_06_UNT_1_IsPonto.ToString() + "', ");
+                            sb.Append(" Dat_06_UNT_2_IsPonto = '" + p.Dat_06_UNT_2_IsPonto.ToString() + "', ");
+
+                            sb.Append(" Dat_06_CAN_Pref = '" + p.Dat_06_CAN_Pref + "', ");
+                            sb.Append(" Dat_06_CAN_1_IsPonto = '" + p.Dat_06_CAN_1_IsPonto.ToString() + "', ");
+
+                            sb.Append(" Dat_06_FRM_Pref = '" + p.Dat_06_FRM_Pref + "', ");
+                            sb.Append(" Dat_06_FRM_SEP = '" + p.Dat_06_FRM_SEP + "', ");
+                            sb.Append(" Dat_06_FRM_1_IsPonto = '" + p.Dat_06_FRM_1_IsPonto.ToString() + "', ");
+
+                            sb.Append(" Dat_06_BAS_Pref = '" + p.Dat_06_BAS_Pref + "', ");
+                            sb.Append(" Dat_06_BAS_1_IsPonto = '" + p.Dat_06_BAS_1_IsPonto.ToString() + "', ");
+
+                            sb.Append(" Dat_06_BAS_Habilitado = '" + p.Dat_06_BAS_Habilitado.ToString() + "', ");
+
+
+                            sb.Append(" Dat_05_UNT_Pref = '" + p.Dat_05_UNT_Pref + "', ");
+                            sb.Append(" Dat_05_UNT_1_IsPonto = '" + p.Dat_05_UNT_1_IsPonto.ToString() + "', ");
+                            sb.Append(" Dat_05_UNT_2_IsPonto = '" + p.Dat_05_UNT_2_IsPonto.ToString() + "', ");
+
+                            sb.Append(" Dat_05_CAN_Pref = '" + p.Dat_05_CAN_Pref + "', ");
+                            sb.Append(" Dat_05_CAN_1_IsPonto  = '" + p.Dat_05_CAN_1_IsPonto.ToString() + "', ");
+
+                            sb.Append(" Dat_05_FRM_Pref = '" + p.Dat_05_FRM_Pref + "', ");
+                            sb.Append(" Dat_05_FRM_SEP = '" + p.Dat_05_FRM_SEP + "', ");
+                            sb.Append(" Dat_05_FRM_1_IsPonto = '" + p.Dat_05_FRM_1_IsPonto.ToString() + "', ");
+
+                            sb.Append(" Dat_05_BAS_Pref = '" + p.Dat_05_BAS_Pref + "', ");
+                            sb.Append(" Dat_05_BAS_1_IsPonto = '" + p.Dat_05_BAS_1_IsPonto.ToString() + "', ");
+
+                            sb.Append(" Dat_05_BAS_Habilitado = '" + p.Dat_05_BAS_Habilitado.ToString() + "', ");
+
+                            sb.Append(" ExtFileTmpUDCP = '" + p.ExtFileTmpUDCP.ToString() + "', ");
+                            sb.Append(" CreateFileTmpUDCP = '" + p.CreateFileTmpUDCP.ToString() + "', ");
+                            sb.Append(" DelayUDCP = '" + p.DelayUDCP.ToString() + "', ");
+
+                            sb.Append(" ProcRemoveLataUDCP = '" + (p.ProcRemoveLataUDCP ? "True" : "False") + "', ");
+
+                            sb.Append(" DisablePopUpDispDat = '" + (p.DisablePopUpDispDat ? "True" : "False") + "', ");
+
+
+
+
+                            #endregion
+
+                            #region Purga
+
+                            sb.Append(" PrazoExecucaoPurga = '" + RetunStringFromTimespan(p.PrazoExecucaoPurga) + "', ");
+                            sb.Append(" VolumePurga = '" + p.VolumePurga.ToString().Replace(",", ".") + "', ");
+                            sb.Append(" VelocidadePurga = '" + p.VelocidadePurga.ToString() + "', ");
+                            sb.Append(" AceleracaoPurga = '" + p.AceleracaoPurga.ToString() + "', ");
+                            sb.Append(" DelayPurga = '" + p.DelayPurga.ToString() + "', ");
+                            sb.Append(" ControlarExecucaoPurga = '" + (p.ControlarExecucaoPurga ? "True" : "False") + "', ");
+                            sb.Append(" ExigirExecucaoPurga = '" + (p.ExigirExecucaoPurga ? "True" : "False") + "', ");
+                            sb.Append(" PurgaSequencial = '" + (p.PurgaSequencial ? "True" : "False") + "', ");
+
+                            #endregion
+
+                            #region Controle de volume
+
+                            sb.Append(" VolumeMinimo = '" + p.VolumeMinimo.ToString().Replace(",", ".") + "', ");
+                            sb.Append(" VolumeMaximo = '" + p.VolumeMaximo.ToString().Replace(",", ".") + "', ");
+                            sb.Append(" ControlarVolume = '" + (p.ControlarNivel ? "True" : "False") + "', ");
+
+                            #endregion
+
+                            #region Inicialização de circuitos
+
+                            sb.Append(" IniPulsoInicial = '" + p.IniPulsoInicial.ToString() + "', ");
+                            sb.Append(" IniPulsoLimite = '" + p.IniPulsoLimite.ToString() + "', ");
+                            sb.Append(" IniVariacaoPulso = '" + p.IniVariacaoPulso.ToString() + "', ");
+                            sb.Append(" IniStepVariacao = '" + p.IniStepVariacao.ToString().Replace(",", ".") + "', ");
+                            sb.Append(" IniVelocidade = '" + p.IniVelocidade.ToString() + "', ");
+                            sb.Append(" IniAceleracao = '" + p.IniAceleracao.ToString() + "', ");
+                            sb.Append(" IniMovimentoReverso = '" + (p.IniMovimentoReverso ? "True" : "False") + "', ");
+                            sb.Append(" InicializarCircuitosPurga = '" + (p.InicializarCircuitosPurga ? "True" : "False") + "', ");
+                            sb.Append(" InicializarCircuitosPurgaIndividual = '" + (p.InicializarCircuitosPurgaIndividual ? "True" : "False") + "', ");
+                            sb.Append(" QtdeCircuitoGrupo = '" + p.QtdeCircuitoGrupo.ToString() + "', ");
+
+                            #endregion
+
+                            #region Monitoramento dos circuitos
+
+                            sb.Append(" QtdeMonitCircuitoGrupo = '" + p.QtdeMonitCircuitoGrupo.ToString() + "', ");
+                            sb.Append(" DesabilitarInterfaceMonitCircuito = '" + (p.DesabilitarInterfaceMonitCircuito ? "True" : "False") + "', ");
+                            sb.Append(" DesabilitarProcessoMonitCircuito = '" + (p.DesabilitarProcessoMonitCircuito ? "True" : "False") + "', ");
+                            sb.Append(" MonitMovimentoReverso = '" + (p.MonitMovimentoReverso ? "True" : "False") + "', ");
+                            sb.Append(" MonitVelocidade = '" + p.MonitVelocidade.ToString() + "', ");
+                            sb.Append(" MonitAceleracao = '" + p.MonitAceleracao.ToString() + "', ");
+                            sb.Append(" MonitDelay = '" + p.MonitDelay.ToString() + "', ");
+                            sb.Append(" MonitTimerDelay = '" + p.MonitTimerDelay.ToString() + "', ");
+                            sb.Append(" MonitTimerDelayIni = '" + p.MonitTimerDelayIni.ToString() + "', ");
+                            sb.Append(" MonitPulsos = '" + p.MonitPulsos.ToString() + "', ");
+
+                            #endregion
+
+                            #region Unidade de medida
+
+                            sb.Append(" ValorShot = '" + p.ValorShot.ToString().Replace(",", ".") + "', ");
+                            sb.Append(" HabilitarShot = '" + (p.HabilitarShot ? "True" : "False") + "', ");
+                            sb.Append(" HabilitarOnca = '" + (p.HabilitarOnca ? "True" : "False") + "', ");
+                            sb.Append(" HabilitarMililitro = '" + (p.HabilitarMililitro ? "True" : "False") + "', ");
+                            sb.Append(" HabilitarGrama = '" + (p.HabilitarGrama ? "True" : "False") + "', ");
+                            sb.Append(" UnidadeMedidaNivelColorante = '" + p.UnidadeMedidaNivelColorante.ToString() + "', ");
+
+                            sb.Append(" ValorFraction = '" + p.ValorFraction.ToString() + "', ");
+                                                     
+
+                            #endregion
+
+                            #region Log
+
+                            sb.Append(" PathLogProcessoDispensa = '" + p.PathLogProcessoDispensa + "', ");
+                            sb.Append(" PathLogControleDispensa = '" + p.PathLogControleDispensa + "', ");
+                            sb.Append(" HabilitarLogComunicacao = '" + (p.HabilitarLogComunicacao ? "True" : "False") + "', ");
+                            sb.Append(" PathLogComunicacao = '" + p.PathLogComunicacao + "', ");
+
+                            sb.Append(" HabilitarLogAutomateTesterProt = '" + (p.HabilitarLogAutomateTesterProt ? "True" : "False") + "', ");
+                            sb.Append(" LogAutomateBackup = '" + (p.LogAutomateBackup ? "True" : "False") + "', ");
+                            
+
+                            #endregion
+
+                            #region Produção
+
+                            sb.Append(" TipoProducao = '" + p.TipoProducao + "', ");
+                            sb.Append(" IpProducao = '" + p.IpProducao + "', ");
+                            sb.Append(" PortaProducao = '" + p.PortaProducao + "', ");
+                            sb.Append(" DesabilitaMonitProcessoProducao = '" + (p.DesabilitaMonitProcessoProducao ? "True" : "False") + "', ");
+                            #endregion
+
+                            #region Sinc Formula
+                            sb.Append(" DesabilitaMonitSincFormula = '" + ( p.DesabilitaMonitSincFormula ? "True" : "False") + "', ");
+                            sb.Append(" PortaSincFormula = '" + p.PortaSincFormula + "', ");
+                            sb.Append(" IpSincFormula = '" + p.IpSincFormula + "', ");
+                            #endregion
+
+                            sb.Append(" TimeoutPingTcp = '" + p.TimeoutPingTcp.ToString() + "', ");
+                            
+
+                            #region Sinc Token
+                            sb.Append(" DesabilitaMonitSyncToken = '" + (p.DesabilitaMonitSyncToken ? "True" : "False") + "', ");
+                            sb.Append(" IpSincToken  = '" + p.IpSincToken + "', ");
+                            sb.Append(" PortaSincToken = '" + p.PortaSincToken + "', ");
+                            sb.Append(" TipoEventos = '" + p.TipoEventos + "', ");
+                            #endregion
+
+                            #region Sinc BkpCalibragem
+                            sb.Append(" DesabilitaMonitSyncBkpCalibragem = '" + (p.DesabilitaMonitSyncBkpCalibragem ? "True" : "False") + "', ");
+                            sb.Append(" UrlSincBkpCalibragem  = '" + p.UrlSincBkpCalibragem + "', ");
+                            #endregion
+
+                            #region Recirculacao
+                            sb.Append(" HabilitarRecirculacao = '" + (p.HabilitarRecirculacao ? "True" : "False") + "', ");
+                            sb.Append(" DelayMonitRecirculacao = '" + p.DelayMonitRecirculacao.ToString() + "', ");
+                            #endregion
+
+                            #region Placa Movimentacao
+                            sb.Append(" Address_PlacaMov = '" + p.Address_PlacaMov.ToString() + "', ");
+                            sb.Append(" NomeDispositivo_PlacaMov = '" + p.NomeDispositivo_PlacaMov.ToString() + "', ");
+                            sb.Append(" DelayAlertaPlacaMov = '" + p.DelayAlertaPlacaMov.ToString() + "', ");
+
+                            #endregion
+
+
+                            #region RecirculacaoAuto
+                            sb.Append(" HabilitarRecirculacaoAuto = '" + (p.HabilitarRecirculacaoAuto ? "True" : "False") + "', ");
+                            sb.Append(" DelayMonitRecirculacaoAuto = '" + p.DelayMonitRecirculacaoAuto.ToString() + "', ");
+                            sb.Append(" DelayNotificacaotRecirculacaoAuto = '" + p.DelayNotificacaotRecirculacaoAuto.ToString() + "', ");
+                            sb.Append(" QtdNotificacaotRecirculacaoAuto = '" + p.QtdNotificacaotRecirculacaoAuto.ToString() + "', ");
+                            sb.Append(" TempoReciAuto = '" + p.TempoReciAuto.ToString() + "', ");
+                            
+
+                            #endregion
+
+                            #region LogBD
+                            sb.Append(" LogBD = '" + (p.LogBD ? "True" : "False") + "', ");
+                            #endregion
+
+                            sb.Append(" NameRemoteAccess = '" + p.NameRemoteAccess + "', ");
+                            
+                            #region  Base de Dados
+                            sb.Append(" TipoBaseDados = '" + p.TipoBaseDados + "', ");
+                            sb.Append(" PathBasesDados = '" + p.PathBasesDados + "', ");
+                            #endregion
+                            sb.Append(" LogStatusMaquina = '" + (p.LogStatusMaquina ? "True" : "False")  + "'; ");
+                            
+
+
+
+
+
+                            cmd.CommandText = sb.ToString();
+
+                            cmd.ExecuteNonQuery();
+
+                            conn.Close();
+
+                        }
                     }
-                }
 
-                gerarEventoALteradaConfiguacao(0, "");
+                    gerarEventoALteradaConfiguacao(0, "");
+                }               
+
+
+            }
+            catch
+            {
+                throw;
             }
         }
 
         public static void PersistInsert(ObjectParametros p)
         {
-            if (File.Exists(PathFile))
+            try
             {
-                StringBuilder sb = new StringBuilder();
-                using (SQLiteConnection conn = Util.SQLite.CreateSQLiteConnection(PathFile, false))
-				{
-                    using (SQLiteCommand cmd = new SQLiteCommand(conn))
-                    {
-                        conn.Open();
-                        sb.Append("INSERT INTO Parametros ( ");
+                if (File.Exists(PathFile))
+                {
+                    StringBuilder sb = new StringBuilder();
+                    using (SQLiteConnection conn = Util.SQLite.CreateSQLiteConnection(PathFile, false))
+					{
+                        using (SQLiteCommand cmd = new SQLiteCommand(conn))
+                        {
+                            conn.Open();
+                            sb.Append("INSERT INTO Parametros ( ");
 
-                        #region Geral
+                            #region Geral
 
-                        sb.Append(" ResponseTimeout, ");
-                        sb.Append(" Velocidade, ");
-                        sb.Append(" Aceleracao, ");
-                        sb.Append(" RevDelay, ");
-                        sb.Append(" RevPulsos, ");
-                        sb.Append(" SomarRevPulsos, ");
-                        sb.Append(" HabilitarTecladoVirtual, ");
-                        sb.Append(" HabilitarDispensaSequencial, ");
-                        sb.Append(" HabilitarFormulaPersonalizada, ");
-                        sb.Append(" HabilitarTesteRecipiente, ");
-                        sb.Append(" IdDispositivo, ");
-                        sb.Append(" HabilitarPurgaIndividual, ");
-                        sb.Append(" HabilitarTouchScrenn, ");
-                        sb.Append(" VersaoIoconnect, ");
-                        sb.Append(" IdDispositivo2, ");
-                        sb.Append(" NomeDispositivo, ");
-                        sb.Append(" NomeDispositivo2, ");
-                        sb.Append(" HabilitarDispensaSequencialP1, ");
-                        sb.Append(" HabilitarDispensaSequencialP2, ");
+                            sb.Append(" ResponseTimeout, ");
+                            sb.Append(" Velocidade, ");
+                            sb.Append(" Aceleracao, ");
+                            sb.Append(" RevDelay, ");
+                            sb.Append(" RevPulsos, ");
+                            sb.Append(" SomarRevPulsos, ");
+                            sb.Append(" HabilitarTecladoVirtual, ");
+                            sb.Append(" HabilitarDispensaSequencial, ");
+                            sb.Append(" HabilitarFormulaPersonalizada, ");
+                            sb.Append(" HabilitarTesteRecipiente, ");
+                            sb.Append(" IdDispositivo, ");
+                            sb.Append(" HabilitarPurgaIndividual, ");
+                            sb.Append(" HabilitarTouchScrenn, ");
+                            sb.Append(" VersaoIoconnect, ");
+                            sb.Append(" IdDispositivo2, ");
+                            sb.Append(" NomeDispositivo, ");
+                            sb.Append(" NomeDispositivo2, ");
+                            sb.Append(" HabilitarDispensaSequencialP1, ");
+                            sb.Append(" HabilitarDispensaSequencialP2, ");
 
-                        #endregion
+                            #endregion
 
-                        #region DAT
 
-                        sb.Append(" PathDAT, ");
-                        sb.Append(" PathRepositorioDAT, ");
-                        sb.Append(" PadraoConteudoDAT, ");
-                        sb.Append(" BasePosicaoCircuitoDAT, ");
-                        sb.Append(" UtilizarCorrespondenciaDAT, ");
-                        sb.Append(" DesabilitarInterfaceDispensaSequencial, ");
-                        sb.Append(" DesabilitarInterfaceDispensaSimultanea, ");
-                        sb.Append(" DesabilitarInterfaceInicializacaoCircuito, ");
-                        sb.Append(" DesabilitarInterfacePurga, ");
+                            #region DAT
 
-                        sb.Append(" DesabilitarVolumeMinimoDat, ");
-                        sb.Append(" VolumeMinimoDat, ");
+                            sb.Append(" PathDAT, ");
+                            sb.Append(" PathRepositorioDAT, ");
+                            sb.Append(" PadraoConteudoDAT, ");
+                            sb.Append(" BasePosicaoCircuitoDAT, ");
+                            sb.Append(" UtilizarCorrespondenciaDAT, ");
+                            sb.Append(" DesabilitarInterfaceDispensaSequencial, ");
+                            sb.Append(" DesabilitarInterfaceDispensaSimultanea, ");
+                            sb.Append(" DesabilitarInterfaceInicializacaoCircuito, ");
+                            sb.Append(" DesabilitarInterfacePurga, ");
 
-                        #endregion
+                            sb.Append(" DesabilitarVolumeMinimoDat, ");
+                            sb.Append(" VolumeMinimoDat, ");
 
-                        #region Purga
+                            #endregion
 
-                        sb.Append(" PrazoExecucaoPurga, ");
-                        sb.Append(" VolumePurga, ");
-                        sb.Append(" VelocidadePurga, ");
-                        sb.Append(" AceleracaoPurga, ");
-                        sb.Append(" DelayPurga, ");
-                        sb.Append(" ControlarExecucaoPurga, ");
-                        sb.Append(" ExigirExecucaoPurga, ");
-                        sb.Append(" PurgaSequencial, ");
+                            #region Purga
 
-                        #endregion
+                            sb.Append(" PrazoExecucaoPurga, ");
+                            sb.Append(" VolumePurga, ");
+                            sb.Append(" VelocidadePurga, ");
+                            sb.Append(" AceleracaoPurga, ");
+                            sb.Append(" DelayPurga, ");
+                            sb.Append(" ControlarExecucaoPurga, ");
+                            sb.Append(" ExigirExecucaoPurga, ");
+                            sb.Append(" PurgaSequencial, ");
 
-                        #region Controle de volume
+                            #endregion
 
-                        sb.Append(" VolumeMinimo, ");
-                        sb.Append(" VolumeMaximo, ");
-                        sb.Append(" ControlarVolume, ");
+                            #region Controle de volume
 
-                        #endregion
+                            sb.Append(" VolumeMinimo, ");
+                            sb.Append(" VolumeMaximo, ");
+                            sb.Append(" ControlarVolume, ");
 
-                        #region Inicialização de circuitos
+                            #endregion
 
-                        sb.Append(" IniPulsoInicial, ");
-                        sb.Append(" IniPulsoLimite, ");
-                        sb.Append(" IniVariacaoPulso, ");
-                        sb.Append(" IniStepVariacao, ");
-                        sb.Append(" IniVelocidade, ");
-                        sb.Append(" IniAceleracao, ");
-                        sb.Append(" IniMovimentoReverso, ");
-                        sb.Append(" InicializarCircuitosPurga, ");
-                        sb.Append(" InicializarCircuitosPurgaIndividual, ");
-                        sb.Append(" QtdeCircuitoGrupo, ");
+                            #region Inicialização de circuitos
 
-                        #endregion
+                            sb.Append(" IniPulsoInicial, ");
+                            sb.Append(" IniPulsoLimite, ");
+                            sb.Append(" IniVariacaoPulso, ");
+                            sb.Append(" IniStepVariacao, ");
+                            sb.Append(" IniVelocidade, ");
+                            sb.Append(" IniAceleracao, ");
+                            sb.Append(" IniMovimentoReverso, ");
+                            sb.Append(" InicializarCircuitosPurga, ");
+                            sb.Append(" InicializarCircuitosPurgaIndividual, ");
+                            sb.Append(" QtdeCircuitoGrupo, ");
 
-                        #region Monitoramento dos circuitos
+                            #endregion
 
-                        sb.Append(" QtdeMonitCircuitoGrupo, ");
-                        sb.Append(" DesabilitarInterfaceMonitCircuito, ");
-                        sb.Append(" DesabilitarProcessoMonitCircuito, ");
-                        sb.Append(" MonitMovimentoReverso, ");
-                        sb.Append(" MonitVelocidade, ");
-                        sb.Append(" MonitAceleracao, ");
-                        sb.Append(" MonitDelay, ");
-                        sb.Append(" MonitTimerDelay, ");
-                        sb.Append(" MonitTimerDelayIni, ");
-                        sb.Append(" MonitPulsos, ");
+                            #region Monitoramento dos circuitos
 
-                        #endregion
+                            sb.Append(" QtdeMonitCircuitoGrupo, ");
+                            sb.Append(" DesabilitarInterfaceMonitCircuito, ");
+                            sb.Append(" DesabilitarProcessoMonitCircuito, ");
+                            sb.Append(" MonitMovimentoReverso, ");
+                            sb.Append(" MonitVelocidade, ");
+                            sb.Append(" MonitAceleracao, ");
+                            sb.Append(" MonitDelay, ");
+                            sb.Append(" MonitTimerDelay, ");
+                            sb.Append(" MonitTimerDelayIni, ");
+                            sb.Append(" MonitPulsos, ");
 
-                        #region Unidade de medida
+                            #endregion
 
-                        sb.Append(" ValorShot, ");
-                        sb.Append(" HabilitarShot, ");
-                        sb.Append(" HabilitarOnca, ");
-                        sb.Append(" HabilitarMililitro, ");
-                        sb.Append(" HabilitarGrama, ");
-                        sb.Append(" UnidadeMedidaNivelColorante, ");
+                            #region Unidade de medida
 
-                        sb.Append(" ValorFraction, ");
-                        
-                        #endregion
+                            sb.Append(" ValorShot, ");
+                            sb.Append(" HabilitarShot, ");
+                            sb.Append(" HabilitarOnca, ");
+                            sb.Append(" HabilitarMililitro, ");
+                            sb.Append(" HabilitarGrama, ");
+                            sb.Append(" UnidadeMedidaNivelColorante, ");
 
-                        #region Log
+                            sb.Append(" ValorFraction, ");
+                           
 
-                        sb.Append(" PathLogProcessoDispensa, ");
-                        sb.Append(" PathLogControleDispensa, ");
-                        sb.Append(" HabilitarLogComunicacao, ");
-                        sb.Append(" PathLogComunicacao, ");
-                        //sb.Append(" HabilitarLogAutomateTesterProt, ");
-                        
-                        #endregion
+                            #endregion
 
-                        #region Produção
+                            #region Log
 
-                        sb.Append(" TipoProducao, ");
-                        sb.Append(" IpProducao, ");
-                        sb.Append(" PortaProducao, ");
-                        sb.Append(" DesabilitaMonitProcessoProducao, ");
-
-                        #endregion
-
-                        #region Sinc Formula
-                        sb.Append(" DesabilitaMonitSincFormula, ");
-                        sb.Append(" PortaSincFormula, ");
-                        sb.Append(" IpSincFormula ");
-
-                        #endregion
-
-                        #region  Base de Dados
-                        //sb.Append(" TipoBaseDados, ");
-                        //sb.Append(" PathBasesDados ");
-                        #endregion
-
-                        //Values
-
-                        sb.Append(") VALUES ( ");
-
-                        #region Geral
-
-                        sb.Append("'" + p.ResponseTimeout.ToString() + "', ");
-                        sb.Append("'" + p.Velocidade.ToString() + "', ");
-                        sb.Append("'" + p.Aceleracao.ToString() + "', ");
-                        sb.Append("'" + p.DelayReverso.ToString() + "', ");
-                        sb.Append("'" + p.PulsoReverso.ToString() + "', ");
-                        //sb.Append("'" + (p.SomarPulsoReverso ? "True" : "False") + "', ");
-                        sb.Append("'True', ");
-                        sb.Append("'" + (p.HabilitarTecladoVirtual ? "True" : "False") + "', ");
-                        sb.Append("'" + (p.HabilitarDispensaSequencial ? "True" : "False") + "', ");
-                        sb.Append("'" + (p.HabilitarFormulaPersonalizada ? "True" : "False") + "', ");
-                        sb.Append("'" + (p.HabilitarTesteRecipiente ? "True" : "False") + "', ");
-                        sb.Append("'" + p.IdDispositivo.ToString() + "', ");
-                        sb.Append("'" + (p.HabilitarPurgaIndividual ? "True" : "False") + "', ");
-                        sb.Append("'" + (p.HabilitarTouchScrenn ? "True" : "False") + "', ");
-                        sb.Append("'" + p.VersaoIoconnect + "', ");
-                        sb.Append("'" + p.IdDispositivo2.ToString() + "', ");
-                        sb.Append("'" + p.NomeDispositivo + "', ");
-                        sb.Append("'" + p.NomeDispositivo2 + "', ");
-                        sb.Append("'" + (p.HabilitarDispensaSequencialP1 ? "True" : "False") + "', ");
-                        sb.Append("'" + (p.HabilitarDispensaSequencialP2 ? "True" : "False") + "', ");
-
-                        #endregion
+                            sb.Append(" PathLogProcessoDispensa, ");
+                            sb.Append(" PathLogControleDispensa, ");
+                            sb.Append(" HabilitarLogComunicacao, ");
+                            sb.Append(" PathLogComunicacao, ");
+                            //sb.Append(" HabilitarLogAutomateTesterProt, ");
                             
-                        #region DAT
 
-                        sb.Append("'" + p.PathMonitoramentoDAT + "', ");
-                        sb.Append("'" + p.PathRepositorioDAT + "', ");
-                        sb.Append("'" + p.PadraoConteudoDAT.ToString() + "', ");
-                        sb.Append("'" + p.BasePosicaoCircuitoDAT.ToString() + "', ");
-                        sb.Append("'" + (p.UtilizarCorrespondenciaDAT ? "True" : "False") + "', ");
-                        sb.Append("'" + (p.DesabilitarInterfaceDispensaSequencial ? "True" : "False") + "', ");
-                        sb.Append("'" + (p.DesabilitarInterfaceDispensaSimultanea ? "True" : "False") + "', ");
-                        sb.Append("'" + (p.DesabilitarInterfaceInicializacaoCircuito ? "True" : "False") + "', ");
-                        sb.Append("'" + (p.DesabilitarInterfacePurga ? "True" : "False") + "', ");
+                            #endregion
 
-                        sb.Append("'" + (p.DesabilitarVolumeMinimoDat ? "True" : "False") + "', ");
-                        sb.Append("'" + p.VolumeMinimoDat.ToString().Replace(",", ".") + "', ");
+                            #region Produção
 
-                        #endregion
+                            sb.Append(" TipoProducao, ");
+                            sb.Append(" IpProducao, ");
+                            sb.Append(" PortaProducao, ");
+                            sb.Append(" DesabilitaMonitProcessoProducao, ");
 
-                        #region Purga
+                            #endregion
 
-                        sb.Append("'" + RetunStringFromTimespan(p.PrazoExecucaoPurga) + "', ");
-                        sb.Append("'" + p.VolumePurga.ToString().Replace(",", ".") + "', ");
-                        sb.Append("'" + p.VelocidadePurga.ToString() + "', ");
-                        sb.Append("'" + p.AceleracaoPurga.ToString() + "', ");
-                        sb.Append("'" + p.DelayPurga.ToString() + "', ");
-                        sb.Append("'" + (p.ControlarExecucaoPurga ? "True" : "False") + "', ");
-                        sb.Append("'" + (p.ExigirExecucaoPurga ? "True" : "False") + "', ");
-                        sb.Append("'" + (p.PurgaSequencial ? "True" : "False") + "', ");
+                          
+                            #region Sinc Formula
+                            sb.Append(" DesabilitaMonitSincFormula, ");
+                            sb.Append(" PortaSincFormula, ");
+                            sb.Append(" IpSincFormula ");
 
-                        #endregion
+                            #endregion
 
-                        #region Controle de volume
+                            #region  Base de Dados
+                            //sb.Append(" TipoBaseDados, ");
+                            //sb.Append(" PathBasesDados ");
+                            #endregion
 
-                        sb.Append("'" + p.VolumeMinimo.ToString().Replace(",", ".") + "', ");
-                        sb.Append("'" + p.VolumeMaximo.ToString().Replace(",", ".") + "', ");
-                        sb.Append("'" + (p.ControlarNivel ? "True" : "False") + "', ");
 
-                        #endregion
+                            //Values
 
-                        #region Inicialização de circuitos
+                            sb.Append(") VALUES ( ");
 
-                        sb.Append("'" + p.IniPulsoInicial.ToString() + "', ");
-                        sb.Append("'" + p.IniPulsoLimite.ToString() + "', ");
-                        sb.Append("'" + p.IniVariacaoPulso.ToString() + "', ");
-                        sb.Append("'" + p.IniStepVariacao.ToString().Replace(",", ".") + "', ");
-                        sb.Append("'" + p.IniVelocidade.ToString() + "', ");
-                        sb.Append("'" + p.IniAceleracao.ToString() + "', ");
-                        sb.Append("'" + (p.IniMovimentoReverso ? "True" : "False") + "', ");
-                        sb.Append("'" + (p.InicializarCircuitosPurga ? "True" : "False") + "', ");
-                        sb.Append("'" + (p.InicializarCircuitosPurgaIndividual ? "True" : "False") + "', ");
-                        sb.Append("'" + p.QtdeCircuitoGrupo.ToString() + "', ");
+                            #region Geral
 
-                        #endregion
+                            sb.Append("'" + p.ResponseTimeout.ToString() + "', ");
+                            sb.Append("'" + p.Velocidade.ToString() + "', ");
+                            sb.Append("'" + p.Aceleracao.ToString() + "', ");
+                            sb.Append("'" + p.DelayReverso.ToString() + "', ");
+                            sb.Append("'" + p.PulsoReverso.ToString() + "', ");
+                            //sb.Append("'" + (p.SomarPulsoReverso ? "True" : "False") + "', ");
+                            sb.Append("'True', ");
+                            sb.Append("'" + (p.HabilitarTecladoVirtual ? "True" : "False") + "', ");
+                            sb.Append("'" + (p.HabilitarDispensaSequencial ? "True" : "False") + "', ");
+                            sb.Append("'" + (p.HabilitarFormulaPersonalizada ? "True" : "False") + "', ");
+                            sb.Append("'" + (p.HabilitarTesteRecipiente ? "True" : "False") + "', ");
+                            sb.Append("'" + p.IdDispositivo.ToString() + "', ");
+                            sb.Append("'" + (p.HabilitarPurgaIndividual ? "True" : "False") + "', ");
+                            sb.Append("'" + (p.HabilitarTouchScrenn ? "True" : "False") + "', ");
+                            sb.Append("'" + p.VersaoIoconnect + "', ");
+                            sb.Append("'" + p.IdDispositivo2.ToString() + "', ");
+                            sb.Append("'" + p.NomeDispositivo + "', ");
+                            sb.Append("'" + p.NomeDispositivo2 + "', ");
+                            sb.Append("'" + (p.HabilitarDispensaSequencialP1 ? "True" : "False") + "', ");
+                            sb.Append("'" + (p.HabilitarDispensaSequencialP2 ? "True" : "False") + "', ");
 
-                        #region Monitoramento dos circuitos
+                            #endregion
+                            
+                            #region DAT
 
-                        sb.Append("'" + p.QtdeMonitCircuitoGrupo.ToString() + "', ");
-                        sb.Append("'" + (p.DesabilitarInterfaceMonitCircuito ? "True" : "False") + "', ");
-                        sb.Append("'" + (p.DesabilitarProcessoMonitCircuito ? "True" : "False") + "', ");
-                        sb.Append("'" + (p.MonitMovimentoReverso ? "True" : "False") + "', ");
-                        sb.Append("'" + p.MonitVelocidade.ToString() + "', ");
-                        sb.Append("'" + p.MonitAceleracao.ToString() + "', ");
-                        sb.Append("'" + p.MonitDelay.ToString() + "', ");
-                        sb.Append("'" + p.MonitTimerDelay.ToString() + "', ");
-                        sb.Append("'" + p.MonitTimerDelayIni.ToString() + "', ");
-                        sb.Append("'" + p.MonitPulsos.ToString() + "', ");
+                            sb.Append("'" + p.PathMonitoramentoDAT + "', ");
+                            sb.Append("'" + p.PathRepositorioDAT + "', ");
+                            sb.Append("'" + p.PadraoConteudoDAT.ToString() + "', ");
+                            sb.Append("'" + p.BasePosicaoCircuitoDAT.ToString() + "', ");
+                            sb.Append("'" + (p.UtilizarCorrespondenciaDAT ? "True" : "False") + "', ");
+                            sb.Append("'" + (p.DesabilitarInterfaceDispensaSequencial ? "True" : "False") + "', ");
+                            sb.Append("'" + (p.DesabilitarInterfaceDispensaSimultanea ? "True" : "False") + "', ");
+                            sb.Append("'" + (p.DesabilitarInterfaceInicializacaoCircuito ? "True" : "False") + "', ");
+                            sb.Append("'" + (p.DesabilitarInterfacePurga ? "True" : "False") + "', ");
 
-                        #endregion
+                            sb.Append("'" + (p.DesabilitarVolumeMinimoDat ? "True" : "False") + "', ");
+                            sb.Append("'" + p.VolumeMinimoDat.ToString().Replace(",", ".") + "', ");
 
-                        #region Unidade de medida
+                            #endregion
 
-                        sb.Append("'" + p.ValorShot.ToString().Replace(",", ".") + "', ");
-                        sb.Append("'" + (p.HabilitarShot ? "True" : "False") + "', ");
-                        sb.Append("'" + (p.HabilitarOnca ? "True" : "False") + "', ");
-                        sb.Append("'" + (p.HabilitarMililitro ? "True" : "False") + "', ");
-                        sb.Append("'" + (p.HabilitarGrama ? "True" : "False") + "', ");
-                        sb.Append("'" + p.UnidadeMedidaNivelColorante.ToString() + "', ");
+                            #region Purga
 
-                        sb.Append("'" + p.ValorFraction.ToString() + "', ");
+                            sb.Append("'" + RetunStringFromTimespan(p.PrazoExecucaoPurga) + "', ");
+                            sb.Append("'" + p.VolumePurga.ToString().Replace(",", ".") + "', ");
+                            sb.Append("'" + p.VelocidadePurga.ToString() + "', ");
+                            sb.Append("'" + p.AceleracaoPurga.ToString() + "', ");
+                            sb.Append("'" + p.DelayPurga.ToString() + "', ");
+                            sb.Append("'" + (p.ControlarExecucaoPurga ? "True" : "False") + "', ");
+                            sb.Append("'" + (p.ExigirExecucaoPurga ? "True" : "False") + "', ");
+                            sb.Append("'" + (p.PurgaSequencial ? "True" : "False") + "', ");
 
-						#endregion
+                            #endregion
 
-						#region Log
+                            #region Controle de volume
 
-						sb.Append("'" + p.PathLogProcessoDispensa + "', ");
-                        sb.Append("'" + p.PathLogControleDispensa + "', ");
-                        sb.Append("'" + (p.HabilitarLogComunicacao ? "True" : "False") + "', ");
-                        sb.Append("'" + p.PathLogComunicacao + "', ");
-                        //sb.Append("'" + (p.HabilitarLogAutomateTesterProt ? "True" : "False") + "', ");
+                            sb.Append("'" + p.VolumeMinimo.ToString().Replace(",", ".") + "', ");
+                            sb.Append("'" + p.VolumeMaximo.ToString().Replace(",", ".") + "', ");
+                            sb.Append("'" + (p.ControlarNivel ? "True" : "False") + "', ");
 
-                        #endregion
+                            #endregion
 
-                        #region Produção
+                            #region Inicialização de circuitos
 
-                        sb.Append("'" + p.TipoProducao + "', ");
-                        sb.Append("'" + p.IpProducao + "', ");
-                        sb.Append("'" + p.PortaProducao + "', ");
-                        sb.Append("'" + (p.DesabilitaMonitProcessoProducao ? "True" : "False") + "', ");
+                            sb.Append("'" + p.IniPulsoInicial.ToString() + "', ");
+                            sb.Append("'" + p.IniPulsoLimite.ToString() + "', ");
+                            sb.Append("'" + p.IniVariacaoPulso.ToString() + "', ");
+                            sb.Append("'" + p.IniStepVariacao.ToString().Replace(",", ".") + "', ");
+                            sb.Append("'" + p.IniVelocidade.ToString() + "', ");
+                            sb.Append("'" + p.IniAceleracao.ToString() + "', ");
+                            sb.Append("'" + (p.IniMovimentoReverso ? "True" : "False") + "', ");
+                            sb.Append("'" + (p.InicializarCircuitosPurga ? "True" : "False") + "', ");
+                            sb.Append("'" + (p.InicializarCircuitosPurgaIndividual ? "True" : "False") + "', ");
+                            sb.Append("'" + p.QtdeCircuitoGrupo.ToString() + "', ");
 
-                        #endregion
+                            #endregion
 
-                        #region Sinc Formula
-                        sb.Append("'" + (p.DesabilitaMonitSincFormula ? "True" : "False") + "', ");
-                        sb.Append("'" + p.PortaSincFormula + "', ");
-                        sb.Append("'" + p.IpSincFormula + "'); ");
+                            #region Monitoramento dos circuitos
 
-                        #endregion
+                            sb.Append("'" + p.QtdeMonitCircuitoGrupo.ToString() + "', ");
+                            sb.Append("'" + (p.DesabilitarInterfaceMonitCircuito ? "True" : "False") + "', ");
+                            sb.Append("'" + (p.DesabilitarProcessoMonitCircuito ? "True" : "False") + "', ");
+                            sb.Append("'" + (p.MonitMovimentoReverso ? "True" : "False") + "', ");
+                            sb.Append("'" + p.MonitVelocidade.ToString() + "', ");
+                            sb.Append("'" + p.MonitAceleracao.ToString() + "', ");
+                            sb.Append("'" + p.MonitDelay.ToString() + "', ");
+                            sb.Append("'" + p.MonitTimerDelay.ToString() + "', ");
+                            sb.Append("'" + p.MonitTimerDelayIni.ToString() + "', ");
+                            sb.Append("'" + p.MonitPulsos.ToString() + "', ");
 
-                        #region  Base de Dados
-                        //sb.Append("'" + p.TipoBaseDados + "', ");
-                        //sb.Append("'" + p.PathBasesDados + "'); ");
-                        #endregion
+                            #endregion
 
-                        cmd.CommandText = sb.ToString();
+                            #region Unidade de medida
 
-                        cmd.ExecuteNonQuery();
+                            sb.Append("'" + p.ValorShot.ToString().Replace(",", ".") + "', ");
+                            sb.Append("'" + (p.HabilitarShot ? "True" : "False") + "', ");
+                            sb.Append("'" + (p.HabilitarOnca ? "True" : "False") + "', ");
+                            sb.Append("'" + (p.HabilitarMililitro ? "True" : "False") + "', ");
+                            sb.Append("'" + (p.HabilitarGrama ? "True" : "False") + "', ");
+                            sb.Append("'" + p.UnidadeMedidaNivelColorante.ToString() + "', ");
 
-                        conn.Close();
+                            sb.Append("'" + p.ValorFraction.ToString() + "', ");
+
+
+							#endregion
+
+							#region Log
+
+							sb.Append("'" + p.PathLogProcessoDispensa + "', ");
+                            sb.Append("'" + p.PathLogControleDispensa + "', ");
+                            sb.Append("'" + (p.HabilitarLogComunicacao ? "True" : "False") + "', ");
+                            sb.Append("'" + p.PathLogComunicacao + "', ");
+                            //sb.Append("'" + (p.HabilitarLogAutomateTesterProt ? "True" : "False") + "', ");
+
+                            #endregion
+
+                            #region Produção
+
+                            sb.Append("'" + p.TipoProducao + "', ");
+                            sb.Append("'" + p.IpProducao + "', ");
+                            sb.Append("'" + p.PortaProducao + "', ");
+                            sb.Append("'" + (p.DesabilitaMonitProcessoProducao ? "True" : "False") + "', ");
+
+                            #endregion
+
+
+                            #region Sinc Formula
+                            sb.Append("'" + (p.DesabilitaMonitSincFormula ? "True" : "False") + "', ");
+                            sb.Append("'" + p.PortaSincFormula + "', ");
+                            sb.Append("'" + p.IpSincFormula + "'); ");
+
+                            #endregion
+
+                            #region  Base de Dados
+                            //sb.Append("'" + p.TipoBaseDados + "', ");
+                            //sb.Append("'" + p.PathBasesDados + "'); ");
+                            #endregion
+
+
+                            cmd.CommandText = sb.ToString();
+
+                            cmd.ExecuteNonQuery();
+
+                            conn.Close();
+
+                        }
                     }
                 }
+
+
+            }
+            catch(Exception exc)
+            {
+                string msg = exc.Message;
+                throw;
             }
         }
+
 
         private static int gerarEventoALteradaConfiguacao(int result, string detalhes = "")
         {
             int retorno = 0;
-            
-            #region gravar Evento Alterada Configuração
-            Util.ObjectEventos objEvt = new Util.ObjectEventos();
-            objEvt.DATAHORA = DateTime.Now;
-            objEvt.COD_EVENTO = (int)IOConnect.Core.PercoloreEnum.Eventos.ALteradaConfiguacao;
-            objEvt.DETALHES = result.ToString() + ";" + detalhes;
-            objEvt.INTEGRADO = false;
-            using (PercoloreRegistry percRegistry = new PercoloreRegistry())
+            try
             {
-                objEvt.NUMERO_SERIE = percRegistry.GetSerialNumber();
+                #region gravar Evento Alterada Configuração
+                Util.ObjectEventos objEvt = new Util.ObjectEventos();
+                objEvt.DATAHORA = DateTime.Now;
+                objEvt.COD_EVENTO = (int)IOConnect.Core.PercoloreEnum.Eventos.ALteradaConfiguacao;
+                objEvt.DETALHES = result.ToString() + ";" + detalhes;
+                objEvt.INTEGRADO = false;
+                using (PercoloreRegistry percRegistry = new PercoloreRegistry())
+                {
+                    objEvt.NUMERO_SERIE = percRegistry.GetSerialNumber();
+                }
+                retorno = Util.ObjectEventos.InsertEvento(objEvt);
+                #endregion
             }
-            retorno = Util.ObjectEventos.InsertEvento(objEvt);
-            #endregion
-
+            catch
+            { }
             return retorno;
         }
 
@@ -2000,6 +2236,7 @@ namespace Percolore.IOConnect.Util
                         {
                             ds.Tables.Add(tbl);
                         }
+
                     }
                     con.Close();
                 }

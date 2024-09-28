@@ -1,9 +1,15 @@
-﻿using System.Data.SQLite;
+﻿using System;
+using System.Collections.Generic;
+using System.Data.SQLite;
+using System.IO;
+using System.Linq;
 using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace Percolore.IOConnect.Util
 {
-	public class ObjectBasDat06
+    public class ObjectBasDat06
     {
         public static readonly string PathFile = Path.Combine(Environment.CurrentDirectory, "BasDat06.db");
         public static readonly string FileName = Path.GetFileName(PathFile);
@@ -11,205 +17,242 @@ namespace Percolore.IOConnect.Util
         public string Name { get; set; }
         public double Volume { get; set; } = 0;
         public int Circuito { get; set; }
+       
 
         public ObjectBasDat06()
         {
 
         }
 
+
         public static void CreateBD()
         {
-            if (!File.Exists(PathFile))
+            try
             {
-                StringBuilder sb = new StringBuilder();
-                sb.Append("CREATE TABLE IF NOT EXISTS [BasDat06] (Name TEXT NULL, Volume TEXT NULL, Circuito TEXT NULL);");
-
-                string createQuery = sb.ToString();
-
-                SQLiteConnection connectCreate = Util.SQLite.CreateSQLiteConnection(PathFile, false);
-                connectCreate.Open();
-				// Open connection to create DB if not exists.
-				connectCreate.Close();
-                Thread.Sleep(2000);
-                if (File.Exists(PathFile))
+                if (!File.Exists(PathFile))
                 {
-                    using (SQLiteConnection conn = Util.SQLite.CreateSQLiteConnection(PathFile, false))
+                    StringBuilder sb = new StringBuilder();
+                    sb.Append("CREATE TABLE IF NOT EXISTS [BasDat06] (Name TEXT NULL, Volume TEXT NULL, Circuito TEXT NULL);");
+
+                    string createQuery = sb.ToString();
+
+                    SQLiteConnection connectCreate = Util.SQLite.CreateSQLiteConnection(PathFile, false);
+                    connectCreate.Open();
+					// Open connection to create DB if not exists.
+					connectCreate.Close();
+                    Thread.Sleep(2000);
+                    if (File.Exists(PathFile))
                     {
-                        using (SQLiteCommand cmd = new SQLiteCommand(conn))
+                        using (SQLiteConnection conn = Util.SQLite.CreateSQLiteConnection(PathFile, false))
                         {
-                            conn.Open();
-                            cmd.CommandText = createQuery;
-                            cmd.ExecuteNonQuery();
-                            conn.Close();
+                            using (SQLiteCommand cmd = new SQLiteCommand(conn))
+                            {
+                                conn.Open();
+                                cmd.CommandText = createQuery;
+                                cmd.ExecuteNonQuery();
+                                conn.Close();
+                            }
                         }
                     }
                 }
             }
+            catch
+            { }
         }
 
         public static ObjectBasDat06 Load(int Circuito)
         {
             ObjectBasDat06 basDat06 = null;
-            
-            using (SQLiteConnection conn = Util.SQLite.CreateSQLiteConnection(PathFile, false))
+            try
             {
-                using (SQLiteCommand cmd = new SQLiteCommand(conn))
+                using (SQLiteConnection conn = Util.SQLite.CreateSQLiteConnection(PathFile, false))
                 {
-                    conn.Open();
-
-                    cmd.CommandText = "SELECT * FROM BasDat06 WHERE Circuito = '" + Circuito.ToString() + "';";
-
-                    using (SQLiteDataReader reader = cmd.ExecuteReader())
+                    using (SQLiteCommand cmd = new SQLiteCommand(conn))
                     {
-                        while (reader.Read())
+                        conn.Open();
+
+                        cmd.CommandText = "SELECT * FROM BasDat06 WHERE Circuito = '" + Circuito.ToString() + "';";
+
+                        using (SQLiteDataReader reader = cmd.ExecuteReader())
                         {
-                            basDat06 = new ObjectBasDat06();
-                            basDat06.Circuito = int.Parse(reader["Circuito"].ToString());
-                            basDat06.Volume = double.Parse(reader["Volume"].ToString(), System.Globalization.CultureInfo.InvariantCulture);
-                            basDat06.Name = reader["Name"].ToString();
+                            while (reader.Read())
+                            {
+                                basDat06 = new ObjectBasDat06();
+                                basDat06.Circuito = int.Parse(reader["Circuito"].ToString());
+                                basDat06.Volume = double.Parse(reader["Volume"].ToString(), System.Globalization.CultureInfo.InvariantCulture);
+                                basDat06.Name = reader["Name"].ToString();
                                
-                            break;
+                                break;
+                            }
                         }
                     }
+                    conn.Close();
                 }
-                conn.Close();
-            }
 
-            return basDat06;
+
+                return basDat06;
+            }
+            catch
+            {
+                throw;
+            }
         }
+
 
         public static List<ObjectBasDat06> List()
         {
             List<ObjectBasDat06> list = new List<ObjectBasDat06>();
 
-            using (SQLiteConnection conn = Util.SQLite.CreateSQLiteConnection(PathFile, false))
+            try
             {
-                using (SQLiteCommand cmd = new SQLiteCommand(conn))
+                using (SQLiteConnection conn = Util.SQLite.CreateSQLiteConnection(PathFile, false))
                 {
-                    conn.Open();
-
-                    cmd.CommandText = "SELECT * FROM BasDat06;";
-
-                    using (SQLiteDataReader reader = cmd.ExecuteReader())
+                    using (SQLiteCommand cmd = new SQLiteCommand(conn))
                     {
-                        while (reader.Read())
+                        conn.Open();
+
+                        cmd.CommandText = "SELECT * FROM BasDat06;";
+
+                        using (SQLiteDataReader reader = cmd.ExecuteReader())
                         {
-                            ObjectBasDat06 basDat06 = new ObjectBasDat06();
-                            basDat06.Circuito = int.Parse(reader["Circuito"].ToString());
-                            basDat06.Volume = double.Parse(reader["Volume"].ToString(), System.Globalization.CultureInfo.InvariantCulture);
-                            basDat06.Name = reader["Name"].ToString();
-                            list.Add(basDat06);
+                            while (reader.Read())
+                            {
+                                ObjectBasDat06 basDat06 = new ObjectBasDat06();
+                                basDat06.Circuito = int.Parse(reader["Circuito"].ToString());
+                                basDat06.Volume = double.Parse(reader["Volume"].ToString(), System.Globalization.CultureInfo.InvariantCulture);
+                                basDat06.Name = reader["Name"].ToString();
+                                list.Add(basDat06);
+                            }
                         }
                     }
+                    conn.Close();
                 }
-                conn.Close();
             }
+            catch
+            {
 
+            }
             return list;
+
         }
 
         public static void Persist(ObjectBasDat06 bDat06)
         {
-            ObjectBasDat06 objc = Load(bDat06.Circuito);
-
-            //Insert
-            if (objc == null)
+            try
             {
-                StringBuilder sb = new StringBuilder();
-                using (SQLiteConnection conn = Util.SQLite.CreateSQLiteConnection(PathFile, false))
+                ObjectBasDat06 objc = Load(bDat06.Circuito);
+                //Insert
+                if (objc == null)
                 {
-                    using (SQLiteCommand cmd = new SQLiteCommand(conn))
+                    StringBuilder sb = new StringBuilder();
+                    using (SQLiteConnection conn = Util.SQLite.CreateSQLiteConnection(PathFile, false))
                     {
+                        using (SQLiteCommand cmd = new SQLiteCommand(conn))
+                        {
 
-                        conn.Open();
-                        sb.Append("INSERT INTO BasDat06 (Name, Volume, Circuito) VALUES (");
-                        sb.Append("'" + bDat06.Name.ToString() + "', ");
-                        sb.Append("'" + bDat06.Volume.ToString().Replace(",", ".") + "', ");
-                        sb.Append("'" + bDat06.Circuito.ToString() + "'");
-                        sb.Append(");");
-                        cmd.CommandText = sb.ToString();
-                        cmd.ExecuteNonQuery();
-                        conn.Close();
+                            conn.Open();
+                            sb.Append("INSERT INTO BasDat06 (Name, Volume, Circuito) VALUES (");
+                            sb.Append("'" + bDat06.Name.ToString() + "', ");
+                            sb.Append("'" + bDat06.Volume.ToString().Replace(",", ".") + "', ");
+                            sb.Append("'" + bDat06.Circuito.ToString() + "'");
+                            sb.Append(");");
+                            cmd.CommandText = sb.ToString();
+                            cmd.ExecuteNonQuery();
+                            conn.Close();
+                        }
                     }
                 }
+                //Update
+                else
+                {
+                    StringBuilder sb = new StringBuilder();
+                    using (SQLiteConnection conn = Util.SQLite.CreateSQLiteConnection(PathFile, false))
+                    {
+                        using (SQLiteCommand cmd = new SQLiteCommand(conn))
+                        {
+                            conn.Open();
+                            sb.Append("UPDATE BasDat06 SET "); // Circuito, Habilitado, VolumeDin, Dias, VolumeRecircular, DtInicio;
+                            sb.Append("Name = '" + bDat06.Name  + "', ");
+                            sb.Append("Volume = '" + bDat06.Volume.ToString().Replace(",", ".") + "' ");
+                            sb.Append(" WHERE Circuito = '" + bDat06.Circuito.ToString() + "';");
+
+                            cmd.CommandText = sb.ToString();
+
+                            cmd.ExecuteNonQuery();
+
+                            conn.Close();
+                        }
+                    }
+                }
+
             }
-            //Update
-            else
+            catch
             {
-                StringBuilder sb = new StringBuilder();
-                using (SQLiteConnection conn = Util.SQLite.CreateSQLiteConnection(PathFile, false))
-                {
-                    using (SQLiteCommand cmd = new SQLiteCommand(conn))
-                    {
-                        conn.Open();
-                        sb.Append("UPDATE BasDat06 SET "); // Circuito, Habilitado, VolumeDin, Dias, VolumeRecircular, DtInicio;
-                        sb.Append("Name = '" + bDat06.Name  + "', ");
-                        sb.Append("Volume = '" + bDat06.Volume.ToString().Replace(",", ".") + "' ");
-                        sb.Append(" WHERE Circuito = '" + bDat06.Circuito.ToString() + "';");
-
-                        cmd.CommandText = sb.ToString();
-
-                        cmd.ExecuteNonQuery();
-
-                        conn.Close();
-                    }
-                }
+                throw;
             }
         }
 
         public static void Persist(List<ObjectBasDat06> lista)
         {
-            if (lista != null && lista.Count > 0)
+            try
             {
-                foreach (ObjectBasDat06 bDat06 in lista)
+                if (lista != null && lista.Count > 0)
                 {
-                    ObjectBasDat06 objc = Load(bDat06.Circuito);
-                    //Insert
-                    if (objc == null)
+                    foreach (ObjectBasDat06 bDat06 in lista)
                     {
-                        StringBuilder sb = new StringBuilder();
-                        using (SQLiteConnection conn = Util.SQLite.CreateSQLiteConnection(PathFile, false))
+                        ObjectBasDat06 objc = Load(bDat06.Circuito);
+                        //Insert
+                        if (objc == null)
                         {
-                            using (SQLiteCommand cmd = new SQLiteCommand(conn))
+                            StringBuilder sb = new StringBuilder();
+                            using (SQLiteConnection conn = Util.SQLite.CreateSQLiteConnection(PathFile, false))
                             {
+                                using (SQLiteCommand cmd = new SQLiteCommand(conn))
+                                {
 
-                                conn.Open();
-                                sb.Append("INSERT INTO BasDat06 (Name, Volume, Circuito) VALUES (");
-                                sb.Append("'" + bDat06.Name.ToString() + "', ");
-                                sb.Append("'" + bDat06.Volume.ToString().Replace(",", ".") + "', ");
-                                sb.Append("'" + bDat06.Circuito.ToString() + "'");
-                                sb.Append(");");
-                                cmd.CommandText = sb.ToString();
-                                cmd.ExecuteNonQuery();
-                                conn.Close();
+                                    conn.Open();
+                                    sb.Append("INSERT INTO BasDat06 (Name, Volume, Circuito) VALUES (");
+                                    sb.Append("'" + bDat06.Name.ToString() + "', ");
+                                    sb.Append("'" + bDat06.Volume.ToString().Replace(",", ".") + "', ");
+                                    sb.Append("'" + bDat06.Circuito.ToString() + "'");
+                                    sb.Append(");");
+                                    cmd.CommandText = sb.ToString();
+                                    cmd.ExecuteNonQuery();
+                                    conn.Close();
+                                }
                             }
                         }
-                    }
-                    //Update
-                    else
-                    {
-                        StringBuilder sb = new StringBuilder();
-                        using (SQLiteConnection conn = Util.SQLite.CreateSQLiteConnection(PathFile, false))
+                        //Update
+                        else
                         {
-                            using (SQLiteCommand cmd = new SQLiteCommand(conn))
+                            StringBuilder sb = new StringBuilder();
+                            using (SQLiteConnection conn = Util.SQLite.CreateSQLiteConnection(PathFile, false))
                             {
-                                conn.Open();
-                                sb.Append("UPDATE BasDat06 SET "); // Circuito, Habilitado, VolumeDin, Dias, VolumeRecircular, DtInicio;
-                                sb.Append("Name = '" + bDat06.Name + "', ");
-                                sb.Append("Volume = '" + bDat06.Volume.ToString().Replace(",", ".") + "' ");
-                                sb.Append(" WHERE Circuito = '" + bDat06.Circuito.ToString() + "';");
+                                using (SQLiteCommand cmd = new SQLiteCommand(conn))
+                                {
+                                    conn.Open();
+                                    sb.Append("UPDATE BasDat06 SET "); // Circuito, Habilitado, VolumeDin, Dias, VolumeRecircular, DtInicio;
+                                    sb.Append("Name = '" + bDat06.Name + "', ");
+                                    sb.Append("Volume = '" + bDat06.Volume.ToString().Replace(",", ".") + "' ");
+                                    sb.Append(" WHERE Circuito = '" + bDat06.Circuito.ToString() + "';");
 
-                                cmd.CommandText = sb.ToString();
+                                    cmd.CommandText = sb.ToString();
 
-                                cmd.ExecuteNonQuery();
+                                    cmd.ExecuteNonQuery();
 
-                                conn.Close();
+                                    conn.Close();
+                                }
                             }
                         }
                     }
                 }
             }
+            catch
+            {
+                throw;
+            }
         }
+
 
         public static bool Validate(List<ObjectBasDat06> lista, out string outMsg)
         {
@@ -247,25 +290,43 @@ namespace Percolore.IOConnect.Util
         public static bool Remove(ObjectBasDat06 bDat06)
         {
             bool retorno = false;
-            
-            StringBuilder sb = new StringBuilder();
-            using (SQLiteConnection conn = Util.SQLite.CreateSQLiteConnection(PathFile, false))
-            {
-                using (SQLiteCommand cmd = new SQLiteCommand(conn))
+            try
+            {   
+                StringBuilder sb = new StringBuilder();
+                using (SQLiteConnection conn = Util.SQLite.CreateSQLiteConnection(PathFile, false))
                 {
-                    conn.Open();
-                    sb.Append("DELETE FROM BasDat06 WHERE Circuito = '" + bDat06.Circuito.ToString() + "';");
+                    using (SQLiteCommand cmd = new SQLiteCommand(conn))
+                    {
+                        conn.Open();
+                        sb.Append("DELETE FROM BasDat06 WHERE Circuito = '" + bDat06.Circuito.ToString() + "';");
 
-                    cmd.CommandText = sb.ToString();
+                        cmd.CommandText = sb.ToString();
 
-                    cmd.ExecuteNonQuery();
+                        cmd.ExecuteNonQuery();
 
-                    conn.Close();
-                    retorno = true;
+                        conn.Close();
+                        retorno = true;
+                    }
                 }
             }
-
+            catch
+            {
+                throw;
+            }
             return retorno;
         }
+
+
+
+
+
+
+
+
+
+
+
+
+
     }
 }
