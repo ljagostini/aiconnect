@@ -1,9 +1,15 @@
-﻿using System.Net.Sockets;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Net.NetworkInformation;
+using System.Net.Sockets;
 using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace Percolore.IOConnect.Negocio
 {
-	public class TCPEventos
+    public class TCPEventos
     {
         private Util.ObjectParametros _parametros = null;
         TcpClient tcpcliente = new TcpClient();
@@ -60,13 +66,24 @@ namespace Percolore.IOConnect.Negocio
 
         public void CloseEventTCP()
         {
-            if(this.tcpcliente.Connected)
+            try
             {
-                this.tcpcliente.Close();
-                this.tcpcliente.Dispose();
-            }
-        }
+                if(this.tcpcliente.Connected)
+                {
+                    try
+                    {
+                        this.tcpcliente.Close();
+                        this.tcpcliente.Dispose();
+                    }
+                    catch
+                    {
 
+                    }
+                }
+            }
+            catch
+            { }
+        }
         #region Metodos Online
 
         private bool isWriteTCP(byte[] pacoteMsg, string simCard, ref string _MsgRet)
@@ -92,6 +109,7 @@ namespace Percolore.IOConnect.Negocio
                         tempo_resposta = _parametros.TimeoutPingTcp / 1000;
                     }
 
+
                     if (this.tcpcliente.Connected)
                     {                       
                         for (int i = 0; i < tempo_resposta; i++)
@@ -106,46 +124,74 @@ namespace Percolore.IOConnect.Negocio
                                 break;
                             }
                         }
-                        
-                        if (this.tcpcliente.Available > 0)
+                        try
                         {
-                            int tamanho = 0;
-                            tamanho = this.tcpcliente.Available;
-                            Byte[] bytes = new Byte[tamanho];
-                            int i = netWriteread.Read(bytes, 0, tamanho);
-
-                            StringBuilder sb = new StringBuilder();
-                            for (int k = 0; k < i; k++)
+                            if (this.tcpcliente.Available > 0)
                             {
-                                byte b = bytes[k];
-                                sb.Append(b.ToString("X2"));
-                                if ((k - 1) < i)
+                                int tamanho = 0;
+                                tamanho = this.tcpcliente.Available;
+                                Byte[] bytes = new Byte[tamanho];
+                                int i = netWriteread.Read(bytes, 0, tamanho);
+
+                                StringBuilder sb = new StringBuilder();
+                                for (int k = 0; k < i; k++)
                                 {
-                                    sb.Append("-");
+                                    byte b = bytes[k];
+                                    sb.Append(b.ToString("X2"));
+                                    if ((k - 1) < i)
+                                    {
+                                        sb.Append("-");
+                                    }
                                 }
+                                string _token = "";
+                                if (DesmontarPacoteTCP(sb.ToString(), simCard, ref _token))
+                                {                                   
+                                    _MsgRet = _token;
+                                    retorno = true;
+                                }
+                               
                             }
-                            string _token = "";
-                            if (DesmontarPacoteTCP(sb.ToString(), simCard, ref _token))
-                            {                                   
-                                _MsgRet = _token;
-                                retorno = true;
+                            else
+                            {
+                                _MsgRet = "No Receive bytes";
                             }
                         }
-                        else
+                        catch (Exception exc1)
                         {
-                            _MsgRet = "No Receive bytes";
+                            _MsgRet = exc1.Message;
+                            // throw;
                         }
                     }
                 }
+
             }
             catch (Exception exc)
             {
                 _MsgRet = exc.Message;
             }
 
+
             return retorno;
         }
+        //private bool TestInternet()
+        //{
+        //    bool retorno = false;
+        //    try
+        //    {
+        //        Ping myPing = new Ping();
+        //        String host = _parametros.IpSincToken;
+        //        byte[] buffer = new byte[32];
+        //        int timeout = 5000;
+        //        PingOptions pingOptions = new PingOptions();
+        //        PingReply reply = myPing.Send(host, timeout, buffer, pingOptions);
+        //        retorno = (reply.Status == IPStatus.Success);
+        //    }
+        //    catch (Exception)
+        //    {
 
+        //    }
+        //    return retorno;
+        //}
         public bool DesmontarPacoteTCP(string msgHex, string codSim, ref string retornoLicense)
         {
             bool retorno = false;

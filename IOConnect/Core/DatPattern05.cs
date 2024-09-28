@@ -1,10 +1,16 @@
 ﻿using Percolore.Core;
+using System;
+using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
+using System.Text;
+using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 
 
 namespace Percolore.IOConnect.Core
 {
-	public class DatPattern05 : IDat
+    public class DatPattern05 : IDat
     {
         private bool UTILIZAR_CORRESPONDENCIA;
         private List<ListCorrespondencia> LISTA_CORRESPONDENCIA;
@@ -43,43 +49,47 @@ namespace Percolore.IOConnect.Core
                 return _quantidades;
             }
         }
-
-        public DatPattern05(string conteudo, int basePosicaoCircuito, bool utilizarCorrespondencia, List<ListCorrespondencia> listaCorrespondencia)
+        //Gambiarra para solucionar este formato de Dat, o padrão seria implementar lá na Percolore.Core, mas como lá não tem como identificar as configurações necessárias para este dat
+        //.....tive que implementar aqui
+        public DatPattern05(string conteudo, int basePosicaoCircuito, bool utilizarCorrespondencia, List<ListCorrespondencia> listaCorrespondencia) /*Dictionary<int, int> listaCorrespondencia)*/
         {
             UTILIZAR_CORRESPONDENCIA = utilizarCorrespondencia;
             LISTA_CORRESPONDENCIA = listaCorrespondencia;
-            
-            this._parametro = Util.ObjectParametros.Load();
-            this.listBasDat05 = Util.ObjectBasDat05.List();
-            string trabalho = conteudo.Replace("\n", "");
-            string[] linhas = trabalho.Split('\r');
-            if (linhas != null && linhas.Length > 0)
+            try
             {
-                foreach (string strLinha in linhas)
+                this._parametro = Util.ObjectParametros.Load();
+                this.listBasDat05 = Util.ObjectBasDat05.List();
+                string trabalho = conteudo.Replace("\n", "");
+                string[] linhas = trabalho.Split('\r');
+                if (linhas != null && linhas.Length > 0)
                 {
-                    if (strLinha.Contains(this._parametro.Dat_05_BAS_Pref))
+                    foreach (string strLinha in linhas)
                     {
-                        DesmontaBAS(strLinha.Replace("\n", ""));
-                    }
-                    else if (strLinha.Contains(this._parametro.Dat_05_CAN_Pref))
-                    {
-                        DesmontaCAN(strLinha.Replace("\n", ""));
-                    }
-                    else if (strLinha.Contains(this._parametro.Dat_05_FRM_Pref))
-                    {
-                        DesmontarFRM(strLinha.Replace("\n", ""));
-                    }
-                    else if (strLinha.Contains(this._parametro.Dat_05_UNT_Pref))
-                    {
-                        DesmontarUNT(strLinha.Replace("\n", ""));
-                    }
-                    else if (strLinha.Contains("CLR"))
-                    {
-                        this._linhaCLR = strLinha;
+                        if (strLinha.Contains(this._parametro.Dat_05_BAS_Pref))
+                        {
+                            DesmontaBAS(strLinha.Replace("\n", ""));
+                        }
+                        else if (strLinha.Contains(this._parametro.Dat_05_CAN_Pref))
+                        {
+                            DesmontaCAN(strLinha.Replace("\n", ""));
+                        }
+                        else if (strLinha.Contains(this._parametro.Dat_05_FRM_Pref))
+                        {
+                            DesmontarFRM(strLinha.Replace("\n", ""));
+                        }
+                        else if (strLinha.Contains(this._parametro.Dat_05_UNT_Pref))
+                        {
+                            DesmontarUNT(strLinha.Replace("\n", ""));
+                        }
+                        else if (strLinha.Contains("CLR"))
+                        {
+                            this._linhaCLR = strLinha;
+                        }
                     }
                 }
             }
-
+            catch
+            { }
             this._codigoCor = this._linhaCAN + ";" + this._linhaCLR.Replace("|", "/") + ";" + _linhaBAS + ";" + this._linhaAllFRM + ";";
         }
 
@@ -87,78 +97,90 @@ namespace Percolore.IOConnect.Core
         {
             string montando = string.Empty;
             string strfrmLimpo = strFRM;
-            
-            //Removendo os espacos duplos.....
-            while (strfrmLimpo.Contains("  "))
+            try
             {
-                strfrmLimpo = strfrmLimpo.Replace("  ", " ");
-            }
-            strfrmLimpo = strfrmLimpo.Replace(" ", "");
-
-            if (strfrmLimpo.Contains(_parametro.Dat_05_FRM_SEP))
-            {
-                string[] controle = strfrmLimpo.Split(_parametro.Dat_05_FRM_SEP[0]);
-                if (controle != null)
+                //Removendo os espacos duplos.....
+                while (strfrmLimpo.Contains("  "))
                 {
-                    //Confirmando Prefixo nos parametros
-                    if (controle[0].Equals(this._parametro.Dat_05_FRM_Pref))
-                    {
-                        for (int i = 1; i < controle.Length; i++)
-                        {
-                            if (montando == string.Empty)
-                            {
-                                montando += controle[i];
-                            }
-                            else
-                            {
-                                montando += _parametro.Dat_05_FRM_SEP[0] + controle[i];
-                            }
+                    strfrmLimpo = strfrmLimpo.Replace("  ", " ");
+                }
+                strfrmLimpo = strfrmLimpo.Replace(" ", "");
 
+                if (strfrmLimpo.Contains(_parametro.Dat_05_FRM_SEP))
+                {
+                    string[] controle = strfrmLimpo.Split(_parametro.Dat_05_FRM_SEP[0]);
+                    if (controle != null)
+                    {
+                        //Confirmando Prefixo nos parametros
+                        if (controle[0].Equals(this._parametro.Dat_05_FRM_Pref))
+                        {
+                            for (int i = 1; i < controle.Length; i++)
+                            {
+                                if (montando == string.Empty)
+                                {
+                                    montando += controle[i];
+                                }
+                                else
+                                {
+                                    montando += _parametro.Dat_05_FRM_SEP[0] + controle[i];
+                                }
+
+                            }
                         }
+
                     }
                 }
             }
+            catch
+            {
+
+            }
 
             this._linhaFRM = montando;
+
         }
 
         private void DesmontaBAS(string strBas)
         {
             string montando = string.Empty;
             string strbasLimpo = strBas;
-            
-            if (this._parametro.Dat_05_BAS_Habilitado == 1)
+            try
             {
-                //Removendo os espacos duplos.....
-                while (strbasLimpo.Contains("  "))
+                if (this._parametro.Dat_05_BAS_Habilitado == 1)
                 {
-                    strbasLimpo = strbasLimpo.Replace("  ", " ");
-                }
-
-                string[] controle = strbasLimpo.Split(' ');
-                if (controle != null)
-                {
-                    //Confirmando Prefixo nos parametros
-                    if (controle[0].Equals(this._parametro.Dat_05_BAS_Pref))
+                    //Removendo os espacos duplos.....
+                    while (strbasLimpo.Contains("  "))
                     {
-                        if (controle[1].Contains("\""))
+                        strbasLimpo = strbasLimpo.Replace("  ", " ");
+                    }
+
+                    string[] controle = strbasLimpo.Split(' ');
+                    if (controle != null)
+                    {
+                        //Confirmando Prefixo nos parametros
+                        if (controle[0].Equals(this._parametro.Dat_05_BAS_Pref))
                         {
-                            string str_B = controle[1].Replace("\"", "");
-                            foreach (Util.ObjectBasDat05 objD05 in this.listBasDat05)
+
+                            if (controle[1].Contains("\""))
                             {
-                                if (objD05.Name.ToUpper().Equals(str_B))
+                                string str_B = controle[1].Replace("\"", "");
+                                foreach (Util.ObjectBasDat05 objD05 in this.listBasDat05)
                                 {
-                                    this.vVolumeBas = objD05.Volume;
-                                    this.vCircuitoBas = objD05.Circuito;
-                                    montando = strbasLimpo;
+                                    if (objD05.Name.ToUpper().Equals(str_B))
+                                    {
+                                        this.vVolumeBas = objD05.Volume;
+                                        this.vCircuitoBas = objD05.Circuito;
+                                        montando = strbasLimpo;
+                                    }
                                 }
                             }
-                        }
 
+                        }
                     }
                 }
             }
-
+            catch
+            { }
             this._linhaBAS = montando;
         }
 
@@ -166,46 +188,54 @@ namespace Percolore.IOConnect.Core
         {
             string montando = string.Empty;
             string strcanLimpo = strCAN;
-            
-            //Removendo os espacos duplos.....
-            while (strcanLimpo.Contains("  "))
+            try
             {
-                strcanLimpo = strcanLimpo.Replace("  ", " ");
-            }
-            strcanLimpo = strcanLimpo.Replace(" ", "");
-            string[] controle = strcanLimpo.Split('"');
-            if (controle != null)
-            {
-                //Confirmando Prefixo nos parametros
-                if (controle[0].Equals(this._parametro.Dat_05_CAN_Pref))
+                //Removendo os espacos duplos.....
+                while (strcanLimpo.Contains("  "))
                 {
-                    bool achou = false;
-                    double embdisp = -1;
-                    for (int i = 2; !achou && i < controle.Length; i++)
+                    strcanLimpo = strcanLimpo.Replace("  ", " ");
+                }
+                strcanLimpo = strcanLimpo.Replace(" ", "");
+                string[] controle = strcanLimpo.Split('"');
+                if (controle != null)
+                {
+                    //Confirmando Prefixo nos parametros
+                    if (controle[0].Equals(this._parametro.Dat_05_CAN_Pref))
                     {
-                        if (controle[i] != null && controle[i].Length > 0)
+                        bool achou = false;
+                        double embdisp = -1;
+                        for (int i = 2; !achou && i < controle.Length; i++)
                         {
-                            //Ponto == 1 e vrigula == 0
-                            if (this._parametro.Dat_05_CAN_1_IsPonto == 1 && !controle[i].Contains(","))
+                            try
                             {
-                                embdisp = double.Parse(controle[i].Replace(",", "."), System.Globalization.CultureInfo.InvariantCulture);
-                                achou = true;
+                                if (controle[i] != null && controle[i].Length > 0)
+                                {
+                                    //Ponto == 1 e vrigula == 0
+                                    if (this._parametro.Dat_05_CAN_1_IsPonto == 1 && !controle[i].Contains(","))
+                                    {
+                                        embdisp = double.Parse(controle[i].Replace(",", "."), System.Globalization.CultureInfo.InvariantCulture);
+                                        achou = true;
+                                    }
+                                    else if (this._parametro.Dat_05_CAN_1_IsPonto == 0 && !controle[i].Contains("."))
+                                    {
+                                        embdisp = double.Parse(controle[i].Replace(",", "."), System.Globalization.CultureInfo.InvariantCulture);
+                                        achou = true;
+                                    }
+                                }
                             }
-                            else if (this._parametro.Dat_05_CAN_1_IsPonto == 0 && !controle[i].Contains("."))
-                            {
-                                embdisp = double.Parse(controle[i].Replace(",", "."), System.Globalization.CultureInfo.InvariantCulture);
-                                achou = true;
-                            }
+                            catch
+                            { }
                         }
-                    }
-                    if (embdisp >= 0)
-                    {
-                        this.vEmbdisp = embdisp;
-                        montando = strCAN;
+                        if (embdisp >= 0)
+                        {
+                            this.vEmbdisp = embdisp;
+                            montando = strCAN;
+                        }
                     }
                 }
             }
-
+            catch
+            { }
             this._linhaCAN = montando;
         }
 
@@ -213,52 +243,60 @@ namespace Percolore.IOConnect.Core
         {
             string montando = string.Empty;
             string struntLimpo = strUNT;
-            
-            //Removendo os espacos duplos.....
-            while (struntLimpo.Contains("  "))
+            try
             {
-                struntLimpo.Replace("  ", " ");
-            }
-            string[] controle = struntLimpo.Split(' ');
-            if (controle != null)
-            {
-                //Confirmando Prefixo nos parametros
-                if (controle[0].Equals(this._parametro.Dat_05_UNT_Pref))
+                //Removendo os espacos duplos.....
+                while (struntLimpo.Contains("  "))
                 {
-                    //Confirmando Fator
-                    double fator = -1;
-                    double fracao = -1;
-                    //Ponto == 1 e vrigula == 0
-                    if (this._parametro.Dat_05_UNT_1_IsPonto == 1 && !controle[1].Contains(","))
+                    struntLimpo.Replace("  ", " ");
+                }
+                string[] controle = struntLimpo.Split(' ');
+                if (controle != null)
+                {
+                    //Confirmando Prefixo nos parametros
+                    if (controle[0].Equals(this._parametro.Dat_05_UNT_Pref))
                     {
-                        fator = double.Parse(controle[1].Replace(",", "."), System.Globalization.CultureInfo.InvariantCulture);
-                    }
-                    else if (this._parametro.Dat_05_UNT_1_IsPonto == 0 && !controle[1].Contains("."))
-                    {
-                        fator = double.Parse(controle[1].Replace(",", "."), System.Globalization.CultureInfo.InvariantCulture);
-                    }
-                    if (fator > -1)
-                    {
+                        //Confirmando Fator
+                        double fator = -1;
+                        double fracao = -1;
                         //Ponto == 1 e vrigula == 0
-                        if (this._parametro.Dat_05_UNT_2_IsPonto == 1 && !controle[2].Contains(","))
+                        if (this._parametro.Dat_05_UNT_1_IsPonto == 1 && !controle[1].Contains(","))
                         {
-                            fracao = double.Parse(controle[2].Replace(",", "."), System.Globalization.CultureInfo.InvariantCulture);
+                            fator = double.Parse(controle[1].Replace(",", "."), System.Globalization.CultureInfo.InvariantCulture);
                         }
-                        else if (this._parametro.Dat_05_UNT_2_IsPonto == 0 && !controle[2].Contains("."))
+                        else if (this._parametro.Dat_05_UNT_1_IsPonto == 0 && !controle[1].Contains("."))
                         {
-                            fracao = double.Parse(controle[2].Replace(",", "."), System.Globalization.CultureInfo.InvariantCulture);
+                            fator = double.Parse(controle[1].Replace(",", "."), System.Globalization.CultureInfo.InvariantCulture);
                         }
-                    }
-                    if (fracao > -1)
-                    {
-                        this.vFracaoUNT = fracao;
-                        this.vFatorUNT = fator;
-                        montando = "@UNT " + fator.ToString().Replace(",", ".") + ";" + fracao.ToString().Replace(",", ".");
+                        if (fator > -1)
+                        {
+                            //Ponto == 1 e vrigula == 0
+                            if (this._parametro.Dat_05_UNT_2_IsPonto == 1 && !controle[2].Contains(","))
+                            {
+                                fracao = double.Parse(controle[2].Replace(",", "."), System.Globalization.CultureInfo.InvariantCulture);
+                            }
+                            else if (this._parametro.Dat_05_UNT_2_IsPonto == 0 && !controle[2].Contains("."))
+                            {
+                                fracao = double.Parse(controle[2].Replace(",", "."), System.Globalization.CultureInfo.InvariantCulture);
+                            }
+                        }
+                        if (fracao > -1)
+                        {
+                            this.vFracaoUNT = fracao;
+                            this.vFatorUNT = fator;
+                            montando = "@UNT " + fator.ToString().Replace(",", ".") + ";" + fracao.ToString().Replace(",", ".");
+                        }
+
+
                     }
                 }
             }
+            catch
+            {
 
+            }
             this._linhaUNT = montando;
+
         }
 
         public bool Validar()
@@ -272,11 +310,16 @@ namespace Percolore.IOConnect.Core
                 retorno = !string.IsNullOrEmpty(_linhaBAS);
             }
 
-            string[] vShots = _linhaFRM.Split(new char[] { this._parametro.Dat_05_FRM_SEP[0] });
-            if (vShots == null || vShots.Length < 2)
+            try
             {
-                retorno = false;
+                string[] vShots = _linhaFRM.Split(new char[] { this._parametro.Dat_05_FRM_SEP[0] });
+                if (vShots == null || vShots.Length < 2)
+                {
+                    retorno = false;
+                }
             }
+            catch
+            { }
 
             return retorno;
         }
@@ -297,7 +340,10 @@ namespace Percolore.IOConnect.Core
                 {
                     CIRCUITO = _lCorv.Circuito;
                     double SHOT = double.Parse(vShots[index + 1].Replace(",", "."), CultureInfo.InvariantCulture);
-                    
+                    //double.TryParse(vShots[index + 1], out SHOT);
+
+
+                    //double QUANTIDADE = (this.vFatorUNT / this.vFracaoUNT) * (this.vEmbdisp / this.vEmbref) * SHOT;
                     double QUANTIDADE = 0.462 * SHOT;
                     qtdes.Add(CIRCUITO, QUANTIDADE);
                 }

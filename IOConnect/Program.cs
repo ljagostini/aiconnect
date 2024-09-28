@@ -215,12 +215,17 @@ namespace Percolore.IOConnect
                 #endregion
 
                 #region Sinc Formula
-                
-                retorno.DesabilitaMonitSincFormula = objPar.DesabilitaMonitSincFormula;
+                try
+                {
+                    retorno.DesabilitaMonitSincFormula = objPar.DesabilitaMonitSincFormula;
 
-                retorno.PortaSincFormula = objPar.PortaSincFormula;
+                    retorno.PortaSincFormula = objPar.PortaSincFormula;
 
-                retorno.IpSincFormula = objPar.IpSincFormula;
+                    retorno.IpSincFormula = objPar.IpSincFormula;
+
+                }
+                catch
+                { }
 
                 #endregion
 
@@ -329,12 +334,20 @@ namespace Percolore.IOConnect
                     }
                     catch
                     {
+
                         if (i > 16)
                         {
-                            Calibragem cal = Calibragem.Load(i - 16);
-                            cal.Motor = i;
-                            lCal.Add(cal);
+                            try
+                            {
+                                Calibragem cal = Calibragem.Load(i - 16);
+                                cal.Motor = i;
+                                lCal.Add(cal);
+
+                            }
+                            catch
+                            { }
                         }
+
                     }
                 }
                 foreach (Calibragem cal in lCal)
@@ -558,18 +571,28 @@ namespace Percolore.IOConnect
             Util.ObjectParametros parametros = Util.ObjectParametros.Load();
             Negocio.IdiomaResx.GetIDiomaREsx(parametros.IdIdioma);
             Init.DefineCultura();
-            
-            if (!File.Exists(Util.ObjectMensagem.PathFile))
+            try
             {
-                Util.ObjectMensagem.CreateBD();
+                if (!File.Exists(Util.ObjectMensagem.PathFile))
+                {
+                    Util.ObjectMensagem.CreateBD();
+                }
+                Util.ObjectMensagem.LoadMessage();
+
             }
+            catch
+            { }
 
-            Util.ObjectMensagem.LoadMessage();
-
-            if (!File.Exists(Util.ObjectLimpBicos.PathFile))
+            try
             {
-                Util.ObjectLimpBicos.CreateBD();
+                if (!File.Exists(Util.ObjectLimpBicos.PathFile))
+                {
+                    Util.ObjectLimpBicos.CreateBD();
+                }
             }
+            catch
+            { }
+
 
             if (!Init.AtualizacaoBD())
             {
@@ -676,43 +699,52 @@ namespace Percolore.IOConnect
                     TipoLog.Processo, parametros.PathLogProcessoDispensa, log_nivel_colorante);
             }
 
-            #region gravar Evento Inicializacao
-            Util.ObjectEventos objEvt = new Util.ObjectEventos();
-            objEvt.DATAHORA = DateTime.Now;
-            objEvt.COD_EVENTO = (int)IOConnect.Core.PercoloreEnum.Eventos.InicalizarSistema;
-            objEvt.INTEGRADO = false;
-            using (PercoloreRegistry percRegistry = new PercoloreRegistry())
+            try
             {
-                objEvt.NUMERO_SERIE = percRegistry.GetSerialNumber();
-            }
+                #region gravar Evento Inicializacao
+                Util.ObjectEventos objEvt = new Util.ObjectEventos();
+                objEvt.DATAHORA = DateTime.Now;
+                objEvt.COD_EVENTO = (int)IOConnect.Core.PercoloreEnum.Eventos.InicalizarSistema;
+                objEvt.INTEGRADO = false;
+                using (PercoloreRegistry percRegistry = new PercoloreRegistry())
+                {
+                    objEvt.NUMERO_SERIE = percRegistry.GetSerialNumber();
+                }
 
-            List<Util.ObjectColorante> colorantesHabilitados = Util.ObjectColorante.List().Where(s => s.Habilitado && s.Seguidor == -1).ToList();
-            string detalhes = "";
-            foreach (Util.ObjectColorante objC in colorantesHabilitados)
-            {
-                if (detalhes == "")
+                List<Util.ObjectColorante> colorantes = Util.ObjectColorante.List().Where(s => s.Habilitado && s.Seguidor == -1).ToList();
+                string detalhes = "";
+                foreach (Util.ObjectColorante objC in colorantes)
                 {
-                    detalhes = "0;" + objC.Circuito.ToString() + "," + objC.Nome + "," + Math.Round(objC.Volume, 3).ToString();
+                    if (detalhes == "")
+                    {
+                        detalhes = "0;" + objC.Circuito.ToString() + "," + objC.Nome + "," + Math.Round(objC.Volume, 3).ToString();
+                    }
+                    else
+                    {
+                        detalhes += "," + objC.Circuito.ToString() + "," + objC.Nome + "," + Math.Round(objC.Volume, 3).ToString();
+                    }
                 }
-                else
-                {
-                    detalhes += "," + objC.Circuito.ToString() + "," + objC.Nome + "," + Math.Round(objC.Volume, 3).ToString();
-                }
+                objEvt.DETALHES = detalhes;
+                Util.ObjectEventos.InsertEvento(objEvt);
+                #endregion
             }
-            objEvt.DETALHES = detalhes;
-            Util.ObjectEventos.InsertEvento(objEvt);
-            #endregion
+            catch
+            { }
 
             //Init.RegUDCP_OK(parametros);
 
             parametros = null;
 
             #endregion  
-            
-            if (!Directory.Exists(Environment.CurrentDirectory + Path.DirectorySeparatorChar + "bkp"))
+            try
             {
-                Directory.CreateDirectory(Environment.CurrentDirectory + Path.DirectorySeparatorChar + "bkp");
+                if (!Directory.Exists(Environment.CurrentDirectory + Path.DirectorySeparatorChar + "bkp"))
+                {
+                    Directory.CreateDirectory(Environment.CurrentDirectory + Path.DirectorySeparatorChar + "bkp");
+                }
             }
+            catch
+            { }
 
             #region excluindo 48 Motores
             #region Colorantes

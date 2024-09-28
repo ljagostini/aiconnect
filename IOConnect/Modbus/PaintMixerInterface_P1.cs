@@ -1,74 +1,77 @@
 ﻿//1.1
+using System;
+using System.Collections.Generic;
 using System.IO.Ports;
 using System.Text.RegularExpressions;
+using System.Threading;
 using WSMBS;
 
 
 namespace PaintMixer
 {
-	/// <summary>
-	/// Basic wrapper around the S3MBPC1 Modbus interface for the new firmware
-	/// </summary>
-	/// <remarks>
-	/// This is a basic wrapper around the Modbus interface to the new board firmware for 
-	/// the S3MBPC1 (12 motor paint mixer control board). Like the interface for the 
-	/// last firmware, it uses the WSMBS.dll library from http://www.modbustools.com/.
-	/// 
-	/// Usage is fairly straight forward:
-	/// 
-	/// The constructor receives the Modbus slave address and COM port number. 
-	/// To open the COM port, call Connect, which will fail if the COM port is
-	/// open in another application, doesn't exist, or doesn't support 9600 baud,
-	/// one stop bit, even parity, eight data bits as a config.
-	/// 
-	/// To close the COM port, call disconnect. While not connected, all other public
-	/// methods will fail.
-	/// 
-	/// Once connected, there are two public methods to perform the motion routine:
-	/// Run and RunReverse. Both functions take three int[12] arrays containing the
-	/// distance each motor should move in steps, the velocity each motor should 
-	/// reach (in steps/sec), and the rate of acceleration/deceleration (in multiples
-	/// of 256, such that ActualAcceleration = AccelValue * 256) The actual acceleration is
-	/// in units of steps/sec^2.
-	/// 
-	/// The Run method just moves each motor, whereas RunReverse includes an additional
-	/// reverse move (to suck the last drop of paint back into the pump) specified by two
-	/// parameters: the delay between the normal move and the reverse move, and the length
-	/// of the reverse move in steps.
-	/// 
-	/// When one of these methods is called, the move will begin, and the Busy flag in the
-	/// Status property will become true. The move is complete once the Busy flag becomes
-	/// false again.
-	/// 
-	/// While the move takes place, some information on the current state can be obtained:
-	/// <list type="bullet">
-	///     <item><description>
-	///     The Status flags Moving, Reving, and Delaying each indicate which portion of the move
-	///     is currently occuring (only one of these will be enabled at a time).
-	///     </item></description>
-	///     <item><description>
-	///     The current motor property returns the index (0 indexed) of the motor that is
-	///     currently moving.
-	///     </item></description>
-	/// </list>
-	/// 
-	/// To abrubtly abort motion, call the Halt method, and then clear the halt with Unhalt or
-	/// by simply performing a move.
-	/// 
-	/// Note that all of the methods and properties here perform blocking I/O operations on the
-	/// serial port. The Run and ReverseRun also sit in an idle loop for about 1 ms or 2. As such, 
-	/// consider operating this interface in a separate thread from GUI event loop if you find it
-	/// adds undesirable delays/jitters to the UI.
-	/// 
-	/// When polling the Status and CurrentMotor properties while a move takes place, it is
-	/// reccomended that you do not poll more than once every 100 milliseconds, to avoid 
-	/// "Denial of Servicing" the board and slowing down the motion control code. It is likely that
-	/// poll rates of less than this are fine, but they are probably useless and put an uneeded load on 
-	/// the board to process a bunch of redundant requests.
-	/// 
-	/// </remarks>
+    /// <summary>
+    /// Basic wrapper around the S3MBPC1 Modbus interface for the new firmware
+    /// </summary>
+    /// <remarks>
+    /// This is a basic wrapper around the Modbus interface to the new board firmware for 
+    /// the S3MBPC1 (12 motor paint mixer control board). Like the interface for the 
+    /// last firmware, it uses the WSMBS.dll library from http://www.modbustools.com/.
+    /// 
+    /// Usage is fairly straight forward:
+    /// 
+    /// The constructor receives the Modbus slave address and COM port number. 
+    /// To open the COM port, call Connect, which will fail if the COM port is
+    /// open in another application, doesn't exist, or doesn't support 9600 baud,
+    /// one stop bit, even parity, eight data bits as a config.
+    /// 
+    /// To close the COM port, call disconnect. While not connected, all other public
+    /// methods will fail.
+    /// 
+    /// Once connected, there are two public methods to perform the motion routine:
+    /// Run and RunReverse. Both functions take three int[12] arrays containing the
+    /// distance each motor should move in steps, the velocity each motor should 
+    /// reach (in steps/sec), and the rate of acceleration/deceleration (in multiples
+    /// of 256, such that ActualAcceleration = AccelValue * 256) The actual acceleration is
+    /// in units of steps/sec^2.
+    /// 
+    /// The Run method just moves each motor, whereas RunReverse includes an additional
+    /// reverse move (to suck the last drop of paint back into the pump) specified by two
+    /// parameters: the delay between the normal move and the reverse move, and the length
+    /// of the reverse move in steps.
+    /// 
+    /// When one of these methods is called, the move will begin, and the Busy flag in the
+    /// Status property will become true. The move is complete once the Busy flag becomes
+    /// false again.
+    /// 
+    /// While the move takes place, some information on the current state can be obtained:
+    /// <list type="bullet">
+    ///     <item><description>
+    ///     The Status flags Moving, Reving, and Delaying each indicate which portion of the move
+    ///     is currently occuring (only one of these will be enabled at a time).
+    ///     </item></description>
+    ///     <item><description>
+    ///     The current motor property returns the index (0 indexed) of the motor that is
+    ///     currently moving.
+    ///     </item></description>
+    /// </list>
+    /// 
+    /// To abrubtly abort motion, call the Halt method, and then clear the halt with Unhalt or
+    /// by simply performing a move.
+    /// 
+    /// Note that all of the methods and properties here perform blocking I/O operations on the
+    /// serial port. The Run and ReverseRun also sit in an idle loop for about 1 ms or 2. As such, 
+    /// consider operating this interface in a separate thread from GUI event loop if you find it
+    /// adds undesirable delays/jitters to the UI.
+    /// 
+    /// When polling the Status and CurrentMotor properties while a move takes place, it is
+    /// reccomended that you do not poll more than once every 100 milliseconds, to avoid 
+    /// "Denial of Servicing" the board and slowing down the motion control code. It is likely that
+    /// poll rates of less than this are fine, but they are probably useless and put an uneeded load on 
+    /// the board to process a bunch of redundant requests.
+    /// 
+    /// </remarks>
 
-	public class PaintMixerInterface_P1 : IDisposable
+    public class PaintMixerInterface_P1 : IDisposable
     {
 
         #region Constantes
@@ -138,8 +141,13 @@ namespace PaintMixer
             wsmbs.CommPort = 0;
 
             //Recupera portas da máquina onde há dispositivos ativos
-            string[] portas = SerialPort.GetPortNames();
-
+            string[] portas = null;
+            try
+            {
+                portas = SerialPort.GetPortNames();
+            }
+            catch
+            { }
             bool bConnect = false; 
             if (portas == null || portas.LongLength == 0)
             {
@@ -151,39 +159,46 @@ namespace PaintMixer
             WSMBSControl.RESULT result = WSMBSControl.RESULT.ERR_NO_CONNECTION;
             foreach (string porta in portas)
             {
-                //Extrai apenas os número da porta
-                Match match = Regex.Match(porta, @"[0-9]");
-                if (match.Success)
+                try
                 {
-                    wsmbs.CommPort = byte.Parse(match.Value);
-                }
+                    //Extrai apenas os número da porta
+                    Match match = Regex.Match(porta, @"[0-9]");
+                    if (match.Success)
+                    {
+                        wsmbs.CommPort = byte.Parse(match.Value);
+                    }
 
-                //Inicia comunicação com porta encontrada
-                result = wsmbs.Connect();
+                    //Inicia comunicação com porta encontrada
+                    result = wsmbs.Connect();
 
-                if (result == WSMBSControl.RESULT.SUCCESS)
-                {
-                    bConnect = true;
-                    ushort[] v = new ushort[1];
-
-                    /* Efetua leitura de registrador para certificar-se que a porta com a qual
-                     * foi estabeleciada a conexão, é realmente a porta onde o dispositivo 
-                     * está conectado */
-                    result = wsmbs.ReadHoldingRegisters(slaveAddr, REG_STATUS, 1, ref v);
                     if (result == WSMBSControl.RESULT.SUCCESS)
                     {
-                        wsmbs.IsAccessible = true;
-                        break;
+                        bConnect = true;
+                        ushort[] v = new ushort[1];
+
+                        /* Efetua leitura de registrador para certificar-se que a porta com a qual
+                         * foi estabeleciada a conexão, é realmente a porta onde o dispositivo 
+                         * está conectado */
+                        result = wsmbs.ReadHoldingRegisters(slaveAddr, REG_STATUS, 1, ref v);
+                        if (result == WSMBSControl.RESULT.SUCCESS)
+                        {
+                            wsmbs.IsAccessible = true;
+                            break;
+                        }
+                        else
+                        {
+                            //Se não for possível ler status, encerra comunicação com a porta
+                            wsmbs.Disconnect();
+                        }
                     }
                     else
                     {
-                        //Se não for possível ler status, encerra comunicação com a porta
-                        wsmbs.Disconnect();
+                        continue;
                     }
                 }
-                else
+                catch
                 {
-                    continue;
+                    
                 }
             }
             
@@ -195,6 +210,8 @@ namespace PaintMixer
             {
                 throw new Exception(wsmbs.GetLastErrorString());
             }
+
+
         }
 
         /// <summary>
@@ -276,6 +293,7 @@ namespace PaintMixer
             public bool Delaying;
             public bool Halted;
         }
+
 
         /// <summary>
         /// Polls the board for the Status register and returns the current status flags.
@@ -489,3 +507,4 @@ namespace PaintMixer
         }
     }
 }
+

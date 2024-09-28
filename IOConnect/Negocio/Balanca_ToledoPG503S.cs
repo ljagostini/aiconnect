@@ -1,8 +1,14 @@
-﻿using System.IO.Ports;
+﻿using System;
+using System.Collections.Generic;
+using System.IO.Ports;
+using System.Linq;
+using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace Percolore.IOConnect.Negocio
 {
-	public class Balanca_ToledoPG503S : InterfaceBalanca
+    public class Balanca_ToledoPG503S : InterfaceBalanca
     {
         #region Serial Port
         public double CargaMaximaBalanca_Gramas { get; set; } = 510;
@@ -100,13 +106,19 @@ namespace Percolore.IOConnect.Negocio
 
                     string portname = sp.PortName;
 
-                    if (this.isDataReceived)
-                    {
-                        sp.DataReceived -= new SerialDataReceivedEventHandler(DataReceivedHandler);
-                    }
 
-					sp.Close();
-					sp.Dispose();
+                    try
+                    {
+                        if (this.isDataReceived)
+                        {
+                            sp.DataReceived -= new SerialDataReceivedEventHandler(DataReceivedHandler);
+                        }
+
+						sp.Close();
+						sp.Dispose();
+					}
+                    catch
+                    { }
                     
                     GC.Collect();
 
@@ -117,13 +129,19 @@ namespace Percolore.IOConnect.Negocio
                 }
                 else
                 {
-                    if (this.isDataReceived)
-                    {
-                        sp.DataReceived -= new SerialDataReceivedEventHandler(DataReceivedHandler);
-                    }
 
-					sp.Close();
-					sp.Dispose();
+                    try
+                    {
+                        if (this.isDataReceived)
+                        {
+                            sp.DataReceived -= new SerialDataReceivedEventHandler(DataReceivedHandler);
+                        }
+
+						sp.Close();
+						sp.Dispose();
+					}
+                    catch
+                    { }
                     
                     GC.Collect();
                     string portname = sp.PortName;
@@ -141,63 +159,86 @@ namespace Percolore.IOConnect.Negocio
 
         public void WriteSerialPort(byte[] arrWS)
         {
-            this.valorPeso = 0;
-            this.isTerminouRead = false;
-            this.inicio_reader = 0;
-            byte[] _arrWS = new byte[arrWS.Length + 2];
-            for (int i = 0; i < arrWS.Length; i++)
+            try
             {
-                _arrWS[i] = arrWS[i];
+                this.valorPeso = 0;
+                this.isTerminouRead = false;
+                this.inicio_reader = 0;
+                byte[] _arrWS = new byte[arrWS.Length + 2];
+                for (int i = 0; i < arrWS.Length; i++)
+                {
+                    _arrWS[i] = arrWS[i];
+                }
+                _arrWS[_arrWS.Length - 2] = (byte)13;
+                _arrWS[_arrWS.Length - 1] = (byte)10;
+                this.sp.Write(_arrWS, 0, _arrWS.Length);
             }
-            _arrWS[_arrWS.Length - 2] = (byte)13;
-            _arrWS[_arrWS.Length - 1] = (byte)10;
-            this.sp.Write(_arrWS, 0, _arrWS.Length);
+            catch
+            {
+            }
         }
 
         public void WriteSerialPortTara(byte[] arrWS)
         {
-            this.valorPeso = 0;
-            this.isTerminouRead = false;
-            this.inicio_reader = 0;
-            byte[] _arrWS = new byte[arrWS.Length + 2];
-            for (int i = 0; i < arrWS.Length; i++)
+            try
             {
-                _arrWS[i] = arrWS[i];
+                this.valorPeso = 0;
+                this.isTerminouRead = false;
+                this.inicio_reader = 0;
+                byte[] _arrWS = new byte[arrWS.Length + 2];
+                for (int i = 0; i < arrWS.Length; i++)
+                {
+                    _arrWS[i] = arrWS[i];
+                }
+                _arrWS[_arrWS.Length - 2] = (byte)13;
+                _arrWS[_arrWS.Length - 1] = (byte)10;
+                this.sp.Write(_arrWS, 0, _arrWS.Length);
+                //this.sp.Write(arrWS, 0, arrWS.Length);
+                Thread.Sleep(10000);
             }
-            _arrWS[_arrWS.Length - 2] = (byte)13;
-            _arrWS[_arrWS.Length - 1] = (byte)10;
-            this.sp.Write(_arrWS, 0, _arrWS.Length);
-            //this.sp.Write(arrWS, 0, arrWS.Length);
-            Thread.Sleep(10000);
+            catch
+            {
+            }
         }
 
         private void DataReceivedHandler(
-            object sender,
-            SerialDataReceivedEventArgs e)
+                      object sender,
+                      SerialDataReceivedEventArgs e)
         {
             //string indata = sp.ReadExisting();
             Console.WriteLine("Data Received:");
             //Console.Write(indata);
-            
-            SerialPort sp2 = (SerialPort)sender;
-            int tamanho = sp2.BytesToRead;
-            sp2.Read(readBytes, inicio_reader, tamanho);
-            inicio_reader += tamanho;
-            if ((inicio_reader >= tamanho_read) || ((int)readBytes[inicio_reader - 2] == 13 || (int)readBytes[inicio_reader - 1] == 10))
+            try
             {
-                isTerminouRead = true;
+                SerialPort sp2 = (SerialPort)sender;
+                int tamanho = sp2.BytesToRead;
+                sp2.Read(readBytes, inicio_reader, tamanho);
+                inicio_reader += tamanho;
+                if ((inicio_reader >= tamanho_read) || ((int)readBytes[inicio_reader - 2] == 13 || (int)readBytes[inicio_reader - 1] == 10))
+                {
+                    isTerminouRead = true;
+                }
+            }
+            catch
+            {
+
             }
         }
 
         public bool IsOpenSerial()
         {
             bool retorno = false;
-            
-            if (this.sp.IsOpen)
+            try
             {
-                retorno = true;
+                if (this.sp.IsOpen)
+                {
+                    retorno = true;
+                }
             }
+            catch
+            {
 
+            }
             return retorno;
         }
 
@@ -290,13 +331,13 @@ namespace Percolore.IOConnect.Negocio
                 {
                     if (isThrow)
                     {
-                        throw new Exception("Balança Toledo Error : Erro Valores incorretos!");
+                        throw new Exception("Balança Toledo Error :" + " Erro Valores incorretos!");
                     }
                 }
             }
             catch
             {
-                throw new Exception("Balança Toledo Error : Erro de Comunicação!");
+                throw new Exception("Balança Toledo Error :" + " Erro de Comunicação!");
             }
         }
     }

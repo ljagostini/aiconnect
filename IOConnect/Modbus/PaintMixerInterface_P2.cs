@@ -67,7 +67,6 @@ namespace PaintMixer
 	class PaintMixerInterface_P2 : IDisposable
     {
         private const int MOTOR_COUNT = 16;
-
         private const int REG_STATUS = 0;
         private const int REG_CONTROL = 1;
         private const int REG_MOTOR_NUM = 2;
@@ -83,17 +82,21 @@ namespace PaintMixer
         private const int REG_POLARITY = 166;
         private const int REG_COUNT = 167;
         private const int REG_STEP = 168;
+
         private const int REG_RESSET_HARD = 169;
         private const int REG_VERSION = 170;
+
         private const int REG_STATUSVALVULA = 171;
+
         private const int REG_ACIONAVALVULA = 173;
+
+
 
         private const int STATUS_BUSY = 1;
         private const int STATUS_MOVING = 2;
         private const int STATUS_REVING = 4;
         private const int STATUS_DELAYED = 8;
         private const int STATUS_HALTED = 16;
-
         private const int CONTROL_IDLE = 0;
         private const int CONTROL_RUN = 1;
         private const int CONTROL_RUNREV = 2;
@@ -214,7 +217,10 @@ namespace PaintMixer
 
                 pacoteWr[(64) + (i * 2)] = nshift;
                 pacoteWr[(64) + (i * 2) + 1] = i16;
+
             }
+
+
 
             mb.SendFc16(slaveAddr, start, (ushort)pacoteWr.Length, pacoteWr);
 
@@ -338,27 +344,31 @@ namespace PaintMixer
             if (!mb.isOpen())
             {
                 string[] portas = null;
-                
-                portas = SerialPort.GetPortNames();
-                    
-                if (this.nomeDispositivo != "")
+                try
                 {
-                    bool achouPorta = false;
-                    string mPortaConfig = "";
-                    foreach (string np in portas)
+                    portas = SerialPort.GetPortNames();
+                    
+                    if (this.nomeDispositivo != "")
                     {
-                        if (np.ToUpper() == this.nomeDispositivo.ToUpper())
+                        bool achouPorta = false;
+                        string mPortaConfig = "";
+                        foreach (string np in portas)
                         {
-                            mPortaConfig = np;
-                            achouPorta = true;
+                            if (np.ToUpper() == this.nomeDispositivo.ToUpper())
+                            {
+                                mPortaConfig = np;
+                                achouPorta = true;
+                            }
+                        }
+                        if (achouPorta)
+                        {
+                            portas = new string[1];
+                            portas[0] = mPortaConfig;
                         }
                     }
-                    if (achouPorta)
-                    {
-                        portas = new string[1];
-                        portas[0] = mPortaConfig;
-                    }
                 }
+                catch
+                { }
                 
                 if (portas == null || portas.LongLength == 0)
                 {
@@ -380,14 +390,18 @@ namespace PaintMixer
                             this.counterConnect++;
                             //Se não for possível ler status, encerra comunicação com a porta                   
                             mb.CloseM();
-                            
-                            if (counterConnect > 2)
+                            try
                             {
-                                counterConnect = 0;
-                                BluetoothClient btClient = new BluetoothClient();
-								var devices = btClient.DiscoverDevices();
-								Bluetooth.PairBluetoothDevices(devices);
-							}
+                                if (counterConnect > 2)
+                                {
+                                    counterConnect = 0;
+                                    BluetoothClient btClient = new BluetoothClient();
+									var devices = btClient.DiscoverDevices();
+									Bluetooth.PairBluetoothDevices(devices);
+								}
+                            }
+                            catch
+                            { }
                         }
                         else
                         {
@@ -418,6 +432,7 @@ namespace PaintMixer
             if (mb != null)
             {
                 mb.CloseM();
+
             }
         }
 
@@ -777,10 +792,11 @@ namespace PaintMixer
                 writeControl(CONTROL_IDLE);
                 this.isDosed = true;
             }
-            catch
+            catch (Exception exc)
             {
                 this.isDosed = true;
-                throw;
+                throw new Exception(exc.Message);
+
             }
         }
 
@@ -911,10 +927,10 @@ namespace PaintMixer
                 writeControl(CONTROL_IDLE);
                 this.isDosed = true;
             }
-            catch
+            catch (Exception exc)
             {
                 this.isDosed = true;
-                throw;
+                throw new Exception(exc.Message);
 
             }
         }

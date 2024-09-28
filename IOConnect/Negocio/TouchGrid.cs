@@ -1,8 +1,15 @@
 ﻿using Percolore.IOConnect.Util;
+using System;
+using System.Collections.Generic;
+using System.Drawing;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace Percolore.IOConnect.Negocio
 {
-	public class TouchGrid
+    public class TouchGrid
     {
         private readonly DataGridView _View;
         int startDragRowHandle = -1;
@@ -47,7 +54,11 @@ namespace Percolore.IOConnect.Negocio
         }
         void _View_Layout(object sender, LayoutEventArgs e)
         {
-            IsDragging = false;
+            try
+            {
+                IsDragging = false;
+            }
+            catch { }
         }
 
         private void DoScroll(int delta)
@@ -62,36 +73,47 @@ namespace Percolore.IOConnect.Negocio
 
         private void _View_MouseUp(object sender, MouseEventArgs e)
         {
-            if (IsDragging && !this._isMoved)
+            try
             {
-                if (this.OnClickDataGridEvent != null)
+                if (IsDragging && !this._isMoved)
                 {
-                    this.OnClickDataGridEvent();
+                    if (this.OnClickDataGridEvent != null)
+                    {
+                        this.OnClickDataGridEvent();
+                    }
+                    this._isMoved = true;
                 }
-                this._isMoved = true;
+                IsDragging = false;
+
             }
-
-            IsDragging = false;
+            catch { }
         }
-
         private void _View_MouseMove(object sender, MouseEventArgs e)
         {
-            if (IsDragging)
+            try
             {
-                int newRow = GetRowUnderCursor(e.Location);
-                if (newRow < 0)
-                    return;
-                int delta = startDragRowHandle - newRow;
-                DoScroll(delta);
+                if (IsDragging)
+                {
+                    int newRow = GetRowUnderCursor(e.Location);
+                    if (newRow < 0)
+                        return;
+                    int delta = startDragRowHandle - newRow;
+                    DoScroll(delta);
+                }
             }
+            catch { }
         }
 
         private void _View_MouseDown(object sender, MouseEventArgs e)
         {
-            this._isMoved = false;
-            IsDragging = true;
-            startDragRowHandle = GetRowUnderCursor(e.Location);
-            topRowIndex = _View.FirstDisplayedScrollingRowIndex;
+            try
+            {
+                this._isMoved = false;
+                IsDragging = true;
+                startDragRowHandle = GetRowUnderCursor(e.Location);
+                topRowIndex = _View.FirstDisplayedScrollingRowIndex;
+            }
+            catch { }
         }
     }
 }

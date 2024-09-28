@@ -1,8 +1,14 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.IO;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace Percolore.IOConnect.Core
 {
-	public static class RunIOConnectHelper
+    public static class RunIOConnectHelper
     {
         const string PROCESS_NAME = "RunIOConnect";
         public static string PATH_DIRECTORY = @"C:\Percolore\IOConnect\RunIOConnect";
@@ -17,7 +23,17 @@ namespace Percolore.IOConnect.Core
 
         public static bool isRunIOConnect()
         {
-            return GetProcess() != null;
+            bool retorno = false;
+            try
+            {
+                if(GetProcess() != null)
+                {
+                    retorno = true;
+                }
+            }
+            catch
+            { }
+            return retorno;
         }
 
         /// <summary>
@@ -33,11 +49,15 @@ namespace Percolore.IOConnect.Core
                 {
                     return true;
                 }
+
                 //Se não estiver em execução, inicia o processo
-                else
+                if (GetProcess() == null)
                 {
+                    //Process.Start(path + ".exe");
+
                     Process process = new Process()
                     {
+
                         StartInfo = new ProcessStartInfo(path, "{Arguments If Needed}")
                         {
                             WindowStyle = ProcessWindowStyle.Normal,
@@ -51,7 +71,7 @@ namespace Percolore.IOConnect.Core
                 //Verifica se processo foi iniciado com sucesso
                 return (GetProcess() != null);
             }
-            catch
+            catch (Exception)
             {
                 return false;
             }
@@ -63,15 +83,22 @@ namespace Percolore.IOConnect.Core
         public static bool ShutdownRunIOConnect()
         {
             bool retorno = false;
-            Process ioconnect = GetProcess();
+            Process ioconnect = null;
 
-            if (ioconnect != null)
+            try
             {
-                retorno = true;
-                ioconnect.Kill();
-                ioconnect.CloseMainWindow();
+                ioconnect = GetProcess();
+                if (ioconnect != null)
+                {
+                    retorno = true;
+                    ioconnect.Kill();
+                    ioconnect.CloseMainWindow();
+                }
             }
-
+            catch
+            {
+                //throw;
+            }
             return retorno;
         }
     }
