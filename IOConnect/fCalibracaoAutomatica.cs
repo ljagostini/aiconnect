@@ -1,22 +1,14 @@
 ﻿using Percolore.Core;
-using Percolore.Core.UserControl;
+using Percolore.Core.Logging;
 using Percolore.IOConnect.Util;
-using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
-using System.Drawing;
 using System.Globalization;
 using System.IO.Ports;
-using System.Linq;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
-using System.Windows.Forms;
 
 namespace Percolore.IOConnect
 {
-    public partial class fCalibracaoAutomatica : Form
+	public partial class fCalibracaoAutomatica : Form
     {
         public event CloseWindows OnClosedEvent = null;
         private List<Util.ObjectCalibracaoHistorico> lCalibracaoAutoHistorico = new List<Util.ObjectCalibracaoHistorico>();
@@ -86,130 +78,109 @@ namespace Percolore.IOConnect
                     colorantes.Add(hist._calibracaoAuto._colorante);
                 }
             }
-            catch
-            { }
-        }
+			catch (Exception ex)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+			}
+		}
 
         private void fCalibracaoAutomatica_Load(object sender, EventArgs e)
         {
             try
             {
                 updateTeclado();
-                try
+                
+                DataTable dtBal = new DataTable();
+                dtBal.Columns.Add("valor", typeof(int));
+                dtBal.Columns.Add("descricao", typeof(string));
+                DataRow dr = dtBal.NewRow();
+                dr["valor"] = 1;
+                dr["descricao"] = "Bell";
+                dtBal.Rows.Add(dr);
+
+                DataRow dr1 = dtBal.NewRow();
+                dr1["valor"] = 2;
+                dr1["descricao"] = "Toledo MS403-S";
+                dtBal.Rows.Add(dr1);
+
+                DataRow dr2 = dtBal.NewRow();
+                dr2["valor"] = 3;
+                dr2["descricao"] = "MT PG503-S";
+                dtBal.Rows.Add(dr2);
+
+                cmbTipoBalanca.DataSource = dtBal.DefaultView;
+                cmbTipoBalanca.DisplayMember = "descricao";
+                cmbTipoBalanca.ValueMember = "valor";
+                cmbTipoBalanca.SelectedIndex = 0;
+                this.interfaceBal = new Negocio.Balanca_BEL();
+                
+                DataTable dtTipoCal = new DataTable();
+                dtTipoCal.Columns.Add("valor", typeof(int));
+                dtTipoCal.Columns.Add("descricao", typeof(string));
+                DataRow dr3 = dtTipoCal.NewRow();
+                dr3["valor"] = 1;
+                dr3["descricao"] = Negocio.IdiomaResxExtensao.CalibracaoAuto_TipoAll;
+                dtTipoCal.Rows.Add(dr3);
+
+                DataRow dr4 = dtTipoCal.NewRow();
+                dr4["valor"] = 2;
+                dr4["descricao"] = Negocio.IdiomaResxExtensao.CalibracaoAuto_TipoIndi;
+                dtTipoCal.Rows.Add(dr4);
+
+                cmb_TipoCalibracao.DataSource = dtTipoCal.DefaultView;
+                cmb_TipoCalibracao.DisplayMember = "descricao";
+                cmb_TipoCalibracao.ValueMember = "valor";
+                cmb_TipoCalibracao.SelectedIndex = 0;
+                this._tipoCalibacao = 1;
+                
+                DataTable dtProcCal = new DataTable();
+                dtProcCal.Columns.Add("valor", typeof(int));
+                dtProcCal.Columns.Add("descricao", typeof(string));
+
+                Util.ObjectParametros parametros = Util.ObjectParametros.Load();
+                bool forceProcAuto = true;
+                switch ((Dispositivo)parametros.IdDispositivo)
                 {
-                    DataTable dtBal = new DataTable();
-                    dtBal.Columns.Add("valor", typeof(int));
-                    dtBal.Columns.Add("descricao", typeof(string));
-                    DataRow dr = dtBal.NewRow();
-                    dr["valor"] = 1;
-                    dr["descricao"] = "Bell";
-                    dtBal.Rows.Add(dr);
-
-                    DataRow dr1 = dtBal.NewRow();
-                    dr1["valor"] = 2;
-                    dr1["descricao"] = "Toledo MS403-S";
-                    dtBal.Rows.Add(dr1);
-
-                    DataRow dr2 = dtBal.NewRow();
-                    dr2["valor"] = 3;
-                    dr2["descricao"] = "MT PG503-S";
-                    dtBal.Rows.Add(dr2);
-
-                    cmbTipoBalanca.DataSource = dtBal.DefaultView;
-                    cmbTipoBalanca.DisplayMember = "descricao";
-                    cmbTipoBalanca.ValueMember = "valor";
-                    cmbTipoBalanca.SelectedIndex = 0;
-                    this.interfaceBal = new Negocio.Balanca_BEL();
+                    case Dispositivo.Placa_3:
+                        {
+                            forceProcAuto = false;
+                            break;
+                        }
                 }
-                catch
-                { }
 
-                try
+                if (forceProcAuto)
                 {
-                    DataTable dtTipoCal = new DataTable();
-                    dtTipoCal.Columns.Add("valor", typeof(int));
-                    dtTipoCal.Columns.Add("descricao", typeof(string));
-                    DataRow dr = dtTipoCal.NewRow();
-                    dr["valor"] = 1;
-                    dr["descricao"] = Negocio.IdiomaResxExtensao.CalibracaoAuto_TipoAll;
-                    dtTipoCal.Rows.Add(dr);
-
-                    DataRow dr1 = dtTipoCal.NewRow();
-                    dr1["valor"] = 2;
-                    dr1["descricao"] = Negocio.IdiomaResxExtensao.CalibracaoAuto_TipoIndi;
-                    dtTipoCal.Rows.Add(dr1);
-
-                    cmb_TipoCalibracao.DataSource = dtTipoCal.DefaultView;
-                    cmb_TipoCalibracao.DisplayMember = "descricao";
-                    cmb_TipoCalibracao.ValueMember = "valor";
-                    cmb_TipoCalibracao.SelectedIndex = 0;
-                    this._tipoCalibacao = 1;
-
-
+                    DataRow dr5 = dtProcCal.NewRow();
+                    dr5["valor"] = 1;
+                    dr5["descricao"] = Negocio.IdiomaResxExtensao.CalibracaoAuto_ProcAut;
+                    dtProcCal.Rows.Add(dr5);
                 }
-                catch
-                { }
+                DataRow dr6 = dtProcCal.NewRow();
+                dr6["valor"] = 2;
+                dr6["descricao"] = Negocio.IdiomaResxExtensao.CalibracaoAuto_ProcSemiAut;
+                dtProcCal.Rows.Add(dr6);
 
-                try
+                cmb_ProcessoCalibracao.DataSource = dtProcCal.DefaultView;
+                cmb_ProcessoCalibracao.DisplayMember = "descricao";
+                cmb_ProcessoCalibracao.ValueMember = "valor";
+                cmb_ProcessoCalibracao.SelectedIndex = 1;
+                this._processoCalibracao = 2;
+                
+                for (int t = 0; t < lCalibracaoAutoHistorico.Count; t++)
                 {
-                    DataTable dtProcCal = new DataTable();
-                    dtProcCal.Columns.Add("valor", typeof(int));
-                    dtProcCal.Columns.Add("descricao", typeof(string));
-
-                    Util.ObjectParametros parametros = Util.ObjectParametros.Load();
-                    bool forceProcAuto = true;
-                    switch ((Dispositivo)parametros.IdDispositivo)
-                    {
-                        case Dispositivo.Placa_3:
-                            {
-                                forceProcAuto = false;
-
-                                break;
-                            }
-                    }
-                    if (forceProcAuto)
-                    {
-                        DataRow dr = dtProcCal.NewRow();
-                        dr["valor"] = 1;
-                        dr["descricao"] = Negocio.IdiomaResxExtensao.CalibracaoAuto_ProcAut;
-                        dtProcCal.Rows.Add(dr);
-                    }
-                    DataRow dr1 = dtProcCal.NewRow();
-                    dr1["valor"] = 2;
-                    dr1["descricao"] = Negocio.IdiomaResxExtensao.CalibracaoAuto_ProcSemiAut;
-                    dtProcCal.Rows.Add(dr1);
-
-                    cmb_ProcessoCalibracao.DataSource = dtProcCal.DefaultView;
-                    cmb_ProcessoCalibracao.DisplayMember = "descricao";
-                    cmb_ProcessoCalibracao.ValueMember = "valor";
-                    cmb_ProcessoCalibracao.SelectedIndex = 1;
-                    this._processoCalibracao = 2;
-
-
+                    lCalibracaoAutoHistorico[t]._calibracaoAuto.CapacideMaxBalanca = this.interfaceBal.CargaMaximaBalanca_Gramas;
                 }
-                catch
-                { }
-                try
-                {
-                    for (int t = 0; t < lCalibracaoAutoHistorico.Count; t++)
-                    {
-                        lCalibracaoAutoHistorico[t]._calibracaoAuto.CapacideMaxBalanca = this.interfaceBal.CargaMaximaBalanca_Gramas;
-                    }
-                    txtCapacidadeMaxBalanca.Text = lCalibracaoAutoHistorico[0]._calibracaoAuto.CapacideMaxBalanca.ToString();
-                    txtMassaAdmRecipiente.Text = lCalibracaoAutoHistorico[0]._calibracaoAuto.MaxMassaAdmRecipiente.ToString();
-                    txtMinMassaAdmRecipiente.Text = lCalibracaoAutoHistorico[0]._calibracaoAuto.MinMassaAdmRecipiente.ToString();
-                    txtVolumeMaxRecipiente.Text = lCalibracaoAutoHistorico[0]._calibracaoAuto.VolumeMaxRecipiente.ToString();
-                    txtTentativasRecipiente.Text = lCalibracaoAutoHistorico[0]._calibracaoAuto.NumeroMaxTentativaRec.ToString();
-                }
-                catch
-                {
-                    txtCapacidadeMaxBalanca.Text = "0";
-                    txtMassaAdmRecipiente.Text = "0";
-                    txtMinMassaAdmRecipiente.Text = "0";
-                    txtVolumeMaxRecipiente.Text = "0";
-                    txtTentativasRecipiente.Text = "0";
+                txtCapacidadeMaxBalanca.Text = lCalibracaoAutoHistorico[0]._calibracaoAuto.CapacideMaxBalanca.ToString();
+                txtMassaAdmRecipiente.Text = lCalibracaoAutoHistorico[0]._calibracaoAuto.MaxMassaAdmRecipiente.ToString();
+                txtMinMassaAdmRecipiente.Text = lCalibracaoAutoHistorico[0]._calibracaoAuto.MinMassaAdmRecipiente.ToString();
+                txtVolumeMaxRecipiente.Text = lCalibracaoAutoHistorico[0]._calibracaoAuto.VolumeMaxRecipiente.ToString();
+                txtTentativasRecipiente.Text = lCalibracaoAutoHistorico[0]._calibracaoAuto.NumeroMaxTentativaRec.ToString();
+                txtCapacidadeMaxBalanca.Text = "0";
+                txtMassaAdmRecipiente.Text = "0";
+                txtMinMassaAdmRecipiente.Text = "0";
+                txtVolumeMaxRecipiente.Text = "0";
+                txtTentativasRecipiente.Text = "0";
 
-                }
                 this.btnSair.Text = string.Empty;
                 this.btnSair.Image = Imagem.GetSair_32x32();
                 this.btnStart.Text = Negocio.IdiomaResxExtensao.Global_Start;
@@ -233,23 +204,17 @@ namespace Percolore.IOConnect
                 this.lblDelayBalanca.Text = Negocio.IdiomaResxExtensao.CalibracaoAutomatica_lblDelayBalanca;
                 this.lblTituloMassaBal.Text = Negocio.IdiomaResxExtensao.CalibracaoAutomatica_lblTituloMassaBal;
 
-
-                try
-                {
-                    dgvCalibracaoAuto.Columns[0].HeaderText = Negocio.IdiomaResxExtensao.CalibracaoAutomatica_Etapa;
-                    dgvCalibracaoAuto.Columns[1].HeaderText = Negocio.IdiomaResxExtensao.CalibracaoAutomatica_Motor;
-                    dgvCalibracaoAuto.Columns[2].HeaderText = Negocio.IdiomaResxExtensao.CalibracaoAutomatica_Tentativa;
-                    dgvCalibracaoAuto.Columns[3].HeaderText = Negocio.IdiomaResxExtensao.CalibracaoAutomatica_Volume;
-                    dgvCalibracaoAuto.Columns[4].HeaderText = Negocio.IdiomaResxExtensao.CalibracaoAutomatica_VolumeDos;
-                    dgvCalibracaoAuto.Columns[5].HeaderText = Negocio.IdiomaResxExtensao.CalibracaoAutomatica_MassaIdeal;
-                    dgvCalibracaoAuto.Columns[6].HeaderText = Negocio.IdiomaResxExtensao.CalibracaoAutomatica_MassaMedBalanca;
-                    dgvCalibracaoAuto.Columns[7].HeaderText = Negocio.IdiomaResxExtensao.CalibracaoAutomatica_Desvio;
-                    dgvCalibracaoAuto.Columns[8].HeaderText = Negocio.IdiomaResxExtensao.CalibracaoAutomatica_DesvioAdmissel;
-                    dgvCalibracaoAuto.Columns[9].HeaderText = Negocio.IdiomaResxExtensao.CalibracaoAutomatica_Aprovado;
-                    dgvCalibracaoAuto.Columns[10].HeaderText = Negocio.IdiomaResxExtensao.CalibracaoAutomatica_Executado;
-                }
-                catch
-                { }               
+                dgvCalibracaoAuto.Columns[0].HeaderText = Negocio.IdiomaResxExtensao.CalibracaoAutomatica_Etapa;
+                dgvCalibracaoAuto.Columns[1].HeaderText = Negocio.IdiomaResxExtensao.CalibracaoAutomatica_Motor;
+                dgvCalibracaoAuto.Columns[2].HeaderText = Negocio.IdiomaResxExtensao.CalibracaoAutomatica_Tentativa;
+                dgvCalibracaoAuto.Columns[3].HeaderText = Negocio.IdiomaResxExtensao.CalibracaoAutomatica_Volume;
+                dgvCalibracaoAuto.Columns[4].HeaderText = Negocio.IdiomaResxExtensao.CalibracaoAutomatica_VolumeDos;
+                dgvCalibracaoAuto.Columns[5].HeaderText = Negocio.IdiomaResxExtensao.CalibracaoAutomatica_MassaIdeal;
+                dgvCalibracaoAuto.Columns[6].HeaderText = Negocio.IdiomaResxExtensao.CalibracaoAutomatica_MassaMedBalanca;
+                dgvCalibracaoAuto.Columns[7].HeaderText = Negocio.IdiomaResxExtensao.CalibracaoAutomatica_Desvio;
+                dgvCalibracaoAuto.Columns[8].HeaderText = Negocio.IdiomaResxExtensao.CalibracaoAutomatica_DesvioAdmissel;
+                dgvCalibracaoAuto.Columns[9].HeaderText = Negocio.IdiomaResxExtensao.CalibracaoAutomatica_Aprovado;
+                dgvCalibracaoAuto.Columns[10].HeaderText = Negocio.IdiomaResxExtensao.CalibracaoAutomatica_Executado;             
 
                 cb_CalibracaoAuto.DisplayMember = "Nome";
                 cb_CalibracaoAuto.ValueMember = "Motor";
@@ -257,13 +222,6 @@ namespace Percolore.IOConnect
                 cb_CalibracaoAuto.SelectedIndex = -1;
                 atualizaPortasComunicacaoBalanca();
 
-                
-                
-            }
-            catch
-            { }
-            try
-            {
                 this._parametro = Util.ObjectParametros.Load();
                 switch ((Dispositivo)this._parametro.IdDispositivo)
                 {
@@ -278,18 +236,9 @@ namespace Percolore.IOConnect
                             break;
                         }
                 }
-            }
-            catch
-            {
-
-            }
-
-            try
-            {
+            
                 List<Util.ObjectColorante> lcol = Util.ObjectColorante.List();
-                //this.lColSeguidor = lcol.FindAll(o => o.Seguidor > 0).ToList();
-             
-
+                
                 foreach (Util.ObjectColorante  _col in lcol)
                 {
                     if(_col.Step > 0)
@@ -298,11 +247,12 @@ namespace Percolore.IOConnect
                         break;
                     }
                 }
-                
             }
-            catch
-            { }
-        }
+			catch (Exception ex)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+			}
+		}
 
         private void updateTeclado()
         {
@@ -314,9 +264,11 @@ namespace Percolore.IOConnect
                 txt_delay_seg_bal.isTecladoShow = chb_tec;
                 txt_delay_seg_bal.isTouchScrenn = chb_touch;
             }
-            catch
-            { }
-        }
+			catch (Exception ex)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+			}
+		}
 
         private void fCalibracaoAutomatica_FormClosing(object sender, FormClosingEventArgs e)
         {
@@ -326,29 +278,22 @@ namespace Percolore.IOConnect
                 {
                     this.interfaceBal.CloseSerial();
                 }
-            }
-            catch
-            { }
-            try
-            {
+            
                 ClosedSerialDispensa();
-            }
-            catch
-            { }
-            try
-            {
+            
                 if (OnClosedEvent != null)
                 {
                     OnClosedEvent();
                 }
             }
-            catch
-            { }
-        }
+			catch (Exception ex)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+			}
+		}
 
         private void btnSair_Click(object sender, EventArgs e)
         {
-            
             isThread = false;
             this.Close();
         }
@@ -377,9 +322,11 @@ namespace Percolore.IOConnect
                     cmbPortaSerial.SelectedIndex = -1;
                 }
             }
-            catch
-            { }
-        }
+			catch (Exception ex)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+			}
+		}
 
         private string ValidadeNameSerialPorta(string _str)
         {
@@ -421,11 +368,12 @@ namespace Percolore.IOConnect
                 {
                     lCalibracaoAutoHistorico[t]._calibracaoAuto.CapacideMaxBalanca = this.interfaceBal.CargaMaximaBalanca_Gramas;
                 }
-
             }
-            catch
-            { }
-        }
+			catch (Exception ex)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+			}
+		}
 
         private void cmb_TipoCalibracao_SelectedIndexChanged(object sender, EventArgs e)
         {
@@ -433,9 +381,11 @@ namespace Percolore.IOConnect
             {
                 this._tipoCalibacao = Convert.ToInt32(cmb_TipoCalibracao.SelectedValue.ToString());
             }
-            catch
-            { }
-        }
+			catch (Exception ex)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+			}
+		}
 
         private void cmb_ProcessoCalibracao_SelectedIndexChanged(object sender, EventArgs e)
         {
@@ -443,9 +393,11 @@ namespace Percolore.IOConnect
             {
                 this._processoCalibracao = Convert.ToInt32(cmb_ProcessoCalibracao.SelectedValue.ToString());
             }
-            catch
-            { }
-        }
+			catch (Exception ex)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+			}
+		}
 
         private void cmbPortaSerial_SelectedIndexChanged(object sender, EventArgs e)
         {
@@ -454,14 +406,13 @@ namespace Percolore.IOConnect
                 if (cmbPortaSerial.SelectedIndex >= 0)
                 {
                     this.interfaceBal._str_Serial = cmbPortaSerial.Text;
-                    //this.balanca_bel.Start_Serial();
                 }
             }
-            catch
-            {
-
-            }
-        }
+			catch (Exception ex)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+			}
+		}
 
         private void cb_CalibracaoAuto_SelectionChangeCommitted(object sender, EventArgs e)
         {
@@ -487,10 +438,11 @@ namespace Percolore.IOConnect
                 gbComunicacaoBalanca.Enabled = true;
                 
             }
-            catch
-            {
-            }
-        }
+			catch (Exception ex)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+			}
+		}
 
         private void atualizaDGView(Util.ObjectCalibracaoHistorico calHist)
         {
@@ -604,7 +556,6 @@ namespace Percolore.IOConnect
                                 if (_st != null && _st.Length > 0)
                                 {
                                     totalV += double.Parse(_st, CultureInfo.InvariantCulture);
-
                                 }
                             }
 
@@ -614,10 +565,8 @@ namespace Percolore.IOConnect
                         {
                             _totalVolumeDos += _op.VolumeDosado;
                         }
-                        //_totalMassaMedBal += _op.MassaMedBalanca;
-                        //_totalVolumeDos += _op.VolumeDosado;
+                        
                         this.dtCalAuto.Rows.Add(dr);
-
                     }
                 }
                 if (dgvCalibracaoAuto.Rows != null)
@@ -633,9 +582,6 @@ namespace Percolore.IOConnect
                 DataTable dt = new DataTable();
                 dt.Columns.Add("Etapa", typeof(int));
                 dt.Columns.Add("Descricao", typeof(string));
-                //dt.Rows.Add(0, "Posicionamento Reciepiente");
-                //dt.Rows.Add(1, "Primeira Calibração");
-                //dt.Rows.Add(2, "Faixas Calibração");
 
                 dt.Rows.Add(0, Negocio.IdiomaResxExtensao.CalibracaoAutomatica_PosicionamentoReciepiente);
                 dt.Rows.Add(1, Negocio.IdiomaResxExtensao.Configuracoes_CalibracaoAutoPrimeiraCal);
@@ -648,27 +594,17 @@ namespace Percolore.IOConnect
 
                 txtTotalMassaMedBal.Text = _totalMassaMedBal.ToString("N3");
                 txtTotalVolumeDos.Text = _totalVolumeDos.ToString("N3");
-
-                
             }
-            catch
-            {
-
-            }
-
-        }
+			catch (Exception ex)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+			}
+		}
 
         private void dgvCalibracaoAuto_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
         {
             try
             {
-                //Green
-                //Color.FromArgb(255, 0, 128, 0);
-                //Red
-                //Color.FromArgb(255, 228, 81, 76);
-                //Yellow
-                //Color.FromArgb(255, 225, 255, 0);
-
                 DataGridViewRow row = dgvCalibracaoAuto.Rows[e.RowIndex];
                 if (row.Cells["Executado"].Value.ToString() == Negocio.IdiomaResxExtensao.Global_Nao)// "Não")
                 {
@@ -693,9 +629,11 @@ namespace Percolore.IOConnect
                     }
                 }
             }
-            catch
-            { }
-        }
+			catch (Exception ex)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+			}
+		}
 
         private void btnStart_Click(object sender, EventArgs e)
         {
@@ -704,13 +642,8 @@ namespace Percolore.IOConnect
                 this.stopExecution = false; 
                 this.numeroMedias = 0;
               
-
-                try
-                {
-                    this.DelayEntreBalanca = txt_delay_seg_bal.ToInt() * 1000;
-                }
-                catch
-                { }
+                this.DelayEntreBalanca = txt_delay_seg_bal.ToInt() * 1000;
+                
                 if(this.DelayEntreBalanca < 5000)
                 {
                     this.DelayEntreBalanca = 5000;
@@ -729,11 +662,6 @@ namespace Percolore.IOConnect
                             {
                                 if (this.lCalibracaoAutoHistorico[i].listOperacaoAutoHist[j].Etapa > 0)
                                 {
-                                    //if (this.lCalibracaoAutoHistorico[i].listOperacaoAutoHist[j].Executado == 0)
-                                    //{
-                                    //    posInicio = i;
-                                    //    break;
-                                    //}
                                     if (volume != this.lCalibracaoAutoHistorico[i].listOperacaoAutoHist[j].Volume)
                                     {
                                         bool existeExecutadoAprovado = false;
@@ -764,8 +692,6 @@ namespace Percolore.IOConnect
                                             break;
                                         }
                                     }
-
-
                                 }
                             }
                             if (this.posInicio >= 0)
@@ -811,7 +737,6 @@ namespace Percolore.IOConnect
                         this.Invoke(new MethodInvoker(iniciarCalibracaoAutomatica));
                         execCal = true;
                         btnStart.Enabled = false;
-                       
                     }
                 }
                 else
@@ -822,10 +747,11 @@ namespace Percolore.IOConnect
                     }
                 }
             }
-            catch
-            { }
-
-        }
+			catch (Exception ex)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+			}
+		}
 
         private void iniciarCalibracaoAutomatica()
         {
@@ -846,26 +772,13 @@ namespace Percolore.IOConnect
                 this.stepPrimeiraCalibracao = 0;
                 this.stepTrocarRec = 0;
 
-                //bool dispensou = true;
                 Util.ObjectParametros parametros = Util.ObjectParametros.Load();
-                //if(this.disp != null)
-                //{
-                //    try
-                //    {
-                //        this.disp.Disconnect();
-                //    }
-                //    catch
-                //    { }
-                //}
+                
                 foreach(IDispenser _disp in this.ldisp)
                 {
-                    try
-                    {
-                        _disp.Disconnect();
-                    }
-                    catch
-                    { }
+                    _disp.Disconnect();
                 }
+
                 this.ldisp.Clear();
                 IDispenser dispenser = null;
                 IDispenser dispenser2 = null;
@@ -898,11 +811,6 @@ namespace Percolore.IOConnect
                             this.modBusDispenserMover_P3 = new ModBusDispenserMover_P3(parametros.NomeDispositivo, parametros.NomeDispositivo_PlacaMov);
                             break;
                         }
-                    //case Dispositivo.Placa_4:
-                    //    {
-                    //        dispenser = new ModBusDispenser_P4(parametros.NomeDispositivo);
-                    //        break;
-                    //    }
                 }
                 if (this.modBusDispenserMover_P3 == null)
                 {
@@ -924,11 +832,6 @@ namespace Percolore.IOConnect
                                 dispenser2 = new ModBusDispenser_P2(parametros.NomeDispositivo2);
                                 break;
                             }
-                        //case Dispositivo2.Placa_4:
-                        //    {
-                        //        dispenser2 = new ModBusDispenser_P4(parametros.NomeDispositivo);
-                        //        break;
-                        //    }
                         default:
                             {
                                 dispenser2 = null;
@@ -936,19 +839,12 @@ namespace Percolore.IOConnect
                             }
                     }
 
-
                     if (parametros.IdDispositivo2 != 0)
                     {
                         this.ldisp.Add(dispenser2);
                     }
                 }
-            }
-            catch
-            {
-               
-            }
-            try
-            {
+            
                 if (this.modBusDispenserMover_P3 != null)
                 {
                     isInicializarDisp = false;
@@ -980,11 +876,7 @@ namespace Percolore.IOConnect
                         }
                     }
                 }
-            }
-            catch
-            { }
-            try
-            {
+            
                 if (isInicializarDisp)
                 {
                     this.MassaBalancaOnLine = 0;
@@ -992,17 +884,10 @@ namespace Percolore.IOConnect
                     this.posInicioHistorico = 0;
                     cb_CalibracaoAuto.SelectedIndex = posInicio;
 
-                    try
-                    {
-                        Util.ObjectColorante colorante = (Util.ObjectColorante)cb_CalibracaoAuto.SelectedItem;
+                    Util.ObjectColorante colorante = (Util.ObjectColorante)cb_CalibracaoAuto.SelectedItem;
 
-                        lblCalibracaoAutoMotor.Text = colorante.Circuito.ToString();
-                        lblCalibracaoAutoMassaEspecifica.Text = colorante.MassaEspecifica.ToString();
-                    }
-                    catch
-                    { }
-
-                    //AttDGVBack();
+                    lblCalibracaoAutoMotor.Text = colorante.Circuito.ToString();
+                    lblCalibracaoAutoMassaEspecifica.Text = colorante.MassaEspecifica.ToString();
 
                     if (backgroundWorker1 == null)
                     {
@@ -1027,19 +912,18 @@ namespace Percolore.IOConnect
                         this.isRunning = false;
                         this.execCal = true;
                         backgroundWorker1.RunWorkerAsync();
-
                     }
                 }
                 else
                 {
                     EnableBtnStart();
                 }
-
             }
-            catch
-            {
-            }
-        }
+			catch (Exception ex)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+			}
+		}
 
         private void backgroundWorker1_DoWork(object sender, System.ComponentModel.DoWorkEventArgs e)
         {
@@ -1055,33 +939,22 @@ namespace Percolore.IOConnect
                     }
                     else
                     {
-                        try
+                        if (!this.isRunning)
                         {
-                            if (!this.isRunning)
-                            {
-                                this.isRunning = true;
-                                this.Invoke(new MethodInvoker(MonitoramentoEvent));
-                                Thread.Sleep(2000);
-                            }
-                            else if(this.stopExecution)
-                            {
-                                this.isRunning = false;
-                            }
+                            this.isRunning = true;
+                            this.Invoke(new MethodInvoker(MonitoramentoEvent));
+                            Thread.Sleep(2000);
                         }
-                        catch
+                        else if(this.stopExecution)
                         {
+                            this.isRunning = false;
                         }
                     }
                     Thread.Sleep(200);
                 }
+
                 worker = null;
-               
-            }
-            catch
-            {
-            }
-            try
-            {
+            
                 if(!this.execCal)
                 {
                     using (fMensagem m = new fMensagem(fMensagem.TipoMensagem.Erro))
@@ -1137,9 +1010,11 @@ namespace Percolore.IOConnect
                     this.Invoke(new MethodInvoker(EnableBtnStart));
                 }
             }
-            catch
-            { }
-        }
+			catch (Exception ex)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+			}
+		}
 
         private void backgroundWorker1_RunWorkerCompleted(object sender, System.ComponentModel.RunWorkerCompletedEventArgs e)
         {
@@ -1157,12 +1032,12 @@ namespace Percolore.IOConnect
                 {
                     this.isThread = true;
                 }
-
             }
-            catch
-            {
-            }
-        }
+			catch (Exception ex)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+			}
+		}
 
         void PausarMonitoramento()
         {
@@ -1171,10 +1046,11 @@ namespace Percolore.IOConnect
                 this.isThread = false;
                 this.isRunning = true;
             }
-            catch
-            {
-            }
-        }
+			catch (Exception ex)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+			}
+		}
 
         private void EnableBtnStart()
         {
@@ -1188,20 +1064,17 @@ namespace Percolore.IOConnect
                 this.mensagemStrip = "";
                 toolMessage.Text = this.mensagemStrip;
                 toolProgress.Value = 0;
-            }
-            catch
-            {
-            }
-            try
-            {
+            
                 if(this.modBusDispenserMover_P3 != null)
                 {
                     this.modBusDispenserMover_P3.ValvulaPosicaoRecirculacao();
                 }
             }
-            catch
-            { }
-        }
+			catch (Exception ex)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+			}
+		}
 
         private void AttDGVBack()
         {
@@ -1212,7 +1085,6 @@ namespace Percolore.IOConnect
                 lblCalibracaoAutoMotor.Text = colorante.Circuito.ToString();
                 lblCalibracaoAutoMassaEspecifica.Text = colorante.MassaEspecifica.ToString();
                
-                //dataGrid.Rows[index].Selected = true;
                 atualizaDGView(this.lCalibracaoAutoHistorico[this.posInicio]);
                 if (this.posInicioHistorico < this.lCalibracaoAutoHistorico[this.posInicio].listOperacaoAutoHist.Count)
                 {                   
@@ -1222,13 +1094,14 @@ namespace Percolore.IOConnect
                     dgvCalibracaoAuto.FirstDisplayedScrollingRowIndex = posScroll;
                     dgvCalibracaoAuto.Update();
                 }
+
                 AttMassaRecipiente();
-
-
             }
-            catch
-            { }
-        }
+			catch (Exception ex)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+			}
+		}
 
         private void AttMassaRecipiente()
         {
@@ -1236,9 +1109,11 @@ namespace Percolore.IOConnect
             {
                 lblMassaRecipiente.Text = this.MassaBalancaOnLine.ToString();
             }
-            catch
-            { }
-        }
+			catch (Exception ex)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+			}
+		}
 
         private void AttStripMsg()
         {
@@ -1253,11 +1128,11 @@ namespace Percolore.IOConnect
                 toolMessage.Text = this.mensagemStrip;
                 statusStrip1.Refresh();
             }
-            catch
-            {
-
-            }
-        }
+			catch (Exception ex)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+			}
+		}
 
         private void MonitoramentoEvent()
         {
@@ -1297,8 +1172,6 @@ namespace Percolore.IOConnect
                         }
                         else
                         {
-                            //this.mensagemStrip = Negocio.IdiomaResxExtensao.CalibracaoAuto_Trocar_Recipiente;
-                            //this.Invoke(new MethodInvoker(AttStripMsg));
                             TrocarRecipiente();
                         }
                     }
@@ -1311,8 +1184,6 @@ namespace Percolore.IOConnect
                         }
                         else
                         {
-                            //this.mensagemStrip = Negocio.IdiomaResxExtensao.CalibracaoAuto_Trocar_Recipiente;
-                            //this.Invoke(new MethodInvoker(AttStripMsg));
                             TrocarRecipiente();
                         }
                         return;
@@ -1326,8 +1197,6 @@ namespace Percolore.IOConnect
                         }
                         else
                         {
-                            //this.mensagemStrip = Negocio.IdiomaResxExtensao.CalibracaoAuto_Trocar_Recipiente;
-                            //this.Invoke(new MethodInvoker(AttStripMsg));
                             TrocarRecipiente();
                         }
                         return;
@@ -1340,12 +1209,13 @@ namespace Percolore.IOConnect
                     PausarMonitoramento();
                     return;
                 }
+            }
+			catch (Exception ex)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+			}
 
-            }
-            catch
-            {
-            }
-            this.isRunning = false;
+			this.isRunning = false;
         }
 
         private bool CapacidadeMaxRecipiente()
@@ -1356,7 +1226,6 @@ namespace Percolore.IOConnect
                 double massaB = this.MassaBalancaOnLine + this.lCalibracaoAutoHistorico[this.posInicio].listOperacaoAutoHist[this.posInicioHistorico].MassaIdeal;
                 double volumeB = (massaB - this.MassaBalancaRecipiente) / this.lCalibracaoAutoHistorico[this.posInicio]._calibracaoAuto._colorante.MassaEspecifica;
                 if ((massaB > this.lCalibracaoAutoHistorico[this.posInicio]._calibracaoAuto.CapacideMaxBalanca) ||
-                   //(massaB > this.lCalibracaoAutoHistorico[this.posInicio]._calibracaoAuto.MaxMassaAdmRecipiente) ||
                    (volumeB > this.lCalibracaoAutoHistorico[this.posInicio]._calibracaoAuto.VolumeMaxRecipiente) 
                    )
                 {
@@ -1365,17 +1234,18 @@ namespace Percolore.IOConnect
                     {
                         this.stepTrocarRec = 0;
                     }
-                    
                 }
                 else
                 {
                     this.isTrocarRec = false;
                 }
-                
             }
-            catch
-            { }
-            return retorno;
+			catch (Exception ex)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+			}
+
+			return retorno;
         }
 
         private void TrocarRecipiente()
@@ -1402,9 +1272,11 @@ namespace Percolore.IOConnect
                     TrocarRecipiente1();
                 }
             }
-            catch
-            { }
-        }
+			catch (Exception ex)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+			}
+		}
 
         private void TrocarRecipiente1()
         {
@@ -1416,8 +1288,6 @@ namespace Percolore.IOConnect
                     {
                         using (fMensagem m = new fMensagem(fMensagem.TipoMensagem.Informacao))
                         {
-                            //string msg = string.Format(Negocio.IdiomaResxExtensao.CalibracaoAuto_PosicaoRecipiente, this.lCalibracaoAutoHistorico[this.posInicio]._calibracaoAuto._colorante.Nome);
-
                             string msg = "";
                             if (this._processoCalibracao == 1)
                             {
@@ -1432,7 +1302,6 @@ namespace Percolore.IOConnect
                         this.isRunning = false;
                         this.stepTrocarRec++;
                     }
-
                 }
                 else if (this.stepTrocarRec == 2)
                 {
@@ -1441,7 +1310,7 @@ namespace Percolore.IOConnect
                         IDispenser _disp = this.ldisp[0];
                         bool conectar = Operar.Conectar(ref _disp, false);
                         bool temRecipiente = Operar.TemRecipiente(_disp, false);
-                        //if (conectar && Operar.TemRecipiente(_disp, false))
+                        
                         if (conectar && ((this._processoCalibracao == 2) || (temRecipiente)))
                         {
                             this.stepTrocarRec++;
@@ -1464,6 +1333,7 @@ namespace Percolore.IOConnect
                             this.dtInioLeituraBalanca = DateTime.Now;
                         }
                     }
+
                     this.isRunning = false;
                 }
                 else if (this.stepTrocarRec == 3)
@@ -1471,20 +1341,6 @@ namespace Percolore.IOConnect
                     this.mensagemStrip = Negocio.IdiomaResxExtensao.CalibracaoAuto_Lendo_Balanca;
                     AttStripMsg();
 
-                    ////Thread.Sleep(this.DelayEntreBalanca);
-                    //int count_Delay = this.DelayEntreBalanca / 1000;
-                    //for (int i = 0; i < count_Delay; i++)
-                    //{
-                    //    Thread.Sleep(1000);
-                    //    if (this.stopExecution)
-                    //    {
-                    //        break;
-                    //    }
-                    //}
-                    //if (this.stopExecution)
-                    //{
-                    //    return;
-                    //}
                     if (DateTime.Now.Subtract(this.dtInioLeituraBalanca).TotalMilliseconds > this.DelayEntreBalanca)
                     {
                         byte[] b_tara = new byte[1];
@@ -1523,17 +1379,6 @@ namespace Percolore.IOConnect
                         {
                             this.MassaBalancaOnLine = this.interfaceBal.valorPeso;
                             this.MassaBalancaRecipiente = this.interfaceBal.valorPeso;
-
-                            //this.MassaBalancaOnLineInc = this.balanca_bel.valorPeso;
-
-                            //Thread.Sleep(this.DelayEntreBalanca);
-                            //b_tara[0] = (byte)this.balanca_bel.b_tara_Balanca;
-                            //this.balanca_bel.WriteSerialPortTara(b_tara);
-
-
-                            //Thread.Sleep(this.DelayEntreBalanca);
-                            //this.balanca_bel.WriteSerialPort(b_w);
-                            //this.balanca_bel.GetResponse(ref response, false);
 
                             if (this.ModoDebug || this.interfaceBal.isTerminouRead)
                             {
@@ -1590,11 +1435,11 @@ namespace Percolore.IOConnect
                         }
                     }
                 }
-
             }
-            catch
-            {
-                this.isRunning = false;
+			catch (Exception ex)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+			    this.isRunning = false;
             }
         }
 
@@ -1630,20 +1475,6 @@ namespace Percolore.IOConnect
                     {
                         if (DateTime.Now.Subtract(this.dtInioLeituraBalanca).TotalMilliseconds > this.DelayEntreBalanca)
                         {
-                            //Thread.Sleep(this.DelayEntreBalanca);
-                            //int count_Delay = this.DelayEntreBalanca / 1000;
-                            //for (int i = 0; i < count_Delay; i++)
-                            //{
-                            //    Thread.Sleep(1000);
-                            //    if (this.stopExecution)
-                            //    {
-                            //        break;
-                            //    }
-                            //}
-                            //if (this.stopExecution)
-                            //{
-                            //    return;
-                            //}
                             byte[] b_w = new byte[1];
                             byte[] response = new byte[this.interfaceBal.tamanhoLeituraBalanca];
                             b_w[0] = (byte)this.interfaceBal.b_peso_balanca;
@@ -1696,7 +1527,6 @@ namespace Percolore.IOConnect
                                         this.lCalibracaoAutoHistorico[this.posInicio].listOperacaoAutoHist[this.posInicioHistorico].VolumeDosadoMedia_str = string.Format("{0:N5}", volDosado);
                                         this.lCalibracaoAutoHistorico[this.posInicio].listOperacaoAutoHist[this.posInicioHistorico].MassaMedBalanca = massaDosada;
                                         this.lCalibracaoAutoHistorico[this.posInicio].listOperacaoAutoHist[this.posInicioHistorico].VolumeDosado = volDosado;
-
                                     }
                                     else
                                     {
@@ -1936,9 +1766,10 @@ namespace Percolore.IOConnect
                     }
                 }
             }
-            catch
-            {
-                this.isRunning = false;
+			catch (Exception ex)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+			    this.isRunning = false;
                 this.execCal = false;
             }
         }
@@ -1974,20 +1805,6 @@ namespace Percolore.IOConnect
                     {
                         if (DateTime.Now.Subtract(this.dtInioLeituraBalanca).TotalMilliseconds > this.DelayEntreBalanca)
                         {
-                            //Thread.Sleep(this.DelayEntreBalanca);
-                            //int count_Delay = this.DelayEntreBalanca / 1000;
-                            //for (int i = 0; i < count_Delay; i++)
-                            //{
-                            //    Thread.Sleep(1000);
-                            //    if (this.stopExecution)
-                            //    {
-                            //        break;
-                            //    }
-                            //}
-                            //if (this.stopExecution)
-                            //{
-                            //    return;
-                            //}
                             byte[] b_w = new byte[1];
                             byte[] response = new byte[this.interfaceBal.tamanhoLeituraBalanca];
                             b_w[0] = (byte)this.interfaceBal.b_peso_balanca;
@@ -2012,7 +1829,6 @@ namespace Percolore.IOConnect
                                     }
                                     break;
                                 }
-
                             }
                             if (isRealizarMediaMedica)
                             {
@@ -2043,7 +1859,6 @@ namespace Percolore.IOConnect
                                         this.lCalibracaoAutoHistorico[this.posInicio].listOperacaoAutoHist[this.posInicioHistorico].MassaMedBalancaMedia_str = string.Format("{0:N5}", massaDosada);
                                         this.lCalibracaoAutoHistorico[this.posInicio].listOperacaoAutoHist[this.posInicioHistorico].VolumeDosado_str = string.Format("{0:N5}", volDosado);
                                         this.lCalibracaoAutoHistorico[this.posInicio].listOperacaoAutoHist[this.posInicioHistorico].VolumeDosadoMedia_str = string.Format("{0:N5}", volDosado);
-
                                     }
                                     else
                                     {
@@ -2083,10 +1898,7 @@ namespace Percolore.IOConnect
                                             media = media / count;
                                             this.lCalibracaoAutoHistorico[this.posInicio].listOperacaoAutoHist[this.posInicioHistorico].VolumeDosadoMedia_str = string.Format("{0:N5}", media);
                                         }
-
-
                                     }
-
                                 }
                                 else
                                 {
@@ -2113,10 +1925,8 @@ namespace Percolore.IOConnect
                                 return;
                             }
 
-
                             if (isRealizarMediaMedica)
                             {
-
                                 if (this.numeroMedias >= _nDTM)
                                 {
                                     this.numeroMedias = 0;
@@ -2127,7 +1937,6 @@ namespace Percolore.IOConnect
                                         this.lCalibracaoAutoHistorico[this.posInicio].listOperacaoAutoHist[this.posInicioHistorico].Aprovado = 1;
                                         this.lCalibracaoAutoHistorico[this.posInicio].listOperacaoAutoHist[this.posInicioHistorico].MassaMedBalanca = massaMedia;
                                         this.lCalibracaoAutoHistorico[this.posInicio].listOperacaoAutoHist[this.posInicioHistorico].VolumeDosado = massaMedia / this.lCalibracaoAutoHistorico[this.posInicio]._calibracaoAuto._colorante.MassaEspecifica; ;
-
 
                                         double pulsoRecalculado = lastPulsoHorario - (desvio * lastPulsoHorario);
                                         int posicaoEditada = 0;
@@ -2143,7 +1952,6 @@ namespace Percolore.IOConnect
                                         {
                                             this.execCal = false;
                                         }
-
                                     }
                                     else
                                     {
@@ -2187,9 +1995,7 @@ namespace Percolore.IOConnect
                                 {
                                     this.MassaBalancaOnLineInc += massaDosada;
                                     this.Invoke(new MethodInvoker(AttMassaRecipiente));
-
                                 }
-
                             }
                             else
                             {
@@ -2229,7 +2035,6 @@ namespace Percolore.IOConnect
                                             this.lCalibracaoAutoHistorico[this.posInicio].listOperacaoAutoHist[j].VolumeDosado = 0;
                                             this.lCalibracaoAutoHistorico[this.posInicio].listOperacaoAutoHist[j].VolumeDosado_str = "";
                                             this.lCalibracaoAutoHistorico[this.posInicio].listOperacaoAutoHist[j].VolumeDosadoMedia_str = "";
-
                                         }
                                         else
                                         {
@@ -2273,9 +2078,10 @@ namespace Percolore.IOConnect
                     }
                 }
             }
-            catch
-            {
-                this.isRunning = false;
+			catch (Exception ex)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+			    this.isRunning = false;
                 this.execCal = false;
             }
         }
@@ -2286,7 +2092,6 @@ namespace Percolore.IOConnect
             {
                 if (this.stepPosicaoRec == 0)
                 {
-
                     using (fMensagem m = new fMensagem(fMensagem.TipoMensagem.Informacao))
                     {
                         string msg = "";
@@ -2341,20 +2146,7 @@ namespace Percolore.IOConnect
                 {
                     this.mensagemStrip = Negocio.IdiomaResxExtensao.CalibracaoAuto_Lendo_Balanca;
                     AttStripMsg();
-                    //Thread.Sleep(this.DelayEntreBalanca);
-                    //int count_Delay = this.DelayEntreBalanca / 1000;
-                    //for (int i = 0; i < count_Delay; i++)
-                    //{
-                    //    Thread.Sleep(1000);
-                    //    if (this.stopExecution)
-                    //    {
-                    //        break;
-                    //    }
-                    //}
-                    //if (this.stopExecution)
-                    //{
-                    //    return;
-                    //}
+                    
                     if (DateTime.Now.Subtract(this.dtInioLeituraBalanca).TotalMilliseconds > this.DelayEntreBalanca)
                     {
                         byte[] b_tara = new byte[1];
@@ -2391,7 +2183,6 @@ namespace Percolore.IOConnect
                             }
                             else
                             {
-
                                 using (fMensagem m = new fMensagem(fMensagem.TipoMensagem.Erro))
                                 {
                                     m.ShowDialog(Negocio.IdiomaResxExtensao.CalibracaoAuto_PesoRecipienteExcedido);
@@ -2399,7 +2190,6 @@ namespace Percolore.IOConnect
                                 this.stepPosicaoRec = 0;
                                 return;
                             }
-
                         }
                         else
                         {
@@ -2411,17 +2201,6 @@ namespace Percolore.IOConnect
                             return;
                         }
 
-                        //Thread.Sleep(6000);
-                        //b_tara[0] = (byte)this.balanca_bel.b_tara_Balanca;
-                        //this.balanca_bel.WriteSerialPortTara(b_tara);
-
-
-                        //Thread.Sleep(5000);
-                        //this.balanca_bel.WriteSerialPort(b_w);
-                        //this.balanca_bel.GetResponse(ref response, false);
-
-                        //this.interfaceBal.SetValues(response, false, false);
-                        //this.MassaBalancaOnLine = this.interfaceBal.valorPeso;
                         this.MassaBalancaOnLineInc = this.MassaBalancaOnLine;
                         this.MassaBalancaRecipiente = this.MassaBalancaOnLine;
 
@@ -2444,14 +2223,13 @@ namespace Percolore.IOConnect
                             }
                         }
                     }
-
                 }
             }
-            catch
-            {
-
-            }
-        }
+			catch (Exception ex)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+			}
+		}
         
         private void ClosedSerialDispensa()
         {
@@ -2459,22 +2237,17 @@ namespace Percolore.IOConnect
             {
                 if (this.modBusDispenserMover_P3 == null)
                 {
-                    //this.disp.Disconnect();
                     foreach (IDispenser _disp in this.ldisp)
                     {
-                        try
-                        {
-                            _disp.Disconnect();
-                        }
-                        catch
-                        { }
+                        _disp.Disconnect();
                     }
                 }
-
             }
-            catch
-            { }
-        }
+			catch (Exception ex)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+			}
+		}
 
         private bool AbrirGaveta()
         {
@@ -2518,9 +2291,12 @@ namespace Percolore.IOConnect
                     }
                 }
             }
-            catch
-            { }
-            return retorno;
+			catch (Exception ex)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+			}
+
+			return retorno;
         }
 
         private bool FecharGaveta()
@@ -2568,9 +2344,12 @@ namespace Percolore.IOConnect
                     }
                 }
             }
-            catch
-            { }
-            return retorno;
+			catch (Exception ex)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+			}
+
+			return retorno;
         }
 
         #region Dosagem Placa
@@ -2609,7 +2388,7 @@ namespace Percolore.IOConnect
                                 _valores.PulsoHorario = _valores.PulsoHorario - _valores.PulsoReverso;
                                 lastPulsoHorario = lastPulsoHorario - _valores.PulsoReverso;
                             }
-                            //Util.ObjectCalibragem.UpdatePulsosRev(_motor + 1, _valores.PulsoReverso);
+                            
                             return;
                         }
                         _valores = Operar.Parser(this.lCalibracaoAutoHistorico[this.posInicio].listOperacaoAutoHist[this.posInicioHistorico].Volume,
@@ -2652,7 +2431,7 @@ namespace Percolore.IOConnect
                     else if (this.lCalibracaoAutoHistorico[this.posInicio]._calibracaoAuto._colorante.Dispositivo == 2)
                     {
                         int indexV2 = 16;
-                        if(/*(Dispositivo)_parametro.IdDispositivo == Dispositivo.Placa_4 ||*/ (Dispositivo)_parametro.IdDispositivo == Dispositivo.Simulador)
+                        if((Dispositivo)_parametro.IdDispositivo == Dispositivo.Simulador)
                         {
                             motor = motor - 16;
                             indexV2 = 16;
@@ -2677,7 +2456,7 @@ namespace Percolore.IOConnect
                                 Util.ObjectCalibragem.UpdatePulsosRev(this.lCalibracaoAutoHistorico[this.posInicio]._calibracaoAuto._calibragem.Motor, _valores.PulsoReverso);
                                 lastPulsoHorario = lastPulsoHorario - _valores.PulsoReverso;
                             }
-                            //Util.ObjectCalibragem.UpdatePulsosRev(_motor + 1, _valores.PulsoReverso);
+                            
                             return;
                         }
                         _valores = Operar.Parser(this.lCalibracaoAutoHistorico[this.posInicio].listOperacaoAutoHist[this.posInicioHistorico].Volume,
@@ -2738,7 +2517,7 @@ namespace Percolore.IOConnect
                                 _valores.PulsoHorario = _valores.PulsoHorario - _valores.PulsoReverso;
                                 lastPulsoHorario = lastPulsoHorario - _valores.PulsoReverso;
                             }
-                            //Util.ObjectCalibragem.UpdatePulsosRev(_motor + 1, _valores.PulsoReverso);
+                            
                             return;
                         }
                         _valores = Operar.Parser(this.lCalibracaoAutoHistorico[this.posInicio].listOperacaoAutoHist[this.posInicioHistorico].Volume,
@@ -2756,12 +2535,14 @@ namespace Percolore.IOConnect
                                         );
                     }
                 }
+
                 this.IsDispensou = true;
-                //Thread.Sleep(1000);
                 this.isRunning2 = false;
             }
-            catch (Exception ex)
-            {
+			catch (Exception ex)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+			    
                 if (!this.IsDispensou)
                 {
                     Falha2(ex);
@@ -2779,8 +2560,6 @@ namespace Percolore.IOConnect
                 m.ShowDialog(
                     Negocio.IdiomaResxExtensao.Global_Falha_ExecucaoPorcesso + ex.Message);
             }
-
-
         }
 
         void PausarMonitoramento2()
@@ -2791,28 +2570,26 @@ namespace Percolore.IOConnect
                 {
                     backgroundWorker2.CancelAsync();
                 }
-            }
-            catch
-            { }
-            this.isThread2 = false;
-            try
-            {
-                //this.disp.Disconnect();
+            
+                this.isThread2 = false;
+            
                 foreach(IDispenser _disp in this.ldisp)
                 {
                     _disp.Disconnect();
                 }
-
             }
-            catch
-            { }
-            if(!this.IsDispensou)
+			catch (Exception ex)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+			}
+
+			if (!this.IsDispensou)
             {
                 this.execCal = false;
                 
             }
+
             this.isRunning = false;
-           
         }
 
         void ExecutarMonitoramento2()
@@ -2850,11 +2627,11 @@ namespace Percolore.IOConnect
                     PausarMonitoramento2();
                 }
             }
-            catch
-            { }
-
-
-        }
+			catch (Exception ex)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+			}
+		}
 
         private void backgroundWorker2_DoWork(object sender, System.ComponentModel.DoWorkEventArgs e)
         {
@@ -2870,28 +2647,24 @@ namespace Percolore.IOConnect
                     }
                     else
                     {
-                        try
+                        if (!this.isRunning2)
                         {
-                            if (!this.isRunning2)
-                            {
-                                this.isRunning2 = true;
-                                this.Invoke(new MethodInvoker(Monitoramento_Event2));
-                                Thread.Sleep(2500);
-                            }
-                        }
-                        catch
-                        {
+                            this.isRunning2 = true;
+                            this.Invoke(new MethodInvoker(Monitoramento_Event2));
+                            Thread.Sleep(2500);
                         }
                     }
+
                     Thread.Sleep(500);
                 }
+
                 worker = null;
             }
-            catch
-            {
-            }
-
-        }
+			catch (Exception ex)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+			}
+		}
 
         private void backgroundWorker2_RunWorkerCompleted(object sender, System.ComponentModel.RunWorkerCompletedEventArgs e)
         {
@@ -2909,12 +2682,12 @@ namespace Percolore.IOConnect
                 {
                     this.isThread2 = true;
                 }
-
             }
-            catch
-            {
-            }
-        }
+			catch (Exception ex)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+			}
+		}
 
         #endregion
 
@@ -2928,7 +2701,6 @@ namespace Percolore.IOConnect
             _calibragem.Valores[indexInicio].MassaMedia = 0;
             _calibragem.Valores[indexInicio].DesvioMedio = 0;
 
-
             for (int indexAtual = indexInicio + 1; indexAtual < this.lCalibracaoAutoHistorico[this.posInicio]._calibracaoAuto._calibragem.Valores.Count; indexAtual++)
             {
                 /* Recalcula pulsos das faixas abaixo da posição inicial */
@@ -2939,7 +2711,6 @@ namespace Percolore.IOConnect
                 _calibragem.Valores[indexAtual].PulsoHorario = (int)Math.Round(pulsoRecalculado);
                 _calibragem.Valores[indexAtual].MassaMedia = 0;
                 _calibragem.Valores[indexAtual].DesvioMedio = 0;
-
             }
         }
 
@@ -2953,10 +2724,7 @@ namespace Percolore.IOConnect
             /* Zera valores de massa e desvio da posição inicial */
             _calibragem.Valores[indexPosicao].MassaMedia = 0;
             _calibragem.Valores[indexPosicao].DesvioMedio = 0;
-            //_massaMedia[indexPosicao].Text = "0";
-            //_desvioMedio[indexPosicao].Text = "0";
-
-
+            
             /* Recalcula pulsos das faixas abaixo da posição inicial */
             double pulsoRecalculado =
                 (_calibragem.Valores[indexPosicao].Volume * pulsosFaixaInicial) / _calibragem.Valores[indexPosicao].Volume;
@@ -2965,11 +2733,6 @@ namespace Percolore.IOConnect
             _calibragem.Valores[indexPosicao].PulsoHorario = (int)Math.Round(pulsoRecalculado);
             _calibragem.Valores[indexPosicao].MassaMedia = 0;
             _calibragem.Valores[indexPosicao].DesvioMedio = 0;
-
-            //_pulsos[indexPosicao].Text = Math.Round(pulsoRecalculado).ToString();
-            //_massaMedia[indexPosicao].Text = "0";
-            //_desvioMedio[indexPosicao].Text = "0";
-
         }
 
         private void btnParar_Click(object sender, EventArgs e)

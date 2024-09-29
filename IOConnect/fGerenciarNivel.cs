@@ -1,20 +1,13 @@
 ﻿using Fractions;
-using Percolore.Core;
+using Percolore.Core.Logging;
 using Percolore.Core.Persistence.WindowsRegistry;
-using Percolore.Core.Persistence.Xml;
-using Percolore.Core.UserControl;
-using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Drawing;
 using System.Globalization;
-using System.Linq;
 using System.Reflection;
-using System.Windows.Forms;
 
 namespace Percolore.IOConnect
 {
-    public partial class fGerenciarNivel : Form
+	public partial class fGerenciarNivel : Form
     {
         Util.ObjectParametros _parametros = null;
         List<Util.ObjectColorante> colorantes = null;
@@ -100,8 +93,10 @@ namespace Percolore.IOConnect
             {
                 ListarColorantes();
             }
-            catch (Exception ex)
-            {
+			catch (Exception ex)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+			
                 using (fMensagem m = new fMensagem(fMensagem.TipoMensagem.Erro))
                 {
                     m.ShowDialog(Negocio.IdiomaResxExtensao.Global_Falha_CarregarDados + ex.Message);
@@ -194,8 +189,10 @@ namespace Percolore.IOConnect
                     }
                     gerarEventoAbastecimento(0, detalhes);
                 }
-                catch (Exception ex)
-                {
+				catch (Exception ex)
+				{
+					LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+				
                     using (fMensagem m = new fMensagem(fMensagem.TipoMensagem.Erro))
                     {
                         string mensagem =
@@ -270,8 +267,10 @@ namespace Percolore.IOConnect
                 }
                 gerarEventoAbastecimento(0, detalhes);
             }
-            catch (Exception ex)
-            {
+			catch (Exception ex)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+			
                 using (fMensagem m = new fMensagem(fMensagem.TipoMensagem.Erro))
                 {
                     string mensagem = Negocio.IdiomaResxExtensao.Global_Falha_GravarDados + ex.Message;
@@ -355,9 +354,10 @@ namespace Percolore.IOConnect
                     dg.Rows.Add(row);
                 }
             }
-            catch
-            {
-                throw;
+			catch (Exception ex)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+			    throw;
             }
         }
 
@@ -379,9 +379,12 @@ namespace Percolore.IOConnect
                 retorno = Util.ObjectEventos.InsertEvento(objEvt);
                 #endregion
             }
-            catch
-            { }
-            return retorno;
+			catch (Exception ex)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+			}
+
+			return retorno;
         }
 
 
@@ -497,11 +500,11 @@ namespace Percolore.IOConnect
                       BARRA_Y + (BARRA_MARGEM_FONT / 2) - 2); /* (11/09/2016) O "-2" foi adicionado ao cálculo com objetivo de centralizar verticalmente a fonte dentro da área da barra de progresso */
 
             }
-            catch
-            {
-
-            }
-        }
+			catch (Exception ex)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+			}
+		}
     }
 
     #endregion

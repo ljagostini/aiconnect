@@ -1,18 +1,12 @@
 ﻿using Percolore.Core;
+using Percolore.Core.Logging;
 using Percolore.Core.Persistence.WindowsRegistry;
-using Percolore.Core.Persistence.Xml;
-using Percolore.Core.UserControl;
 using Percolore.Core.Util;
-using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Linq;
 using System.Resources;
-using System.Windows.Forms;
 
 namespace Percolore.IOConnect
 {
-    public partial class fFormulaPersonalizada : Form
+	public partial class fFormulaPersonalizada : Form
     {
         Util.ObjectParametros _parametros = null;
         Util.ObjectFormula _formula = null;
@@ -808,26 +802,22 @@ namespace Percolore.IOConnect
                         if (result == DialogResult.OK)
                         {
                             string delathes = "";
-                            try
+                            
+                            foreach (KeyValuePair<int, double> item in paramDispSeq.Demanda)
                             {
-                                foreach (KeyValuePair<int, double> item in paramDispSeq.Demanda)
+                                Util.ObjectFormulaItem itemF = _formula.Itens.Find(o => o.Colorante.Circuito == item.Key);
+                                if (itemF != null)
                                 {
-                                    Util.ObjectFormulaItem itemF = _formula.Itens.Find(o => o.Colorante.Circuito == item.Key);
-                                    if (itemF != null)
+                                    if (delathes == "")
                                     {
-                                        if (delathes == "")
-                                        {
-                                            delathes += item.Key.ToString() + "," + itemF.Colorante.Nome + "," + Math.Round(item.Value, 3).ToString();
-                                        }
-                                        else
-                                        {
-                                            delathes += "," + item.Key.ToString() + "," + itemF.Colorante.Nome + "," + Math.Round(item.Value, 3).ToString();
-                                        }
+                                        delathes += item.Key.ToString() + "," + itemF.Colorante.Nome + "," + Math.Round(item.Value, 3).ToString();
+                                    }
+                                    else
+                                    {
+                                        delathes += "," + item.Key.ToString() + "," + itemF.Colorante.Nome + "," + Math.Round(item.Value, 3).ToString();
                                     }
                                 }
                             }
-                            catch
-                            { }
 
                             gerarEventoFormulaPersonalizada(0, delathes);
                         }
@@ -1233,26 +1223,22 @@ namespace Percolore.IOConnect
                         if (result == DialogResult.OK)
                         {
                             string delathes = "";
-                            try
+                            
+                            foreach (KeyValuePair<int, double> item in demanda)
                             {
-                                foreach (KeyValuePair<int, double> item in demanda)
+                                Util.ObjectFormulaItem itemF = _formula.Itens.Find(o => o.Colorante.Circuito == item.Key);
+                                if (itemF != null)
                                 {
-                                    Util.ObjectFormulaItem itemF = _formula.Itens.Find(o => o.Colorante.Circuito == item.Key);
-                                    if (itemF != null)
+                                    if (delathes == "")
                                     {
-                                        if (delathes == "")
-                                        {
-                                            delathes += item.Key.ToString() + "," + itemF.Colorante.Nome + "," + Math.Round(item.Value, 3).ToString();
-                                        }
-                                        else
-                                        {
-                                            delathes += "," + item.Key.ToString() + "," + itemF.Colorante.Nome + "," + Math.Round(item.Value, 3).ToString();
-                                        }
+                                        delathes += item.Key.ToString() + "," + itemF.Colorante.Nome + "," + Math.Round(item.Value, 3).ToString();
+                                    }
+                                    else
+                                    {
+                                        delathes += "," + item.Key.ToString() + "," + itemF.Colorante.Nome + "," + Math.Round(item.Value, 3).ToString();
                                     }
                                 }
                             }
-                            catch
-                            { }
 
                             gerarEventoFormulaPersonalizada(0, delathes);
                         }
@@ -1269,19 +1255,6 @@ namespace Percolore.IOConnect
                             gerarEventoFormulaPersonalizada(3);
                         }
                     }
-
-                    //foreach (Util.ObjectFormulaItem item in _formula.Itens)
-                    //{
-                    //    int motor = item.Colorante.Circuito;
-                    //    if (item.Colorante.Dispositivo == 1)
-                    //    {
-                    //        Util.ObjectCalibragem.UpdatePulsosRev(motor, valores[motor - 1].PulsoReverso);
-                    //    }
-                    //    else if (item.Colorante.Dispositivo == 2)
-                    //    {
-                    //        Util.ObjectCalibragem.UpdatePulsosRev(motor, valores2[(motor - 16) - 1].PulsoReverso);
-                    //    }
-                    //}
                 }
                 else
                 {
@@ -1292,8 +1265,10 @@ namespace Percolore.IOConnect
                 }
 
             }
-            catch (Exception ex)
-            {
+			catch (Exception ex)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+			
                 using (fMensagem m = new fMensagem(fMensagem.TipoMensagem.Erro))
                 {
                     m.ShowDialog(
@@ -1318,9 +1293,11 @@ namespace Percolore.IOConnect
                         dispenserP3.Disconnect_Mover();
                     }
                 }
-                catch
-                { }
-            }
+				catch (Exception ex)
+				{
+					LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+				}
+			}
         }
 
         int gerarEventoFormulaPersonalizada(int result, string detalhes = "")
@@ -1341,10 +1318,14 @@ namespace Percolore.IOConnect
                 retorno = Util.ObjectEventos.InsertEvento(objEvt);
                 #endregion
             }
-            catch
-            { }
-            return retorno;
+			catch (Exception ex)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+			}
+
+			return retorno;
         }
+
         private void Quantidade_KeyUp(object sender, KeyEventArgs e)
         {
             switch (_unidade)
@@ -1622,7 +1603,5 @@ namespace Percolore.IOConnect
         }
 
         #endregion
-
-      
     }
 }

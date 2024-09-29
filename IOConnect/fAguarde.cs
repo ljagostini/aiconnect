@@ -1,18 +1,10 @@
-﻿using Percolore.IOConnect.Util;
-using System;
-using System.Collections.Generic;
+﻿using Percolore.Core.Logging;
+using Percolore.IOConnect.Util;
 using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
-using System.Windows.Forms;
 
 namespace Percolore.IOConnect
 {
-    public partial class fAguarde : Form
+	public partial class fAguarde : Form
     {
         //private int inicializacao = -1;
         private bool isThread = false;
@@ -67,9 +59,11 @@ namespace Percolore.IOConnect
                     this.OnOpenWindows();
                 }
             }
-            catch
-            { }
-        }
+			catch (Exception ex)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+			}
+		}
 
         private void fAguarde_FormClosing(object sender, FormClosingEventArgs e)
         {
@@ -80,26 +74,25 @@ namespace Percolore.IOConnect
                     this.OnClosedEvent();
                 }
             }
-            catch
-            {
-            }
-        }
+			catch (Exception ex)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+			}
+		}
 
         public void PausarMonitoramento()
         {
             try
             {
                 this.isThread = false;
-                //if (bkgWorker.IsBusy && bkgWorker.CancellationPending == false)
-                //{
-                //    bkgWorker.CancelAsync();
-                //}
                 Thread.Sleep(10);
             }
-            catch
-            { }
+			catch (Exception ex)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+			}
 
-        }
+		}
 
         public void ExecutarMonitoramento()
         {
@@ -107,11 +100,12 @@ namespace Percolore.IOConnect
             {
                 this.isThread = true;
                 bkgWorker.RunWorkerAsync();
-                //this.inicializacao = 0;
             }
-            catch
-            { }
-        }
+			catch (Exception ex)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+			}
+		}
         
         private void backgroundWorker1_DoWork(object sender, DoWorkEventArgs e)
         {
@@ -127,34 +121,23 @@ namespace Percolore.IOConnect
                     }
                     else
                     {
-                        try
+                        if (!this.statusPaint)
                         {
-                            if (!this.statusPaint)
-                            {
-                                this.statusPaint = true;
-                                this.Invoke(new MethodInvoker(MonitoramentoEvent));
-                            }
-                        }
-                        catch
-                        {
+                            this.statusPaint = true;
+                            this.Invoke(new MethodInvoker(MonitoramentoEvent));
                         }
                     }
+
                     Thread.Sleep(this._TimerDelay);
                 }
 
-            }
-            catch
-            {
-            }
-
-            try
-            {
                 this.Invoke(new MethodInvoker(ClosedWindowEvent));
             }
-            catch
-            { }
-
-        }
+			catch (Exception ex)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+			}
+		}
 
         private void backgroundWorker1_ProgressChanged(object sender, ProgressChangedEventArgs e)
         {
@@ -177,12 +160,12 @@ namespace Percolore.IOConnect
                 {
                     this.isThread = true;
                 }
-
             }
-            catch
-            {
-            }
-        }
+			catch (Exception ex)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+			}
+		}
 
         private void ClosedWindowEvent()
         {
@@ -191,20 +174,17 @@ namespace Percolore.IOConnect
                 Thread.Sleep(2000);
                 this.Close();
             }
-            catch (Exception exc)
-            {
-                string msg = exc.Message;
-            }
-        }
+			catch (Exception ex)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+			}
+		}
 
         private void MonitoramentoEvent()
         {
             
             this.isRunning = true;
             this.statusPaint = false;
-
-
         }
-
     }
 }

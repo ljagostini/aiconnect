@@ -1,18 +1,9 @@
 ﻿using Percolore.Core;
-using Percolore.Core.UserControl;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
+using Percolore.Core.Logging;
 
 namespace Percolore.IOConnect
 {
-    public partial class fCalibracao : Form
+	public partial class fCalibracao : Form
     {
         private Util.ObjectCalibragem _calibracao;
         public ValoresVO valores = null;
@@ -64,7 +55,6 @@ namespace Percolore.IOConnect
                     this.valores.PulsoReverso = pulsoRev;
                     this.valores.Velocidade = velocidade;
                     this.valores.Volume = volume;
-
 
                    DialogResult = DialogResult.OK;
                 }
@@ -120,7 +110,6 @@ namespace Percolore.IOConnect
                 txtPulsoReverso.isTecladoShow = chb_tec;
                 txtPulsoReverso.isTouchScrenn = chb_touch;
 
-
                 lblTitulo.Text = Negocio.IdiomaResxExtensao.fCalibracao_lblTitulo;
                 lblVolume.Text = Negocio.IdiomaResxExtensao.Configuracoes_lblCalibragemVolume;
                 lblAceleracao.Text = Negocio.IdiomaResxExtensao.Configuracoes_lblAceleracao; ;
@@ -131,9 +120,11 @@ namespace Percolore.IOConnect
                 btnSair.Text = Negocio.IdiomaResxExtensao.PainelControle_Menu_Sair;
                 btnConfirmar.Text = Negocio.IdiomaResxExtensao.Global_Confirma;
             }
-            catch
-            { }
-        }
+			catch (Exception ex)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+			}
+		}
 
         private void txtVolume_TextChanged(object sender, EventArgs e)
         {
@@ -143,9 +134,11 @@ namespace Percolore.IOConnect
                 int nPulso = int.Parse(Math.Round((pulsos_vol * txtVolume.ToDouble())).ToString());
                 txtPulsos.Text = nPulso.ToString();
             }
-            catch
-            { }
-        }
+			catch (Exception ex)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+			}
+		}
 
         private void txtVelocidade_TextChanged(object sender, EventArgs e)
         {

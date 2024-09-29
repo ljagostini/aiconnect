@@ -1,19 +1,12 @@
-﻿using Percolore.Core.UserControl;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-using Percolore.Core;
+﻿using Percolore.Core;
+using Percolore.Core.Logging;
+using Percolore.Core.UserControl;
 using Percolore.Core.Util;
+using System.Data;
 
 namespace Percolore.IOConnect
 {
-    public partial class fColoranteConfig : Form
+	public partial class fColoranteConfig : Form
     {
         public List<Util.ObjectColorante> _colorantes = null;
         private Util.ObjectParametros _parametros = null;
@@ -23,8 +16,6 @@ namespace Percolore.IOConnect
         private ComboBox[] _Step = null;
         //Volume Purga é nivel Bico Individual
         private UTextBox[] _VolumePurga = null;
-
-        
 
         public fColoranteConfig()
         {
@@ -93,9 +84,11 @@ namespace Percolore.IOConnect
                 btnTeclado.Text = string.Empty;
                 btnTeclado.Image = Imagem.GetTeclado_32x32();
             }
-            catch
-            { }
-        }
+			catch (Exception ex)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+			}
+		}
 
         private void fColoranteConfig_Load(object sender, EventArgs e)
         {
@@ -138,12 +131,6 @@ namespace Percolore.IOConnect
                             gpPlaca2.Visible = true;
                             break;
                         }
-                    //case Dispositivo.Placa_4:
-                    //    {
-                    //        gpPlaca2.Enabled = true;
-                    //        gpPlaca2.Visible = true;
-                    //        break;
-                    //    }
                     case Dispositivo.Simulador:
                         {
                             gpPlaca2.Enabled = true;
@@ -158,9 +145,12 @@ namespace Percolore.IOConnect
                         }
                 }
             }
-            catch
-            { }
-            atualizaCombos();
+			catch (Exception ex)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+			}
+
+			atualizaCombos();
         }
 
         private void updateTeclado()
@@ -175,16 +165,16 @@ namespace Percolore.IOConnect
                     _VolumePurga[i].isTouchScrenn = chb_touch;
                 }
             }
-            catch
-            { }
-        }
+			catch (Exception ex)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+			}
+		}
 
         private void atualizaCombos()
         {
             try
             {  
-                
-
                 cmbSeguidor0.DataSource = getCombobox(true).DefaultView;
                 cmbSeguidor0.ValueMember = "Value";
                 cmbSeguidor0.DisplayMember = "Display";
@@ -221,16 +211,13 @@ namespace Percolore.IOConnect
                 cmbSeguidor8.ValueMember = "Value";
                 cmbSeguidor8.DisplayMember = "Display";
 
-
                 cmbSeguidor9.DataSource = getCombobox(true).DefaultView;
                 cmbSeguidor9.ValueMember = "Value";
                 cmbSeguidor9.DisplayMember = "Display";
 
-
                 cmbSeguidor10.DataSource = getCombobox(true).DefaultView;
                 cmbSeguidor10.ValueMember = "Value";
                 cmbSeguidor10.DisplayMember = "Display";
-
 
                 cmbSeguidor11.DataSource = getCombobox(true).DefaultView;
                 cmbSeguidor11.ValueMember = "Value";
@@ -315,10 +302,6 @@ namespace Percolore.IOConnect
                 cmbSeguidor31.DataSource = getCombobox(false).DefaultView;
                 cmbSeguidor31.ValueMember = "Value";
                 cmbSeguidor31.DisplayMember = "Display";
-
-               
-
-
 
                 cmbStep0.DataSource = getComboboxStep().DefaultView;
                 cmbStep0.ValueMember = "Value";
@@ -448,8 +431,6 @@ namespace Percolore.IOConnect
                 cmbStep31.ValueMember = "Value";
                 cmbStep31.DisplayMember = "Display";
 
-                
-
                 _colorantes = Util.ObjectColorante.List();
 
                 for (int i = 0; i < _colorantes.Count; i++)
@@ -480,7 +461,6 @@ namespace Percolore.IOConnect
                         }
                         else
                         {
-
                             _circuito[i].Enabled = false;
                             _circuito[i].Text = _colorantes[i].Circuito.ToString();
                             _circuito[i].BackColor = Cores.Seguir;
@@ -489,16 +469,18 @@ namespace Percolore.IOConnect
                             _NomeCorante[i].Enabled = false;
                             _NomeCorante[i].Text = _colorantes[i].Nome;
                         }
+
                         _Step[i].SelectedValue = _colorantes[i].Step.ToString();
                         _Step[i].Enabled = true;
                     }
                     _VolumePurga[i].Text = _colorantes[i].VolumeBicoIndividual.ToString();
                 }
-
             }
-            catch
-            { }
-        }
+			catch (Exception ex)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+			}
+		}
 
         private DataTable getCombobox(bool isP1)
         {
@@ -515,10 +497,6 @@ namespace Percolore.IOConnect
                         dr["Value"] = i.ToString();
                         dr["Display"] = "Não";
                         dtRetorno.Rows.Add(dr);
-                    }
-                    else if(i == 0)
-                    {
-
                     }
                     else
                     {
@@ -539,10 +517,6 @@ namespace Percolore.IOConnect
                         dr["Value"] = i.ToString();
                         dr["Display"] = "Não";
                         dtRetorno.Rows.Add(dr);
-                    }
-                    else if (i == 0)
-                    {
-
                     }
                     else
                     {
@@ -572,10 +546,6 @@ namespace Percolore.IOConnect
                     dr["Display"] = "Não";
                     dtRetorno.Rows.Add(dr);
                 }
-                else if (i == 0)
-                {
-
-                }
                 else
                 {
                     DataRow dr = dtRetorno.NewRow();
@@ -585,7 +555,6 @@ namespace Percolore.IOConnect
                 }
             }
             
-
             return dtRetorno;
         }
 
@@ -605,7 +574,6 @@ namespace Percolore.IOConnect
                 dr["Display"] = i.ToString();
                 dtRetorno.Rows.Add(dr);
             }
-
 
             return dtRetorno;
         }
@@ -632,15 +600,14 @@ namespace Percolore.IOConnect
                         _colorantes[i].VolumeBicoIndividual = 5;
                     }
                 }
-                catch
-                { 
-                    _colorantes[i].VolumeBicoIndividual = 5; 
+				catch (Exception ex)
+				{
+					LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+				    _colorantes[i].VolumeBicoIndividual = 5; 
                 }
             }
 
-            
             this.DialogResult = DialogResult.OK;
-
         }
 
         private void cmbSeguidor_SelectedIndexChanged(object sender, EventArgs e)
@@ -662,9 +629,11 @@ namespace Percolore.IOConnect
                     _colorantes[index].Habilitado = false;
                 }
             }
-            catch
-            { }
-        }
+			catch (Exception ex)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+			}
+		}
         
         private void cmbStep_SelectedIndexChanged(object sender, EventArgs e)
         {
@@ -673,11 +642,12 @@ namespace Percolore.IOConnect
                 ComboBox cmb = (ComboBox)sender;
                 int index = Convert.ToInt32(cmb.Tag.ToString());
                 _colorantes[index].Step = Convert.ToInt32(cmb.SelectedValue.ToString());
-                
             }
-            catch
-            { }
-        }
+			catch (Exception ex)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+			}
+		}
 
         private void btnTeclado_Click(object sender, EventArgs e)
         {

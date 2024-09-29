@@ -1,18 +1,12 @@
 ﻿using Percolore.Core;
+using Percolore.Core.Logging;
 using Percolore.Core.Persistence.WindowsRegistry;
-using Percolore.Core.Persistence.Xml;
-using Percolore.Core.UserControl;
 using Percolore.Core.Util;
-using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Linq;
 using System.Reflection;
-using System.Windows.Forms;
 
 namespace Percolore.IOConnect
 {
-    public partial class fGerenciarFormula : Form
+	public partial class fGerenciarFormula : Form
     {
         Util.ObjectParametros _parametros = null;
 
@@ -178,8 +172,10 @@ namespace Percolore.IOConnect
                 listView.Items.Clear();
                 CarregarFormulas();
             }
-            catch (Exception)
-            {
+			catch (Exception ex)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+			
                 using (fMensagem m = new fMensagem(fMensagem.TipoMensagem.Erro))
                 {
                     m.ShowDialog(Negocio.IdiomaResxExtensao.Global_Falha_ExcluirDados);
@@ -801,26 +797,22 @@ namespace Percolore.IOConnect
                         if (result == DialogResult.OK)
                         {
                             string delathes = "";
-                            try
+                            
+                            foreach (KeyValuePair<int, double> item in dispSeqVO.Demanda)
                             {
-                                foreach (KeyValuePair<int, double> item in dispSeqVO.Demanda)
+                                Util.ObjectFormulaItem itemF = formula.Itens.Find(o => o.Colorante.Circuito == item.Key);
+                                if (itemF != null)
                                 {
-                                    Util.ObjectFormulaItem itemF = formula.Itens.Find(o => o.Colorante.Circuito == item.Key);
-                                    if (itemF != null)
+                                    if (delathes == "")
                                     {
-                                        if (delathes == "")
-                                        {
-                                            delathes += item.Key.ToString() + "," + itemF.Colorante.Nome + "," + Math.Round(item.Value, 3).ToString();
-                                        }
-                                        else
-                                        {
-                                            delathes += "," + item.Key.ToString() + "," + itemF.Colorante.Nome + "," + Math.Round(item.Value, 3).ToString();
-                                        }
+                                        delathes += item.Key.ToString() + "," + itemF.Colorante.Nome + "," + Math.Round(item.Value, 3).ToString();
+                                    }
+                                    else
+                                    {
+                                        delathes += "," + item.Key.ToString() + "," + itemF.Colorante.Nome + "," + Math.Round(item.Value, 3).ToString();
                                     }
                                 }
                             }
-                            catch
-                            { }
                                 
                             gerarEventoFormulaPersonalizada(0, delathes);
                         }
@@ -1264,26 +1256,22 @@ namespace Percolore.IOConnect
                         if (result == DialogResult.OK)
                         {
                             string delathes = "";
-                            try
+                            
+                            foreach (KeyValuePair<int, double> item in demanda)
                             {
-                                foreach (KeyValuePair<int, double> item in demanda)
+                                Util.ObjectFormulaItem itemF = formula.Itens.Find(o => o.Colorante.Circuito == item.Key);
+                                if (itemF != null)
                                 {
-                                    Util.ObjectFormulaItem itemF = formula.Itens.Find(o => o.Colorante.Circuito == item.Key);
-                                    if (itemF != null)
+                                    if (delathes == "")
                                     {
-                                        if (delathes == "")
-                                        {
-                                            delathes += item.Key.ToString() + "," + itemF.Colorante.Nome + "," + Math.Round(item.Value, 3).ToString();
-                                        }
-                                        else
-                                        {
-                                            delathes += "," + item.Key.ToString() + "," + itemF.Colorante.Nome + "," + Math.Round(item.Value, 3).ToString();
-                                        }
+                                        delathes += item.Key.ToString() + "," + itemF.Colorante.Nome + "," + Math.Round(item.Value, 3).ToString();
+                                    }
+                                    else
+                                    {
+                                        delathes += "," + item.Key.ToString() + "," + itemF.Colorante.Nome + "," + Math.Round(item.Value, 3).ToString();
                                     }
                                 }
                             }
-                            catch
-                            { }
 
                             gerarEventoFormulaPersonalizada(0, delathes);
                         }
@@ -1299,25 +1287,7 @@ namespace Percolore.IOConnect
                         {
                             gerarEventoFormulaPersonalizada(3);
                         }
-                        //using (Form f =
-                        //    new fDispensaSimultanea(ldisp, valores, valores2, demanda, colSimultanea, desc, false, "", dispenserP3))
-                        //{
-                        //    f.ShowDialog();
-                        //}
                     }
-
-                    //foreach (Util.ObjectFormulaItem item in formula.Itens)
-                    //{
-                    //    int motor = item.Colorante.Circuito;
-                    //    if (item.Colorante.Dispositivo == 1)
-                    //    {
-                    //        Util.ObjectCalibragem.UpdatePulsosRev(motor, valores[motor - 1].PulsoReverso);
-                    //    }
-                    //    else if (item.Colorante.Dispositivo == 2)
-                    //    {
-                    //        Util.ObjectCalibragem.UpdatePulsosRev(motor, valores2[(motor - 16) - 1].PulsoReverso);
-                    //    }
-                    //}
                 }
                 else
                 {
@@ -1327,10 +1297,11 @@ namespace Percolore.IOConnect
                     #endregion
 
                 }
-
             }
-            catch (Exception ex)
-            {
+			catch (Exception ex)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+			
                 using (fMensagem m = new fMensagem(fMensagem.TipoMensagem.Erro))
                 {
                     m.ShowDialog(Negocio.IdiomaResxExtensao.GerenciarFormulaPersonalizada_Falha_Dispensar + ex.Message);
@@ -1372,9 +1343,12 @@ namespace Percolore.IOConnect
                 retorno = Util.ObjectEventos.InsertEvento(objEvt);
                 #endregion
             }
-            catch
-            { }
-            return retorno;
+			catch (Exception ex)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+			}
+
+			return retorno;
         }
 
         private void btnTeclado_Click(object sender, EventArgs e)
@@ -1394,8 +1368,10 @@ namespace Percolore.IOConnect
             {
                 formulas = Util.ObjectFormula.List();
             }
-            catch (Exception)
-            {
+			catch (Exception ex)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+			
                 using (fMensagem m = new fMensagem(fMensagem.TipoMensagem.Erro))
                 {
                     m.ShowDialog(Negocio.IdiomaResxExtensao.Global_Falha_CarregarDados);

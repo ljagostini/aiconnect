@@ -1,21 +1,11 @@
 ﻿using Percolore.Core;
-using Percolore.Core.Persistence.Xml;
-using Percolore.Core.UserControl;
-using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Windows.Forms;
-
+using Percolore.Core.Logging;
 using System.ComponentModel;
-using System.Threading;
-using System.Threading.Tasks;
-using System.Linq;
-using System.IO;
 using System.Text;
 
 namespace Percolore.IOConnect
 {
-    public partial class fDispensaSimultanea : Form
+	public partial class fDispensaSimultanea : Form
     {
         Util.ObjectParametros _parametros;
         List<IDispenser> _dispenser;
@@ -176,11 +166,11 @@ namespace Percolore.IOConnect
                     }
                 }
             }
-            catch
-            {
-
-            }
-        }
+			catch (Exception ex)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+			}
+		}
 
         #region Eventos
 
@@ -201,14 +191,14 @@ namespace Percolore.IOConnect
                     }
                 }
             }
-            catch
-            {
+			catch (Exception ex)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+			}
 
-            }
-
-            /* Se a exibição da interface for desabilitada,
+			/* Se a exibição da interface for desabilitada,
              * reduz form a tamanho zero e incia automaticamente a dispensa */
-            if (desativarUI)
+			if (desativarUI)
             {
                 this.Width = 0;
                 this.Height = 0;
@@ -416,13 +406,8 @@ namespace Percolore.IOConnect
             try
             {
                 PausarMonitoramento();
-            }
-            catch
-            { }
 
-            ////Interrompe e retoma operação da placa
-            try
-            {
+                //Interrompe e retoma operação da placa
                 for (int j = 0; j < 3; j++)
                 {
                     for (int i = 0; _dispenser != null && i < _dispenser.Count; i++)
@@ -446,23 +431,22 @@ namespace Percolore.IOConnect
                         }
                     }
                 }
-            }
-            catch
-            { }
-            try
-            {
+            
                 if (modBusDispenser_P3 != null)
                 {
                     modBusDispenser_P3.Halt();
                     modBusDispenser_P3.UnHalt();
                 }
             }
-            catch
-            { }
-            //Status do processo
-            DialogResult = DialogResult.Abort;
+			catch (Exception ex)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+			}
+
+			//Status do processo
+			DialogResult = DialogResult.Abort;
         }
-        //void Monitoramento_Event(object sender, EventArgs e)
+        
         void Monitoramento_Event()
         {
             try
@@ -503,20 +487,16 @@ namespace Percolore.IOConnect
                                     for (int j = 0; j < vl_.Length; j++)
                                     {
                                         bool permiteArmazenar_nivel = true;
-                                        try
+                                        
+                                        if (lCol != null && lCol.Count > 0)
                                         {
-                                            if (lCol != null && lCol.Count > 0)
+                                            Util.ObjectColorante nCol = lCol.Find(o => o.Circuito == j+1);
+                                            if (nCol != null)
                                             {
-                                                Util.ObjectColorante nCol = lCol.Find(o => o.Circuito == j+1);
-                                                if (nCol != null)
-                                                {
-                                                    permiteArmazenar_nivel = false;
-                                                }
-
+                                                permiteArmazenar_nivel = false;
                                             }
                                         }
-                                        catch
-                                        { }
+
                                         if (permiteArmazenar_nivel)
                                         {
                                             ValoresVO vl = vl_[j];
@@ -534,7 +514,7 @@ namespace Percolore.IOConnect
                             if (this._valores2 != null && this._valores2.Count > 0)
                             {
                                 int index_dec2 = 16;
-                                if(/*(Dispositivo)_parametros.IdDispositivo == Dispositivo.Placa_4 ||*/ (Dispositivo)_parametros.IdDispositivo == Dispositivo.Simulador)
+                                if((Dispositivo)_parametros.IdDispositivo == Dispositivo.Simulador)
                                 {
                                     index_dec2 = 16;
                                 }
@@ -544,20 +524,16 @@ namespace Percolore.IOConnect
                                     for (int j = 0; j < vl_.Length; j++)
                                     {
                                         bool permiteArmazenar_nivel = true;
-                                        try
+                                        
+                                        if (lCol != null && lCol.Count > 0)
                                         {
-                                            if (lCol != null && lCol.Count > 0)
+                                            Util.ObjectColorante nCol = lCol.Find(o => o.Circuito == j + 1 + index_dec2);
+                                            if (nCol != null)
                                             {
-                                                Util.ObjectColorante nCol = lCol.Find(o => o.Circuito == j + 1 + index_dec2);
-                                                if (nCol != null)
-                                                {
-                                                    permiteArmazenar_nivel = false;
-                                                }
+                                                permiteArmazenar_nivel = false;
                                             }
                                         }
-                                        catch
-                                        {
-                                        }
+
                                         if (permiteArmazenar_nivel)
                                         {
                                             ValoresVO vl = vl_[j];
@@ -593,13 +569,11 @@ namespace Percolore.IOConnect
                                 counterP2 = 1;
                                 terminou_Base_P2 = true;
                                 Thread.Sleep(1000);
-                            }                           
-
+                            }
                         }
                         else
                         {
                             _dispenser[0].Dispensar(this._valores[counterP1++], i_Step);
-                            //counterP1 = counterUltimoP1;
                             Thread.Sleep(1000);
                             if (!placa2Seq && counterP2 < counterUltimoP2)
                             {
@@ -608,7 +582,6 @@ namespace Percolore.IOConnect
                                     _dispenser[1].Dispensar(this._valores2[counterP2++], i_Step);
                                     Thread.Sleep(1000);
                                 }
-                                //counterP2 = counterUltimoP2;
                             }
                         }
                         if (placa2Seq)
@@ -618,10 +591,9 @@ namespace Percolore.IOConnect
                                 if (counterP2 < counterUltimoP2)
                                 {
                                     Thread.Sleep(1000);
-                                    //counterUltimoP2 = 16;
                                     bool achou = false;
                                     int index_dec2 = 16;
-                                    if (/*(Dispositivo2)_parametros.IdDispositivo2 == Dispositivo2.Placa_4 ||*/ (Dispositivo2)_parametros.IdDispositivo2 == Dispositivo2.Simulador)
+                                    if ((Dispositivo2)_parametros.IdDispositivo2 == Dispositivo2.Simulador)
                                     {
                                         index_dec2 = 16;
                                     }
@@ -689,7 +661,6 @@ namespace Percolore.IOConnect
                                 terminou_Base_P2 = true;
                                 Thread.Sleep(1000);
                             }
-                            
                         }
                         else
                         {
@@ -701,11 +672,8 @@ namespace Percolore.IOConnect
                             if (!placa1Seq && counterP1 < counterUltimoP1)
                             {
                                 _dispenser[0].Dispensar(this._valores[counterP1++], i_Step);
-                                //counterP1 = counterUltimoP1;
                                 Thread.Sleep(1000);
                             }
-                            //counterP2 = counterUltimoP2;
-                            
                         }
 
                         if (placa1Seq)
@@ -713,10 +681,9 @@ namespace Percolore.IOConnect
                             if (counterP1 < counterUltimoP1)
                             {
                                 Thread.Sleep(1000);
-                                //counterUltimoP1 = 16;
                                 bool achou = false;
                                 int index_dec = 16;
-                                if (/*(Dispositivo)_parametros.IdDispositivo == Dispositivo.Placa_4 || */(Dispositivo)_parametros.IdDispositivo == Dispositivo.Simulador)
+                                if ((Dispositivo)_parametros.IdDispositivo == Dispositivo.Simulador)
                                 {
                                     index_dec = 16;
                                 }
@@ -781,11 +748,9 @@ namespace Percolore.IOConnect
                                 if (counterP1 < this._valores.Count)
                                 {
                                     _dispenser[0].Dispensar(this._valores[counterP1++], i_Step);
-                                    //counterP1 = counterUltimoP1;
                                     passouPlaca1 = true;
                                     Thread.Sleep(1000);
                                 }
-                                
                             }
                         }
                         if (placa2Seq && !passouPlaca1)
@@ -801,7 +766,6 @@ namespace Percolore.IOConnect
                                         terminou_Base_P2 = true;
                                         Thread.Sleep(1000);
                                     }
-
                                 }
                                 else
                                 {
@@ -809,14 +773,10 @@ namespace Percolore.IOConnect
                                     {
                                         _dispenser[1].Dispensar(this._valores2[counterP2++], i_Step);
                                         Thread.Sleep(1000);
-                                    }                                    
-                                    //counterP2 = counterUltimoP2;
-
+                                    }
                                 }
                             }
-
                         }
-
                     }
                     Thread.Sleep(this.thread_Sleep);
                     this.counterFalhaConexao = 0;
@@ -850,38 +810,30 @@ namespace Percolore.IOConnect
             {
                 if (this.modBusDispenser_P3 != null)
                 {
-                    try
-                    {
-                        this.modBusDispenser_P3.Disconnect();
-                        Thread.Sleep(1000);
-                        this.modBusDispenser_P3.Disconnect_Mover();
-                        Thread.Sleep(1000);
-                        this.modBusDispenser_P3.Connect();
-                        Thread.Sleep(1000);
-                        this.modBusDispenser_P3.Connect_Mover();
-                    }
-                    catch
-                    { }
+                    this.modBusDispenser_P3.Disconnect();
+                    Thread.Sleep(1000);
+                    this.modBusDispenser_P3.Disconnect_Mover();
+                    Thread.Sleep(1000);
+                    this.modBusDispenser_P3.Connect();
+                    Thread.Sleep(1000);
+                    this.modBusDispenser_P3.Connect_Mover();
                 }
                 else
                 {
                     for (int i = 0; i < this._dispenser.Count; i++)
                     {
-                        try
-                        {
-                            this._dispenser[i].Disconnect();
-                            Thread.Sleep(1000);
-                            this._dispenser[i].Connect();
-                            Thread.Sleep(1000);
-                        }
-                        catch
-                        { }
+                        this._dispenser[i].Disconnect();
+                        Thread.Sleep(1000);
+                        this._dispenser[i].Connect();
+                        Thread.Sleep(1000);
                     }
                 }
             }
-            catch
-            { }
-        }
+			catch (Exception ex)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+			}
+		}
 
         private void ProcessoDispensaSimultanea_FormClosed(object sender, FormClosedEventArgs e)
         {
@@ -1017,8 +969,9 @@ namespace Percolore.IOConnect
         #region Métodos privados
 
         void Falha(Exception ex)
-        {
-            PausarMonitoramento();
+		{
+            LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+			PausarMonitoramento();
 
             using (fMensagem m = new fMensagem(fMensagem.TipoMensagem.Erro))
             {
@@ -1037,10 +990,12 @@ namespace Percolore.IOConnect
                 this.modBusDispenser_P3.Halt();
                 this.modBusDispenser_P3.UnHalt();
             }
-            catch
-            { }
+			catch (Exception ex)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+			}
 
-            using (fMensagem m = new fMensagem(fMensagem.TipoMensagem.Erro))
+			using (fMensagem m = new fMensagem(fMensagem.TipoMensagem.Erro))
             {
                 //m.ShowDialog(Negocio.IdiomaResxExtensao.Global_Falha_ExecucaoPorcesso + "Botão de Emergência pressionado!");
                 m.ShowDialog(Negocio.IdiomaResxExtensao.Global_Falha_ExecucaoPorcesso + Negocio.IdiomaResxExtensao.PlacaMov_Botao_Emergencia);
@@ -1057,12 +1012,13 @@ namespace Percolore.IOConnect
                 this.modBusDispenser_P3.Halt();
                 this.modBusDispenser_P3.UnHalt();
             }
-            catch
-            { }
+			catch (Exception ex)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+			}
 
-            using (fMensagem m = new fMensagem(fMensagem.TipoMensagem.Erro))
+			using (fMensagem m = new fMensagem(fMensagem.TipoMensagem.Erro))
             {
-                //m.ShowDialog(Negocio.IdiomaResxExtensao.Global_Falha_ExecucaoPorcesso + "Dispensa parou!");
                 m.ShowDialog(Negocio.IdiomaResxExtensao.Global_Falha_ExecucaoPorcesso + Negocio.IdiomaResxExtensao.PlacaMov_Disp_Parou, true);
             }
 
@@ -1079,10 +1035,11 @@ namespace Percolore.IOConnect
                     backgroundWorker1.CancelAsync();
                 }
             }
-            catch
-            { }
-
-        }
+			catch (Exception ex)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+			}
+		}
 
         void ExecutarMonitoramento()
         {
@@ -1111,11 +1068,11 @@ namespace Percolore.IOConnect
                     backgroundWorker1.RunWorkerAsync();
                 }
             }
-            catch
-            { }
-
-
-        }
+			catch (Exception ex)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+			}
+		}
 
         private void backgroundWorker1_DoWork(object sender, System.ComponentModel.DoWorkEventArgs e)
         {
@@ -1131,32 +1088,25 @@ namespace Percolore.IOConnect
                     }
                     else
                     {
-                        try
+                        if (!this.isRunning)
                         {
-                            if (!this.isRunning)
+                            this.isRunning = true;
+                            this.Invoke(new MethodInvoker(Monitoramento_Event));
+                            if (this.modBusDispenser_P3 == null)
                             {
-                                this.isRunning = true;
-                                this.Invoke(new MethodInvoker(Monitoramento_Event));
-                                if (this.modBusDispenser_P3 == null)
-                                {
-                                    Thread.Sleep(1500);
-                                }
+                                Thread.Sleep(1500);
                             }
                         }
-                        catch
-                        {
-                        }
-                    }                    
+                    }
+
                     Thread.Sleep(this.thread_Sleep);
-                    
                 }
-
             }
-            catch
-            {
-            }
-
-        }
+			catch (Exception ex)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+			}
+		}
 
         private void backgroundWorker1_RunWorkerCompleted(object sender, System.ComponentModel.RunWorkerCompletedEventArgs e)
         {
@@ -1174,12 +1124,12 @@ namespace Percolore.IOConnect
                 {
                     this.isThread = true;
                 }
-
             }
-            catch
-            {
-            }
-        }
+			catch (Exception ex)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+			}
+		}
 
         #endregion
 
@@ -1209,10 +1159,11 @@ namespace Percolore.IOConnect
                     }                    
                 }                          
             }
-            catch
-            { 
-            }
-        }
+			catch (Exception ex)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+			}
+		}
         #endregion
 
         void trataActionP3()
@@ -1305,13 +1256,14 @@ namespace Percolore.IOConnect
                         {
                             break;
                         }
-
                 }
 
             }
-            catch
-            { }
-        }
+			catch (Exception ex)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+			}
+		}
 
         void trataPassosAction_01()
         {

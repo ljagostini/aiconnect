@@ -1,16 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
+﻿using Percolore.Core.Logging;
 
 namespace Percolore.IOConnect
 {
-    public partial class fBasDat06 : Form
+	public partial class fBasDat06 : Form
     {
         public int myAction = 0;
         public Util.ObjectBasDat06 objRetorno = null;
@@ -23,11 +15,12 @@ namespace Percolore.IOConnect
             try
             {
                 this.objRetorno = obj;
-               
             }
-            catch
-            { }
-        }
+			catch (Exception ex)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+			}
+		}
 
         private void fBasDat06_Load(object sender, EventArgs e)
         {
@@ -40,7 +33,6 @@ namespace Percolore.IOConnect
 
                 bool chb_tec = _parametros.HabilitarTecladoVirtual;
                 bool chb_touch = _parametros.HabilitarTouchScrenn;
-
 
                 txtVolume.isTecladoShow = chb_tec;
                 txtVolume.isTouchScrenn = chb_touch;
@@ -58,12 +50,6 @@ namespace Percolore.IOConnect
                 btnExcluir.Text = string.Empty;
                 btnExcluir.Image = Imagem.GetExcluir_32x32();
 
-            }
-            catch
-            { }
-
-            try
-            {
                 if (this.isNew)
                 {
                     btnExcluir.Enabled = false;
@@ -73,14 +59,12 @@ namespace Percolore.IOConnect
                 txt_Nome.Text = this.objRetorno.Name;
                 txtVolume.Text = this.objRetorno.Volume.ToString();
                 txt_Circuito.Text = this.objRetorno.Circuito.ToString();
-
-                
-
-
             }
-            catch
-            { }
-        }
+			catch (Exception ex)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+			}
+		}
 
         private void btnConfirmar_Click(object sender, EventArgs e)
         {
@@ -114,6 +98,5 @@ namespace Percolore.IOConnect
             this.myAction = 2;
             DialogResult = DialogResult.OK;
         }
-
     }
 }

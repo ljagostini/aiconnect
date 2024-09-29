@@ -1,14 +1,9 @@
-﻿using Percolore.Core.Persistence.Xml;
-using Percolore.Core.UserControl;
+﻿using Percolore.Core.Logging;
 using Percolore.Core.Util;
-using System;
-using System.Drawing;
-using System.IO;
-using System.Windows.Forms;
 
 namespace Percolore.IOConnect
 {
-    public partial class fCaminhoArquivo : Form
+	public partial class fCaminhoArquivo : Form
     {
         Util.ObjectParametros _parametros = null;
         string _currentPathFile;
@@ -31,17 +26,10 @@ namespace Percolore.IOConnect
             _parametros = Util.ObjectParametros.Load();
             _currentPathFile = currentPathFile;
 
-            //Globalização
-            /*
-            this.lblTitulo.Text = Properties.IOConnect.CaminhoArquivo_lblTitulo;
-            this.lblDiretorio.Text = Properties.IOConnect.CaminhoArquivo_lblDiretorio;
-            this.lblNome.Text = Properties.IOConnect.CaminhoArquivo_lblNome;
-            */
             this.lblTitulo.Text = Negocio.IdiomaResxExtensao.CaminhoArquivo_lblTitulo;
             this.lblDiretorio.Text = Negocio.IdiomaResxExtensao.CaminhoArquivo_lblDiretorio;
             this.lblNome.Text = Negocio.IdiomaResxExtensao.CaminhoArquivo_lblNome;
            
-
             if (!string.IsNullOrEmpty(_currentPathFile))
             {
                 txtDiretorio.Text = Path.GetDirectoryName(currentPathFile);
@@ -114,22 +102,21 @@ namespace Percolore.IOConnect
         {
             try
             {
-
                 Util.ObjectParametros _parametros = Util.ObjectParametros.Load();
 
                 bool chb_tec = _parametros.HabilitarTecladoVirtual;
                 bool chb_touch = _parametros.HabilitarTouchScrenn;
-
 
                 txtArquivo.isTecladoShow = chb_tec;
                 txtArquivo.isTouchScrenn = chb_touch;
 
                 txtDiretorio.isTecladoShow = chb_tec;
                 txtDiretorio.isTouchScrenn = chb_touch;
-
             }
-            catch
-            { }
-        }
+			catch (Exception ex)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+			}
+		}
     }
 }

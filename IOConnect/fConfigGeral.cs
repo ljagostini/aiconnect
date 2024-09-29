@@ -1,18 +1,10 @@
 ﻿using Percolore.Core;
 using Percolore.Core.AccessControl;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
+using Percolore.Core.Logging;
 
 namespace Percolore.IOConnect
 {
-    public partial class fConfigGeral : Form
+	public partial class fConfigGeral : Form
     {
         Authentication authentication;
         public Util.ObjectParametros _parametros = null;
@@ -56,8 +48,6 @@ namespace Percolore.IOConnect
             chkTesteRecipiente.Checked =
                 permissions.HabilitarTesteRecipiente;
 
-           
-
             this.chkViewMessageProc.Text = Negocio.IdiomaResxExtensao.Configuracoes_chkViewMessageProc;
             this.lblGeralFuncinamentoSoftware.Text = Negocio.IdiomaResxExtensao.Configuracoes_lblGeralFuncinamentoSoftware;
             this.chkTecladoVirtual.Text = Negocio.IdiomaResxExtensao.Configuracoes_chkTecladoVirtual;
@@ -73,7 +63,6 @@ namespace Percolore.IOConnect
             chkDispensaSequencial.Checked = _parametros.HabilitarDispensaSequencial;
 
             chk_TreinamentoCal.Checked = _parametros.TreinamentoCal;
-
 
             chkFormulasPersonalizadas.Checked = _parametros.HabilitarFormulaPersonalizada;
             chkTesteRecipiente.Checked = _parametros.HabilitarTesteRecipiente;
@@ -121,16 +110,11 @@ namespace Percolore.IOConnect
             bool chb_tec = _parametros.HabilitarTecladoVirtual;
             bool chb_touch = _parametros.HabilitarTouchScrenn;
 
-           
             txt_NameRemoteAccess.isTecladoShow = chb_tec;
             txtDelayEsponja.isTecladoShow = chb_tec;
 
-
             txt_NameRemoteAccess.isTouchScrenn = chb_touch;
             txtDelayEsponja.isTouchScrenn = chb_touch;
-
-
-
         }
 
         private void btnRessetData_Click(object sender, EventArgs e)
@@ -166,8 +150,10 @@ namespace Percolore.IOConnect
                     }
                 }
             }
-            catch (Exception ex)
-            {
+			catch (Exception ex)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+			
                 using (fMensagem m = new fMensagem(fMensagem.TipoMensagem.Erro))
                 {
                     m.ShowDialog(

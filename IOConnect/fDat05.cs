@@ -1,18 +1,10 @@
-﻿using Percolore.Core.UserControl;
+﻿using Percolore.Core.Logging;
 using Percolore.IOConnect.Util;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
 
 namespace Percolore.IOConnect
 {
-    public partial class fDat05 : Form
+	public partial class fDat05 : Form
     {
         private int index_selGridBasDat06;
         private List<Util.ObjectBasDat05> listBasDat05 = new List<Util.ObjectBasDat05>();
@@ -216,10 +208,11 @@ namespace Percolore.IOConnect
                 btnAddBasDat5.Text = string.Empty;
                 btnAddBasDat5.Image = Imagem.GetAdicionar_32x32();
             }
-            catch
-            { }
-
-        }
+			catch (Exception ex)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+			}
+		}
 
         private void AtualizaGridDat05()
         {
@@ -245,10 +238,11 @@ namespace Percolore.IOConnect
                 this.index_selGridBasDat06 = -1;
 
             }
-            catch
-            { }
-
-        }
+			catch (Exception ex)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+			}
+		}
 
         private void btnAddBasDat5_Click(object sender, EventArgs e)
         {
@@ -285,11 +279,11 @@ namespace Percolore.IOConnect
 
                 }
             }
-            catch
-            {
-
-            }
-        }
+			catch (Exception ex)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+			}
+		}
 
         private void dgBasDat05_CellClick(object sender, DataGridViewCellEventArgs e)
         {
@@ -339,11 +333,11 @@ namespace Percolore.IOConnect
                     }
                 }
             }
-            catch
-            {
-
-            }
-        }
+			catch (Exception ex)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+			}
+		}
 
         private void btnConfirmar_Click(object sender, EventArgs e)
         {
@@ -354,12 +348,6 @@ namespace Percolore.IOConnect
                 _parametros.Dat_05_FRM_Pref = txt_FRM_DAT_05_Prefixo.Text;
                 _parametros.Dat_05_FRM_SEP = txt_FRM_DAT_05_Separador.Text;
                 _parametros.Dat_05_UNT_Pref = txt_UNT_DAT_05_Prefixo.Text;
-
-                //_parametros.Dat_06_CAN_1_IsPonto = chk_CAN_DAT_06_1_Ponto.Checked ? 1 : 0;
-                //_parametros.Dat_06_FRM_1_IsPonto = chk_FRM_DAT_06_1_Ponto.Checked ? 1 : 0;
-                //_parametros.Dat_06_UNT_1_IsPonto = chk_UNT_DAT_06_1_Ponto.Checked ? 1 : 0;
-                //_parametros.Dat_06_UNT_2_IsPonto = chk_UNT_DAT_06_2_Ponto.Checked ? 1 : 0;
-                //_parametros.Dat_06_BAS_1_IsPonto = chk_BAS_DAT_06_1_Ponto.Checked ? 1 : 0;
 
                 _parametros.Dat_05_UNT_1_IsPonto = cmb_UNT_DAT_05_1_Ponto.SelectedValue.ToString() == "1" ? 1 : 0;
                 _parametros.Dat_05_UNT_2_IsPonto = cmb_UNT_DAT_05_2_Ponto.SelectedValue.ToString() == "1" ? 1 : 0;
@@ -372,9 +360,11 @@ namespace Percolore.IOConnect
 
                 DialogResult = DialogResult.OK;
             }
-            catch
-            { }
-        }
+			catch (Exception ex)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+			}
+		}
 
         private void btnSair_Click(object sender, EventArgs e)
         {

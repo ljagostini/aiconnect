@@ -1,30 +1,14 @@
 ﻿using Percolore.Core;
 using Percolore.Core.AccessControl;
+using Percolore.Core.Logging;
 using Percolore.Core.Persistence.WindowsRegistry;
-using Percolore.Core.Persistence.Xml;
-using Percolore.Core.Security.License;
 using Percolore.Core.Security.Token;
-using Percolore.Core.UserControl;
-using Percolore.Core.Util;
-using Percolore.IOConnect.Util;
-using System;
-using System.Data;
-using System.Drawing;
-using System.Globalization;
-using System.Net.NetworkInformation;
-using System.Net.Sockets;
 using System.Reflection;
-using System.Resources;
-using System.Text;
-using System.Threading;
-using System.Windows.Forms;
-using System.Xml;
-using System.Xml.Linq;
 using MethodInvoker = System.Windows.Forms.MethodInvoker;
 
 namespace Percolore.IOConnect
 {
-    public partial class fAutenticacao : Form
+	public partial class fAutenticacao : Form
     {
         private Authentication _authentication = null;
         private Util.ObjectParametros _parametros = null;
@@ -50,13 +34,7 @@ namespace Percolore.IOConnect
             this.Location = new Point(0, 30);
             _parametros = Util.ObjectParametros.Load();
 
-            //Globalização  
-            /*
-            this.lblTitulo.Text = Properties.IOConnect.Autenticacao_lblTitulo;
-            this.rdbSenha.Text = Properties.IOConnect.Autenticacao_rdbSenha;
-            */
             this.lblTitulo.Text = Negocio.IdiomaResxExtensao.Autenticacao_lblTitulo;
-            //this.rdbSenha.Text = Negocio.IdiomaResxExtensao.Autenticacao_rdbSenha;
 
             this.rdbSenha.Text = Negocio.IdiomaResxExtensao.fAutenticacao_lblUsuario;
             lblUsuario.Text = Negocio.IdiomaResxExtensao.Autenticacao_lblUsuario;
@@ -85,9 +63,7 @@ namespace Percolore.IOConnect
 
                 txtSenha.isTecladoShow = _parametros.HabilitarTecladoVirtual;
                 txtSenha.isTouchScrenn = _parametros.HabilitarTouchScrenn;
-               
             }
-            
         }
 
         private void btnCancelar_Click(object sender, System.EventArgs e)
@@ -99,7 +75,6 @@ namespace Percolore.IOConnect
         {
             this.Invoke(new MethodInvoker(btnOkClick));
         }
-
 
         private void btnOkClick()
         {
@@ -163,93 +138,6 @@ namespace Percolore.IOConnect
 
             #endregion
 
-            //AuthenticationMode mode =
-            //    (rdbToken.Checked) ? AuthenticationMode.Token : AuthenticationMode.Password;
-
-            //switch (mode)
-            //{
-            //    case AuthenticationMode.Token:
-            //        {
-            //            #region Token
-
-            //            AssemblyInfo assemblyInfo =
-            //                new AssemblyInfo(Assembly.GetExecutingAssembly());
-            //            string guid = assemblyInfo.Guid;
-
-            //            string serial = string.Empty;
-            //            using (PercoloreRegistry percRegistry = new PercoloreRegistry())
-            //            {
-            //                serial = percRegistry.GetSerialNumber();
-            //            }
-
-            //            ITokenHandler<AccessTokenModel> handler =
-            //                new TokenHandler<AccessTokenModel>();
-            //            AccessTokenModel model = handler.Read(input);
-            //            TokenStatus status = handler.Validate(
-            //                new TokenTargetIdentity(serial, guid), model);
-
-            //            switch (status)
-            //            {
-            //                #region TokenStatus
-
-            //                case TokenStatus.InvalidFormat:
-            //                    {
-            //                        using (fMensagem m = new fMensagem(fMensagem.TipoMensagem.Informacao))
-            //                        {
-            //                            m.ShowDialog(Negocio.IdiomaResxExtensao.Global_TokenInvalido);
-            //                        }
-
-            //                        txtInput.Focus();
-            //                        return;
-            //                    }
-            //                case TokenStatus.Expired:
-            //                    {
-            //                        using (fMensagem m = new fMensagem(fMensagem.TipoMensagem.Informacao))
-            //                        {
-            //                            m.ShowDialog(Negocio.IdiomaResxExtensao.Global_TokenExpirado);
-            //                        };
-
-            //                        txtInput.Focus();
-            //                        return;
-            //                    }
-
-            //                    #endregion
-            //            }
-
-            //            _authentication =
-            //                new Authentication((Profile)model.Profile);
-
-            //            break;
-
-            //            #endregion
-            //        }
-            //    case AuthenticationMode.Password:
-            //        {
-            //            #region Senha
-
-            //            string senha = string.Empty;
-            //            using (IOConnectRegistry icntRegistry = new IOConnectRegistry())
-            //            {
-            //                senha = icntRegistry.GetSenhaAdmnistrador();
-            //            }
-
-            //            if (txtInput.Text != senha)
-            //            {
-            //                using (fMensagem m = new fMensagem(fMensagem.TipoMensagem.Informacao))
-            //                    m.ShowDialog(Negocio.IdiomaResxExtensao.Autenticacao_SenhaInvalida);
-            //                txtInput.Focus();
-            //                return;
-            //            }
-
-            //            _authentication =
-            //                new Authentication(Profile.Administrador);
-
-            //            break;
-
-            //            #endregion
-            //        }
-            //}
-
             Close();
         }
         private void rdbToken_CheckedChanged(object sender, System.EventArgs e)
@@ -266,7 +154,6 @@ namespace Percolore.IOConnect
         {
             if(isToken)
             {
-                //txtInput.PasswordChar = '\0';
                 txtInput.Text = string.Empty;
                 txtInput.UseSystemPasswordChar = false;
                 txtInput.Focus();
@@ -275,7 +162,6 @@ namespace Percolore.IOConnect
             }
             else
             {
-                //txtInput.PasswordChar = '*';
                 txtUsuario.Text = string.Empty;
                 txtSenha.Text = string.Empty;
                 txtUsuario.Focus();
@@ -338,8 +224,6 @@ namespace Percolore.IOConnect
                     return;
                 }
 
-
-
                 Close();
             }
             catch (Exception ex)
@@ -374,11 +258,13 @@ namespace Percolore.IOConnect
                 if(e.KeyChar == (char)Keys.Enter)
                 {
                     btnConfirmaUser_Click(null, null);
-
                 }
-            }catch
-            { }
-        }
+            }
+			catch (Exception ex)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+			}
+		}
 
         private void txtUsuario_KeyPress(object sender, KeyPressEventArgs e)
         {
@@ -387,13 +273,12 @@ namespace Percolore.IOConnect
                 if (e.KeyChar == (char)Keys.Enter)
                 {
                     txtSenha.Select();
-
                 }
             }
-            catch
-            { }
-        }
-
-        
+			catch (Exception ex)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+			}
+		}
     }
 }
