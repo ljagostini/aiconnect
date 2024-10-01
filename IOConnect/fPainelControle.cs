@@ -1,31 +1,20 @@
 ﻿using Newtonsoft.Json;
 using Percolore.Core;
 using Percolore.Core.AccessControl;
+using Percolore.Core.Logging;
 using Percolore.Core.Persistence.WindowsRegistry;
-using Percolore.Core.Persistence.Xml;
-using Percolore.Core.UserControl;
 using Percolore.Core.Util;
 using Percolore.IOConnect.Negocio;
-using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Drawing;
 using System.Globalization;
-using System.IO;
-using System.Linq;
-using System.Net;
 using System.Net.Http.Headers;
-using System.Net.NetworkInformation;
-using System.Net.Sockets;
 using System.Reflection;
 using System.Text;
-using System.Threading;
-using System.Windows.Forms;
 using MethodInvoker = System.Windows.Forms.MethodInvoker;
 
 namespace Percolore.IOConnect
 {
-    public partial class fPainelControle : Form
+	public partial class fPainelControle : Form
     {
         NotifyIcon _notifyIcon;
         ContextMenuStrip _contextMenu;
@@ -346,9 +335,11 @@ namespace Percolore.IOConnect
                         }
                 }
             }
-            catch
-            { }
-        }
+			catch (Exception ex)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+			}
+		}
 
         private void CreateMenuDinamicoIdioma(bool createEvt = true)
         {
@@ -409,11 +400,12 @@ namespace Percolore.IOConnect
                     }
                 }
             }
-            catch
-            {
+			catch (Exception ex)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+			}
 
-            }
-            bool isUDCP = false;
+			bool isUDCP = false;
             if ((DatPattern)_parametros.PadraoConteudoDAT == DatPattern.PadraoUDCP)
             {
                 isUDCP = true;
@@ -760,9 +752,11 @@ namespace Percolore.IOConnect
             {
                 this.Invoke(new MethodInvoker(initVerifApp));
             }
-            catch
-            { }
-        }
+			catch (Exception ex)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+			}
+		}
 
         //Função para identificar o reinicio do Monitoramento dos circuitos
         void RessetarTempoMonitoramento()
@@ -946,9 +940,11 @@ namespace Percolore.IOConnect
                             }
                         }
                     }
-                    catch
-                    { }
-                }
+					catch (Exception ex)
+					{
+						LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+					}
+				}
 
                 switch ((DatPattern)_parametros.PadraoConteudoDAT)
                 {
@@ -1070,9 +1066,10 @@ namespace Percolore.IOConnect
 
                         }
                     }
-                    catch
-                    {
-                        Log.Logar(
+					catch (Exception ex)
+					{
+						LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+					    Log.Logar(
                         TipoLog.Processo,
                         _parametros.PathLogProcessoDispensa,
                         Negocio.IdiomaResxExtensao.Log_Cod_29 + Negocio.IdiomaResxExtensao.LogProcesso_FalhaLeituraConteudoDat);
@@ -1146,9 +1143,10 @@ namespace Percolore.IOConnect
                             _parametros.PathLogProcessoDispensa,
                             Negocio.IdiomaResxExtensao.LogProcesso_SucessoLeituraConteudoDat);
                     }
-                    catch
-                    {
-                        Log.Logar(
+					catch (Exception ex)
+					{
+						LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+					    Log.Logar(
                             TipoLog.Processo,
                             _parametros.PathLogProcessoDispensa,
                             Negocio.IdiomaResxExtensao.Log_Cod_29 + Negocio.IdiomaResxExtensao.LogProcesso_FalhaLeituraConteudoDat);
@@ -2470,10 +2468,12 @@ namespace Percolore.IOConnect
                                         }
                                     }
                                 }
-                                catch
-                                { }
+								catch (Exception ex)
+								{
+									LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+								}
 
-                                gerarEventoDispensa(0, delathes);
+								gerarEventoDispensa(0, delathes);
                             }
                             else if (result == DialogResult.Cancel)
                             {
@@ -3020,10 +3020,12 @@ namespace Percolore.IOConnect
                                         }
                                     }
                                 }
-                                catch
-                                { }
+								catch (Exception ex)
+								{
+									LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+								}
 
-                                gerarEventoDispensa(0, delathes);
+								gerarEventoDispensa(0, delathes);
                             }
                             else if (result == DialogResult.Cancel)
                             {
@@ -3389,12 +3391,14 @@ namespace Percolore.IOConnect
                         return;
                     }
                 }
-                catch (Exception ex)
-                {
+				catch (Exception ex)
+				{
+					LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+				
                     #region Catch
 
 
-                    if (isProtocolUDCP)
+				    if (isProtocolUDCP)
                     {
                         if (File.Exists(Path.Combine(this.pathUDCP, "busy.flg")))
                         {
@@ -3474,9 +3478,10 @@ namespace Percolore.IOConnect
                     #endregion
                 }
             }
-            catch
-            {
-                this.menu = false;
+			catch (Exception ex)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+			    this.menu = false;
             }
         }
 
@@ -3505,13 +3510,7 @@ namespace Percolore.IOConnect
                     sw.WriteLine("Msg =  Remove the base can please...");
                     sw.Close();
                 }
-                
-            }
-            catch
-            { }
-
-            try
-            {
+            
                 bool existLastMSG = false;
                 for (int i = 0; !existLastMSG && i < 5; i++)
                 {
@@ -3579,14 +3578,15 @@ namespace Percolore.IOConnect
                     File.Delete(Path.Combine(this.pathUDCP, "reply.dat"));
                 }
             }
-            catch
-            {
-                Thread.Sleep(1000);
+			catch (Exception ex)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+			    Thread.Sleep(1000);
             }
-            
-            if(!isLoop)
+
+            try
             {
-                try
+                if(!isLoop)
                 {
                     if (File.Exists(Path.Combine(this.pathUDCP, "reply.sig")))
                     {
@@ -3596,12 +3596,8 @@ namespace Percolore.IOConnect
                     {
                         File.Delete(Path.Combine(this.pathUDCP, "reply.dat"));
                     }
-                }
-                catch
-                { }
-            }
-            try
-            {
+			    }
+            
                 if (File.Exists(Path.Combine(this.pathUDCP, "msg.dat")))
                 {
                     File.Delete(Path.Combine(this.pathUDCP, "msg.dat"));
@@ -3612,9 +3608,11 @@ namespace Percolore.IOConnect
                 }
                 
             }
-            catch
-            { }
-        }
+			catch (Exception ex)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+			}
+		}
 
         int gerarEventoDispensa(int result, string detalhes = "")
         {
@@ -3634,9 +3632,12 @@ namespace Percolore.IOConnect
                 retorno = Util.ObjectEventos.InsertEvento(objEvt);
                 #endregion
             }
-            catch
-            { }
-            return retorno;
+			catch (Exception ex)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+			}
+
+			return retorno;
         }
 
         private void ExecuteCheckFormula(Dictionary<int, double> demanda)
@@ -3714,10 +3715,11 @@ namespace Percolore.IOConnect
                     sw.Close();
                 }
             }
-            catch
-            { }
-
-        }
+			catch (Exception ex)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+			}
+		}
 
         private void ExecuteExtKey(string _strExtKey)
         {
@@ -3758,9 +3760,12 @@ namespace Percolore.IOConnect
                                     }
                             }
                         }
-                        catch
-                        { }
-                        WriteCanisterContents(sw, null, null);
+						catch (Exception ex)
+						{
+							LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+						}
+
+						WriteCanisterContents(sw, null, null);
                         sw.Close();
                     }
 
@@ -3852,9 +3857,12 @@ namespace Percolore.IOConnect
                                 }
                         }
                     }
-                    catch
-                    { }
-                    if(isDelay)
+					catch (Exception ex)
+					{
+						LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+					}
+
+					if (isDelay)
                     {
                         Thread.Sleep(4000);
                     }
@@ -3921,36 +3929,6 @@ namespace Percolore.IOConnect
                         Thread.Sleep(this._parametros.DelayUDCP * 1000);
                     }
                    
-
-                    ////if (!Core.RunIOConnectHelper.ShutdownRunIOConnect())
-                    //{
-                        
-                    //    if (this.fLog != null)
-                    //    {
-                    //        this.fLog.Close();
-                    //    }
-                    //    try
-                    //    {
-                    //        #region gravar Evento Fechar
-
-                    //        Util.ObjectEventos objEvt = new Util.ObjectEventos();
-                    //        objEvt.DATAHORA = DateTime.Now;
-                    //        objEvt.COD_EVENTO = (int)IOConnect.Core.PercoloreEnum.Eventos.FecharSistema;
-                    //        objEvt.INTEGRADO = false;
-                    //        using (PercoloreRegistry percRegistry = new PercoloreRegistry())
-                    //        {
-                    //            objEvt.NUMERO_SERIE = percRegistry.GetSerialNumber();
-                    //        }
-                    //        Util.ObjectEventos.InsertEvento(objEvt);
-                    //        #endregion
-                    //    }
-                    //    catch
-                    //    {
-
-                    //    }
-                        
-                    //}
-
                     using (StreamWriter sw = new StreamWriter(Path.Combine(this.pathUDCP, "result.sig")))
                     {
                         sw.WriteLine("0");
@@ -5367,9 +5345,11 @@ namespace Percolore.IOConnect
                 }
 
             }
-            catch
-            { }
-        }
+			catch (Exception ex)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+			}
+		}
 
         int gerarEventoAbastecimento(int result, string detalhes = "")
         {
@@ -5389,9 +5369,12 @@ namespace Percolore.IOConnect
                 retorno = Util.ObjectEventos.InsertEvento(objEvt);
                 #endregion
             }
-            catch
-            { }
-            return retorno;
+			catch (Exception ex)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+			}
+
+			return retorno;
         }
 
         int gerarEventoAlteradoProdutos(int result, string detalhes = "")
@@ -5412,9 +5395,12 @@ namespace Percolore.IOConnect
                 retorno = Util.ObjectEventos.InsertEvento(objEvt);
                 #endregion
             }
-            catch
-            { }
-            return retorno;
+			catch (Exception ex)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+			}
+
+			return retorno;
         }
 
         private void WriteCanisterContents(StreamWriter sw, Dictionary<int, double> _demanda, List<int> purge_cir)
@@ -5491,89 +5477,11 @@ namespace Percolore.IOConnect
                     }
                 }
             }
-            catch
-            { }
-        }
-
-        /*
-        private void WriteCanisterContents(StreamWriter sw, Dictionary<int, double> _demanda, List<int> purge_cir)
-        {
-            try
-            {
-                List<Util.ObjectColorante> lCol = this._colorantes.FindAll(o => o.Habilitado && o.Seguidor == -1).ToList();
-                sw.WriteLine("[CanisterContents]");
-                foreach (Util.ObjectColorante _col in lCol)
-                {
-                    if (_col.Habilitado && _col.Seguidor == -1)
-                    {
-                        sw.WriteLine("Canister_" + _col.Correspondencia.ToString() + "_ml = " + string.format("{0:0.###}", _col.Volume));
-                        sw.WriteLine("Canister_" + _col.Correspondencia.ToString() + "_size_ml = " + ((int)_col.NivelMaximo).ToString());
-                        sw.WriteLine("Canister_" + _col.Correspondencia.ToString() + "_min_ml = " + ((int)_col.NivelMinimo).ToString());
-                        sw.WriteLine("Canister_" + _col.Correspondencia.ToString() + "_warn_ml = " + ((int)(_col.NivelMaximo / 3)).ToString());
-                        sw.WriteLine("Canister_" + _col.Correspondencia.ToString() + "_ColorantName = " + _col.Nome);
-                        if (purge_cir != null && purge_cir.Count > 0)
-                        {
-                            bool achou_can = false;
-                            foreach (int _c_purga in purge_cir)
-                            {
-                                if (_c_purga == _col.Correspondencia || _c_purga == 0)
-                                {
-                                    achou_can = true;
-                                    break;
-                                }
-                            }
-                            if (!achou_can)
-                            {
-                                sw.WriteLine("Canister_" + _col.Correspondencia.ToString() + "_dosed_ul = 0");
-                            }
-                            else
-                            {
-                                sw.WriteLine("Canister_" + _col.Correspondencia.ToString() + "_dosed_ul = 500");
-                            }
-                        }
-                        else if (_demanda != null && _demanda.Count > 0)
-                        {
-                            bool achou_can = false;
-                            double vol_dosed = 0;
-                            foreach (KeyValuePair<int, double> item in _demanda)
-                            {
-                                int circuito = item.Key;
-                                if (circuito == _col.Correspondencia)
-                                {
-                                    achou_can = true;
-                                    vol_dosed = item.Value;
-                                    break;
-                                }
-                            }
-                            if (!achou_can)
-                            {
-                                sw.WriteLine("Canister_" + _col.Correspondencia.ToString() + "_dosed_ul = 0");
-                            }
-                            else
-                            {
-                                sw.WriteLine("Canister_" + _col.Correspondencia.ToString() + "_dosed_ul = " + ((int)(vol_dosed * 1000)).ToString());
-                            }
-                        }
-                        else
-                        {
-                            sw.WriteLine("Canister_" + _col.Correspondencia.ToString() + "_dosed_ul = 0");
-                        }
-                    }
-                    else
-                    {
-                        sw.WriteLine("Canister_" + _col.Correspondencia.ToString() + "_ml = -1");
-                        sw.WriteLine("Canister_" + _col.Correspondencia.ToString() + "_size_ml = -1");
-                        sw.WriteLine("Canister_" + _col.Correspondencia.ToString() + "_warn_ml = -1");
-                        sw.WriteLine("Canister_" + _col.Correspondencia.ToString() + "_min_ml = -1");
-                        sw.WriteLine("Canister_" + _col.Correspondencia.ToString() + "_ColorantName = " + _col.Nome);
-                        sw.WriteLine("Canister_" + _col.Correspondencia.ToString() + "_dosed_ul = -1");
-                    }
-                }
-            }
-            catch
-            { }
-        }
-        */
+			catch (Exception ex)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+			}
+		}
 
         private void VerificarBaseDados(string[] filesDat, string pathMonitFD)
         {
@@ -5610,11 +5518,12 @@ namespace Percolore.IOConnect
                         lDatDB = JsonConvert.DeserializeObject<List<DatIOConnectTO>>(serializedResult);
                     }
                 }
-                catch
-                {
-                }
+				catch (Exception ex)
+				{
+					LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+				}
 
-                if (lDatDB != null && lDatDB.Count > 0)
+				if (lDatDB != null && lDatDB.Count > 0)
                 {
                     foreach (DatIOConnectTO _datIoCon in lDatDB)
                     {
@@ -5641,116 +5550,51 @@ namespace Percolore.IOConnect
                             }
                         }
 
-                        try
+                        string text = "";
+                        MyModel adloc = new MyModel();
+                        MyModel adlocReturn = new MyModel();
+                        adloc.Output = "0";
+                        adloc.User = "adm";
+                        adloc.Pass = "adm2019";
+                        _datIoCon.Executado = "1";
+
+                        adloc.ObjetoEntrada = _datIoCon;
+
+						string strParameter = JsonConvert.SerializeObject(adloc);
+						string urlReq = _parametros.PathBasesDados + "DatIOConnect/DatIOConnect_UpDate/";
+
+						client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+						HttpContent content = new StringContent(strParameter, Encoding.UTF8, "application/json");
+						HttpResponseMessage response = client.PostAsync(urlReq, content).Result;
+
+						if (response.IsSuccessStatusCode)
+						{
+							text = response.Content.ReadAsStringAsync().Result;
+						}
+
+                        if (text != null && text.Length > 1)
                         {
-                            string text = "";
-                            MyModel adloc = new MyModel();
-                            MyModel adlocReturn = new MyModel();
-                            adloc.Output = "0";
-                            adloc.User = "adm";
-                            adloc.Pass = "adm2019";
-                            _datIoCon.Executado = "1";
-
-                            adloc.ObjetoEntrada = _datIoCon;
-
-							string strParameter = JsonConvert.SerializeObject(adloc);
-							string urlReq = _parametros.PathBasesDados + "DatIOConnect/DatIOConnect_UpDate/";
-
-							client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-							HttpContent content = new StringContent(strParameter, Encoding.UTF8, "application/json");
-							HttpResponseMessage response = client.PostAsync(urlReq, content).Result;
-
-							if (response.IsSuccessStatusCode)
-							{
-								text = response.Content.ReadAsStringAsync().Result;
-							}
-
-                            if (text != null && text.Length > 1)
+                            adlocReturn = JsonConvert.DeserializeObject<MyModel>(text);
+                            if (adlocReturn.Output == "1;OK;")
                             {
-                                adlocReturn = JsonConvert.DeserializeObject<MyModel>(text);
-                                if (adlocReturn.Output == "1;OK;")
+                                var serializedResult = JsonConvert.SerializeObject(adlocReturn.ListObjetoSaida);
+                                string retorno = JsonConvert.DeserializeObject<List<string>>(serializedResult)[0];
+                                if (retorno == "1")
                                 {
-                                    var serializedResult = JsonConvert.SerializeObject(adlocReturn.ListObjetoSaida);
-                                    string retorno = JsonConvert.DeserializeObject<List<string>>(serializedResult)[0];
-                                    if (retorno == "1")
-                                    {
 
-                                    }
                                 }
                             }
-                        }
-                        catch
-                        {
                         }
                     }
                 }
             }
-            catch
-            {
+			catch (Exception ex)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+			}
 
-            }
-            this.dtMonitoramentoFilaBaseDados = DateTime.Now;
+			this.dtMonitoramentoFilaBaseDados = DateTime.Now;
         }      
-
-        /*
-        private bool ReadWriteTCP(string imei, string message)
-        {
-            bool retorno = false;
-            try
-            {
-                if (this.tcpcliente.Connected)
-                {
-                    try
-                    {
-                        this.tcpcliente.Close();
-                        this.tcpcliente.Dispose();
-                    }
-                    catch
-                    {
-
-                    }
-                }
-                this.tcpcliente = new TcpClient();
-                this.tcpcliente.Connect(_parametros.IpProducao, Convert.ToInt32(_parametros.PortaProducao));
-                if (tcpcliente.Connected)
-                {
-                    NetworkStream netWriteread = tcpcliente.GetStream();
-
-                    try
-                    {
-                        if (this.tcpcliente.Available > 0)
-                        {
-                            int tamanho = 0;
-                            tamanho = this.tcpcliente.Available;
-                            Byte[] bytes = new Byte[tamanho];
-                            int i = netWriteread.Read(bytes, 0, tamanho);
-
-                            StringBuilder sb = new StringBuilder();
-                            for (int k = 0; k < i; k++)
-                            {
-                                byte b = bytes[k];
-                                sb.Append(b.ToString("X2"));
-                                if ((k - 1) < i)
-                                {
-                                    sb.Append("-");
-                                }
-                            }
-                        }
-
-                    }
-                    catch (Exception exc)
-                    {
-
-                    }
-                }
-            }
-            catch (Exception exc1)
-            {
-
-            }
-            return retorno;
-        }
-        */
 
         #region Menu
 
@@ -5821,15 +5665,9 @@ namespace Percolore.IOConnect
 
                             if (authentication != null && _usuario != null)
                             {
-                                try
+                                using (Form f = new fConfiguracoes(authentication, _usuario))
                                 {
-                                    using (Form f = new fConfiguracoes(authentication, _usuario))
-                                    {
-                                        f.ShowDialog();
-                                    }
-                                }
-                                catch
-                                {
+                                    f.ShowDialog();
                                 }
 
                                 Util.ObjectParametros.InitLoad();
@@ -6071,22 +5909,19 @@ namespace Percolore.IOConnect
                                 {
                                     this.fLog.Close();
                                 }
-                                try
+                                
+                                #region gravar Evento Fechar
+                                Util.ObjectEventos objEvt = new Util.ObjectEventos();
+                                objEvt.DATAHORA = DateTime.Now;
+                                objEvt.COD_EVENTO = (int)IOConnect.Core.PercoloreEnum.Eventos.FecharSistema;
+                                objEvt.INTEGRADO = false;
+                                using (PercoloreRegistry percRegistry = new PercoloreRegistry())
                                 {
-                                    #region gravar Evento Fechar
-                                    Util.ObjectEventos objEvt = new Util.ObjectEventos();
-                                    objEvt.DATAHORA = DateTime.Now;
-                                    objEvt.COD_EVENTO = (int)IOConnect.Core.PercoloreEnum.Eventos.FecharSistema;
-                                    objEvt.INTEGRADO = false;
-                                    using (PercoloreRegistry percRegistry = new PercoloreRegistry())
-                                    {
-                                        objEvt.NUMERO_SERIE = percRegistry.GetSerialNumber();
-                                    }
-                                    Util.ObjectEventos.InsertEvento(objEvt);
-                                    #endregion
+                                    objEvt.NUMERO_SERIE = percRegistry.GetSerialNumber();
                                 }
-                                catch
-                                { }
+                                Util.ObjectEventos.InsertEvento(objEvt);
+                                #endregion
+
                                 this.Close();
                             }
 
@@ -6190,90 +6025,77 @@ namespace Percolore.IOConnect
                             {
                                 this.fLog.Close();
                             }
-                            try
+                            
+                            #region gravar Evento Fechar
+                            Util.ObjectEventos objEvt = new Util.ObjectEventos();
+                            objEvt.DATAHORA = DateTime.Now;
+                            objEvt.COD_EVENTO = (int)IOConnect.Core.PercoloreEnum.Eventos.FecharSistema;
+                            objEvt.INTEGRADO = false;
+                            using (PercoloreRegistry percRegistry = new PercoloreRegistry())
                             {
-                                #region gravar Evento Fechar
-                                Util.ObjectEventos objEvt = new Util.ObjectEventos();
-                                objEvt.DATAHORA = DateTime.Now;
-                                objEvt.COD_EVENTO = (int)IOConnect.Core.PercoloreEnum.Eventos.FecharSistema;
-                                objEvt.INTEGRADO = false;
-                                using (PercoloreRegistry percRegistry = new PercoloreRegistry())
-                                {
-                                    objEvt.NUMERO_SERIE = percRegistry.GetSerialNumber();
-                                }
-                                Util.ObjectEventos.InsertEvento(objEvt);
-                                #endregion
+                                objEvt.NUMERO_SERIE = percRegistry.GetSerialNumber();
                             }
-                            catch
-                            { }
+                            Util.ObjectEventos.InsertEvento(objEvt);
+                            #endregion
+
                             this.Close();
                             
                             break;
                         }
                     case OpcaoMenu.LogBD:
                         {
-                            try
+                            bool logDB = false;                                
+                            DateTime? dtFimValLog = null;
+                            using (StreamReader reader = new StreamReader(this.CLICK_LOGBD))
                             {
-                                bool logDB = false;                                
-                                DateTime? dtFimValLog = null;
-                                using (StreamReader reader = new StreamReader(this.CLICK_LOGBD))
+                                string line = "";
+                                while ((line = reader.ReadLine()) != null)
                                 {
-                                    try
+                                    if (line.Contains("="))
                                     {
-                                        string line = "";
-                                        while ((line = reader.ReadLine()) != null)
+                                        string[] array = line.Split('=');
+                                        if(array[0] == "LogBD")
                                         {
-                                            if (line.Contains("="))
+                                            if(array[1] =="1" || array[1].ToUpper() == "TRUE")
                                             {
-                                                string[] array = line.Split('=');
-                                                if(array[0] == "LogBD")
-                                                {
-                                                    if(array[1] =="1" || array[1].ToUpper() == "TRUE")
-                                                    {
-                                                        logDB = true;
-                                                    }
-                                                }
-                                                else if(array[0] == "dataFimValLog")
-                                                {
-                                                    dtFimValLog = Convert.ToDateTime(array[1]);
-                                                }
+                                                logDB = true;
                                             }
-
+                                        }
+                                        else if(array[0] == "dataFimValLog")
+                                        {
+                                            dtFimValLog = Convert.ToDateTime(array[1]);
                                         }
                                     }
-                                    catch
-                                    { }
+                                }
                                      
-                                    reader.Close();
-                                }
-                                if(dtFimValLog!= null)
+                                reader.Close();
+                            }
+                            if(dtFimValLog!= null)
+                            {
+                                if(dtFimValLog.Value.CompareTo( DateTime.Now) > 0)
                                 {
-                                    if(dtFimValLog.Value.CompareTo( DateTime.Now) > 0)
+                                    _parametros.LogBD = logDB;
+                                    Util.ObjectParametros.Persist(_parametros);
+                                    Util.ObjectParametros.InitLoad();
+                                    _parametros = Util.ObjectParametros.Load();
+                                    if(logDB)
                                     {
-                                        _parametros.LogBD = logDB;
-                                        Util.ObjectParametros.Persist(_parametros);
-                                        Util.ObjectParametros.InitLoad();
-                                        _parametros = Util.ObjectParametros.Load();
-                                        if(logDB)
+                                        using (fMensagem message = new fMensagem(fMensagem.TipoMensagem.Informacao))
                                         {
-                                            using (fMensagem message = new fMensagem(fMensagem.TipoMensagem.Informacao))
-                                            {
-                                                message.ShowDialog("Log by BD", Negocio.IdiomaResxExtensao.Global_Sim, null, true, 10);
-                                            }
+                                            message.ShowDialog("Log by BD", Negocio.IdiomaResxExtensao.Global_Sim, null, true, 10);
                                         }
-                                        else
+                                    }
+                                    else
+                                    {
+                                        using (fMensagem message = new fMensagem(fMensagem.TipoMensagem.Informacao))
                                         {
-                                            using (fMensagem message = new fMensagem(fMensagem.TipoMensagem.Informacao))
-                                            {
-                                                message.ShowDialog("Log by TXT", Negocio.IdiomaResxExtensao.Global_Sim, null, true, 10);
-                                            }
+                                            message.ShowDialog("Log by TXT", Negocio.IdiomaResxExtensao.Global_Sim, null, true, 10);
                                         }
                                     }
                                 }
-                                dtFimValLog = null;
                             }
-                            catch
-                            { }
+                            dtFimValLog = null;
+
                             break;
                         }
                     default:
@@ -6343,9 +6165,11 @@ namespace Percolore.IOConnect
                     }
                 }
             }
-            catch
-            { }
-        }
+			catch (Exception ex)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+			}
+		}
         #endregion
 
         #region Métodos
@@ -6365,19 +6189,15 @@ namespace Percolore.IOConnect
                     this.fLog.Focus();
                 }
             }
-            catch
-            { }
-            
-        }
+			catch (Exception ex)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+			}
+		}
 
         void ClosedLogComunication()
         {
-            try
-            {
-                this.fLog = null;
-            }
-            catch
-            { }
+            this.fLog = null;
         }
 
         bool ExecutarLimpezaBico()
@@ -6466,9 +6286,10 @@ namespace Percolore.IOConnect
 
                 return (result == DialogResult.OK);
             }
-            catch
-            {
-                return false;
+			catch (Exception ex)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+			    return false;
             }
             finally
             {
@@ -6480,12 +6301,11 @@ namespace Percolore.IOConnect
                         dispenser3.Disconnect_Mover();
                     }
                 }
-                catch
-                {
-
-                }
-            }
-            
+				catch (Exception ex)
+				{
+					LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+				}
+			}
         }
 
         bool ExecutarRecircularAutomatica()
@@ -6773,9 +6593,10 @@ namespace Percolore.IOConnect
                 this._listaRecircular = Util.ObjectRecircular.List().Where(o => o.Habilitado && !o.isAuto).ToList();
                 return (result == DialogResult.OK);
             }
-            catch
-            {
-                return false;
+			catch (Exception ex)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+			    return false;
             }
             finally
             {
@@ -6805,10 +6626,11 @@ namespace Percolore.IOConnect
                     f.ShowDialog();
                 }
             }
-            catch
-            {
-            }
-        }
+			catch (Exception ex)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+			}
+		}
 
         void ExecutarRecircular()
         {
@@ -6827,13 +6649,12 @@ namespace Percolore.IOConnect
                         bool confirma = message.ShowDialog(Negocio.IdiomaResxExtensao.Global_Falha_Esponja, Negocio.IdiomaResxExtensao.Global_Sim, null, true, 20);
                     }
                 }
-
-               
             }
-            catch
-            {
-            }
-        }
+			catch (Exception ex)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+			}
+		}
 
         void ExecutarMenuAutomaticDispensa()
         {
@@ -6843,11 +6664,12 @@ namespace Percolore.IOConnect
                 {
                     f.ShowDialog();
                 }
-                
             }
-            catch
-            { }
-        }
+			catch (Exception ex)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+			}
+		}
 
         void ExecutarPrecisao()
         {
@@ -6958,11 +6780,12 @@ namespace Percolore.IOConnect
                 {
                     File.Delete(this.CLICK_Precisao);
                 }
-             
             }
-            catch
-            { }
-        }
+			catch (Exception ex)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+			}
+		}
 
         void PausarMonitoramento()
         {
@@ -6971,19 +6794,16 @@ namespace Percolore.IOConnect
                 this.isThread = false;
                 if (backgroundWorker1.IsBusy && backgroundWorker1.CancellationPending == false)
                 {
-                    try
-                    {
-                        backgroundWorker1.CancelAsync();
-                    }
-                    catch
-                    { }
+                    backgroundWorker1.CancelAsync();
                 }
                 _notifyIcon.Text =
                $"IOConnect ({Negocio.IdiomaResxExtensao.Global_MonitoramentoPausado})";
             }
-            catch
-            { }
-        }
+			catch (Exception ex)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+			}
+		}
 
         void ExecutarMonitoramento()
         {
@@ -7008,10 +6828,12 @@ namespace Percolore.IOConnect
                     backgroundWorker1.RunWorkerAsync();
                 }
             }
-            catch
-            { }
+			catch (Exception ex)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+			}
 
-            _notifyIcon.Text =
+			_notifyIcon.Text =
                 $"IOConnect ({Negocio.IdiomaResxExtensao.Global_Monitorando})";
         }
 
@@ -7083,9 +6905,12 @@ namespace Percolore.IOConnect
                 retorno = Util.ObjectEventos.InsertEvento(objEvt);
                 #endregion
             }
-            catch
-            { }
-            return retorno;
+			catch (Exception ex)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+			}
+
+			return retorno;
         }
 
         bool ExecutarInicializacaoColorantes(ModBusDispenserMover_P3 dispenser)
@@ -7580,9 +7405,10 @@ namespace Percolore.IOConnect
                 //this._listaRecircular = Util.ObjectRecircular.List().Where(o => o.Habilitado).ToList();
                 return (result == DialogResult.OK);
             }
-            catch
-            {
-                return false;
+			catch (Exception ex)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+			    return false;
             }
             finally
             {
@@ -7626,9 +7452,12 @@ namespace Percolore.IOConnect
                 retorno = Util.ObjectEventos.InsertEvento(objEvt);
                 #endregion
             }
-            catch
-            { }
-            return retorno;
+			catch (Exception ex)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+			}
+
+			return retorno;
         }
         int ExecutarPurgaUDCP(List<int> circuitos_udcp)
         {
@@ -8035,9 +7864,10 @@ namespace Percolore.IOConnect
                     return 3;
                 }
             }
-            catch
-            {
-                return -1;
+			catch (Exception ex)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+			    return -1;
             }
             finally
             {
@@ -8475,9 +8305,10 @@ namespace Percolore.IOConnect
                                 detalhes_purga += "," + objC.Circuito.ToString() + "," + objC.Nome + "," + Math.Round(vVolDosado, 3).ToString();
                             }
                         }
-                        catch
-                        {
-                            detalhes_purga = "";
+						catch (Exception ex)
+						{
+							LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+						    detalhes_purga = "";
                             break;
                         }
                     }
@@ -8500,9 +8331,10 @@ namespace Percolore.IOConnect
                     return 3;
                 }
             }
-            catch
-            {
-                return -1;
+			catch (Exception ex)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+			    return -1;
             }
             finally
             {
@@ -8553,9 +8385,12 @@ namespace Percolore.IOConnect
                 retorno = Util.ObjectEventos.InsertEvento(objEvt);
                 #endregion
             }
-            catch
-            { }
-            return retorno;
+			catch (Exception ex)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+			}
+
+			return retorno;
         }
 
         bool ExecutarPurgaIndividual()
@@ -8945,9 +8780,10 @@ namespace Percolore.IOConnect
                 this.dtControleMaquinaLigada = DateTime.Now;
                 return (result == DialogResult.OK);
             }
-            catch
-            {
-                return false;
+			catch (Exception ex)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+			    return false;
             }
             finally
             {
@@ -9168,9 +9004,10 @@ namespace Percolore.IOConnect
 
                 return (result == DialogResult.OK);
             }
-            catch
-            {
-                return false;
+			catch (Exception ex)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+			    return false;
             }
             finally
             {
@@ -9205,9 +9042,12 @@ namespace Percolore.IOConnect
                 retorno = Util.ObjectEventos.InsertEvento(objEvt);
                 #endregion
             }
-            catch
-            { }
-            return retorno;
+			catch (Exception ex)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+			}
+
+			return retorno;
         }
 
         bool ExecutarSincronismoFormula(int tipo)
@@ -9223,9 +9063,12 @@ namespace Percolore.IOConnect
 
                 retorno = (result == DialogResult.OK);
             }
-            catch
-            { }
-            return retorno;
+			catch (Exception ex)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+			}
+
+			return retorno;
         }
 
         bool ExecutarGerenciadorFilaDat()
@@ -9241,9 +9084,12 @@ namespace Percolore.IOConnect
                 this._listaRecircular = Util.ObjectRecircular.List().Where(o => o.Habilitado && !o.isAuto).ToList();
                 retorno = (result == DialogResult.OK);
             }
-            catch
-            { }
-            return retorno;
+			catch (Exception ex)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+			}
+
+			return retorno;
         }
 
         void EncerrarOperacao(string descricaoDAT, string[] log, string mensagemUsuario)
@@ -9273,10 +9119,12 @@ namespace Percolore.IOConnect
                     }
                 }
             }
-            catch
-            { }
+			catch (Exception ex)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+			}
 
-            if (log.Length > 0)
+			if (log.Length > 0)
             {
                 Log.Logar(
                     TipoLog.Processo, _parametros.PathLogProcessoDispensa, log);
@@ -9315,27 +9163,20 @@ namespace Percolore.IOConnect
                     }
                     else
                     {
-                        try
+                        if (!this.menu)
                         {
-                            if (!this.menu)
-                            {
-                                this.menu = true;
-                                this.Invoke(new MethodInvoker(MonitoramentoEvent));
-                            }
-                        }
-                        catch
-                        {
+                            this.menu = true;
+                            this.Invoke(new MethodInvoker(MonitoramentoEvent));
                         }
                     }
                     Thread.Sleep(1000);
                 }
-
             }
-            catch
-            {
-            }
-
-        }        
+			catch (Exception ex)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+			}
+		}        
         private void backgroundWorker1_RunWorkerCompleted(object sender, System.ComponentModel.RunWorkerCompletedEventArgs e)
         {
             try
@@ -9352,12 +9193,12 @@ namespace Percolore.IOConnect
                 {
                     this.isThread = true;
                 }
-
             }
-            catch
-            {
-            }
-        }
+			catch (Exception ex)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+			}
+		}
         #region Controle fMensagem Placa Movimentacao
         private bool getControlePlacaMov()
         {
@@ -9419,9 +9260,11 @@ namespace Percolore.IOConnect
                 }
 
             }
-            catch
-            { }
-            finally
+			catch (Exception ex)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+			}
+			finally
             {
                 try
                 {
@@ -9431,9 +9274,11 @@ namespace Percolore.IOConnect
                         dispP3.Disconnect();
                     }
                 }
-                catch
-                { }
-            }
+				catch (Exception ex)
+				{
+					LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+				}
+			}
         }
         private void getMessageEsponja()
         {
@@ -9464,9 +9309,11 @@ namespace Percolore.IOConnect
                                     }
                                    
                                 }
-                                catch
-                                { }
-                                finally
+								catch (Exception ex)
+								{
+									LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+								}
+								finally
                                 {
                                     mdP2.Disconnect();
                                 }
@@ -9487,10 +9334,11 @@ namespace Percolore.IOConnect
                 }
                 ts = null;
             }
-            catch
-            {
-            }
-        }
+			catch (Exception ex)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+			}
+		}
         public void setCondicaoMaquinaLigada(bool _b_lig)
         {
             try
@@ -9510,9 +9358,11 @@ namespace Percolore.IOConnect
                 }
                 this.machine_turned_on = _b_lig;
             }
-            catch
-            { }
-        }
+			catch (Exception ex)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+			}
+		}
         private void getMaquinaLigada(bool forceConnect=false)
         {
             bool estadoAnteriorMaquina = this.machine_turned_on;
@@ -9547,9 +9397,11 @@ namespace Percolore.IOConnect
                                         this.machine_turned_on = false;
                                     }
                                 }
-                                catch
-                                { }
-                                finally
+								catch (Exception ex)
+								{
+									LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+								}
+								finally
                                 {
                                     try
                                     {
@@ -9558,29 +9410,11 @@ namespace Percolore.IOConnect
                                             disp.Disconnect();
                                         }
                                     }
-                                    catch
-                                    { }
-                                }
-                                
-                                //ModBusDispenser_P2 mdP2 = new ModBusDispenser_P2(_parametros.NomeDispositivo);                                
-                                //try
-                                //{
-                                //    mdP2.Connect();
-                                //    if (!this.machine_turned_on)
-                                //    {
-                                //        Log.Logar(TipoLog.Processo, _parametros.PathLogProcessoDispensa, Negocio.IdiomaResxExtensao.Global_Maquina_Ligada);
-                                //    }
-                                //    this.machine_turned_on = true;
-                                //}
-                                //catch
-                                //{
-                                //    Log.Logar(TipoLog.Processo, _parametros.PathLogProcessoDispensa, Negocio.IdiomaResxExtensao.Global_Maquina_Desligada);
-                                //    this.machine_turned_on = false;                                    
-                                //}
-                                //finally
-                                //{
-                                //    mdP2.Disconnect();
-                                //}
+									catch (Exception ex)
+									{
+										LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+									}
+								}
                                 break;
                             }
                         default:
@@ -9598,10 +9432,12 @@ namespace Percolore.IOConnect
                 }
                 ts = null;
             }
-            catch
-            { }
+			catch (Exception ex)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+			}
 
-            if(estadoAnteriorMaquina != this.machine_turned_on)
+			if (estadoAnteriorMaquina != this.machine_turned_on)
             {
                 if(this.machine_turned_on)
                 {
@@ -9631,9 +9467,12 @@ namespace Percolore.IOConnect
                 retorno = Util.ObjectEventos.InsertEvento(objEvt);
                 #endregion
             }
-            catch
-            { }
-            return retorno;
+			catch (Exception ex)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+			}
+
+			return retorno;
         }
         private void getLimpezaBico(bool force = false)
         {
@@ -9713,10 +9552,11 @@ namespace Percolore.IOConnect
                 }
 
             }
-            catch
-            {
-            }
-        }
+			catch (Exception ex)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+			}
+		}
         private void MonitProd()
         {
             try
@@ -9905,10 +9745,10 @@ namespace Percolore.IOConnect
 
                     }
                 }
-                catch
-                {
-
-                    Log.Logar(
+				catch (Exception ex)
+				{
+					LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+				    Log.Logar(
                     TipoLog.Processo,
                     _parametros.PathLogProcessoDispensa,
                     Negocio.IdiomaResxExtensao.Log_Cod_29 + Negocio.IdiomaResxExtensao.LogProcesso_FalhaLeituraConteudoDat);
@@ -9922,103 +9762,45 @@ namespace Percolore.IOConnect
                 }
                 #endregion
             }
-            catch
-            { }
-        }
+			catch (Exception ex)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+			}
+		}
         private void MonitEventos()
         {
             try
             {
                 #region Monitoramento de Eventos
-                try
+                
+                if (this.isMonitEventos)
                 {
-                    if (this.isMonitEventos)
+                    //Caso HD Externo
+                    if (isHDEventos)
                     {
-                        //Caso HD Externo
-                        if (isHDEventos)
+                        int tempoDelay = (int)DateTime.Now.Subtract(this.dtMonitEventos).TotalMinutes;
+                        if (tempoDelay >= this.timerDelayMonitProducao)
                         {
-                            int tempoDelay = (int)DateTime.Now.Subtract(this.dtMonitEventos).TotalMinutes;
-                            if (tempoDelay >= this.timerDelayMonitProducao)
+                            this.dtMonitEventos = DateTime.Now;
+                            List<Util.ObjectEventos> lEvtIntegracao = Util.ObjectEventos.getListEventosIntegrado(false);
+                            if (lEvtIntegracao != null)
                             {
-                                this.dtMonitEventos = DateTime.Now;
-                                List<Util.ObjectEventos> lEvtIntegracao = Util.ObjectEventos.getListEventosIntegrado(false);
-                                if (lEvtIntegracao != null)
+                                foreach (Util.ObjectEventos evtBD in lEvtIntegracao)
                                 {
-                                    foreach (Util.ObjectEventos evtBD in lEvtIntegracao)
-                                    {
-                                        Util.ObjectEventos.UpdateEventoIntegrado(evtBD.Id, 2);
-                                    }
-                                    Util.ObjectEventos.GenerateBkp();
+                                    Util.ObjectEventos.UpdateEventoIntegrado(evtBD.Id, 2);
                                 }
+                                Util.ObjectEventos.GenerateBkp();
                             }
                         }
-                        //Caso Programado para algum horário especifico
-                        else if (isProgEventos)
+                    }
+                    //Caso Programado para algum horário especifico
+                    else if (isProgEventos)
+                    {
+                        double timeNow = DateTime.Now.TimeOfDay.TotalMinutes;
+                        if (timeNow > this.tsProgEventos.TotalMinutes)
                         {
-                            double timeNow = DateTime.Now.TimeOfDay.TotalMinutes;
-                            if (timeNow > this.tsProgEventos.TotalMinutes)
-                            {
-                                if (!this.transmitiuProgEventos)
-                                {                                    
-                                    List<Util.ObjectEventos> lEvtIntegracao = Util.ObjectEventos.getListEventosIntegrado(false);
-                                    TCPEventos tcpEvt = null;
-                                    if (lEvtIntegracao != null)
-                                    {
-                                        int _index_fim = 0;
-                                        bool isFailTCP = false;
-                                        foreach (Util.ObjectEventos evtBD in lEvtIntegracao)
-                                        {
-                                            if (tcpEvt == null)
-                                            {
-                                                tcpEvt = new TCPEventos(_parametros);
-                                            }
-                                            tcpEvt.SetObjEvt(evtBD);
-                                            string msgC = "";
-
-                                            if (tcpEvt.SendEventToTCP(ref msgC))
-                                            {
-                                                Log.Logar(TipoLog.Processo, _parametros.PathLogProcessoDispensa, "Send event TCP :" + msgC);
-                                                Util.ObjectEventos.UpdateEventoIntegrado(evtBD.Id, true);
-
-                                            }
-                                            else
-                                            {
-                                                isFailTCP = true;
-                                            }
-                                            tcpEvt.CloseEventTCP();
-                                            _index_fim++;
-                                            if (_index_fim > 50 || File.Exists(_parametros.PathMonitoramentoDAT) || this.isNotifyMouseUp || isFailTCP)
-                                            {
-                                                break;
-                                            }
-                                        }
-
-                                        if(!isFailTCP)
-                                        {                                            
-                                            if(_index_fim >= lEvtIntegracao.Count)
-                                            {
-                                                this.transmitiuProgEventos = true;
-                                                Util.ObjectEventos.GenerateBkp();
-                                            }
-                                            
-                                        }
-                                    }
-                                }
-                            }
-                            else
-                            {
-                                this.transmitiuProgEventos = false;
-                            }
-
-                        }
-                        //Caso seja Online ou de um tempo especifo para transmitir 
-                        else if (isProgEventosOnLine)
-                        {
-                            int tempoDelay = (int)DateTime.Now.Subtract(this.dtMonitEventos).TotalMinutes;
-                            if (tempoDelay >= this.timerDelayMonitEventos)
-                            {
-                                this.dtMonitEventos = DateTime.Now;
-
+                            if (!this.transmitiuProgEventos)
+                            {                                    
                                 List<Util.ObjectEventos> lEvtIntegracao = Util.ObjectEventos.getListEventosIntegrado(false);
                                 TCPEventos tcpEvt = null;
                                 if (lEvtIntegracao != null)
@@ -10038,15 +9820,10 @@ namespace Percolore.IOConnect
                                         {
                                             Log.Logar(TipoLog.Processo, _parametros.PathLogProcessoDispensa, "Send event TCP :" + msgC);
                                             Util.ObjectEventos.UpdateEventoIntegrado(evtBD.Id, true);
+
                                         }
                                         else
                                         {
-                                            int tempoDelayFailEvt = (int)DateTime.Now.Subtract(this.dtFailEvt).TotalMinutes;
-                                            if (tempoDelayFailEvt >= 20)
-                                            {
-                                                dtFailEvt = DateTime.Now;
-                                                Log.Logar(TipoLog.Processo, _parametros.PathLogProcessoDispensa, "Fail event TCP ");
-                                            }
                                             isFailTCP = true;
                                         }
                                         tcpEvt.CloseEventTCP();
@@ -10057,137 +9834,197 @@ namespace Percolore.IOConnect
                                         }
                                     }
 
-                                    if (!isFailTCP)
-                                    {  
-                                        if (_index_fim >= lEvtIntegracao.Count)
+                                    if(!isFailTCP)
+                                    {                                            
+                                        if(_index_fim >= lEvtIntegracao.Count)
                                         {
+                                            this.transmitiuProgEventos = true;
                                             Util.ObjectEventos.GenerateBkp();
                                         }
-
+                                            
                                     }
                                 }
                             }
                         }
-                        //Caso seja um tempo especifo para transmitir 
                         else
                         {
-                            int tempoDelay = (int)DateTime.Now.Subtract(this.dtMonitEventos).TotalMinutes;
-                            if (tempoDelay >= this.timerDelayMonitEventos)
+                            this.transmitiuProgEventos = false;
+                        }
+
+                    }
+                    //Caso seja Online ou de um tempo especifo para transmitir 
+                    else if (isProgEventosOnLine)
+                    {
+                        int tempoDelay = (int)DateTime.Now.Subtract(this.dtMonitEventos).TotalMinutes;
+                        if (tempoDelay >= this.timerDelayMonitEventos)
+                        {
+                            this.dtMonitEventos = DateTime.Now;
+
+                            List<Util.ObjectEventos> lEvtIntegracao = Util.ObjectEventos.getListEventosIntegrado(false);
+                            TCPEventos tcpEvt = null;
+                            if (lEvtIntegracao != null)
                             {
-                                this.dtMonitEventos = DateTime.Now;
-                                List<Util.ObjectEventos> lEvtIntegracao = Util.ObjectEventos.getListEventosIntegrado(false);
-                                TCPEventos tcpEvt = null;
-                                if (lEvtIntegracao != null)
+                                int _index_fim = 0;
+                                bool isFailTCP = false;
+                                foreach (Util.ObjectEventos evtBD in lEvtIntegracao)
                                 {
-                                    int _index_fim = 0;
-                                    bool isFailTCP = false;
-                                    foreach (Util.ObjectEventos evtBD in lEvtIntegracao)
+                                    if (tcpEvt == null)
                                     {
-                                        if (tcpEvt == null)
-                                        {
-                                            tcpEvt = new TCPEventos(_parametros);
-                                        }
-                                        tcpEvt.SetObjEvt(evtBD);
-                                        string msgC = "";
+                                        tcpEvt = new TCPEventos(_parametros);
+                                    }
+                                    tcpEvt.SetObjEvt(evtBD);
+                                    string msgC = "";
 
-                                        if (tcpEvt.SendEventToTCP(ref msgC))
+                                    if (tcpEvt.SendEventToTCP(ref msgC))
+                                    {
+                                        Log.Logar(TipoLog.Processo, _parametros.PathLogProcessoDispensa, "Send event TCP :" + msgC);
+                                        Util.ObjectEventos.UpdateEventoIntegrado(evtBD.Id, true);
+                                    }
+                                    else
+                                    {
+                                        int tempoDelayFailEvt = (int)DateTime.Now.Subtract(this.dtFailEvt).TotalMinutes;
+                                        if (tempoDelayFailEvt >= 20)
                                         {
-                                            Log.Logar(TipoLog.Processo, _parametros.PathLogProcessoDispensa, "Send event TCP :" + msgC);
-                                            Util.ObjectEventos.UpdateEventoIntegrado(evtBD.Id, true);
+                                            dtFailEvt = DateTime.Now;
+                                            Log.Logar(TipoLog.Processo, _parametros.PathLogProcessoDispensa, "Fail event TCP ");
                                         }
-                                        else
-                                        {
-                                            int tempoDelayFailEvt = (int)DateTime.Now.Subtract(this.dtFailEvt).TotalMinutes;
-                                            if (tempoDelayFailEvt >= 20)
-                                            {
-                                                dtFailEvt = DateTime.Now;
-                                                Log.Logar(TipoLog.Processo, _parametros.PathLogProcessoDispensa, "Fail event TCP ");
-                                            }
-                                            isFailTCP = true;
-                                        }
-                                        tcpEvt.CloseEventTCP();
-                                        _index_fim++;
-                                        if (_index_fim > 50 || File.Exists(_parametros.PathMonitoramentoDAT) || this.isNotifyMouseUp || isFailTCP)
-                                        {
-                                            break;
-                                        }
+                                        isFailTCP = true;
+                                    }
+                                    tcpEvt.CloseEventTCP();
+                                    _index_fim++;
+                                    if (_index_fim > 50 || File.Exists(_parametros.PathMonitoramentoDAT) || this.isNotifyMouseUp || isFailTCP)
+                                    {
+                                        break;
+                                    }
+                                }
+
+                                if (!isFailTCP)
+                                {  
+                                    if (_index_fim >= lEvtIntegracao.Count)
+                                    {
+                                        Util.ObjectEventos.GenerateBkp();
                                     }
 
-                                    if (!isFailTCP)
+                                }
+                            }
+                        }
+                    }
+                    //Caso seja um tempo especifo para transmitir 
+                    else
+                    {
+                        int tempoDelay = (int)DateTime.Now.Subtract(this.dtMonitEventos).TotalMinutes;
+                        if (tempoDelay >= this.timerDelayMonitEventos)
+                        {
+                            this.dtMonitEventos = DateTime.Now;
+                            List<Util.ObjectEventos> lEvtIntegracao = Util.ObjectEventos.getListEventosIntegrado(false);
+                            TCPEventos tcpEvt = null;
+                            if (lEvtIntegracao != null)
+                            {
+                                int _index_fim = 0;
+                                bool isFailTCP = false;
+                                foreach (Util.ObjectEventos evtBD in lEvtIntegracao)
+                                {
+                                    if (tcpEvt == null)
                                     {
-                                        if (_index_fim >= lEvtIntegracao.Count)
-                                        {
-                                            Util.ObjectEventos.GenerateBkp();
-                                        }
-
+                                        tcpEvt = new TCPEventos(_parametros);
                                     }
+                                    tcpEvt.SetObjEvt(evtBD);
+                                    string msgC = "";
+
+                                    if (tcpEvt.SendEventToTCP(ref msgC))
+                                    {
+                                        Log.Logar(TipoLog.Processo, _parametros.PathLogProcessoDispensa, "Send event TCP :" + msgC);
+                                        Util.ObjectEventos.UpdateEventoIntegrado(evtBD.Id, true);
+                                    }
+                                    else
+                                    {
+                                        int tempoDelayFailEvt = (int)DateTime.Now.Subtract(this.dtFailEvt).TotalMinutes;
+                                        if (tempoDelayFailEvt >= 20)
+                                        {
+                                            dtFailEvt = DateTime.Now;
+                                            Log.Logar(TipoLog.Processo, _parametros.PathLogProcessoDispensa, "Fail event TCP ");
+                                        }
+                                        isFailTCP = true;
+                                    }
+                                    tcpEvt.CloseEventTCP();
+                                    _index_fim++;
+                                    if (_index_fim > 50 || File.Exists(_parametros.PathMonitoramentoDAT) || this.isNotifyMouseUp || isFailTCP)
+                                    {
+                                        break;
+                                    }
+                                }
+
+                                if (!isFailTCP)
+                                {
+                                    if (_index_fim >= lEvtIntegracao.Count)
+                                    {
+                                        Util.ObjectEventos.GenerateBkp();
+                                    }
+
                                 }
                             }
                         }
                     }
                 }
-                catch
-                {
-                   
-                }
+
                 #endregion
             }
-            catch
-            { }
-        }
+			catch (Exception ex)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+			}
+		}
         private void MonitBkpCalibragem()
         {
+            #region Monitoramento de Bkp Calibragem
+            
             try
             {
-                #region Monitoramento de Bkp Calibragem
-                try
+                if (this.isMonitBkpCalibragem)
                 {
-                    if (this.isMonitBkpCalibragem)
-                    {       
-                        int tempoDelay = (int)DateTime.Now.Subtract(this.dtMonitBkpCalibragem).TotalMinutes;
-                        if (tempoDelay >= this.timerDelayMonitBkpCalibragem)
+                    int tempoDelay = (int)DateTime.Now.Subtract(this.dtMonitBkpCalibragem).TotalMinutes;
+                    if (tempoDelay >= this.timerDelayMonitBkpCalibragem)
+                    {
+                        this.dtMonitBkpCalibragem = DateTime.Now;
+                        string dir = Environment.CurrentDirectory + Path.DirectorySeparatorChar + "bkp";
+                        string[] files = Directory.GetFiles(dir);
+                        if (files != null && files.Length > 0)
                         {
-                            this.dtMonitBkpCalibragem = DateTime.Now;
-                            string dir = Environment.CurrentDirectory + Path.DirectorySeparatorChar + "bkp";
-                            string[] files = Directory.GetFiles(dir);
-                            if (files != null && files.Length > 0)
+                            for (int i = 0; i < files.Length; i++)
                             {
-                                for (int i = 0; i < files.Length; i++)
+                                string namefile = files[i];
+                                string FileName = Path.GetFileName(namefile);
+                                if (FileName.Contains(".zip"))
                                 {
-                                    string namefile = files[i];
-                                    string FileName = Path.GetFileName(namefile);
-                                    if (FileName.Contains(".zip"))
+                                    string msgError = "";
+                                    bool enviouFTP = FTPClient.EnviarArquivoFTP(namefile, _parametros.UrlSincBkpCalibragem + "/" + FileName, "Percolore_FTP", "avsb", ref msgError);
+                                    if (!enviouFTP)
                                     {
-                                        string msgError = "";
-                                        bool enviouFTP = FTPClient.EnviarArquivoFTP(namefile, _parametros.UrlSincBkpCalibragem + "/" + FileName, "Percolore_FTP", "avsb", ref msgError);
-                                        if (!enviouFTP)
-                                        {
-                                            Log.Logar(TipoLog.Processo, _parametros.PathLogProcessoDispensa, "Fail BKP Calibracao FTP:" + msgError);
-                                            break;
-                                        }
-                                        else
-                                        {
-                                            File.Delete(namefile);
-                                        }
+                                        Log.Logar(TipoLog.Processo, _parametros.PathLogProcessoDispensa, "Fail BKP Calibracao FTP:" + msgError);
+                                        break;
                                     }
-                                    else 
-                                    { 
-                                        File.Delete(namefile); 
+                                    else
+                                    {
+                                        File.Delete(namefile);
                                     }
                                 }
+                                else
+                                {
+                                    File.Delete(namefile);
+                                }
                             }
-                            this.dtMonitBkpCalibragem = DateTime.Now;
                         }
+                        this.dtMonitBkpCalibragem = DateTime.Now;
                     }
                 }
-                catch
-                {
-                    return;
-                }
-                #endregion
             }
-            catch
-            { }
+			catch (Exception ex)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+			    return;
+            }
+
+            #endregion
         }
         
         private void GenerateEventoOnLine()
@@ -10195,34 +10032,31 @@ namespace Percolore.IOConnect
             try
             {
                 #region Monitoramento de Eventos OnLine
-                try
+                
+                if (this.isMonitEventos)
                 {
-                    if (this.isMonitEventos)
+                    getMaquinaOnLine();
+                }
+                else
+                {
+                    this.machine_OnLine = false;
+                    TimeSpan? ts = DateTime.Now.Subtract(this.dtControleMaquinaOnLine);
+                    if (ts != null && ts.HasValue && ts.Value.TotalMinutes >= 60)
                     {
-                        getMaquinaOnLine();
-                    }
-                    else
-                    {
-                        this.machine_OnLine = false;
-                        TimeSpan? ts = DateTime.Now.Subtract(this.dtControleMaquinaOnLine);
-                        if (ts != null && ts.HasValue && ts.Value.TotalMinutes >= 60)
-                        {
-                            this.dtControleMaquinaOnLine = DateTime.Now;
+                        this.dtControleMaquinaOnLine = DateTime.Now;
 
-                            gerarEventoMAquinaOnLine((int)IOConnect.Core.PercoloreEnum.Eventos.OffLine_MSP);
+                        gerarEventoMAquinaOnLine((int)IOConnect.Core.PercoloreEnum.Eventos.OffLine_MSP);
 
-                        }
                     }
                 }
-                catch
-                {
 
-                }
                 #endregion
             }
-            catch
-            { }
-        }
+			catch (Exception ex)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+			}
+		}
 
         private void getMaquinaOnLine(bool forceConnect = false)
         {
@@ -10270,10 +10104,11 @@ namespace Percolore.IOConnect
                 }
                 ts = null;
             }
-            catch
-            { }
-            
-        }
+			catch (Exception ex)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+			}
+		}
         int gerarEventoMAquinaOnLine(int codevt)
         {
             int retorno = 0;
@@ -10292,9 +10127,12 @@ namespace Percolore.IOConnect
                 retorno = Util.ObjectEventos.InsertEvento(objEvt);
                 #endregion
             }
-            catch
-            { }
-            return retorno;
+			catch (Exception ex)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+			}
+
+			return retorno;
         }
 
         private bool getRecirculacao(bool force = false)
@@ -10340,10 +10178,12 @@ namespace Percolore.IOConnect
                     }
                     ts = null;
                 }
-                catch
-                {
-                }
-                if (existeRecirculacao || (force && DateTime.Now.Day != this.dtRecircularPurga.Day))
+				catch (Exception ex)
+				{
+					LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+				}
+
+				if (existeRecirculacao || (force && DateTime.Now.Day != this.dtRecircularPurga.Day))
                 {
                     this.dtRecircularPurga = DateTime.Now;
                     bool confirma = true;
@@ -10403,10 +10243,12 @@ namespace Percolore.IOConnect
                     }
                     ts = null;
                 }
-                catch
-                {
-                }
-                if (existeRecirculacao)
+				catch (Exception ex)
+				{
+					LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+				}
+
+				if (existeRecirculacao)
                 {
                     bool confirma = true;
                     if (this.qtdTentativasRecirculaAUto < _parametros.QtdNotificacaotRecirculacaoAuto)

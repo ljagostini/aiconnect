@@ -1,19 +1,11 @@
-﻿using Percolore.IOConnect.Util;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
+﻿using Percolore.Core.Logging;
+using Percolore.IOConnect.Util;
 using System.Data;
-using System.Drawing;
-using System.IO;
-using System.Linq;
 using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
-using System.Windows.Forms;
 
 namespace Percolore.IOConnect
 {
-    public partial class fLogComunication : Form
+	public partial class fLogComunication : Form
     {
         public event CloseWindows OnClosedEvent = null;
 
@@ -28,9 +20,11 @@ namespace Percolore.IOConnect
             {
                 atualizaDGV();
             }
-            catch
-            { }
-        }
+			catch (Exception ex)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+			}
+		}
 
         private void fLogComunication_FormClosing(object sender, FormClosingEventArgs e)
         {
@@ -41,10 +35,11 @@ namespace Percolore.IOConnect
                     this.OnClosedEvent();
                 }
             }
-            catch
-            {
-            }
-        }
+			catch (Exception ex)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+			}
+		}
 
         private void btnRefresh_Click(object sender, EventArgs e)
         {
@@ -60,11 +55,12 @@ namespace Percolore.IOConnect
                     Modbus.Constantes.listLogSerial.Clear();
                     atualizaDGV();
                 }
-
             }
-            catch
-            { }
-        }
+			catch (Exception ex)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+			}
+		}
 
         private void atualizaDGV()
         {
@@ -102,9 +98,11 @@ namespace Percolore.IOConnect
 
 
             }
-            catch
-            { }
-        }
+			catch (Exception ex)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+			}
+		}
 
         private void btnSaveLog_Click(object sender, EventArgs e)
         {
@@ -128,10 +126,10 @@ namespace Percolore.IOConnect
                 }
                     
             }
-            catch
-            {
-
-            }
-        }
+			catch (Exception ex)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+			}
+		}
     }
 }

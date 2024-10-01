@@ -1,12 +1,8 @@
-﻿using Percolore.Core.Persistence.Xml;
-using Percolore.Core.UserControl;
-using System;
-using System.Drawing;
-using System.Windows.Forms;
+﻿using Percolore.Core.Logging;
 
 namespace Percolore.IOConnect
 {
-    public partial class fNumeroSerie : Form
+	public partial class fNumeroSerie : Form
     {
         private string _serial = string.Empty;
         private Util.ObjectParametros _parametros;
@@ -85,8 +81,10 @@ namespace Percolore.IOConnect
                     btnConfirmar_Click(null, null);
                 }
             }
-            catch
-            { }
-        }
+			catch (Exception ex)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+			}
+		}
     }
 }

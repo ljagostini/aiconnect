@@ -1,17 +1,10 @@
-﻿using Percolore.Core;
-using Percolore.Core.Persistence.Xml;
-using Percolore.Core.UserControl;
+﻿using Percolore.Core.Logging;
 using Percolore.Core.Util;
-using System;
-using System.Collections.Generic;
 using System.Data;
-using System.Drawing;
-using System.Resources;
-using System.Windows.Forms;
 
 namespace Percolore.IOConnect
 {
-    /* Considerações - 05/09/2016
+	/* Considerações - 05/09/2016
      * Esta tela controla a edição de nível de colorante.
      * 
      * Independentemente da unidade de medida em que o usuário 
@@ -19,7 +12,7 @@ namespace Percolore.IOConnect
      * desabilitada, a quantidade será definida primeiramento 
      * para esta unidade e após convertida para as demais.
      */
-    public partial class fNivel : Form
+	public partial class fNivel : Form
     {
         List<Util.ObjectColorante> _colorantes = null;
         Util.ObjectParametros _parametros = null;
@@ -245,9 +238,10 @@ namespace Percolore.IOConnect
                     //Define diálogo e fecha form
                     DialogResult = DialogResult.OK;
                 }
-                catch (Exception ex)
-                {
-                    using (fMensagem m = new fMensagem(fMensagem.TipoMensagem.Informacao))
+				catch (Exception ex)
+				{
+					LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+				    using (fMensagem m = new fMensagem(fMensagem.TipoMensagem.Informacao))
                     {
                         string mensagem =
                             Negocio.IdiomaResxExtensao.Global_Falha_GravarDados + ex.Message;

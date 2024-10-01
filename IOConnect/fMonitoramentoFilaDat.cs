@@ -1,8 +1,7 @@
 ﻿using Newtonsoft.Json;
+using Percolore.Core.Logging;
 using Percolore.Core.Util;
 using Percolore.IOConnect.Negocio;
-using System;
-using System.Net;
 using System.Net.Http.Headers;
 using System.Text;
 
@@ -26,9 +25,12 @@ namespace Percolore.IOConnect
                 btn_Consulta_Dat.Image = Imagem.Get_Monit_Fila_Dat_Refresh();
                 btn_Consulta_Dat.Text = string.Empty;
             }
-            catch
-            { }
-            LoadGrid();
+			catch (Exception ex)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+			}
+
+			LoadGrid();
         }
 
         private void btnCancelar_Click(object sender, EventArgs e)
@@ -38,9 +40,11 @@ namespace Percolore.IOConnect
                 this.DialogResult = DialogResult.Cancel;
                 this.Close();
             }
-            catch
-            { }
-        }
+			catch (Exception ex)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+			}
+		}
 
         private void LoadGrid()
         {
@@ -111,15 +115,11 @@ namespace Percolore.IOConnect
                                     colDataGerada.Value = _data;
 
                                     string idBaseDados = "0";
-                                    try
+                                    
+                                    if(arraycolunasNameFile.Length > 4)
                                     {
-                                        if(arraycolunasNameFile.Length > 4)
-                                        {
-                                            idBaseDados = arraycolunasNameFile[4];
-                                        }
+                                        idBaseDados = arraycolunasNameFile[4];
                                     }
-                                    catch
-                                    { }
 
                                     colIdBaseDados.Value = idBaseDados;
 
@@ -142,13 +142,12 @@ namespace Percolore.IOConnect
                     this.DialogResult = DialogResult.OK;
                     this.Close();
                 }
-
             }
-            catch
-            {
-
-            }
-        }
+			catch (Exception ex)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+			}
+		}
 
         private void dataGrid_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
@@ -217,9 +216,11 @@ namespace Percolore.IOConnect
                 }
                
             }
-            catch
-            { }
-        }
+			catch (Exception ex)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+			}
+		}
 
         private bool DeleteBaseDados(int id)
         {
@@ -266,10 +267,12 @@ namespace Percolore.IOConnect
                     }
                 }
             }
-            catch
-            {
-            }
-            return retorno;
+			catch (Exception ex)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+			}
+
+			return retorno;
         }
 
         private void btn_Consulta_Dat_Click(object sender, EventArgs e)
@@ -278,8 +281,10 @@ namespace Percolore.IOConnect
             {
                 LoadGrid();
             }
-            catch
-            { }
-        }
+			catch (Exception ex)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+			}
+		}
     }
 }

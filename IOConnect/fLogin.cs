@@ -1,17 +1,8 @@
-﻿using Percolore.Core.UserControl;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
+﻿using Percolore.Core.Logging;
 
 namespace Percolore.IOConnect
 {
-    public partial class fLogin : Form
+	public partial class fLogin : Form
     {
         private Util.ObjectParametros _parametros = null;
         Util.ObjectUser usuario;
@@ -41,9 +32,11 @@ namespace Percolore.IOConnect
                 btnCancelar.Text = Negocio.IdiomaResxExtensao.fAutenticacao_btnCancelar;
                
             }
-            catch
-            { }
-        }
+			catch (Exception ex)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+			}
+		}
 
         private void updateTeclado()
         {
@@ -56,9 +49,11 @@ namespace Percolore.IOConnect
                 txtSenha.isTouchScrenn = chb_touch;
                 txtUsuario.isTouchScrenn = chb_touch;
             }
-            catch
-            { }
-        }
+			catch (Exception ex)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+			}
+		}
 
         private void btnCancelar_Click(object sender, EventArgs e)
         {
@@ -87,11 +82,13 @@ namespace Percolore.IOConnect
 
                 Close();
             }
-            catch (Exception ex)
-            {
-                #region Exception
+			catch (Exception ex)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
 
-                using (fMensagem m = new fMensagem(fMensagem.TipoMensagem.Erro))
+			    #region Exception
+
+			    using (fMensagem m = new fMensagem(fMensagem.TipoMensagem.Erro))
                 {
                     m.ShowDialog(string.Format(Negocio.IdiomaResxExtensao.fAutenticacao_Falha_ValidarDadosUsuario,ex.Message));
                 }
@@ -111,9 +108,11 @@ namespace Percolore.IOConnect
                     btnEntrar_Click(null, null);
                 }
             }
-            catch
-            { }
-        }
+			catch (Exception ex)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+			}
+		}
 
         private void txtUsuario_KeyPress(object sender, KeyPressEventArgs e)
         {
@@ -124,8 +123,10 @@ namespace Percolore.IOConnect
                     txtSenha.Select();
                 }
             }
-            catch
-            { }
-        }
+			catch (Exception ex)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+			}
+		}
     }
 }

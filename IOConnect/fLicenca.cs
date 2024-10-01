@@ -1,22 +1,15 @@
-﻿using Percolore.Core.Persistence.WindowsRegistry;
-using Percolore.Core.Persistence.Xml;
+﻿using Percolore.Core.Logging;
+using Percolore.Core.Persistence.WindowsRegistry;
 using Percolore.Core.Security.License;
-using Percolore.Core.UserControl;
-using Percolore.Core.Util;
 using Percolore.IOConnect.Util;
-using System;
 using System.Diagnostics;
-using System.Drawing;
-using System.IO;
 using System.Net.NetworkInformation;
 using System.Net.Sockets;
 using System.Text;
-using System.Threading;
-using System.Windows.Forms;
 
 namespace Percolore.IOConnect
 {
-    public partial class fLicenca : Form
+	public partial class fLicenca : Form
     {
         private ALicenseKey _chave;
         private string _licença = "";
@@ -109,9 +102,11 @@ namespace Percolore.IOConnect
                 // KeyboardHelper.Kill();
                 this.Close();
             }
-            catch
-            { }
-        }
+			catch (Exception ex)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+			}
+		}
         private void btnCancelar_Click(object sender, EventArgs e)
         {
             //KeyboardHelper.Kill();
@@ -152,28 +147,20 @@ namespace Percolore.IOConnect
                     this._fAguarde._TimerDelay = 330;
                     this._fAguarde.Focus();
                 }
-                try
-                {
-                    Thread thrd = new Thread(new ThreadStart(RequestOnLineValidadeManutencao));
-                    thrd.Start();
-                }
-                catch
-                {
-
-                }
+                
+                Thread thrd = new Thread(new ThreadStart(RequestOnLineValidadeManutencao));
+                thrd.Start();
             }
-            catch
-            { }
-        }
+			catch (Exception ex)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+			}
+		}
         private void ClosedProgressBar()
         {
-            try
-            {
-                this._fAguarde = null;
-            }
-            catch
-            { }
+            this._fAguarde = null;
         }
+
         private void ClosePrg()
         {
             try
@@ -181,9 +168,11 @@ namespace Percolore.IOConnect
                 this._fAguarde.PausarMonitoramento();
                 this._fAguarde.Close();
             }
-            catch
-            { }
-        }
+			catch (Exception ex)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+			}
+		}
         private void RequestOnLineValidadeManutencao()
         {
             try
@@ -194,9 +183,11 @@ namespace Percolore.IOConnect
                 }
                 this.Invoke(new MethodInvoker(GetOnLineValidadeManutencao));
             }
-            catch
-            { }
-        }
+			catch (Exception ex)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+			}
+		}
 
         private void GetOnLineValidadeManutencao()
         {
@@ -247,33 +238,20 @@ namespace Percolore.IOConnect
                         m.ShowDialog(msg);
                     }
                 }
-            }
-            catch
-            { }
-            try
-            {
+            
                 if (this.tcpcliente.Connected)
                 {
-                    try
-                    {
-                        this.tcpcliente.Close();
-                        this.tcpcliente.Dispose();
-                    }
-                    catch
-                    {
-
-                    }
+                    this.tcpcliente.Close();
+                    this.tcpcliente.Dispose();
                 }
-            }
-            catch
-            { }
-            try
-            {
+            
                 this.Invoke(new MethodInvoker(ClosePrg));
             }
-            catch
-            { }
-        }
+			catch (Exception ex)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+			}
+		}
 
         #region Metodos Online
 
@@ -281,6 +259,7 @@ namespace Percolore.IOConnect
         {
             bool retorno = false;
             _MsgRet = "";
+            
             try
             {
                 if (TestInternet())
@@ -305,51 +284,46 @@ namespace Percolore.IOConnect
                                 break;
                             }
                         }
-                        try
+                        
+                        if (this.tcpcliente.Available > 0)
                         {
-                            if (this.tcpcliente.Available > 0)
-                            {
-                                int tamanho = 0;
-                                tamanho = this.tcpcliente.Available;
-                                Byte[] bytes = new Byte[tamanho];
-                                int i = netWriteread.Read(bytes, 0, tamanho);
+                            int tamanho = 0;
+                            tamanho = this.tcpcliente.Available;
+                            Byte[] bytes = new Byte[tamanho];
+                            int i = netWriteread.Read(bytes, 0, tamanho);
 
-                                StringBuilder sb = new StringBuilder();
-                                for (int k = 0; k < i; k++)
+                            StringBuilder sb = new StringBuilder();
+                            for (int k = 0; k < i; k++)
+                            {
+                                byte b = bytes[k];
+                                sb.Append(b.ToString("X2"));
+                                if ((k - 1) < i)
                                 {
-                                    byte b = bytes[k];
-                                    sb.Append(b.ToString("X2"));
-                                    if ((k - 1) < i)
-                                    {
-                                        sb.Append("-");
-                                    }
-                                }
-                                string _token = "";
-                                if (DesmontarPacoteTCP(sb.ToString(), simCard, ref _token))
-                                {
-                                    _MsgRet = _token;
-                                    retorno = true;
+                                    sb.Append("-");
                                 }
                             }
-                        }
-                        catch
-                        {
-                            
+                            string _token = "";
+                            if (DesmontarPacoteTCP(sb.ToString(), simCard, ref _token))
+                            {
+                                _MsgRet = _token;
+                                retorno = true;
+                            }
                         }
                     }
                 }
             }
-            catch
-            {
+			catch (Exception ex)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+			}
 
-            }
-
-            return retorno;
+			return retorno;
         }
 
         private bool TestInternet()
         {
             bool retorno = false;
+            
             try
             {
                 Ping myPing = new Ping();
@@ -361,11 +335,12 @@ namespace Percolore.IOConnect
                 PingReply reply = myPing.Send(host, timeout, buffer, pingOptions);
                 retorno = (reply.Status == IPStatus.Success);
             }
-            catch (Exception)
-            {
+			catch (Exception ex)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+			}
 
-            }
-            return retorno;
+			return retorno;
         }
 
         public bool DesmontarPacoteTCP(string msgHex, string codSim, ref string retornoLicense)

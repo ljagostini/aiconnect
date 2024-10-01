@@ -1,18 +1,11 @@
-﻿using Percolore.Core.Persistence.Xml;
+﻿using Percolore.Core;
+using Percolore.Core.Logging;
 using Percolore.Core.UserControl;
-using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-
 using System.ComponentModel;
-using System.Threading;
-using Percolore.Core;
 
 namespace Percolore.IOConnect
 {
-    public partial class fInicializacaoCircuitos : Form
+	public partial class fInicializacaoCircuitos : Form
     {
         Util.ObjectParametros _parametros = null;
         InicializacaoCircuitosVO _paramIni;
@@ -85,10 +78,12 @@ namespace Percolore.IOConnect
                     }
                 }
             }
-            catch
-            { }
-#if DEBUG 
-            TopMost = false;
+			catch (Exception ex)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+			}
+#if DEBUG
+			TopMost = false;
 #endif
 
             double PULSO = _paramIni.PulsoInicial;
@@ -462,11 +457,13 @@ namespace Percolore.IOConnect
                     _paramIni.Dispenser[i].UnHalt();
                 }
             }
-            catch
-            { }
-            DialogResult = DialogResult.Abort;
+			catch (Exception ex)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+			}
+
+			DialogResult = DialogResult.Abort;
             Close();
-          
         }
 
         private void ProcessoDispensaSimultanea_FormClosed(object sender, FormClosedEventArgs e)
@@ -480,8 +477,9 @@ namespace Percolore.IOConnect
         #region Métodos privados
 
         void Falha(Exception ex)
-        {
-            PausarMonitoramento();
+		{
+            LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+			PausarMonitoramento();
 
             using (fMensagem m = new fMensagem(fMensagem.TipoMensagem.Erro))
             {
@@ -499,10 +497,12 @@ namespace Percolore.IOConnect
                 this._paramIni.DispenserP3.Halt();
                 this._paramIni.DispenserP3.UnHalt();
             }
-            catch
-            { }
+			catch (Exception ex)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+			}
 
-            using (fMensagem m = new fMensagem(fMensagem.TipoMensagem.Erro))
+			using (fMensagem m = new fMensagem(fMensagem.TipoMensagem.Erro))
             {
                 //m.ShowDialog(Negocio.IdiomaResxExtensao.Global_Falha_ExecucaoPorcesso + "Botão de Emergência pressionado!");
                 m.ShowDialog(Negocio.IdiomaResxExtensao.Global_Falha_ExecucaoPorcesso + Negocio.IdiomaResxExtensao.PlacaMov_Botao_Emergencia);
@@ -519,10 +519,12 @@ namespace Percolore.IOConnect
                 this._paramIni.DispenserP3.Halt();
                 this._paramIni.DispenserP3.UnHalt();
             }
-            catch
-            { }
+			catch (Exception ex)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+			}
 
-            using (fMensagem m = new fMensagem(fMensagem.TipoMensagem.Erro))
+			using (fMensagem m = new fMensagem(fMensagem.TipoMensagem.Erro))
             {
                 //m.ShowDialog(Negocio.IdiomaResxExtensao.Global_Falha_ExecucaoPorcesso + "Dispensa parou!");
                 m.ShowDialog(Negocio.IdiomaResxExtensao.Global_Falha_ExecucaoPorcesso + Negocio.IdiomaResxExtensao.PlacaMov_Disp_Parou);
@@ -541,10 +543,11 @@ namespace Percolore.IOConnect
                     backgroundWorker1.CancelAsync();
                 }
             }
-            catch
-            { }
-
-        }
+			catch (Exception ex)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+			}
+		}
 
         void ExecutarMonitoramento()
         {
@@ -571,11 +574,11 @@ namespace Percolore.IOConnect
                     backgroundWorker1.RunWorkerAsync();
                 }
             }
-            catch
-            { }
-
-
-        }
+			catch (Exception ex)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+			}
+		}
 
         private void backgroundWorker1_DoWork(object sender, System.ComponentModel.DoWorkEventArgs e)
         {
@@ -591,28 +594,21 @@ namespace Percolore.IOConnect
                     }
                     else
                     {
-                        try
+                        if (!this.isRunning)
                         {
-                            if (!this.isRunning)
-                            {
-                                this.isRunning = true;
-                                this.Invoke(new MethodInvoker(MonitorarDispensa));
-                                Thread.Sleep(500);
-                            }
-                        }
-                        catch
-                        {
+                            this.isRunning = true;
+                            this.Invoke(new MethodInvoker(MonitorarDispensa));
+                            Thread.Sleep(500);
                         }
                     }
                     Thread.Sleep(500);
                 }
-
             }
-            catch
-            {
-            }
-
-        }
+			catch (Exception ex)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+			}
+		}
         
         private void backgroundWorker1_RunWorkerCompleted(object sender, System.ComponentModel.RunWorkerCompletedEventArgs e)
         {
@@ -630,12 +626,12 @@ namespace Percolore.IOConnect
                 {
                     this.isThread = true;
                 }
-
             }
-            catch
-            {
-            }
-        }
+			catch (Exception ex)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+			}
+		}
 
         #endregion
 
@@ -731,13 +727,13 @@ namespace Percolore.IOConnect
                         {
                             break;
                         }
-
                 }
-
             }
-            catch
-            { }
-        }
+			catch (Exception ex)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+			}
+		}
 
         void trataPassosAction_01()
         {
