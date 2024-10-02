@@ -2,6 +2,7 @@
 using Percolore.Core;
 using Percolore.Core.Logging;
 using Percolore.Core.Persistence.WindowsRegistry;
+using System.CodeDom;
 
 namespace Percolore.IOConnect
 {
@@ -179,8 +180,10 @@ namespace Percolore.IOConnect
                 booRetorno = true;
                 CounterComunication = 0;
             }
-            catch
-            {
+			catch (Exception ex)
+			{
+				LogManager.LogError($"Erro no módulo {typeof(Operar).Name}: ", ex);
+			
                 dispenser.Disconnect();
                
                 if (forceMessage && CounterComunication >= p.QtdTentativasConexao)
@@ -253,8 +256,10 @@ namespace Percolore.IOConnect
                 booRetorno = true;
                 CounterComunication = 0;
             }
-            catch
-            {
+			catch (Exception ex)
+			{
+				LogManager.LogError($"Erro no módulo {typeof(Operar).Name}: ", ex);
+			
                 Thread.Sleep(100);
                 dispenser.Disconnect_Mover();
                 Thread.Sleep(100);

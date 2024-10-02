@@ -195,9 +195,12 @@ namespace Percolore.IOConnect
                 {
                     ReadSensores_Mover();
                 }
-                catch
-                { }
-                return this.stSensores.SensorEmergencia;
+				catch (Exception ex)
+				{
+					LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+				}
+
+				return this.stSensores.SensorEmergencia;
             }
         }
 

@@ -1,17 +1,9 @@
-﻿using Percolore.IOConnect.Util;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
+﻿using Percolore.Core.Logging;
+using Percolore.IOConnect.Util;
 
 namespace Percolore.IOConnect
 {
-    public partial class fTreinamentoCalibracao : Form
+	public partial class fTreinamentoCalibracao : Form
     {
         int index_Tela = 0;
         public event CloseWindows OnClosedEvent = null;
@@ -26,22 +18,18 @@ namespace Percolore.IOConnect
             try
             {
                 this.index_Tela = 1;
-                try
-                {
-                    lblTitulo.Text = Negocio.IdiomaResxExtensao.frmTreinCal_lblTitulo;
-                    btnSair.Text = Negocio.IdiomaResxExtensao.frmTreinCal_btnSair;
-                    btnAvancar.Text = Negocio.IdiomaResxExtensao.frmTreinCal_btnAvancar;
-                    btnVoltar.Text = Negocio.IdiomaResxExtensao.frmTreinCal_btnRecuar;
-                }
-                catch
-                { }
+                lblTitulo.Text = Negocio.IdiomaResxExtensao.frmTreinCal_lblTitulo;
+                btnSair.Text = Negocio.IdiomaResxExtensao.frmTreinCal_btnSair;
+                btnAvancar.Text = Negocio.IdiomaResxExtensao.frmTreinCal_btnAvancar;
+                btnVoltar.Text = Negocio.IdiomaResxExtensao.frmTreinCal_btnRecuar;
                 
                 ShowTela();
             }
-            catch
-            {
-            }
-        }
+			catch (Exception ex)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+			}
+		}
 
         private void fTreinamentoCalibracao_FormClosing(object sender, FormClosingEventArgs e)
         {
@@ -52,10 +40,11 @@ namespace Percolore.IOConnect
                     this.OnClosedEvent();
                 }
             }
-            catch
-            {
-            }
-        }
+			catch (Exception ex)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+			}
+		}
 
         private void btnSair_Click(object sender, EventArgs e)
         {
@@ -63,9 +52,11 @@ namespace Percolore.IOConnect
             {
                 this.Close();
             }
-            catch
-            { }
-        }
+			catch (Exception ex)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+			}
+		}
 
         private void btnVoltar_Click(object sender, EventArgs e)
         {
@@ -151,9 +142,10 @@ namespace Percolore.IOConnect
                         }
                 }
             }
-            catch
-            {
-            }
-        }       
+			catch (Exception ex)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+			}
+		}       
     }
 }

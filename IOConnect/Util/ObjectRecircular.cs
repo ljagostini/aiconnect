@@ -94,14 +94,20 @@ namespace Percolore.IOConnect.Util
                                 {
                                     recircular.isValve = Convert.ToBoolean(reader["isValve"].ToString());
                                 }
-                                catch
-                                { recircular.isValve = false; }
+								catch (Exception e)
+								{
+									LogManager.LogError($"Erro no módulo {typeof(ObjectRecircular).Name}: ", e);
+								    recircular.isValve = false;
+                                }
                                 try
                                 {
                                     recircular.isAuto = Convert.ToBoolean(reader["isAuto"].ToString());
                                 }
-                                catch
-                                { recircular.isAuto = false; }
+								catch (Exception e)
+								{
+									LogManager.LogError($"Erro no módulo {typeof(ObjectRecircular).Name}: ", e);
+                                    recircular.isAuto = false;
+                                }
 
                                 if (recircular._colorante != null && !recircular._colorante.Habilitado)
                                 {
@@ -153,14 +159,20 @@ namespace Percolore.IOConnect.Util
                                 {
                                     recircular.isValve = Convert.ToBoolean(reader["isValve"].ToString());
                                 }
-                                catch
-                                { recircular.isValve = false; }
+								catch (Exception e)
+								{
+									LogManager.LogError($"Erro no módulo {typeof(ObjectRecircular).Name}: ", e);
+                                    recircular.isValve = false;
+                                }
                                 try
                                 {
                                     recircular.isAuto = Convert.ToBoolean(reader["isAuto"].ToString());
                                 }
-                                catch
-                                { recircular.isAuto = false; }
+								catch (Exception e)
+								{
+									LogManager.LogError($"Erro no módulo {typeof(ObjectRecircular).Name}: ", e);
+                                    recircular.isAuto = false;
+                                }
                                 recircular._colorante = Util.ObjectColorante.Load(recircular.Circuito);
                                 if (recircular._colorante != null && !recircular._colorante.Habilitado)
                                 {

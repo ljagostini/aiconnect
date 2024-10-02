@@ -1,18 +1,9 @@
-﻿using Percolore.Core.UserControl;
-using System;
-using System.Collections.Generic;
+﻿using Percolore.Core.Logging;
 using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
-using System.Windows.Forms;
 
 namespace Percolore.IOConnect
 {
-    public partial class fTratarAlertasP3 : Form
+	public partial class fTratarAlertasP3 : Form
     {
         private ModBusDispenserMover_P3 modBusDispenserMover_P3 = null;
         System.ComponentModel.BackgroundWorker backgroundWorker1 = null;
@@ -212,8 +203,9 @@ namespace Percolore.IOConnect
         #region Métodos privados
 
         void Falha(Exception ex)
-        {
-            PausarMonitoramento();
+		{
+            LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+			PausarMonitoramento();
 
             using (fMensagem m = new fMensagem(fMensagem.TipoMensagem.Erro))
             {
@@ -234,10 +226,11 @@ namespace Percolore.IOConnect
                     backgroundWorker1.CancelAsync();
                 }
             }
-            catch
-            { }
-
-        }
+			catch (Exception ex)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+			}
+		}
 
         void ExecutarMonitoramento()
         {
@@ -266,11 +259,11 @@ namespace Percolore.IOConnect
                     backgroundWorker1.RunWorkerAsync();
                 }
             }
-            catch
-            { }
-
-
-        }
+			catch (Exception ex)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+			}
+		}
 
         private void backgroundWorker1_DoWork(object sender, System.ComponentModel.DoWorkEventArgs e)
         {
@@ -286,28 +279,22 @@ namespace Percolore.IOConnect
                     }
                     else
                     {
-                        try
+                        if (!this.isRunning)
                         {
-                            if (!this.isRunning)
-                            {
-                                this.isRunning = true;
-                                this.Invoke(new MethodInvoker(MonitoramentoEvent));
-                                Thread.Sleep(500);
-                            }
-                        }
-                        catch
-                        {
+                            this.isRunning = true;
+                            this.Invoke(new MethodInvoker(MonitoramentoEvent));
+                            Thread.Sleep(500);
                         }
                     }
+
                     Thread.Sleep(500);
                 }
-
             }
-            catch
-            {
-            }
-
-        }
+			catch (Exception ex)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+			}
+		}
         
         private void backgroundWorker1_RunWorkerCompleted(object sender, System.ComponentModel.RunWorkerCompletedEventArgs e)
         {
@@ -325,14 +312,13 @@ namespace Percolore.IOConnect
                 {
                     this.isThread = true;
                 }
-
             }
-            catch
-            {
-            }
-        }
+			catch (Exception ex)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+			}
+		}
 
-        // void Monitoramento_Event(object sender, EventArgs e)
         void MonitoramentoEvent()
         {
             try
@@ -340,14 +326,16 @@ namespace Percolore.IOConnect
                 trataActionP3();                
                 this.isRunning = false;
                 this.counterFalha = 0;
-                ////Thread.Sleep(1000);
             }
             catch (Exception ex)
             {
+                LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+			
                 if (this.counterFalha > 0)
                 {
                     Falha(ex);
                 }
+
                 this.isRunning = false;
                 this.counterFalha++;
             }
@@ -390,9 +378,11 @@ namespace Percolore.IOConnect
                         }
                 }
             }
-            catch
-            { }
-        }
+			catch (Exception ex)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+			}
+		}
 
         void trataPassosAction_05()
         {

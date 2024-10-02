@@ -140,9 +140,12 @@ namespace Percolore.IOConnect
                 retorno.Input_3 = stI.Input_3;
                 retorno.Input_4 = stI.Input_4;
             }
-            catch
-            { }
-            return retorno;
+			catch (Exception ex)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+			}
+
+			return retorno;
         }
 
         public void Connect()

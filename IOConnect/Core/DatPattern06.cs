@@ -179,8 +179,7 @@ namespace Percolore.IOConnect.Core
                     }
                 }
             }
-            catch
-            (Exception e)
+            catch (Exception e)
 			{
 				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", e);
 			}

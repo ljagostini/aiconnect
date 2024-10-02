@@ -74,10 +74,12 @@ namespace Percolore.IOConnect.Negocio
                     retorno = true;
                 }
             }
-            catch
-            {
-                this.Header = 0x00;
+			catch (Exception ex)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+			    this.Header = 0x00;
             }
+
             return retorno;
         }
 

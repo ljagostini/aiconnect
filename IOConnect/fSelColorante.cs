@@ -1,4 +1,5 @@
-﻿using System.Data;
+﻿using Percolore.Core.Logging;
+using System.Data;
 
 namespace Percolore.IOConnect
 {
@@ -47,12 +48,12 @@ namespace Percolore.IOConnect
                 {
                     chlColorantes.Items.Add(li.Descricao, li.IsSelecionado);
                 }
-
-
             }
-            catch
-            { }
-        }
+			catch (Exception ex)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+			}
+		}
 
         private void btnConfirmar_Click(object sender, EventArgs e)
         {
@@ -94,9 +95,11 @@ namespace Percolore.IOConnect
                     this._ListItemSel[e.Index].IsSelecionado = false;
                 }
             }
-            catch
-            { }
-        }
+			catch (Exception ex)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+			}
+		}
 
         private class ListItemSel
         {

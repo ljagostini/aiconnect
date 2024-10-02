@@ -533,9 +533,12 @@ namespace Percolore.IOConnect
                 mixer.RessetHard();
                 retorno = true;
             }
-            catch
-            { }
-            return retorno;
+			catch (Exception ex)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+			}
+
+			return retorno;
         }
 
         public string GetVersion()
@@ -545,10 +548,12 @@ namespace Percolore.IOConnect
             {
                 retorno = mixer.GetVersion();
             }
-            catch
-            {
-            }
-            return retorno;
+			catch (Exception ex)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+			}
+
+			return retorno;
         }
 
 

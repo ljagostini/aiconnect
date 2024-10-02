@@ -133,8 +133,10 @@ namespace Percolore.IOConnect.Util
                                     }
                                     colorante.corCorante = Color.FromArgb(red, green, blue);
                                 }
-                                catch
-                                {
+								catch (Exception ex)
+								{
+									LogManager.LogError($"Erro no módulo {typeof(ObjectColorante).Name}: ", ex);
+								
                                     colorante.ColorRGB = "255;255;255;";
                                     colorante.corCorante = Color.White;
                                 }
@@ -198,8 +200,9 @@ namespace Percolore.IOConnect.Util
                                 {
                                     colorante.VolumePurga = double.Parse(reader["VolumePurga"].ToString(), System.Globalization.CultureInfo.InvariantCulture);
                                 }
-                                catch
-                                { 
+								catch (Exception ex)
+								{
+									LogManager.LogError($"Erro no módulo {typeof(ObjectColorante).Name}: ", ex);
                                     colorante.VolumePurga = 1; 
                                 }
 
@@ -223,9 +226,10 @@ namespace Percolore.IOConnect.Util
 
                                     colorante.corCorante = Color.FromArgb(red, green, blue);
                                 }
-                                catch
-                                {
-                                    colorante.ColorRGB = "255;255;255;";
+								catch (Exception ex)
+								{
+									LogManager.LogError($"Erro no módulo {typeof(ObjectColorante).Name}: ", ex);
+								    colorante.ColorRGB = "255;255;255;";
                                     colorante.corCorante = Color.White;
                                 }
 

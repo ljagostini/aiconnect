@@ -528,10 +528,10 @@ namespace Percolore.IOConnect.Util
                                 {
                                     objPar.IdIdioma = Convert.ToInt32(reader["IdIdioma"].ToString());
                                 }
-                                catch
-                                {
-                                    objPar.IdIdioma = 1;
-
+								catch (Exception e)
+								{
+									LogManager.LogError($"Erro no módulo {typeof(ObjectParametros).Name}: ", e);
+								    objPar.IdIdioma = 1;
                                 }
 
                                 objPar.ViewMessageProc = Convert.ToBoolean(reader["ViewMessageProc"].ToString());
@@ -549,36 +549,39 @@ namespace Percolore.IOConnect.Util
                                 {
                                     objPar.QtdTentativasConexao = Convert.ToInt32(reader["QtdTentativasConexao"].ToString());
                                 }
-                                catch
-                                {
-                                    objPar.QtdTentativasConexao = 1;
+								catch (Exception e)
+								{
+									LogManager.LogError($"Erro no módulo {typeof(ObjectParametros).Name}: ", e);
+								    objPar.QtdTentativasConexao = 1;
                                 }
 
                                 try
                                 {
                                     objPar.HabLimpBicos = Convert.ToBoolean(reader["HabLimpBicos"].ToString());
                                 }
-                                catch
-                                {
-                                    objPar.HabLimpBicos = false;
+								catch (Exception e)
+								{
+									LogManager.LogError($"Erro no módulo {typeof(ObjectParametros).Name}: ", e);
+									objPar.HabLimpBicos = false;
                                 }
 
                                 try
                                 {
                                     objPar.DelayLimpBicos = Convert.ToInt32(reader["DelayLimpBicos"].ToString());
                                 }
-                                catch
-                                {
-                                    objPar.DelayLimpBicos = 1;
+								catch (Exception e)
+								{
+									LogManager.LogError($"Erro no módulo {typeof(ObjectParametros).Name}: ", e);
+									objPar.DelayLimpBicos = 1;
                                 }
                                 try
                                 {
                                     objPar.TipoLimpBicos = Convert.ToInt32(reader["TipoLimpBicos"].ToString());
-                                    
                                 }
-                                catch
-                                {
-                                    objPar.TipoLimpBicos = 1;
+								catch (Exception e)
+								{
+									LogManager.LogError($"Erro no módulo {typeof(ObjectParametros).Name}: ", e);
+									objPar.TipoLimpBicos = 1;
                                 }
 
                                 objPar.TipoDosagemExec = Convert.ToInt32(reader["TipoDosagemExec"].ToString());
@@ -641,8 +644,11 @@ namespace Percolore.IOConnect.Util
                                 {
                                     objPar.DisablePopUpDispDat = Convert.ToBoolean(reader["DisablePopUpDispDat"].ToString());
                                 }
-                                catch
-                                { objPar.DisablePopUpDispDat = true; }
+								catch (Exception e)
+								{
+									LogManager.LogError($"Erro no módulo {typeof(ObjectParametros).Name}: ", e);
+                                    objPar.DisablePopUpDispDat = true;
+                                }
                                 #endregion
                                 #endregion
 
@@ -658,9 +664,10 @@ namespace Percolore.IOConnect.Util
                                     }
                                     objPar.ProcRemoveLataUDCP = Convert.ToBoolean(reader["ProcRemoveLataUDCP"].ToString());
                                 }
-                                catch
-                                {
-                                    objPar.DelayUDCP = 0;
+								catch (Exception e)
+								{
+									LogManager.LogError($"Erro no módulo {typeof(ObjectParametros).Name}: ", e);
+									objPar.DelayUDCP = 0;
                                 }
                                 #endregion
 
@@ -674,9 +681,10 @@ namespace Percolore.IOConnect.Util
                                 {
                                     objPar.DataExecucaoPurga = DateTime.Parse(reader["DataExecucaoPurga"].ToString());
                                 }
-                                catch
-                                {
-                                    objPar.DataExecucaoPurga = DateTime.MinValue;
+								catch (Exception e)
+								{
+									LogManager.LogError($"Erro no módulo {typeof(ObjectParametros).Name}: ", e);
+									objPar.DataExecucaoPurga = DateTime.MinValue;
                                 }
 
                                 objPar.VolumePurga = double.Parse(reader["VolumePurga"].ToString(), System.Globalization.CultureInfo.InvariantCulture);
@@ -745,9 +753,10 @@ namespace Percolore.IOConnect.Util
                                 {
                                     objPar.ValorFraction = Convert.ToInt32(reader["ValorFraction"].ToString());
                                 }
-                                catch
-                                {
-                                    objPar.ValorFraction = 800;
+								catch (Exception e)
+								{
+									LogManager.LogError($"Erro no módulo {typeof(ObjectParametros).Name}: ", e);
+									objPar.ValorFraction = 800;
                                 }
 
                                 #endregion
@@ -872,15 +881,21 @@ namespace Percolore.IOConnect.Util
                                 {
                                     objPar.TempoReciAuto = Convert.ToInt32(reader["TempoReciAuto"].ToString());
                                 }
-                                catch
-                                { objPar.TempoReciAuto = 1; }
+								catch (Exception e)
+								{
+									LogManager.LogError($"Erro no módulo {typeof(ObjectParametros).Name}: ", e);
+                                    objPar.TempoReciAuto = 1;
+                                }
 
                                 try
                                 {
                                     objPar.LogStatusMaquina = Convert.ToBoolean(reader["LogStatusMaquina"].ToString());
                                 }
-                                catch
-                                { objPar.LogStatusMaquina = false; }
+								catch (Exception e)
+								{
+									LogManager.LogError($"Erro no módulo {typeof(ObjectParametros).Name}: ", e);
+                                    objPar.LogStatusMaquina = false;
+                                }
                                 
                                 break;
                             }

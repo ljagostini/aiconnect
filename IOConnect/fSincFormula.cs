@@ -1,22 +1,12 @@
-﻿using Percolore.Core.Persistence.WindowsRegistry;
-using Percolore.Core.Persistence.Xml;
+﻿using Percolore.Core.Logging;
+using Percolore.Core.Persistence.WindowsRegistry;
 using Percolore.IOConnect.Negocio;
-using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.IO;
-using System.Linq;
 using System.Net.Sockets;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
-using System.Windows.Forms;
 
 namespace Percolore.IOConnect
 {
-    public partial class fSincFormula : Form
+	public partial class fSincFormula : Form
     {
         TcpClient tcpcliente = new TcpClient();
         Util.ObjectParametros _parametros = null;
@@ -73,12 +63,11 @@ namespace Percolore.IOConnect
                 }
                 ExecutarMonitoramento();
             }
-            catch
-            {
-
-            }
-            
-        }
+			catch (Exception ex)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+			}
+		}
 
         private void fSincFormula_FormClosed(object sender, FormClosedEventArgs e)
         {
@@ -109,87 +98,57 @@ namespace Percolore.IOConnect
                             break;
                         }
                     }
-                    try
+                    
+                    if (this.tcpcliente.Available > 0)
                     {
-                        if (this.tcpcliente.Available > 0)
+                        int tamanho = 0;
+                        int countInt = 0;
+                        Byte[] PacRec = null;
+                        bool achouFim = false;
+                        for (int z = 0; z < 10; z++)
                         {
-                            int tamanho = 0;
-                            int countInt = 0;
-                            Byte[] PacRec = null;
-                            bool achouFim = false;
-                            for (int z = 0; z < 10; z++)
+                            tamanho = this.tcpcliente.Available;
+                            Byte[] bytes = new Byte[tamanho];
+                            int i = netWriteread.Read(bytes, 0, tamanho);
+                            countInt += i;
+                            PacRec = ConcatenaBytes(PacRec, bytes);
+                            if (i > 0 && bytes != null && PacRec.Length > 0 && (PacRec[countInt - 1] == 255 && PacRec[0] == 0xA5))
                             {
-                                tamanho = this.tcpcliente.Available;
-                                Byte[] bytes = new Byte[tamanho];
-                                int i = netWriteread.Read(bytes, 0, tamanho);
-                                countInt += i;
-                                PacRec = ConcatenaBytes(PacRec, bytes);
-                                if (i > 0 && bytes != null && PacRec.Length > 0 && (PacRec[countInt - 1] == 255 && PacRec[0] == 0xA5))
-                                {
-                                    achouFim = true;
-                                    break;
-                                }
-                                if(i == 0)
-                                {
-                                    break;
-                                }
-                                Thread.Sleep(2000);
+                                achouFim = true;
+                                break;
                             }
-                            if (achouFim)
+                            if(i == 0)
                             {
-                                ReadMessageTcp rdTcp = new ReadMessageTcp();
-                                if (rdTcp.desmontarMessage(PacRec, 1))
+                                break;
+                            }
+                            Thread.Sleep(2000);
+                        }
+                        if (achouFim)
+                        {
+                            ReadMessageTcp rdTcp = new ReadMessageTcp();
+                            if (rdTcp.desmontarMessage(PacRec, 1))
+                            {
+                                if(rdTcp.TipoEvento == 1)
                                 {
-                                    if(rdTcp.TipoEvento == 1)
+                                    string jsp = rdTcp.message;
+                                    using (StreamWriter sW = new StreamWriter(CLICK_DOWN_FORMULA))
                                     {
-                                        string jsp = rdTcp.message;
-                                        using (StreamWriter sW = new StreamWriter(CLICK_DOWN_FORMULA))
-                                        {
-                                            sW.WriteLine(jsp);
-                                            sW.Close();
-                                        }
-                                        retorno = true;
+                                        sW.WriteLine(jsp);
+                                        sW.Close();
                                     }
+                                    retorno = true;
                                 }
                             }
-                            /*
-                            StringBuilder sb = new StringBuilder();
-                        for (int k = 0; k < i; k++)
-                        {
-                            byte b = bytes[k];
-                            sb.Append(b.ToString("X2"));
-                            if ((k - 1) < i)
-                            {
-                                sb.Append("-");
-                            }
                         }
-                        /*
-                        if (DesmontarPacoteTCP(sb.ToString(), simCard))
-                        {
-                            retorno = true;
-                        }
-                        /*
-                        this.set_txt = sb.ToString();
-                        DesmontarPacoteTCP(set_txt);
-
-                        this.Invoke(this.MISendPtxt);
-                        */
-                        }
-                    }
-                    catch (Exception)
-                    {
-                        // throw;
                     }
                 }
-
             }
-            catch
-            {
+			catch (Exception ex)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+			}
 
-            }
-
-
-            return retorno;
+			return retorno;
         }
         
         private byte[] montaPacoteProducao(string codSimcard, string message, int tipo)
@@ -244,13 +203,16 @@ namespace Percolore.IOConnect
                 DialogResult = DialogResult.Cancel;
                 Close();
             }
-            catch
-            { }
-        }
+			catch (Exception ex)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+			}
+		}
         
         public static byte[] ConcatenaBytes(byte[] pac1, byte[] pac2)
         {
             byte[] retorno = null;
+            
             try
             {
                 int tamanho_pac = 0;
@@ -277,9 +239,10 @@ namespace Percolore.IOConnect
 
                 }
             }
-            catch
-            {
-                retorno = null;
+			catch (Exception ex)
+			{
+				LogManager.LogError($"Erro no módulo {typeof(fSincFormula).Name}: ", ex);
+			    retorno = null;
             }
 
             return retorno;
@@ -335,10 +298,12 @@ namespace Percolore.IOConnect
                 }
 
             }
-            catch
-            { }
+			catch (Exception ex)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+			}
 
-            this.DialogResult = DialogResult.OK;
+			this.DialogResult = DialogResult.OK;
             this.Close();
         }
         
@@ -352,10 +317,11 @@ namespace Percolore.IOConnect
                     backgroundWorker1.CancelAsync();
                 }
             }
-            catch
-            { }
-
-        }
+			catch (Exception ex)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+			}
+		}
 
         void ExecutarMonitoramento()
         {
@@ -382,11 +348,11 @@ namespace Percolore.IOConnect
                     backgroundWorker1.RunWorkerAsync();
                 }
             }
-            catch
-            { }
-
-
-        }
+			catch (Exception ex)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+			}
+		}
 
         private void backgroundWorker1_DoWork(object sender, System.ComponentModel.DoWorkEventArgs e)
         {
@@ -402,29 +368,23 @@ namespace Percolore.IOConnect
                     }
                     else
                     {
-                        try
+                        if (!this.isRunning)
                         {
-                            if (!this.isRunning)
-                            {
-                                Thread.Sleep(2500);
-                                this.isRunning = true;
-                                this.Invoke(new MethodInvoker(Monitoramento_Event));
-                                Thread.Sleep(1000);
-                            }
-                        }
-                        catch
-                        {
+                            Thread.Sleep(2500);
+                            this.isRunning = true;
+                            this.Invoke(new MethodInvoker(Monitoramento_Event));
+                            Thread.Sleep(1000);
                         }
                     }
+
                     Thread.Sleep(500);
                 }
-
             }
-            catch
-            {
-            }
-
-        }
+			catch (Exception ex)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+			}
+		}
         
         private void backgroundWorker1_RunWorkerCompleted(object sender, System.ComponentModel.RunWorkerCompletedEventArgs e)
         {
@@ -442,12 +402,11 @@ namespace Percolore.IOConnect
                 {
                     this.isThread = true;
                 }
-
             }
-            catch
-            {
-            }
-        }
-
+			catch (Exception ex)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+			}
+		}
     }
 }

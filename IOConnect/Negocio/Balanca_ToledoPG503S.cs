@@ -37,8 +37,10 @@ namespace Percolore.IOConnect.Negocio
                 CloseSerial();
                 this.IsOpen = OpenSerial(_str_Serial, 2400, 7, Parity.Even, StopBits.One);
             }
-            catch
-            {
+			catch (Exception ex)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+			
                 if (sp != null)
                 {
                     this.IsOpen = sp.IsOpen;

@@ -1,25 +1,16 @@
-﻿using Percolore.Core;
+﻿using Newtonsoft.Json;
+using Percolore.Core;
+using Percolore.Core.Logging;
 using Percolore.Core.Persistence.WindowsRegistry;
-using Percolore.Core.Persistence.Xml;
-using Percolore.Core.UserControl;
 using Percolore.Core.Util;
 using Percolore.IOConnect.Negocio;
-using System;
-using System.Collections.Generic;
-using System.Drawing;
 using System.Reflection;
 using System.Resources;
-using System.Windows.Forms;
-
-using System.Linq;
-using Newtonsoft.Json;
-using System.IO;
 using System.Text;
-using System.Threading;
 
 namespace Percolore.IOConnect
 {
-    public partial class fSobre : Form
+	public partial class fSobre : Form
     {
         string _serial;
         string _guid;
@@ -234,8 +225,10 @@ namespace Percolore.IOConnect
                     m.ShowDialog("Exportação de Status realizada com sucesso! ");
                 }
             }
-            catch
-            { }
-        }
+			catch (Exception ex)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+			}
+		}
     }
 }

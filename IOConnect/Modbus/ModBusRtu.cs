@@ -486,11 +486,12 @@ namespace Percolore.IOConnect
                     sp.DiscardInBuffer();
                     Thread.Sleep(10);
                 }
-                catch
-                {
+				catch (Exception ex)
+				{
+					LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+				}
 
-                }
-                readBytes = new byte[2048];
+				readBytes = new byte[2048];
                 //Message is 1 addr + 1 fcn + 2 start + 2 reg + 1 count + 2 * reg vals + 2 CRC
                 byte[] message = new byte[8];
                 //Function 16 response is fixed at 8 bytes

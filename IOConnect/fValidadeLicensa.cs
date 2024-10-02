@@ -1,22 +1,17 @@
-﻿using Percolore.Core.Persistence.WindowsRegistry;
-using Percolore.Core.Persistence.Xml;
+﻿using Percolore.Core.Logging;
+using Percolore.Core.Persistence.WindowsRegistry;
 using Percolore.Core.Security.Token;
-using Percolore.Core.UserControl;
 using Percolore.IOConnect.Util;
-using System;
-using System.Drawing;
 using System.Net.NetworkInformation;
 using System.Net.Sockets;
 using System.Text;
-using System.Threading;
-using System.Windows.Forms;
 
 namespace Percolore.IOConnect
 {
-    /// <summary>
-    /// View de edição da data de validade da manutenção via token
-    /// </summary>
-    public partial class fValidadeLicensa : Form
+	/// <summary>
+	/// View de edição da data de validade da manutenção via token
+	/// </summary>
+	public partial class fValidadeLicensa : Form
     {
         private string _serial;
         private string _appGuid;
@@ -70,9 +65,11 @@ namespace Percolore.IOConnect
                     this._fAguarde.Close();
                 }
             }
-            catch
-            { }
-        }
+			catch (Exception ex)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+			}
+		}
 
         private void updateTeclado()
         {
@@ -101,9 +98,11 @@ namespace Percolore.IOConnect
             {
                 this.Invoke(new MethodInvoker(btnOkClick));
             }
-            catch
-            { }
-        }
+			catch (Exception ex)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+			}
+		}
 
         private void btnOkClick()
         {
@@ -172,8 +171,10 @@ namespace Percolore.IOConnect
 
                 this.DialogResult = DialogResult.OK;
             }
-            catch (Exception ex)
-            {
+			catch (Exception ex)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+			
                 using (fMensagem m = new fMensagem(fMensagem.TipoMensagem.Informacao))
                 {
                     string mensagem = Negocio.IdiomaResxExtensao.Global_Falha_GravarDados + ex.Message;
@@ -199,28 +200,18 @@ namespace Percolore.IOConnect
                     this._fAguarde._TimerDelay = 330;
                     this._fAguarde.Focus();
                 }
-                try
-                {
-                    Thread thrd = new Thread(new ThreadStart(RequestOnLineValidadeManutencao));
-                    thrd.Start();
-                }
-                catch
-                {
-                    
-                }
+                
+                Thread thrd = new Thread(new ThreadStart(RequestOnLineValidadeManutencao));
+                thrd.Start();
             }
-            catch
-            { }
-        }
+			catch (Exception ex)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+			}
+		}
         private void ClosedProgressBar()
         {
-            try
-            {
-                this._fAguarde = null;
-
-            }
-            catch
-            { }
+            this._fAguarde = null;
         }
         private void ClosePrg()
         {
@@ -229,9 +220,11 @@ namespace Percolore.IOConnect
                 this._fAguarde.PausarMonitoramento();
                 this._fAguarde.Close();               
             }
-            catch
-            { }
-        }
+			catch (Exception ex)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+			}
+		}
         private void RequestOnLineValidadeManutencao()
         {
             try
@@ -242,9 +235,11 @@ namespace Percolore.IOConnect
                 }
                 this.Invoke(new MethodInvoker(GetOnLineValidadeManutencao));
             }
-            catch
-            { }
-        }
+			catch (Exception ex)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+			}
+		}
         private void GetOnLineValidadeManutencao()
         {
             try
@@ -295,37 +290,20 @@ namespace Percolore.IOConnect
                         m.ShowDialog(msg);
                     }
                 }
-
-
-
-            }
-            catch
-            { }
-
-            try
-            {
+            
                 if(this.tcpcliente.Connected)
                 {
-                    try
-                    {
-                        this.tcpcliente.Close();
-                        this.tcpcliente.Dispose();
-                    }
-                    catch
-                    {
-
-                    }
+                    this.tcpcliente.Close();
+                    this.tcpcliente.Dispose();
                 }
-            }
-            catch
-            { }
-            try
-            {
+            
                 this.Invoke(new MethodInvoker(ClosePrg));
             }
-            catch
-            { }
-        }
+			catch (Exception ex)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+			}
+		}
 
         #region Metodos Online
 
@@ -357,47 +335,40 @@ namespace Percolore.IOConnect
                                 break;
                             }
                         }
-                        try
+                        
+                        if (this.tcpcliente.Available > 0)
                         {
-                            if (this.tcpcliente.Available > 0)
-                            {
-                                int tamanho = 0;
-                                tamanho = this.tcpcliente.Available;
-                                Byte[] bytes = new Byte[tamanho];
-                                int i = netWriteread.Read(bytes, 0, tamanho);
+                            int tamanho = 0;
+                            tamanho = this.tcpcliente.Available;
+                            Byte[] bytes = new Byte[tamanho];
+                            int i = netWriteread.Read(bytes, 0, tamanho);
 
-                                StringBuilder sb = new StringBuilder();
-                                for (int k = 0; k < i; k++)
+                            StringBuilder sb = new StringBuilder();
+                            for (int k = 0; k < i; k++)
+                            {
+                                byte b = bytes[k];
+                                sb.Append(b.ToString("X2"));
+                                if ((k - 1) < i)
                                 {
-                                    byte b = bytes[k];
-                                    sb.Append(b.ToString("X2"));
-                                    if ((k - 1) < i)
-                                    {
-                                        sb.Append("-");
-                                    }
-                                }
-                                string _token = "";
-                                if (DesmontarPacoteTCP(sb.ToString(), simCard, ref _token))
-                                {
-                                    _MsgRet = _token;
-                                    retorno = true;
+                                    sb.Append("-");
                                 }
                             }
-                        }
-                        catch
-                        {
-                            
+                            string _token = "";
+                            if (DesmontarPacoteTCP(sb.ToString(), simCard, ref _token))
+                            {
+                                _MsgRet = _token;
+                                retorno = true;
+                            }
                         }
                     }
                 }
             }
-            catch
-            {
+			catch (Exception ex)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+			}
 
-            }
-
-
-            return retorno;
+			return retorno;
         }
         private bool TestInternet()
         {
@@ -413,11 +384,12 @@ namespace Percolore.IOConnect
                 PingReply reply = myPing.Send(host, timeout, buffer, pingOptions);
                 retorno = (reply.Status == IPStatus.Success);
             }
-            catch (Exception)
-            {
+			catch (Exception ex)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+			}
 
-            }
-            return retorno;
+			return retorno;
         }
         public bool DesmontarPacoteTCP(string msgHex, string codSim, ref string retornoLicense)
         {

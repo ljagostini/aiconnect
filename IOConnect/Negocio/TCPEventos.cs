@@ -66,15 +66,8 @@ namespace Percolore.IOConnect.Negocio
             {
                 if(this.tcpcliente.Connected)
                 {
-                    try
-                    {
-                        this.tcpcliente.Close();
-                        this.tcpcliente.Dispose();
-                    }
-                    catch
-                    {
-
-                    }
+                    this.tcpcliente.Close();
+                    this.tcpcliente.Dispose();
                 }
             }
 			catch (Exception e)
