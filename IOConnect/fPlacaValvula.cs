@@ -1,18 +1,10 @@
 ﻿using Percolore.Core;
+using Percolore.Core.Logging;
 using Percolore.IOConnect.Modbus;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
 
 namespace Percolore.IOConnect
 {
-    public partial class fPlacaValvula : Form
+	public partial class fPlacaValvula : Form
     {
         public fPlacaValvula()
         {
@@ -25,12 +17,7 @@ namespace Percolore.IOConnect
 
         private void btn_Fechar_Click(object sender, EventArgs e)
         {
-            try
-            {
-                DialogResult = DialogResult.OK;
-            }
-            catch
-            { }
+            DialogResult = DialogResult.OK;
         }
 
         private void btnRefresh_Click(object sender, EventArgs e)
@@ -187,11 +174,13 @@ namespace Percolore.IOConnect
                             m.ShowDialog("Command executed");
                         }
                     }
-                    catch (Exception exc1)
-                    {
+					catch (Exception ex)
+					{
+						LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+					
                         using (fMensagem m = new fMensagem(fMensagem.TipoMensagem.Erro))
                         {
-                            m.ShowDialog("Error:" + exc1.Message);
+                            m.ShowDialog("Error:" + ex.Message);
                         }
                     }
                     finally
@@ -206,7 +195,6 @@ namespace Percolore.IOConnect
                     {
                         mP2.Connect();
                         Task<StatusValvulas> task = Task.Factory.StartNew(() => mP2.getStatusValvulas());
-                        //ModBusDispenser_P2.StatusSensores stSensor = mP2.getStatusSensores();
 
                         StatusValvulas stVal = task.Result;
                         if (stVal.Circuito_1)
@@ -342,11 +330,13 @@ namespace Percolore.IOConnect
                             m.ShowDialog("Command executed");
                         }
                     }
-                    catch (Exception exc1)
-                    {
+					catch (Exception ex)
+					{
+						LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+					
                         using (fMensagem m = new fMensagem(fMensagem.TipoMensagem.Erro))
                         {
-                            m.ShowDialog("Error:" + exc1.Message);
+                            m.ShowDialog("Error:" + ex.Message);
                         }
                     }
                     finally
@@ -355,11 +345,13 @@ namespace Percolore.IOConnect
                     }
                 }
             }
-            catch (Exception exc)
-            {
+			catch (Exception ex)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+			
                 using (fMensagem m = new fMensagem(fMensagem.TipoMensagem.Erro))
                 {
-                    m.ShowDialog("Error:" + exc.Message);
+                    m.ShowDialog("Error:" + ex.Message);
                 }
             }
 
@@ -385,11 +377,13 @@ namespace Percolore.IOConnect
                         }
 
                     }
-                    catch (Exception exc1)
-                    {
+					catch (Exception ex)
+					{
+						LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+					
                         using (fMensagem m = new fMensagem(fMensagem.TipoMensagem.Erro))
                         {
-                            m.ShowDialog("Error:" + exc1.Message);
+                            m.ShowDialog("Error:" + ex.Message);
                         }
                     }
                     finally
@@ -411,11 +405,13 @@ namespace Percolore.IOConnect
                         }
 
                     }
-                    catch (Exception exc1)
-                    {
+					catch (Exception ex)
+					{
+						LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+					
                         using (fMensagem m = new fMensagem(fMensagem.TipoMensagem.Erro))
                         {
-                            m.ShowDialog("Error:" + exc1.Message);
+                            m.ShowDialog("Error:" + ex.Message);
                         }
                     }
                     finally
@@ -424,11 +420,13 @@ namespace Percolore.IOConnect
                     }
                 }
             }
-            catch (Exception exc)
-            {
+			catch (Exception ex)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+			
                 using (fMensagem m = new fMensagem(fMensagem.TipoMensagem.Erro))
                 {
-                    m.ShowDialog("Error:" + exc.Message);
+                    m.ShowDialog("Error:" + ex.Message);
                 }
             }
         }
@@ -452,11 +450,13 @@ namespace Percolore.IOConnect
                         }
 
                     }
-                    catch (Exception exc1)
-                    {
+					catch (Exception ex)
+					{
+						LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+					
                         using (fMensagem m = new fMensagem(fMensagem.TipoMensagem.Erro))
                         {
-                            m.ShowDialog("Error:" + exc1.Message);
+                            m.ShowDialog("Error:" + ex.Message);
                         }
                     }
                     finally
@@ -478,11 +478,13 @@ namespace Percolore.IOConnect
                         }
 
                     }
-                    catch (Exception exc1)
-                    {
+					catch (Exception ex)
+					{
+						LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+					
                         using (fMensagem m = new fMensagem(fMensagem.TipoMensagem.Erro))
                         {
-                            m.ShowDialog("Error:" + exc1.Message);
+                            m.ShowDialog("Error:" + ex.Message);
                         }
                     }
                     finally
@@ -491,11 +493,13 @@ namespace Percolore.IOConnect
                     }
                 }
             }
-            catch (Exception exc)
-            {
+			catch (Exception ex)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+			
                 using (fMensagem m = new fMensagem(fMensagem.TipoMensagem.Erro))
                 {
-                    m.ShowDialog("Error:" + exc.Message);
+                    m.ShowDialog("Error:" + ex.Message);
                 }
             }
         }
@@ -516,13 +520,14 @@ namespace Percolore.IOConnect
                         {
                             m.ShowDialog("Command executed");
                         }
-
                     }
-                    catch (Exception exc1)
-                    {
+					catch (Exception ex)
+					{
+						LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+					
                         using (fMensagem m = new fMensagem(fMensagem.TipoMensagem.Erro))
                         {
-                            m.ShowDialog("Error:" + exc1.Message);
+                            m.ShowDialog("Error:" + ex.Message);
                         }
                     }
                     finally
@@ -543,11 +548,13 @@ namespace Percolore.IOConnect
                         }
 
                     }
-                    catch (Exception exc1)
-                    {
+					catch (Exception ex)
+					{
+						LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+					
                         using (fMensagem m = new fMensagem(fMensagem.TipoMensagem.Erro))
                         {
-                            m.ShowDialog("Error:" + exc1.Message);
+                            m.ShowDialog("Error:" + ex.Message);
                         }
                     }
                     finally
@@ -556,11 +563,13 @@ namespace Percolore.IOConnect
                     }
                 }
             }
-            catch (Exception exc)
-            {
+			catch (Exception ex)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+			
                 using (fMensagem m = new fMensagem(fMensagem.TipoMensagem.Erro))
                 {
-                    m.ShowDialog("Error:" + exc.Message);
+                    m.ShowDialog("Error:" + ex.Message);
                 }
             }
         }
@@ -583,11 +592,13 @@ namespace Percolore.IOConnect
                             m.ShowDialog("Command executed");
                         }
                     }
-                    catch (Exception exc1)
-                    {
+					catch (Exception ex)
+					{
+						LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+					
                         using (fMensagem m = new fMensagem(fMensagem.TipoMensagem.Erro))
                         {
-                            m.ShowDialog("Error:" + exc1.Message);
+                            m.ShowDialog("Error:" + ex.Message);
                         }
                     }
                     finally
@@ -608,11 +619,13 @@ namespace Percolore.IOConnect
                             m.ShowDialog("Command executed");
                         }
                     }
-                    catch (Exception exc1)
-                    {
+					catch (Exception ex)
+					{
+						LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+					
                         using (fMensagem m = new fMensagem(fMensagem.TipoMensagem.Erro))
                         {
-                            m.ShowDialog("Error:" + exc1.Message);
+                            m.ShowDialog("Error:" + ex.Message);
                         }
                     }
                     finally
@@ -621,11 +634,13 @@ namespace Percolore.IOConnect
                     }
                 }
             }
-            catch (Exception exc)
-            {
+			catch (Exception ex)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+			
                 using (fMensagem m = new fMensagem(fMensagem.TipoMensagem.Erro))
                 {
-                    m.ShowDialog("Error:" + exc.Message);
+                    m.ShowDialog("Error:" + ex.Message);
                 }
             }
         }

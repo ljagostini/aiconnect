@@ -1,17 +1,8 @@
-﻿
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
+﻿using Percolore.Core.Logging;
 
 namespace Percolore.IOConnect
 {
-    public partial class fPlacaInput : Form
+	public partial class fPlacaInput : Form
     {
         public fPlacaInput()
         {
@@ -20,22 +11,12 @@ namespace Percolore.IOConnect
 
         private void btn_Fechar_Click(object sender, EventArgs e)
         {
-            try
-            {
-                DialogResult = DialogResult.OK;
-            }
-            catch
-            { }
+            DialogResult = DialogResult.OK;
         }
 
         private void fPlacaInput_Load(object sender, EventArgs e)
         {
-            try
-            {
-                //btnRefresh_Click(null, null);
-            }
-            catch
-            { }
+            
         }
 
         private void btnRefresh_Click(object sender, EventArgs e)
@@ -49,11 +30,11 @@ namespace Percolore.IOConnect
             {
                 Util.ObjectParametros parametros = Util.ObjectParametros.Load();
                 ModBusDispenser_P2 mP2 = new ModBusDispenser_P2(parametros.NomeDispositivo);
+
                 try
                 {
                     mP2.Connect();
                     Task<ModBusDispenser_P2.StatusSensores> task = Task.Factory.StartNew(() => mP2.getStatusSensores());
-                    //ModBusDispenser_P2.StatusSensores stSensor = mP2.getStatusSensores();
 
                     ModBusDispenser_P2.StatusSensores stSensor = task.Result;
                     if (stSensor.Input_1)
@@ -88,13 +69,14 @@ namespace Percolore.IOConnect
                     {
                         txtInput4.Text = "0";
                     }
-                    //mP2.sa
                 }
-                catch (Exception exc1)
+                catch (Exception ex)
                 {
+                    LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+				
                     using (fMensagem m = new fMensagem(fMensagem.TipoMensagem.Erro))
                     {
-                        m.ShowDialog("Error:" + exc1.Message);
+                        m.ShowDialog("Error:" + ex.Message);
                     }
                 }
                 finally
@@ -102,14 +84,15 @@ namespace Percolore.IOConnect
                     mP2.Disconnect();
                 }
             }
-            catch (Exception exc)
-            {
+			catch (Exception ex)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+			
                 using (fMensagem m = new fMensagem(fMensagem.TipoMensagem.Erro))
                 {
-                    m.ShowDialog("Error:" +exc.Message);
+                    m.ShowDialog("Error:" + ex.Message);
                 }
             }
-
         }
 
         private void btnVersion_Click(object sender, EventArgs e)
@@ -118,6 +101,7 @@ namespace Percolore.IOConnect
             {
                 Util.ObjectParametros parametros = Util.ObjectParametros.Load();
                 ModBusDispenser_P2 mP2 = new ModBusDispenser_P2(parametros.NomeDispositivo);
+                
                 try
                 {
                     mP2.Connect();
@@ -125,11 +109,13 @@ namespace Percolore.IOConnect
 
                     txtVersionHard.Text = string.IsNullOrEmpty(_strV) ? "failure to get version...." : _strV;
                  }
-                catch (Exception exc1)
-                {
+				catch (Exception ex)
+				{
+					LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+				
                     using (fMensagem m = new fMensagem(fMensagem.TipoMensagem.Erro))
                     {
-                        m.ShowDialog("Error:" + exc1.Message);
+                        m.ShowDialog("Error:" + ex.Message);
                     }
                 }
                 finally
@@ -137,11 +123,13 @@ namespace Percolore.IOConnect
                     mP2.Disconnect();
                 }
             }
-            catch (Exception exc)
-            {
+			catch (Exception ex)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+			
                 using (fMensagem m = new fMensagem(fMensagem.TipoMensagem.Erro))
                 {
-                    m.ShowDialog("Error:" + exc.Message);
+                    m.ShowDialog("Error:" + ex.Message);
                 }
             }
         }

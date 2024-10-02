@@ -1,23 +1,13 @@
 ﻿using Percolore.Core;
-using Percolore.Core.UserControl;
-using System;
-using System.Collections.Generic;
+using Percolore.Core.Logging;
+using Percolore.Core.Persistence.WindowsRegistry;
 using System.ComponentModel;
 using System.Data;
-using System.Drawing;
-using System.IO;
 using System.IO.Ports;
-using System.Linq;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-using Percolore.IOConnect.Util;
-using Percolore.Core.Persistence.WindowsRegistry;
 
 namespace Percolore.IOConnect
 {
-    public partial class fPrecisaoMenu : Form
+	public partial class fPrecisaoMenu : Form
     {
         private int inicializacaoPG = -1;       
         public Brush _Brush = Brushes.ForestGreen;
@@ -97,9 +87,11 @@ namespace Percolore.IOConnect
                 panel8.BackColor = System.Drawing.Color.Transparent;
 
             }
-            catch
-            { }
-        }
+			catch (Exception ex)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+			}
+		}
 
         private void fPrecisaoMenu_Load(object sender, EventArgs e)
         {
@@ -114,11 +106,7 @@ namespace Percolore.IOConnect
                         break;
                     }
                 }
-            }
-            catch
-            { }
-            try
-            {
+            
                 this.lblTitulo.Text = Negocio.IdiomaResxExtensao.CalibracaoAutomate_lblTitulo;
                 this.lblConfigSetup.Text = Negocio.IdiomaResxExtensao.CalibracaoAutomate_lblConfigSetup;
                 this.lblModelScale.Text = Negocio.IdiomaResxExtensao.CalibracaoAutomate_lblModelScale;
@@ -135,107 +123,91 @@ namespace Percolore.IOConnect
                 this.btnCancel.Text = Negocio.IdiomaResxExtensao.Global_Stop;
                 this.btnHelp.Text = Negocio.IdiomaResxExtensao.Global_BtnAjuda;
                 this.btnClose.Text = Negocio.IdiomaResxExtensao.Global_BtnClose;
-            }
-            catch
-            { }
-            try
-            {
+            
                 using (PercoloreRegistry percRegistry = new PercoloreRegistry())
                 {
                     this.acurracy.NumeroSerie = percRegistry.GetSerialNumber();
                 }
                 this.acurracy.listPrecisao = new List<Negocio.Precisao>();
                 AttStripMsg();
-                try
+                
+                DataTable dtBal = new DataTable();
+                dtBal.Columns.Add("valor", typeof(int));
+                dtBal.Columns.Add("descricao", typeof(string));
+                DataRow dr = dtBal.NewRow();
+                dr["valor"] = 1;
+                dr["descricao"] = "Bell";
+                dtBal.Rows.Add(dr);
+
+                DataRow dr1 = dtBal.NewRow();
+                dr1["valor"] = 2;
+                dr1["descricao"] = "Toledo MS403-S";
+                dtBal.Rows.Add(dr1);
+
+                DataRow dr2 = dtBal.NewRow();
+                dr2["valor"] = 3;
+                dr2["descricao"] = "MT PG503-S";
+                dtBal.Rows.Add(dr2);
+
+                cmbTipoBalanca.DataSource = dtBal.DefaultView;
+                cmbTipoBalanca.DisplayMember = "descricao";
+                cmbTipoBalanca.ValueMember = "valor";
+
+                listColorantes = Util.ObjectColorante.List().Where(c => c.Habilitado == true && c.Seguidor == -1).ToList();
+
+                DataTable dtGridCircuitos = new DataTable();
+                dtGridCircuitos.Columns.Add("Circuito1", typeof(string));
+                dtGridCircuitos.Columns.Add("Circuito2", typeof(string));
+                dtGridCircuitos.Columns.Add("Circuito3", typeof(string));
+                dtGridCircuitos.Columns.Add("Circuito4", typeof(string));
+                dtGridCircuitos.Columns.Add("Circuito5", typeof(string));
+                for(int i = 0; i < listColorantes.Count; i++)
                 {
-                    DataTable dtBal = new DataTable();
-                    dtBal.Columns.Add("valor", typeof(int));
-                    dtBal.Columns.Add("descricao", typeof(string));
-                    DataRow dr = dtBal.NewRow();
-                    dr["valor"] = 1;
-                    dr["descricao"] = "Bell";
-                    dtBal.Rows.Add(dr);
-
-                    DataRow dr1 = dtBal.NewRow();
-                    dr1["valor"] = 2;
-                    dr1["descricao"] = "Toledo MS403-S";
-                    dtBal.Rows.Add(dr1);
-
-                    DataRow dr2 = dtBal.NewRow();
-                    dr2["valor"] = 3;
-                    dr2["descricao"] = "MT PG503-S";
-                    dtBal.Rows.Add(dr2);
-
-                    cmbTipoBalanca.DataSource = dtBal.DefaultView;
-                    cmbTipoBalanca.DisplayMember = "descricao";
-                    cmbTipoBalanca.ValueMember = "valor";
-
-                    listColorantes = Util.ObjectColorante.List().Where(c => c.Habilitado == true && c.Seguidor == -1).ToList();
-
-                    DataTable dtGridCircuitos = new DataTable();
-                    dtGridCircuitos.Columns.Add("Circuito1", typeof(string));
-                    dtGridCircuitos.Columns.Add("Circuito2", typeof(string));
-                    dtGridCircuitos.Columns.Add("Circuito3", typeof(string));
-                    dtGridCircuitos.Columns.Add("Circuito4", typeof(string));
-                    dtGridCircuitos.Columns.Add("Circuito5", typeof(string));
-                    for(int i = 0; i < listColorantes.Count; i++)
+                    DataRow drC = dtGridCircuitos.NewRow();
+                    drC["Circuito1"] = Negocio.IdiomaResxExtensao.CalibracaoAutomate_Circuit + " " + String.Format("{0:00}", listColorantes[i].Circuito) + "  " + listColorantes[i].Nome;
+                    i++;
+                    if(i < listColorantes.Count)
                     {
-                        DataRow drC = dtGridCircuitos.NewRow();
-                        drC["Circuito1"] = Negocio.IdiomaResxExtensao.CalibracaoAutomate_Circuit + " " + String.Format("{0:00}", listColorantes[i].Circuito) + "  " + listColorantes[i].Nome;
+                        drC["Circuito2"] = Negocio.IdiomaResxExtensao.CalibracaoAutomate_Circuit + "  " + String.Format("{0:00}", listColorantes[i].Circuito) + "  " + listColorantes[i].Nome;
                         i++;
-                        if(i < listColorantes.Count)
+                        if (i < listColorantes.Count)
                         {
-                            drC["Circuito2"] = Negocio.IdiomaResxExtensao.CalibracaoAutomate_Circuit + "  " + String.Format("{0:00}", listColorantes[i].Circuito) + "  " + listColorantes[i].Nome;
+                            drC["Circuito3"] = Negocio.IdiomaResxExtensao.CalibracaoAutomate_Circuit + "  " + String.Format("{0:00}", listColorantes[i].Circuito) + "  " + listColorantes[i].Nome;
                             i++;
                             if (i < listColorantes.Count)
                             {
-                                drC["Circuito3"] = Negocio.IdiomaResxExtensao.CalibracaoAutomate_Circuit + "  " + String.Format("{0:00}", listColorantes[i].Circuito) + "  " + listColorantes[i].Nome;
+                                drC["Circuito4"] = Negocio.IdiomaResxExtensao.CalibracaoAutomate_Circuit + "  " + String.Format("{0:00}", listColorantes[i].Circuito) + "  " + listColorantes[i].Nome;
                                 i++;
                                 if (i < listColorantes.Count)
                                 {
-                                    drC["Circuito4"] = Negocio.IdiomaResxExtensao.CalibracaoAutomate_Circuit + "  " + String.Format("{0:00}", listColorantes[i].Circuito) + "  " + listColorantes[i].Nome;
-                                    i++;
-                                    if (i < listColorantes.Count)
-                                    {
-                                        drC["Circuito5"] = Negocio.IdiomaResxExtensao.CalibracaoAutomate_Circuit + "  " + String.Format("{0:00}", listColorantes[i].Circuito) + "  " + listColorantes[i].Nome;                                       
-                                    }
+                                    drC["Circuito5"] = Negocio.IdiomaResxExtensao.CalibracaoAutomate_Circuit + "  " + String.Format("{0:00}", listColorantes[i].Circuito) + "  " + listColorantes[i].Nome;                                       
                                 }
                             }
                         }
-
-                        dtGridCircuitos.Rows.Add(drC);
                     }
 
-                    if (dgvCircuit.Rows != null)
-                    {
-                        dgvCircuit.Rows.Clear();
-                    }
-                    for (int i = 0; i < dtGridCircuitos.Rows.Count; i++)
-                    {
-                        dgvCircuit.Rows.Add(dtGridCircuitos.Rows[i][0], dtGridCircuitos.Rows[i][1], dtGridCircuitos.Rows[i][2], dtGridCircuitos.Rows[i][3], dtGridCircuitos.Rows[i][4]);
-                    }
-
-                    this.colorante = this.listColorantes[0];
-                    this.calibracao = Util.ObjectCalibragem.Load(this.colorante.Circuito);
-                    atualizaDetailColorante();
-                    AttListPrecisao();
-
-                    atualizaPortasComunicacaoBalanca();
-                    
-                    
+                    dtGridCircuitos.Rows.Add(drC);
                 }
-                catch
+
+                if (dgvCircuit.Rows != null)
                 {
-
+                    dgvCircuit.Rows.Clear();
                 }
+                for (int i = 0; i < dtGridCircuitos.Rows.Count; i++)
+                {
+                    dgvCircuit.Rows.Add(dtGridCircuitos.Rows[i][0], dtGridCircuitos.Rows[i][1], dtGridCircuitos.Rows[i][2], dtGridCircuitos.Rows[i][3], dtGridCircuitos.Rows[i][4]);
+                }
+
+                this.colorante = this.listColorantes[0];
+                this.calibracao = Util.ObjectCalibragem.Load(this.colorante.Circuito);
+                atualizaDetailColorante();
+                AttListPrecisao();
+
+                atualizaPortasComunicacaoBalanca();
+                
                 iniciarbgWork();
                 enableStatus(false);
-            }
-            catch
-            { }
-
-            try
-            {
+            
                 this._parametro = Util.ObjectParametros.Load();
                 switch ((Dispositivo)this._parametro.IdDispositivo)
                 {
@@ -250,19 +222,14 @@ namespace Percolore.IOConnect
                             break;
                         }
                 }
-            }
-            catch
-            {
-
-            }
-
-            try
-            {
+            
                 this.lColSeguidor = Util.ObjectColorante.List().FindAll(o => o.Seguidor > 0).ToList();
             }
-            catch
-            { }
-        }
+			catch (Exception ex)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+			}
+		}
 
         private void fPrecisaoMenu_FormClosing(object sender, FormClosingEventArgs e)
         {
@@ -277,11 +244,12 @@ namespace Percolore.IOConnect
                 this.isThreadWork = false;
                 this.isThread = false;
                 this.isThread2 = false;
-                
             }
-            catch
-            { }
-        }
+			catch (Exception ex)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+			}
+		}
 
         private void atualizaPortasComunicacaoBalanca()
         {
@@ -308,9 +276,11 @@ namespace Percolore.IOConnect
                     cmbTipoBalanca_SelectedIndexChanged(null, null);
                 }
             }
-            catch
-            { }
-        }
+			catch (Exception ex)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+			}
+		}
 
         private string ValidadeNameSerialPorta(string _str)
         {
@@ -323,6 +293,7 @@ namespace Percolore.IOConnect
                     retorno += c.ToString();
                 }
             }
+
             return retorno;
         }
 
@@ -351,9 +322,11 @@ namespace Percolore.IOConnect
                     }
                 }
             }
-            catch
-            { }
-        }
+			catch (Exception ex)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+			}
+		}
 
         private void AttListPrecisao()
         {
@@ -382,33 +355,31 @@ namespace Percolore.IOConnect
 
                     foreach (string _str in lReadFile)
                     {
-                        try
+                        string[] arrStr = _str.Split(';');
+                        if (arrStr != null && arrStr.Length > 2)
                         {
-                            string[] arrStr = _str.Split(';');
-                            if (arrStr != null && arrStr.Length > 2)
+                            int _tent = Convert.ToInt32(arrStr[2]);
+                            for (int i = 0; i < _tent; i++)
                             {
-                                int _tent = Convert.ToInt32(arrStr[2]);
-                                for (int i = 0; i < _tent; i++)
-                                {
-                                    Negocio.Precisao _p = new Negocio.Precisao();
-                                    _p.volume = double.Parse(arrStr[1].Replace(",", "."), System.Globalization.CultureInfo.InvariantCulture);
-                                    _p.tentativas = i + 1;
-                                    _p.volumeDos = 0;
-                                    _p.volumeDos_str = "0";
-                                    _p.executado = 0;
-                                    this.acurracy.listPrecisao.Add(_p);
-                                }
+                                Negocio.Precisao _p = new Negocio.Precisao();
+                                _p.volume = double.Parse(arrStr[1].Replace(",", "."), System.Globalization.CultureInfo.InvariantCulture);
+                                _p.tentativas = i + 1;
+                                _p.volumeDos = 0;
+                                _p.volumeDos_str = "0";
+                                _p.executado = 0;
+                                this.acurracy.listPrecisao.Add(_p);
                             }
                         }
-                        catch
-                        { }
                     }
+
                     atualizaDGView(this.acurracy);
                 }
             }
-            catch
-            { }
-        }
+			catch (Exception ex)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+			}
+		}
 
         private void atualizaDetailColorante()
         {
@@ -416,11 +387,12 @@ namespace Percolore.IOConnect
             {
                 txt_CircuitExecuting.Text = "Circuito " + String.Format("{0:00}", this.colorante.Circuito);
                 txtMassaEspecifica.Text = this.colorante.MassaEspecifica.ToString();
-
             }
-            catch
-            { }
-        }
+			catch (Exception ex)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+			}
+		}
 
         #region BackWork Datahora e progressbar
         private void iniciarbgWork()
@@ -451,10 +423,11 @@ namespace Percolore.IOConnect
 
                 }
             }
-            catch
-            { }
-
-        }
+			catch (Exception ex)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+			}
+		}
 
         private void bgWork_DoWork(object sender, System.ComponentModel.DoWorkEventArgs e)
         {
@@ -479,19 +452,22 @@ namespace Percolore.IOConnect
                                 Thread.Sleep(800);
                             }
                         }
-                        catch
-                        {
-                        }
-                    }
+						catch (Exception ex)
+						{
+							LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+						}
+					}
+
                     Thread.Sleep(200);
                 }
-                worker = null;
 
+                worker = null;
             }
-            
-            catch
-            { }
-        }
+			catch (Exception ex)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+			}
+		}
 
         private void bgWork_RunWorkerCompleted(object sender, System.ComponentModel.RunWorkerCompletedEventArgs e)
         {
@@ -509,12 +485,12 @@ namespace Percolore.IOConnect
                 {
                     this.isThreadWork = true;
                 }
-
             }
-            catch
-            {
-            }
-        }
+			catch (Exception ex)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+			}
+		}
 
         private void MonitoramentoWork()
         {
@@ -526,9 +502,12 @@ namespace Percolore.IOConnect
                     Invalidate();
                 }
             }
-            catch
-            { }
-            this.isRunningWork = false;
+			catch (Exception ex)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+			}
+
+			this.isRunningWork = false;
         }
         #endregion
 
@@ -572,15 +551,16 @@ namespace Percolore.IOConnect
 
                 if (e.Handled) return;
             }
-            catch
-            { }
-        }
+			catch (Exception ex)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+			}
+		}
 
         private void txtDelayBalanca_KeyPress(object sender, KeyPressEventArgs e)
         {
             try
             {
-
                 char currentKey = e.KeyChar;
                 char chrBackSpace = (char)Keys.Back;
                 char chrEnterReturn = (char)Keys.Enter;
@@ -595,53 +575,16 @@ namespace Percolore.IOConnect
 
                 if (e.Handled) return;
             }
-            catch
-            { }
-        }
+			catch (Exception ex)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+			}
+		}
 
         private void txtVolumeMaxRecipiente_KeyPress(object sender, KeyPressEventArgs e)
         {
-            //try
-            //{
-            //    char chrPoint = '.';
-            //    char currentKey = e.KeyChar;
-            //    char chrBackSpace = (char)Keys.Back;
-            //    char chrEnterReturn = (char)Keys.Enter;
-            //    if (currentKey == chrPoint)
-            //    {
-            //        if (txtVolumeMaxRecipiente.Text.Contains("."))
-            //        {
-            //            string[] arrStr = txtVolumeMaxRecipiente.Text.Split('.');
-            //            if (arrStr.Length > 1)
-            //            {
-            //                e.Handled = true;
-            //            }
-            //            else
-            //            {
-            //                e.Handled = false;
-            //            }
-            //        }
-            //        else
-            //        {
-            //            e.Handled = false;
-            //        }
-            //    }
-            //    else if (Char.IsNumber(currentKey) || currentKey == chrBackSpace || currentKey == chrEnterReturn)
-            //    {
-            //        e.Handled = false;
-            //    }
-            //    else
-            //    {
-            //        e.Handled = true;
-            //    }
-
-            //    if (e.Handled) return;
-            //}
-            //catch
-            //{ }
             try
             {
-
                 char currentKey = e.KeyChar;
                 char chrBackSpace = (char)Keys.Back;
                 char chrEnterReturn = (char)Keys.Enter;
@@ -656,15 +599,16 @@ namespace Percolore.IOConnect
 
                 if (e.Handled) return;
             }
-            catch
-            { }
-        }
+			catch (Exception ex)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+			}
+		}
 
         private void txtCapacidadeMaxBalanca_KeyPress(object sender, KeyPressEventArgs e)
         {
             try
             {
-
                 char currentKey = e.KeyChar;
                 char chrBackSpace = (char)Keys.Back;
                 char chrEnterReturn = (char)Keys.Enter;
@@ -679,15 +623,16 @@ namespace Percolore.IOConnect
 
                 if (e.Handled) return;
             }
-            catch
-            { }
-        }
+			catch (Exception ex)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+			}
+		}
 
         private void txtMinMassaAdmRecipiente_KeyPress(object sender, KeyPressEventArgs e)
         {
             try
             {
-
                 char currentKey = e.KeyChar;
                 char chrBackSpace = (char)Keys.Back;
                 char chrEnterReturn = (char)Keys.Enter;
@@ -702,9 +647,11 @@ namespace Percolore.IOConnect
 
                 if (e.Handled) return;
             }
-            catch
-            { }
-        }
+			catch (Exception ex)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+			}
+		}
 
         #endregion
 
@@ -725,11 +672,12 @@ namespace Percolore.IOConnect
                 inicializacaoPG++;
                 statusStrip1.Refresh();
             }
-            catch
-            {
+			catch (Exception ex)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+			}
 
-            }
-            if (inicializacaoPG >= 8)
+			if (inicializacaoPG >= 8)
             {
                 inicializacaoPG = 0;
             }
@@ -889,28 +837,22 @@ namespace Percolore.IOConnect
 
                     foreach (string _str in lReadFile)
                     {
-                        try
+                        string[] arrStr = _str.Split(';');
+                        if (arrStr != null && arrStr.Length > 2)
                         {
-                            string[] arrStr = _str.Split(';');
-                            if (arrStr != null && arrStr.Length > 2)
+                            int _tent = Convert.ToInt32(arrStr[2]);
+                            for (int i = 0; i < _tent; i++)
                             {
-                                int _tent = Convert.ToInt32(arrStr[2]);
-                                for (int i = 0; i < _tent; i++)
-                                {
-                                    Negocio.Precisao _p = new Negocio.Precisao();
-                                    _p.volume = double.Parse(arrStr[1].Replace(",", "."), System.Globalization.CultureInfo.InvariantCulture);
-                                    _p.tentativas = i + 1;
-                                    _p.volumeDos = 0;
-                                    _p.volumeDos_str = "0";                                   
-                                    _p.executado = 0;
-                                    this.acurracy.listPrecisao.Add(_p);
-                                }
+                                Negocio.Precisao _p = new Negocio.Precisao();
+                                _p.volume = double.Parse(arrStr[1].Replace(",", "."), System.Globalization.CultureInfo.InvariantCulture);
+                                _p.tentativas = i + 1;
+                                _p.volumeDos = 0;
+                                _p.volumeDos_str = "0";                                   
+                                _p.executado = 0;
+                                this.acurracy.listPrecisao.Add(_p);
                             }
                         }
-                        catch
-                        { }
                     }
-
                 }
                 else
                 {
@@ -919,15 +861,16 @@ namespace Percolore.IOConnect
 
                 atualizaDGView(this.acurracy);
             }
-            catch
-            { }
-        }
+			catch (Exception ex)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+			}
+		}
 
         private void atualizaDGView(Negocio.Accurracy _accurracy)
         {
             try
             {
-
                 if (dgvCalibracaoAuto.Rows != null)
                 {
                     dgvCalibracaoAuto.Rows.Clear();
@@ -970,14 +913,12 @@ namespace Percolore.IOConnect
                 }
 
                 this.Refresh();
-
             }
-            catch
-            {
-
-            }
-
-        }
+			catch (Exception ex)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+			}
+		}
 
         private void dgvCalibracaoAuto_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
         {
@@ -1002,9 +943,11 @@ namespace Percolore.IOConnect
 
                 }
             }
-            catch
-            { }
-        }
+			catch (Exception ex)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+			}
+		}
 
         private void cmbTipoBalanca_SelectedIndexChanged(object sender, EventArgs e)
         {
@@ -1030,9 +973,11 @@ namespace Percolore.IOConnect
                 txtCapacidadeMaxBalanca.Text = this.interfaceBal.CargaMaximaBalanca_Gramas.ToString(); ;
 
             }
-            catch
-            { }
-        }
+			catch (Exception ex)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+			}
+		}
 
         private void enableStatus(bool _status)
         {
@@ -1042,9 +987,11 @@ namespace Percolore.IOConnect
                 this.pnlStatus2.Visible = _status;
                 this.statusStrip1.Visible = _status;
             }
-            catch
-            { }
-        }
+			catch (Exception ex)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+			}
+		}
 
         private void AttStripMsg()
         {
@@ -1071,11 +1018,11 @@ namespace Percolore.IOConnect
                 toolProgress.Value = valor_toolP;               
                 statusStrip1.Refresh();
             }
-            catch
-            {
-
-            }
-        }
+			catch (Exception ex)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+			}
+		}
 
         private void btnStart_Click(object sender, EventArgs e)
         {
@@ -1130,9 +1077,12 @@ namespace Percolore.IOConnect
                 {
                     this.DelayEntreBalanca = Convert.ToInt32(txtDelayBalanca.Text) * 1000;
                 }
-                catch
-                { }
-                if (this.DelayEntreBalanca < 5000)
+				catch (Exception ex)
+				{
+					LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+				}
+
+				if (this.DelayEntreBalanca < 5000)
                 {
                     this.DelayEntreBalanca = 5000;
                 }
@@ -1146,9 +1096,11 @@ namespace Percolore.IOConnect
                     execCal = true;
                 }
             }
-            catch
-            { }
-        }
+			catch (Exception ex)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+			}
+		}
 
         private void iniciarCalibracaoAutomatica()
         {
@@ -1162,9 +1114,12 @@ namespace Percolore.IOConnect
                     {
                         _disp.Disconnect();
                     }
-                    catch
-                    { }
-                }
+					catch (Exception ex)
+					{
+						LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+					}
+				}
+
                 this.ldisp.Clear();
                 IDispenser dispenser = null;
                 IDispenser dispenser2 = null;
@@ -1227,49 +1182,41 @@ namespace Percolore.IOConnect
                 {
                     this.ldisp.Add(dispenser2);
                 }
-            }
-            catch
-            {
-            }
-            try
-            {
+            
                 this.MassaBalancaOnLine = 0;
                 this.MassaBalancaOnLineInc = 0;
                 this.isPosicaoRecipiente = false;
-                //bool posRec = PosicionarRecipiente();
-                //if (posRec)
-                //{
-                //AttDGVBack();
+                
                 if (backgroundWorker1 == null)
-                    {
-                        this.backgroundWorker1 = new BackgroundWorker();
-                        this.backgroundWorker1.DoWork += new System.ComponentModel.DoWorkEventHandler(backgroundWorker1_DoWork);
-                        this.backgroundWorker1.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(backgroundWorker1_RunWorkerCompleted);
-                        this.backgroundWorker1.WorkerSupportsCancellation = true;
-                        this.isThread = true;
-                        this.isRunning = false;
-                        this.execCal = true;
-                        this.backgroundWorker1.RunWorkerAsync();
-                    }
-                    else
-                    {
+                {
+                    this.backgroundWorker1 = new BackgroundWorker();
+                    this.backgroundWorker1.DoWork += new System.ComponentModel.DoWorkEventHandler(backgroundWorker1_DoWork);
+                    this.backgroundWorker1.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(backgroundWorker1_RunWorkerCompleted);
+                    this.backgroundWorker1.WorkerSupportsCancellation = true;
+                    this.isThread = true;
+                    this.isRunning = false;
+                    this.execCal = true;
+                    this.backgroundWorker1.RunWorkerAsync();
+                }
+                else
+                {
 
-                        this.backgroundWorker1 = new BackgroundWorker();
-                        this.backgroundWorker1.DoWork += new System.ComponentModel.DoWorkEventHandler(backgroundWorker1_DoWork);
-                        this.backgroundWorker1.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(backgroundWorker1_RunWorkerCompleted);
-                        this.backgroundWorker1.WorkerSupportsCancellation = true;
-                        this.isThread = true;
-                        this.isRunning = false;
-                        this.execCal = true;
-                        backgroundWorker1.RunWorkerAsync();
+                    this.backgroundWorker1 = new BackgroundWorker();
+                    this.backgroundWorker1.DoWork += new System.ComponentModel.DoWorkEventHandler(backgroundWorker1_DoWork);
+                    this.backgroundWorker1.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(backgroundWorker1_RunWorkerCompleted);
+                    this.backgroundWorker1.WorkerSupportsCancellation = true;
+                    this.isThread = true;
+                    this.isRunning = false;
+                    this.execCal = true;
+                    backgroundWorker1.RunWorkerAsync();
 
-                    }
-                //}
+                }
             }
-            catch
-            {
-            }
-        }
+			catch (Exception ex)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+			}
+		}
 
         #region Processo
 
@@ -1300,20 +1247,15 @@ namespace Percolore.IOConnect
                                 Thread.Sleep(2000);
                             }
                         }
-                        catch
-                        {
-                        }
-                    }
+						catch (Exception ex)
+						{
+							LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+						}
+					}
                     Thread.Sleep(200);
                 }
                 worker = null;
 
-            }
-            catch
-            {
-            }
-            try
-            {
                 if (!this.ClosingWindows)
                 {
                     if (this.stopExecution)
@@ -1345,9 +1287,11 @@ namespace Percolore.IOConnect
                     this.Invoke(new MethodInvoker(disabeStatus));
                 }
             }
-            catch
-            { }
-        }
+			catch (Exception ex)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+			}
+		}
 
         private void ExportFile()
         {
@@ -1369,9 +1313,11 @@ namespace Percolore.IOConnect
                     m.ShowDialog(msg);
                 }
             }
-            catch
-            { }
-        }
+			catch (Exception ex)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+			}
+		}
 
         private void disabeStatus()
         {
@@ -1381,9 +1327,11 @@ namespace Percolore.IOConnect
                 btnEditarDiretorio.Enabled = true;
                 enableStatus(false);
             }
-            catch
-            { }
-        }       
+			catch (Exception ex)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+			}
+		}       
 
         private void backgroundWorker1_RunWorkerCompleted(object sender, System.ComponentModel.RunWorkerCompletedEventArgs e)
         {
@@ -1401,12 +1349,12 @@ namespace Percolore.IOConnect
                 {
                     this.isThread = true;
                 }
-
             }
-            catch
-            {
-            }
-        }
+			catch (Exception ex)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+			}
+		}
 
         void PausarMonitoramento()
         {
@@ -1415,17 +1363,16 @@ namespace Percolore.IOConnect
                 this.isThread = false;
                 this.isRunning = true;
             }
-            catch
-            {
-            }
-        }
+			catch (Exception ex)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+			}
+		}
 
         private void AttDGVBack()
         {
             try
             {
-
-                //dataGrid.Rows[index].Selected = true;
                 atualizaDGView(this.acurracy);
                 if (this.posInicio < this.acurracy.listPrecisao.Count)
                 {
@@ -1436,12 +1383,12 @@ namespace Percolore.IOConnect
                     dgvCalibracaoAuto.Update();
                 }
                 AttMassaRecipiente();
-
-
             }
-            catch
-            { }
-        }
+			catch (Exception ex)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+			}
+		}
 
         private void AttMassaRecipiente()
         {
@@ -1449,9 +1396,11 @@ namespace Percolore.IOConnect
             {
                 lblMassaRecipiente.Text = this.MassaBalancaOnLine.ToString();
             }
-            catch
-            { }
-        }
+			catch (Exception ex)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+			}
+		}
 
         private void MonitoramentoEvent()
         {
@@ -1492,10 +1441,12 @@ namespace Percolore.IOConnect
                 }
 
             }
-            catch
-            {
-            }
-            this.isRunning = false;
+			catch (Exception ex)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+			}
+
+			this.isRunning = false;
         }
 
         private bool CapacidadeMaxRecipiente()
@@ -1515,9 +1466,12 @@ namespace Percolore.IOConnect
                     this.istrocarRecipiente = false;
                 }
             }
-            catch
-            { }
-            return retorno;
+			catch (Exception ex)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+			}
+
+			return retorno;
         }
 
         private void TrocarRecipiente()
@@ -1544,12 +1498,12 @@ namespace Percolore.IOConnect
                 this.stepPosicaoRec = 0;
                 this.isPosicaoRecipiente = false;
                 this.isRunning = false;
-                //TrocarRecipiente1();
-
             }
-            catch
-            { }
-        }
+			catch (Exception ex)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+			}
+		}
 
         private void FaixaPrecisao()
         {
@@ -1634,11 +1588,11 @@ namespace Percolore.IOConnect
                     this.stepFaixaPrecisao = 0;
 
                 }
-
             }
-            catch
-            {
-                this.isRunning = false;
+			catch (Exception ex)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+			    this.isRunning = false;
                 this.execCal = false;
             }
         }
@@ -1738,15 +1692,14 @@ namespace Percolore.IOConnect
                             return false;
                         }
                     }
-
                 }
-               
             }
-            catch
-            {
+			catch (Exception ex)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+			}
 
-            }
-            return retorno;
+			return retorno;
         }
 
         private void ClosedSerialDispensa()
@@ -1756,17 +1709,14 @@ namespace Percolore.IOConnect
                 //this.disp.Disconnect();
                 foreach (IDispenser _disp in this.ldisp)
                 {
-                    try
-                    {
-                        _disp.Disconnect();
-                    }
-                    catch
-                    { }
+                    _disp.Disconnect();
                 }
             }
-            catch
-            { }
-        }
+			catch (Exception ex)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+			}
+		}
         #endregion
 
         #region Dosagem Placa
@@ -1906,12 +1856,15 @@ namespace Percolore.IOConnect
                 //Thread.Sleep(1000);
                 this.isRunning2 = false;
             }
-            catch (Exception ex)
-            {
+			catch (Exception ex)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+			
                 if (!this.IsDispensou)
                 {
                     Falha2(ex);
                 }
+
                 this.isRunning2 = false;
             }
         }
@@ -1924,8 +1877,6 @@ namespace Percolore.IOConnect
             {
                 m.ShowDialog(Negocio.IdiomaResxExtensao.Global_Falha_ExecucaoPorcesso + ex.Message);
             }
-
-
         }
 
         void PausarMonitoramento2()
@@ -1937,9 +1888,13 @@ namespace Percolore.IOConnect
                     backgroundWorker2.CancelAsync();
                 }
             }
-            catch
-            { }
-            this.isThread2 = false;
+			catch (Exception ex)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+			}
+
+			this.isThread2 = false;
+            
             try
             {
                 //this.disp.Disconnect();
@@ -1948,15 +1903,18 @@ namespace Percolore.IOConnect
                     _disp.Disconnect();
                 }
             }
-            catch
-            { }
-            if (!this.IsDispensou)
+			catch (Exception ex)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+			}
+
+			if (!this.IsDispensou)
             {
                 this.execCal = false;
                 this.acurracy.MessageRetorno = "Erro ao Dispensar Produto!";
             }
-            this.isRunning = false;
 
+            this.isRunning = false;
         }
 
         void ExecutarMonitoramento2()
@@ -1994,11 +1952,11 @@ namespace Percolore.IOConnect
                     PausarMonitoramento2();
                 }
             }
-            catch
-            { }
-
-
-        }
+			catch (Exception ex)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+			}
+		}
 
         private void backgroundWorker2_DoWork(object sender, System.ComponentModel.DoWorkEventArgs e)
         {
@@ -2023,19 +1981,22 @@ namespace Percolore.IOConnect
                                 Thread.Sleep(500);
                             }
                         }
-                        catch
-                        {
-                        }
-                    }
+						catch (Exception ex)
+						{
+							LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+						}
+					}
+
                     Thread.Sleep(500);
                 }
+
                 worker = null;
             }
-            catch
-            {
-            }
-
-        }
+			catch (Exception ex)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+			}
+		}
 
         private void backgroundWorker2_RunWorkerCompleted(object sender, System.ComponentModel.RunWorkerCompletedEventArgs e)
         {
@@ -2054,10 +2015,11 @@ namespace Percolore.IOConnect
                     this.isThread2 = true;
                 }
             }
-            catch
-            {
-            }
-        }
+			catch (Exception ex)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+			}
+		}
 
         #endregion
     }

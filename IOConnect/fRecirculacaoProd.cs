@@ -1,17 +1,9 @@
-﻿using Percolore.Core.Util;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
+﻿using Percolore.Core.Logging;
+using Percolore.Core.Util;
 
 namespace Percolore.IOConnect
 {
-    public partial class fRecirculacaoProd : Form
+	public partial class fRecirculacaoProd : Form
     {
         public Util.ObjectRecircular _recirculacao = null;
         private Util.ObjectParametros _parametros = null;
@@ -72,13 +64,12 @@ namespace Percolore.IOConnect
 
                 txtRecirculacaoVol.isTecladoShow = chb_tec;
                 txtRecirculacaoVol.isTouchScrenn = chb_touch;
-
-
-
             }
-            catch
-            { }
-        }
+			catch (Exception ex)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+			}
+		}
 
         private void btnTeclado_Click(object sender, EventArgs e)
         {
@@ -105,9 +96,11 @@ namespace Percolore.IOConnect
                 }
                 this.DialogResult = DialogResult.OK;
             }
-            catch
-            { }
-        }
+			catch (Exception ex)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+			}
+		}
 
         private void lblRecCircuito_Click(object sender, EventArgs e)
         {
@@ -126,9 +119,10 @@ namespace Percolore.IOConnect
                 }
 
             }
-            catch (Exception exc)
-            {
-                string msg = exc.Message;
+			catch (Exception ex)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+			    string msg = ex.Message;
             }
         }
     }

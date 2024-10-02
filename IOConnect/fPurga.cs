@@ -1,18 +1,10 @@
-﻿using Percolore.Core.Persistence.Xml;
-using Percolore.Core.UserControl;
-using System;
-using System.Drawing;
-using System.Windows.Forms;
+﻿using Percolore.Core;
+using Percolore.Core.Logging;
 using System.ComponentModel;
-using System.Threading;
-using System.Threading.Tasks;
-using Percolore.Core;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace Percolore.IOConnect
 {
-    public partial class fPurga : Form
+	public partial class fPurga : Form
     {
         Util.ObjectParametros _parametros = null;
         PurgaVO _prmPurga;
@@ -89,11 +81,14 @@ namespace Percolore.IOConnect
                     }
                 }
             }
-            catch
-            { }
-            /* É necessário indicar topMost aqui para que o form seja 
+			catch (Exception ex)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+			}
+
+			/* É necessário indicar topMost aqui para que o form seja 
              * redesenhando em primeiro plano sobre qualquer processo em execução */
-            TopMost = !desativarUI;
+			TopMost = !desativarUI;
 
             /* Se a exibição da interface for desabilitada,
              * reduz form a tamanho zero e incia automaticamente a dispensa */
@@ -410,13 +405,13 @@ namespace Percolore.IOConnect
                     _prmPurga.DispenserP3.UnHalt();
                 }
             }
-            catch
-            {
+			catch (Exception ex)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+			}
 
-            }
-
-            //Define status da operação
-            DialogResult = DialogResult.Abort;
+			//Define status da operação
+			DialogResult = DialogResult.Abort;
         }
 
         private void Cancelar_Click(object sender, EventArgs e)
@@ -473,8 +468,9 @@ namespace Percolore.IOConnect
         #region Métodos privados
 
         void Falha(Exception ex)
-        {
-            PausarMonitoramento();
+		{
+            LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+			PausarMonitoramento();
 
             using (fMensagem m = new fMensagem(fMensagem.TipoMensagem.Erro))
             {
@@ -493,10 +489,12 @@ namespace Percolore.IOConnect
                 this._prmPurga.DispenserP3.Halt();
                 this._prmPurga.DispenserP3.UnHalt();
             }
-            catch
-            { }
+			catch (Exception ex)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+			}
 
-            using (fMensagem m = new fMensagem(fMensagem.TipoMensagem.Erro))
+			using (fMensagem m = new fMensagem(fMensagem.TipoMensagem.Erro))
             {
                 //m.ShowDialog(Negocio.IdiomaResxExtensao.Global_Falha_ExecucaoPorcesso + "Botão de Emergência pressionado!");
                 m.ShowDialog(Negocio.IdiomaResxExtensao.Global_Falha_ExecucaoPorcesso + Negocio.IdiomaResxExtensao.PlacaMov_Botao_Emergencia, true);
@@ -513,10 +511,12 @@ namespace Percolore.IOConnect
                 this._prmPurga.DispenserP3.Halt();
                 this._prmPurga.DispenserP3.UnHalt();
             }
-            catch
-            { }
+			catch (Exception ex)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+			}
 
-            using (fMensagem m = new fMensagem(fMensagem.TipoMensagem.Erro))
+			using (fMensagem m = new fMensagem(fMensagem.TipoMensagem.Erro))
             {
                 //m.ShowDialog(Negocio.IdiomaResxExtensao.Global_Falha_ExecucaoPorcesso + "Dispensa parou!");
                 m.ShowDialog(Negocio.IdiomaResxExtensao.Global_Falha_ExecucaoPorcesso + Negocio.IdiomaResxExtensao.PlacaMov_Disp_Parou, true);
@@ -535,10 +535,11 @@ namespace Percolore.IOConnect
                     backgroundWorker1.CancelAsync();
                 }
             }
-            catch
-            { }
-
-        }
+			catch (Exception ex)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+			}
+		}
 
         void ExecutarMonitoramento()
         {
@@ -567,11 +568,11 @@ namespace Percolore.IOConnect
                     backgroundWorker1.RunWorkerAsync();
                 }
             }
-            catch
-            { }
-
-
-        }
+			catch (Exception ex)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+			}
+		}
 
         private void backgroundWorker1_DoWork(object sender, System.ComponentModel.DoWorkEventArgs e)
         {
@@ -599,19 +600,20 @@ namespace Percolore.IOConnect
                                 }
                             }
                         }
-                        catch
-                        {
-                        }
-                    }
+						catch (Exception ex)
+						{
+							LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+						}
+					}
+
                     Thread.Sleep(500);
                 }
-
             }
-            catch
-            {
-            }
-
-        }
+			catch (Exception ex)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+			}
+		}
         
         private void backgroundWorker1_RunWorkerCompleted(object sender, System.ComponentModel.RunWorkerCompletedEventArgs e)
         {
@@ -629,12 +631,12 @@ namespace Percolore.IOConnect
                 {
                     this.isThread = true;
                 }
-
             }
-            catch
-            {
-            }
-        }
+			catch (Exception ex)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+			}
+		}
 
         // void Monitoramento_Event(object sender, EventArgs e)
         void MonitoramentoEvent()
@@ -872,12 +874,15 @@ namespace Percolore.IOConnect
                 this.counterFalha = 0;
                 ////Thread.Sleep(1000);
             }
-            catch (Exception ex)
-            {
+			catch (Exception ex)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+			
                 if (this.counterFalha > 0)
                 {
                     Falha(ex);
                 }
+
                 this.isRunning = false;
                 this.counterFalha++;
             }
@@ -973,13 +978,13 @@ namespace Percolore.IOConnect
                         {
                             break;
                         }
-
                 }
-                
             }
-            catch
-            { }
-        }
+			catch (Exception ex)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+			}
+		}
 
         void trataPassosAction_01()
         {

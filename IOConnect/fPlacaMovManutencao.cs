@@ -1,19 +1,9 @@
-﻿using Percolore.Core.UserControl;
-using System;
-using System.Collections.Generic;
+﻿using Percolore.Core.Logging;
 using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-using Percolore.IOConnect;
 
 namespace Percolore.IOConnect
 {
-    public partial class fPlacaMovManutencao : Form
+	public partial class fPlacaMovManutencao : Form
     {
         Util.ObjectParametros _parametros = null;
         System.ComponentModel.BackgroundWorker backgroundWorker1 = null;
@@ -94,9 +84,11 @@ namespace Percolore.IOConnect
                 txtSensorValvulaFechada.isTouchScrenn = chb_touch;
 
             }
-            catch
-            { }
-        }
+			catch (Exception ex)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+			}
+		}
 
         private void fPlacaMovManutencao_FormClosing(object sender, FormClosingEventArgs e)
         {
@@ -138,11 +130,11 @@ namespace Percolore.IOConnect
                 PausarMonitoramento();
                 DialogResult = DialogResult.OK;               
             }
-            catch
-            {
-
-            }
-        }
+			catch (Exception ex)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+			}
+		}
 
         private void btnAbrirGaveta_Click(object sender, EventArgs e)
         {
@@ -180,9 +172,10 @@ namespace Percolore.IOConnect
                     MessageBox.Show(Negocio.IdiomaResxExtensao.Manutencao_Show_Erro_Nativo + this.modBusDispenser_P3.IsNativo.ToString());
                 }
             }
-            catch (Exception exc)
-            {
-                MessageBox.Show("Error:" + exc.Message);
+			catch (Exception ex)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+			    MessageBox.Show("Error:" + ex.Message);
             }
         }
 
@@ -224,9 +217,10 @@ namespace Percolore.IOConnect
                     MessageBox.Show(Negocio.IdiomaResxExtensao.Manutencao_Show_Erro_Nativo + this.modBusDispenser_P3.IsNativo.ToString());
                 }
             }
-            catch (Exception exc)
-            {
-                MessageBox.Show("Error:" + exc.Message);
+			catch (Exception ex)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+			    MessageBox.Show("Error:" + ex.Message);
             }
 
         }
@@ -271,9 +265,10 @@ namespace Percolore.IOConnect
                 }
 
             }
-            catch (Exception exc)
-            {
-                MessageBox.Show("Error:" + exc.Message);
+			catch (Exception ex)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+			    MessageBox.Show("Error:" + ex.Message);
             }
         }
 
@@ -318,9 +313,10 @@ namespace Percolore.IOConnect
                 }
 
             }
-            catch (Exception exc)
-            {
-                MessageBox.Show("Error:" + exc.Message);
+			catch (Exception ex)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+			    MessageBox.Show("Error:" + ex.Message);
             }
         }
 
@@ -335,9 +331,10 @@ namespace Percolore.IOConnect
                 this.modBusDispenser_P3.ReadSensores_Mover();
                 this.Invoke(new MethodInvoker(atualizaGridEnable));
             }
-            catch (Exception exc)
-            {
-                MessageBox.Show("Error:" + exc.Message);
+			catch (Exception ex)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+			    MessageBox.Show("Error:" + ex.Message);
             }
         }
 
@@ -384,11 +381,11 @@ namespace Percolore.IOConnect
                 }
 
             }
-            catch (Exception exc)
-            {
-                MessageBox.Show("Error:" + exc.Message);
+			catch (Exception ex)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+			    MessageBox.Show("Error:" + ex.Message);
             }
-
         }
 
         private void btnSubirBico_Click(object sender, EventArgs e)
@@ -433,9 +430,10 @@ namespace Percolore.IOConnect
                 }
 
             }
-            catch (Exception exc)
-            {
-                MessageBox.Show("Error:" + exc.Message);
+			catch (Exception ex)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+			    MessageBox.Show("Error:" + ex.Message);
             }
         }
 
@@ -642,7 +640,6 @@ namespace Percolore.IOConnect
             catch (Exception ex)
             {
                 Falha(ex);
-                
             }
         }
 
@@ -654,13 +651,16 @@ namespace Percolore.IOConnect
             {
                 this.modBusDispenser_P3.Disconnect_Mover();
             }
-            catch
-            { }
-        }
+			catch (Exception ex)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+			}
+		}
 
         void Falha(Exception ex)
-        {
-            PausarMonitoramento();
+		{
+            LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+			PausarMonitoramento();
 
             using (fMensagem m = new fMensagem(fMensagem.TipoMensagem.Erro))
             {
@@ -681,10 +681,11 @@ namespace Percolore.IOConnect
                 gbActionComand.Enabled = true;
                 ClosedSerialDispensa();
             }
-            catch
-            {
-            }
-        }
+			catch (Exception ex)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+			}
+		}
 
         void ExecutarMonitoramento()
         {
@@ -725,9 +726,10 @@ namespace Percolore.IOConnect
                     }
                 }
             }
-            catch
-            {
-                gbActionComand.Enabled = true;
+			catch (Exception ex)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+			    gbActionComand.Enabled = true;
             }
         }
 
@@ -754,19 +756,21 @@ namespace Percolore.IOConnect
                                 Thread.Sleep(2000);
                             }
                         }
-                        catch
-                        {
-                        }
-                    }
+						catch (Exception ex)
+						{
+							LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+						}
+					}
                     Thread.Sleep(200);
                 }
 
                 this.Invoke(new MethodInvoker(atualizaGridEnable));
             }
-            catch
-            {
-            }
-        }
+			catch (Exception ex)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+			}
+		}
 
         private void backgroundWorker1_RunWorkerCompleted(object sender, System.ComponentModel.RunWorkerCompletedEventArgs e)
         {
@@ -784,12 +788,12 @@ namespace Percolore.IOConnect
                 {
                     this.isThread = true;
                 }
-
             }
-            catch
-            {
-            }
-        }
+			catch (Exception ex)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+			}
+		}
 
         private void atualizaGridEnable()
         {
@@ -834,25 +838,12 @@ namespace Percolore.IOConnect
                 //    //MessageBox.Show("Máquina Desligada!");
                     MessageBox.Show(Negocio.IdiomaResxExtensao.Manutencao_Show_Maquina_Desligada);
                 }
-
-                //if (!gbIndividual.Enabled)
-                //{
-                //    Thread.Sleep(2000);
-                //    gbIndividual.Enabled = true;
-                //}
-                //if (this.isDispensou)
-                //{
-                //    this.isDispensou = false;
-                //    this._circuitos[this.index_PurgaIndividual].BackColor = Color.FromArgb(6, 176, 37);
-                //    this._toolTip.SetToolTip(this._circuitos[this.index_PurgaIndividual], string.Format("Volume Dosado: {0} ml apartir do dia {1:dd/MM/yyyy HH:mm:ss}", this._listRecircular[this.index_PurgaIndividual].VolumeDosado.ToString(), this._listRecircular[this.index_PurgaIndividual].DtInicio));
-                //}
-                //this.counterEnableGrid = 0;
             }
-            catch
-            {
-
-            }
-        }
+			catch (Exception ex)
+			{
+				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+			}
+		}
 
         #endregion
        
