@@ -2797,12 +2797,20 @@ namespace Percolore.IOConnect
 
             if (this.User.Tipo == 1)
             {
-                p.TipoDosagemExec = Convert.ToInt32(cmbTipoDosagemExec.SelectedValue.ToString());
+                if (cmbTipoDosagemExec.SelectedValue == null)
+				{
+					MessageBox.Show("Tipo de Dosagem não selecionado", "ATENÇÃO", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+					cmbTipoDosagemExec.Focus();
+					return false;
+				}
+
+				p.TipoDosagemExec = Convert.ToInt32(cmbTipoDosagemExec.SelectedValue.ToString());
             }
             else
             {
                 p.TipoDosagemExec = Convert.ToInt32(cmbTipoDosagemExec_2.SelectedValue.ToString());
             }
+
             p.HabilitarPurgaIndividual = chkHabilitarPurgaIndividual.Checked;
             if (this.User.Tipo == 1)
             {
@@ -2926,7 +2934,15 @@ namespace Percolore.IOConnect
             p.IpSincToken = txtIpToken.Text;
             p.PortaSincToken = txtPortToken.ToInt().ToString();
             p.DesabilitaMonitSyncToken = chkMonitToken.Checked;
-            p.TipoEventos = ckTipoEventos.SelectedItem.ToString();
+            
+            if (ckTipoEventos.SelectedItem == null)
+			{
+				MessageBox.Show("Tipo de Eventos não selecionado", "ATENÇÃO", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+				ckTipoEventos.Focus();
+				return false;
+			}
+
+			p.TipoEventos = ckTipoEventos.SelectedItem.ToString();
 
             //Monitoramento Sinc BkpCalibragem      
             p.UrlSincBkpCalibragem = txtUrlSincBkpCalibragem.Text;
@@ -2936,7 +2952,8 @@ namespace Percolore.IOConnect
             if (cmbTipoBaseDados.SelectedValue == null)
             {
                 MessageBox.Show("Tipo de base de dados não selecionado.", "ATENÇÃO", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return false;
+                cmbTipoBaseDados.Focus();
+				return false;
             }
 
             p.TipoBaseDados = cmbTipoBaseDados.SelectedValue.ToString();
@@ -2993,7 +3010,8 @@ namespace Percolore.IOConnect
 
             //Recircular Auto
             p.HabilitarRecirculacaoAuto = chkHabilitarMonitRecirculacaoAuto.Checked;
-            if (cbTipoTempoMonitRecirculacaoAuto.SelectedValue.ToString() == "1")
+
+			if ((cbTipoTempoMonitRecirculacaoAuto.SelectedValue != null) && (cbTipoTempoMonitRecirculacaoAuto.SelectedValue.ToString() == "1"))
             {
                 int delay = txtDelayMonitRecirculacaoAuto.ToInt();
                 if(delay < 0 )
@@ -3371,7 +3389,7 @@ namespace Percolore.IOConnect
                 txtDelayMonitRecirculacao.Text = _parametros.DelayMonitRecirculacao.ToString();
 
                 chkHabilitarMonitRecirculacaoAuto.Checked = _parametros.HabilitarRecirculacaoAuto;
-                if (cbTipoTempoMonitRecirculacaoAuto.SelectedValue.ToString() == "1")
+                if ((cbTipoTempoMonitRecirculacaoAuto.SelectedValue != null) && (cbTipoTempoMonitRecirculacaoAuto.SelectedValue.ToString() == "1"))
                 {
                     int delay = _parametros.DelayMonitRecirculacaoAuto;
                     txtDelayMonitRecirculacaoAuto.Text = ((int)(delay / 60 )).ToString();

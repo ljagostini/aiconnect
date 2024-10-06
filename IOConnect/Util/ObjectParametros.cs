@@ -520,22 +520,42 @@ namespace Percolore.IOConnect.Util
                                 objPar.HabilitarDispensaSequencial = Convert.ToBoolean(reader["HabilitarDispensaSequencial"].ToString());
                                 objPar.HabilitarFormulaPersonalizada = Convert.ToBoolean(reader["HabilitarFormulaPersonalizada"].ToString());
                                 objPar.HabilitarTesteRecipiente = Convert.ToBoolean(reader["HabilitarTesteRecipiente"].ToString());
-                                objPar.HabilitarIdentificacaoCopo = Convert.ToBoolean(reader["HabilitarIdentificacaoCopo"].ToString());
-                                objPar.TreinamentoCal = Convert.ToBoolean(reader["TreinamentoCal"].ToString());                                    
-                                objPar.DelayEsponja = Convert.ToInt32(reader["DelayEsponja"].ToString());
                                 
-                                try
+                                if (!bool.TryParse(reader["HabilitarIdentificacaoCopo"].ToString(), out bool habilitarIdentificacaoCopo))
+									LogManager.LogInformation("Parâmetro 'HabilitarIdentificacaoCopo' inválido. Usando valor default 'false'.");
+
+								objPar.HabilitarIdentificacaoCopo = habilitarIdentificacaoCopo;
+
+                                if (!bool.TryParse(reader["TreinamentoCal"].ToString(), out bool treinamentoCal))
+                                    LogManager.LogInformation("Parâmetro 'TreinamentoCal' inválido. Utilizando o valor default 'false'.");
+                                
+                                objPar.TreinamentoCal = treinamentoCal;
+
+								if (!int.TryParse(reader["DelayEsponja"].ToString(), out int delayEsponja))
+									LogManager.LogInformation("Parâmetro 'DelayEsponja' inválido. Utilizando o valor default '0'.");
+
+								objPar.DelayEsponja = delayEsponja;
+
+                                if (!int.TryParse(reader["IdIdioma"].ToString(), out int idIdioma))
                                 {
-                                    objPar.IdIdioma = Convert.ToInt32(reader["IdIdioma"].ToString());
-                                }
-								catch (Exception e)
-								{
-									LogManager.LogError($"Erro no módulo {typeof(ObjectParametros).Name}: ", e);
-								    objPar.IdIdioma = 1;
+                                    LogManager.LogInformation("Parâmetro 'IdIdioma' inválido. Utilizando o valor default '1'.");
+                                    idIdioma = 1;
                                 }
 
-                                objPar.ViewMessageProc = Convert.ToBoolean(reader["ViewMessageProc"].ToString());
-                                objPar.IdDispositivo = Convert.ToInt32(reader["IdDispositivo"].ToString());                                
+								objPar.IdIdioma = idIdioma;
+
+								if (!bool.TryParse(reader["ViewMessageProc"].ToString(), out bool viewMessageProc))
+									LogManager.LogInformation("Parâmetro 'ViewMessageProc' inválido. Utilizando o valor default 'false'.");
+
+								objPar.ViewMessageProc = viewMessageProc;
+
+								if (!int.TryParse(reader["IdDispositivo"].ToString(), out int idDispositivo))
+								{
+									LogManager.LogInformation("Parâmetro 'IdDispositivo' inválido. Utilizando o valor default '1'.");
+									idIdioma = 1;
+								}
+
+								objPar.IdDispositivo = idDispositivo;                                
                                 objPar.HabilitarPurgaIndividual = Convert.ToBoolean(reader["HabilitarPurgaIndividual"].ToString());
                                 objPar.HabilitarTouchScrenn = Convert.ToBoolean(reader["HabilitarTouchScrenn"].ToString());
                                 objPar.IdDispositivo2 = Convert.ToInt32(reader["IdDispositivo2"].ToString());
@@ -544,47 +564,40 @@ namespace Percolore.IOConnect.Util
                                 objPar.VersaoIoconnect = reader["VersaoIoconnect"].ToString();
                                 objPar.HabilitarDispensaSequencialP1 = Convert.ToBoolean(reader["HabilitarDispensaSequencialP1"].ToString());
                                 objPar.HabilitarDispensaSequencialP2 = Convert.ToBoolean(reader["HabilitarDispensaSequencialP2"].ToString());
-                                
-                                try
-                                {
-                                    objPar.QtdTentativasConexao = Convert.ToInt32(reader["QtdTentativasConexao"].ToString());
-                                }
-								catch (Exception e)
-								{
-									LogManager.LogError($"Erro no módulo {typeof(ObjectParametros).Name}: ", e);
-								    objPar.QtdTentativasConexao = 1;
-                                }
 
-                                try
-                                {
-                                    objPar.HabLimpBicos = Convert.ToBoolean(reader["HabLimpBicos"].ToString());
-                                }
-								catch (Exception e)
+								if (!int.TryParse(reader["QtdTentativasConexao"].ToString(), out int qtdTentativasConexao))
 								{
-									LogManager.LogError($"Erro no módulo {typeof(ObjectParametros).Name}: ", e);
-									objPar.HabLimpBicos = false;
-                                }
+									LogManager.LogInformation("Parâmetro 'QtdTentativasConexao' inválido. Utilizando o valor default '1'.");
+									qtdTentativasConexao = 1;
+								}
 
-                                try
-                                {
-                                    objPar.DelayLimpBicos = Convert.ToInt32(reader["DelayLimpBicos"].ToString());
-                                }
-								catch (Exception e)
-								{
-									LogManager.LogError($"Erro no módulo {typeof(ObjectParametros).Name}: ", e);
-									objPar.DelayLimpBicos = 1;
-                                }
-                                try
-                                {
-                                    objPar.TipoLimpBicos = Convert.ToInt32(reader["TipoLimpBicos"].ToString());
-                                }
-								catch (Exception e)
-								{
-									LogManager.LogError($"Erro no módulo {typeof(ObjectParametros).Name}: ", e);
-									objPar.TipoLimpBicos = 1;
-                                }
+                                objPar.QtdTentativasConexao = qtdTentativasConexao;
 
-                                objPar.TipoDosagemExec = Convert.ToInt32(reader["TipoDosagemExec"].ToString());
+								if (!bool.TryParse(reader["HabLimpBicos"].ToString(), out bool habLimpBicos))
+									LogManager.LogInformation("Parâmetro 'HabLimpBicos' inválido. Utilizando o valor default 'false'.");
+
+                                objPar.HabLimpBicos = habLimpBicos;
+
+								if (!int.TryParse(reader["DelayLimpBicos"].ToString(), out int delayLimpBicos))
+								{
+									LogManager.LogInformation("Parâmetro 'DelayLimpBicos' inválido. Utilizando o valor default '1'.");
+									delayLimpBicos = 1;
+								}
+
+                                objPar.DelayLimpBicos = delayLimpBicos;
+
+								if (!int.TryParse(reader["TipoLimpBicos"].ToString(), out int tipoLimpBicos))
+								{
+									LogManager.LogInformation("Parâmetro 'TipoLimpBicos' inválido. Utilizando o valor default '1'.");
+									tipoLimpBicos = 1;
+								}
+
+                                objPar.TipoLimpBicos = tipoLimpBicos;
+
+								if (!int.TryParse(reader["TipoDosagemExec"].ToString(), out int tipoDosagemExec))
+								    LogManager.LogInformation("Parâmetro 'TipoDosagemExec' inválido. Utilizando o valor default '0'.");
+								
+                                objPar.TipoDosagemExec = tipoDosagemExec;
 
                                 #endregion
 
@@ -602,8 +615,16 @@ namespace Percolore.IOConnect.Util
 
                                 //Versão 19
                                 objPar.PathMonitoramentoFilaDAT = reader["PathFilaDAT"].ToString();
-                                objPar.DesabilitarMonitoramentoFilaDAT = Convert.ToBoolean(reader["DesabilitarMonitoramentoFilaDAT"].ToString());
-                                objPar.DelayMonitoramentoFilaDAT = Convert.ToInt32(reader["DelayMonitoramentoFilaDAT"].ToString());
+                                
+                                if (!bool.TryParse(reader["DesabilitarMonitoramentoFilaDAT"].ToString(), out bool desabilitarMonitoramentoFilaDAT))
+									LogManager.LogInformation("Parâmetro 'DesabilitarMonitoramentoFilaDAT' inválido. Utilizando o valor default 'false'.");
+
+								objPar.DesabilitarMonitoramentoFilaDAT = desabilitarMonitoramentoFilaDAT;
+
+								if (!int.TryParse(reader["DelayMonitoramentoFilaDAT"].ToString(), out int delayMonitoramentoFilaDAT))
+									LogManager.LogInformation("Parâmetro 'DelayMonitoramentoFilaDAT' inválido. Utilizando o valor default '0'.");
+
+								objPar.DelayMonitoramentoFilaDAT = delayMonitoramentoFilaDAT;
 
                                 //Versão 25
                                 objPar.DesabilitarVolumeMinimoDat = Convert.ToBoolean(reader["DesabilitarVolumeMinimoDat"].ToString());
@@ -640,35 +661,38 @@ namespace Percolore.IOConnect.Util
                                 objPar.Dat_05_BAS_Habilitado = reader["Dat_05_BAS_Habilitado"].ToString() == "0" ? 0 : 1;
 
                                 #region Version 56
-                                try
-                                {
-                                    objPar.DisablePopUpDispDat = Convert.ToBoolean(reader["DisablePopUpDispDat"].ToString());
-                                }
-								catch (Exception e)
-								{
-									LogManager.LogError($"Erro no módulo {typeof(ObjectParametros).Name}: ", e);
-                                    objPar.DisablePopUpDispDat = true;
-                                }
-                                #endregion
-                                #endregion
 
-                                #region Version 46
-                                try
+                                if (!bool.TryParse(reader["DisablePopUpDispDat"].ToString(), out bool disablePopUpDispDat))
                                 {
-                                    objPar.CreateFileTmpUDCP = reader["CreateFileTmpUDCP"].ToString() == "0" ? 0 : 1;
-                                    objPar.ExtFileTmpUDCP = reader["ExtFileTmpUDCP"].ToString();
-                                    objPar.DelayUDCP = Convert.ToInt32(reader["DelayUDCP"].ToString());
-                                    if(objPar.DelayUDCP < 0)
-                                    {
-                                        objPar.DelayUDCP = 0;
-                                    }
-                                    objPar.ProcRemoveLataUDCP = Convert.ToBoolean(reader["ProcRemoveLataUDCP"].ToString());
-                                }
-								catch (Exception e)
+                                    LogManager.LogInformation("Parâmetro 'DisablePopUpDispDat' inválido. Utilizando o valor default 'true'.");
+                                    disablePopUpDispDat = true;
+								}
+
+                                objPar.DisablePopUpDispDat = disablePopUpDispDat;
+
+								#endregion
+								#endregion
+
+								#region Version 46
+
+								if (!int.TryParse(reader["DelayUDCP"].ToString(), out int delayUDCP))
+									LogManager.LogInformation("Parâmetro 'DelayUDCP' inválido. Utilizando o valor default '0'.");
+
+								objPar.DelayUDCP = delayUDCP;
+
+								if (objPar.DelayUDCP < 0)
 								{
-									LogManager.LogError($"Erro no módulo {typeof(ObjectParametros).Name}: ", e);
 									objPar.DelayUDCP = 0;
-                                }
+								}
+
+								objPar.CreateFileTmpUDCP = reader["CreateFileTmpUDCP"].ToString() == "0" ? 0 : 1;
+                                objPar.ExtFileTmpUDCP = reader["ExtFileTmpUDCP"].ToString();
+
+								if (!bool.TryParse(reader["ProcRemoveLataUDCP"].ToString(), out var procRemoveLataUDCP))
+								    LogManager.LogInformation("Parâmetro 'ProcRemoveLataUDCP' inválido. Utilizando o valor default 'false'.");
+
+								objPar.ProcRemoveLataUDCP = procRemoveLataUDCP;
+
                                 #endregion
 
                                 #region Purga
@@ -677,15 +701,14 @@ namespace Percolore.IOConnect.Util
                                 {
                                     objPar.PrazoExecucaoPurga = ts;
                                 }
-                                try
+
+                                if (!DateTime.TryParse(reader["DataExecucaoPurga"].ToString(), out DateTime dataExecucaoPurga))
                                 {
-                                    objPar.DataExecucaoPurga = DateTime.Parse(reader["DataExecucaoPurga"].ToString());
-                                }
-								catch (Exception e)
-								{
-									LogManager.LogError($"Erro no módulo {typeof(ObjectParametros).Name}: ", e);
-									objPar.DataExecucaoPurga = DateTime.MinValue;
-                                }
+									LogManager.LogInformation($"Parâmetro 'DataExecucaoPurga' inválido. Utilizando o valor default '{DateTime.MinValue}'.");
+                                    dataExecucaoPurga = DateTime.MinValue;
+								}
+
+								objPar.DataExecucaoPurga = dataExecucaoPurga;
 
                                 objPar.VolumePurga = double.Parse(reader["VolumePurga"].ToString(), System.Globalization.CultureInfo.InvariantCulture);
 
@@ -749,15 +772,13 @@ namespace Percolore.IOConnect.Util
 
                                 objPar.UnidadeMedidaNivelColorante = Convert.ToInt32(reader["UnidadeMedidaNivelColorante"].ToString());
 
-                                try
+                                if (!int.TryParse(reader["ValorFraction"].ToString(), out int valorFraction))
                                 {
-                                    objPar.ValorFraction = Convert.ToInt32(reader["ValorFraction"].ToString());
+                                    LogManager.LogInformation("Parâmetro 'ValorFraction' inválido. Utilizando o valor default '800'.");
+                                    valorFraction = 800;
                                 }
-								catch (Exception e)
-								{
-									LogManager.LogError($"Erro no módulo {typeof(ObjectParametros).Name}: ", e);
-									objPar.ValorFraction = 800;
-                                }
+								
+                                objPar.ValorFraction = valorFraction;
 
                                 #endregion
 
@@ -771,9 +792,15 @@ namespace Percolore.IOConnect.Util
 
                                 objPar.PathLogComunicacao = reader["PathLogComunicacao"].ToString();
 
-                                objPar.HabilitarLogAutomateTesterProt = Convert.ToBoolean(reader["HabilitarLogAutomateTesterProt"].ToString());
-                                
-                                objPar.LogAutomateBackup = Convert.ToBoolean(reader["LogAutomateBackup"].ToString());
+                                if (!bool.TryParse(reader["HabilitarLogAutomateTesterProt"].ToString(), out bool habilitarLogAutomateTesterProt))
+								    LogManager.LogInformation("Parâmetro 'HabilitarLogAutomateTesterProt' inválido. Utilizando o valor default 'false'.");
+								
+                                objPar.HabilitarLogAutomateTesterProt = habilitarLogAutomateTesterProt;
+
+								if (!bool.TryParse(reader["LogAutomateBackup"].ToString(), out bool logAutomateBackup))
+									LogManager.LogInformation("Parâmetro 'LogAutomateBackup' inválido. Utilizando o valor default 'false'.");
+								
+                                objPar.LogAutomateBackup = logAutomateBackup;
                                 
                                 #endregion
 
@@ -825,77 +852,115 @@ namespace Percolore.IOConnect.Util
 
                                 objPar.PathBasesDados = reader["PathBasesDados"].ToString();
 
-                                #endregion
+								#endregion
 
-                                #region sync Token
-                                
-                                objPar.DesabilitaMonitSyncToken = Convert.ToBoolean(reader["DesabilitaMonitSyncToken"].ToString());
+								#region sync Token
+
+								if (!bool.TryParse(reader["DesabilitaMonitSyncToken"].ToString(), out bool desabilitaMonitSyncToken))
+									LogManager.LogInformation("Parâmetro 'DesabilitaMonitSyncToken' inválido. Utilizando o valor default 'false'.");
+
+								objPar.DesabilitaMonitSyncToken = desabilitaMonitSyncToken;
                                 objPar.IpSincToken = reader["IpSincToken"].ToString();
                                 objPar.PortaSincToken = reader["PortaSincToken"].ToString();
                                 objPar.TipoEventos = reader["TipoEventos"].ToString();
-                                
-                                #endregion
 
-                                objPar.TimeoutPingTcp = Convert.ToInt32(reader["TimeoutPingTcp"].ToString());
+								#endregion
 
-                                #region sync BkpCalibragem
-                                
-                                objPar.DesabilitaMonitSyncBkpCalibragem = Convert.ToBoolean(reader["DesabilitaMonitSyncBkpCalibragem"].ToString());
+                                if (!int.TryParse(reader["TimeoutPingTcp"].ToString(), out var timeoutPingTcp))
+								    LogManager.LogInformation("Parâmetro 'TimeoutPingTcp' inválido. Utilizando o valor default '0'.");
+								
+                                objPar.TimeoutPingTcp = timeoutPingTcp;
+
+								#region sync BkpCalibragem
+
+								if (!bool.TryParse(reader["DesabilitaMonitSyncBkpCalibragem"].ToString(), out var desabilitaMonitSyncBkpCalibragem))
+									LogManager.LogInformation("Parâmetro 'DesabilitaMonitSyncBkpCalibragem' inválido. Utilizando o valor default 'false'.");
+
+								objPar.DesabilitaMonitSyncBkpCalibragem = desabilitaMonitSyncBkpCalibragem;
                                 objPar.UrlSincBkpCalibragem = reader["UrlSincBkpCalibragem"].ToString();
-                                
-                                #endregion
 
-                                #region Recirculacao
-                                
-                                objPar.HabilitarRecirculacao = Convert.ToBoolean(reader["HabilitarRecirculacao"].ToString());
-                                objPar.DelayMonitRecirculacao = Convert.ToInt32(reader["DelayMonitRecirculacao"].ToString());
-                                
-                                #endregion
+								#endregion
 
-                                #region Placa Movimentacao
-                                
-                                objPar.Address_PlacaMov = Convert.ToInt32(reader["Address_PlacaMov"].ToString());
+								#region Recirculacao
+
+								if (!bool.TryParse(reader["HabilitarRecirculacao"].ToString(), out var habilitarRecirculacao))
+									LogManager.LogInformation("Parâmetro 'HabilitarRecirculacao' inválido. Utilizando o valor default 'false'.");
+
+								objPar.HabilitarRecirculacao = habilitarRecirculacao;
+
+								if (!int.TryParse(reader["DelayMonitRecirculacao"].ToString(), out var delayMonitRecirculacao))
+									LogManager.LogInformation("Parâmetro 'DelayMonitRecirculacao' inválido. Utilizando o valor default '0'.");
+
+								objPar.DelayMonitRecirculacao = delayMonitRecirculacao;
+
+								#endregion
+
+								#region Placa Movimentacao
+
+								if (!int.TryParse(reader["Address_PlacaMov"].ToString(), out var addressPlacaMov))
+									LogManager.LogInformation("Parâmetro 'Address_PlacaMov' inválido. Utilizando o valor default '0'.");
+
+								objPar.Address_PlacaMov = addressPlacaMov;
+
                                 objPar.NomeDispositivo_PlacaMov = reader["NomeDispositivo_PlacaMov"].ToString();
-                                objPar.DelayAlertaPlacaMov = Convert.ToInt32(reader["DelayAlertaPlacaMov"].ToString());
-                                
-                                #endregion
 
-                                #region RecirculacaoAuto
-                                
-                                objPar.HabilitarRecirculacaoAuto = Convert.ToBoolean(reader["HabilitarRecirculacaoAuto"].ToString());
-                                objPar.DelayMonitRecirculacaoAuto = Convert.ToInt32(reader["DelayMonitRecirculacaoAuto"].ToString());
-                                objPar.DelayNotificacaotRecirculacaoAuto = Convert.ToInt32(reader["DelayNotificacaotRecirculacaoAuto"].ToString());
-                                objPar.QtdNotificacaotRecirculacaoAuto = Convert.ToInt32(reader["QtdNotificacaotRecirculacaoAuto"].ToString());
+								if (!int.TryParse(reader["DelayAlertaPlacaMov"].ToString(), out var delayAlertaPlacaMov))
+									LogManager.LogInformation("Parâmetro 'DelayAlertaPlacaMov' inválido. Utilizando o valor default '0'.");
+
+								objPar.DelayAlertaPlacaMov = delayAlertaPlacaMov;
+
+								#endregion
+
+								#region RecirculacaoAuto
+
+								if (!bool.TryParse(reader["HabilitarRecirculacaoAuto"].ToString(), out var habilitarRecirculacaoAuto))
+									LogManager.LogInformation("Parâmetro 'HabilitarRecirculacaoAuto' inválido. Utilizando o valor default 'false'.");
+
+								objPar.HabilitarRecirculacaoAuto = habilitarRecirculacaoAuto;
+
+								if (!int.TryParse(reader["DelayMonitRecirculacaoAuto"].ToString(), out var delayMonitRecirculacaoAuto))
+									LogManager.LogInformation("Parâmetro 'DelayMonitRecirculacaoAuto' inválido. Utilizando o valor default '0'.");
+
+								objPar.DelayMonitRecirculacaoAuto = delayMonitRecirculacaoAuto;
+
+								if (!int.TryParse(reader["DelayNotificacaotRecirculacaoAuto"].ToString(), out var delayNotificacaotRecirculacaoAuto))
+									LogManager.LogInformation("Parâmetro 'DelayNotificacaotRecirculacaoAuto' inválido. Utilizando o valor default '0'.");
+
+								objPar.DelayNotificacaotRecirculacaoAuto = delayNotificacaotRecirculacaoAuto;
+
+                                if (!int.TryParse(reader["QtdNotificacaotRecirculacaoAuto"].ToString(), out var qtdNotificacaotRecirculacaoAuto))
+                                {
+                                    LogManager.LogInformation("Parâmetro 'QtdNotificacaotRecirculacaoAuto' inválido. Utilizando o valor default '1'.");
+									qtdNotificacaotRecirculacaoAuto = 1;
+								}
+
+								objPar.QtdNotificacaotRecirculacaoAuto = qtdNotificacaotRecirculacaoAuto;
 
                                 #endregion
 
                                 #region LogBD
-                                
-                                objPar.LogBD = Convert.ToBoolean(reader["LogBD"].ToString());
+
+                                if (!bool.TryParse(reader["LogBD"].ToString(), out var logBD))
+                                {
+                                    LogManager.LogInformation("Parâmetro 'LogBD' inválido. Utilizando o valor default 'true'.");
+                                    logBD = true;
+								}
+
+								objPar.LogBD = logBD;
                                 
                                 #endregion
                                 
                                 objPar.NameRemoteAccess = reader["NameRemoteAccess"].ToString();
 
-                                try
-                                {
-                                    objPar.TempoReciAuto = Convert.ToInt32(reader["TempoReciAuto"].ToString());
-                                }
-								catch (Exception e)
-								{
-									LogManager.LogError($"Erro no módulo {typeof(ObjectParametros).Name}: ", e);
-                                    objPar.TempoReciAuto = 1;
-                                }
+                                if (!int.TryParse(reader["TempoReciAuto"].ToString(), out int tempoReciAuto))
+								    LogManager.LogInformation("Parâmetro 'TempoReciAuto' inválido. Utilizando o valor default '0'.");
+								
+                                objPar.TempoReciAuto = tempoReciAuto;
 
-                                try
-                                {
-                                    objPar.LogStatusMaquina = Convert.ToBoolean(reader["LogStatusMaquina"].ToString());
-                                }
-								catch (Exception e)
-								{
-									LogManager.LogError($"Erro no módulo {typeof(ObjectParametros).Name}: ", e);
-                                    objPar.LogStatusMaquina = false;
-                                }
+								if (!bool.TryParse(reader["LogStatusMaquina"].ToString(), out bool logStatusMaquina))
+									LogManager.LogInformation("Parâmetro 'LogStatusMaquina' inválido. Utilizando o valor default 'false'.");
+								
+                                objPar.LogStatusMaquina = logStatusMaquina;
                                 
                                 break;
                             }

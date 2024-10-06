@@ -1,4 +1,5 @@
-﻿using System.Data.SQLite;
+﻿using System.Data.Common;
+using System.Data.SQLite;
 
 namespace Percolore.IOConnect.Util
 {
@@ -57,6 +58,42 @@ namespace Percolore.IOConnect.Util
 		{
 			string connString = GetSQLiteConnectionString(dataSource, failIfMissing, licenseKey);
 			return CreateSQLiteConnection(connString);
+		}
+
+		/// <summary>
+		/// Checks if a column exists in a given SQLite table.
+		/// </summary>
+		/// <param name="connection"><see cref="SQLiteConnection"/> object.</param>
+		/// <param name="tableName">The table name to check.</param>
+		/// <param name="columnName">The given column name to check.</param>
+		/// <returns>True, if the column exists; otherwise, false.</returns>
+		public static bool IsColumnExists(SQLiteConnection connection, string tableName, string columnName)
+		{
+			if (connection is null)
+				throw new ArgumentNullException(nameof(connection));
+
+			if (string.IsNullOrWhiteSpace(tableName))
+				throw new ArgumentException(nameof(tableName));
+
+			if (string.IsNullOrWhiteSpace(columnName))
+				throw new ArgumentException(nameof(columnName));
+
+			string query = $"PRAGMA table_info({tableName});";
+			var existingColumns = new HashSet<string>();
+
+			using var command = new SQLiteCommand(query, connection);
+
+			if (connection.State != System.Data.ConnectionState.Open)
+				connection.Open();
+
+			using var reader = command.ExecuteReader();
+			
+			while (reader.Read())
+				existingColumns.Add(reader["name"].ToString());
+
+			connection.Close();
+
+			return existingColumns.Contains(columnName);
 		}
 	}
 }

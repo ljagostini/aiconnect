@@ -233,8 +233,15 @@ namespace Percolore.IOConnect.Util
                                     colorante.corCorante = Color.White;
                                 }
 
-                                colorante.VolumeBicoIndividual = double.Parse(reader["VolumeBicoIndividual"].ToString(), System.Globalization.CultureInfo.InvariantCulture);
-                                colorante.IsBicoIndividual = Convert.ToBoolean(reader["IsBicoIndividual"].ToString());
+                                if (!double.TryParse(reader["VolumeBicoIndividual"].ToString(), System.Globalization.CultureInfo.InvariantCulture, out var volumeBicoIndividual))
+									LogManager.LogInformation($"Parâmetro 'VolumeBicoIndividual' inválido. Utilizando o valor default '0.0'.");
+
+								colorante.VolumeBicoIndividual = volumeBicoIndividual;
+
+								if (!bool.TryParse(reader["IsBicoIndividual"].ToString(), out var isBicoIndividual))
+									LogManager.LogInformation($"Parâmetro 'IsBicoIndividual' inválido. Utilizando o valor default 'false'.");
+
+								colorante.IsBicoIndividual = isBicoIndividual;
                                 
                                 list.Add(colorante);
                             }

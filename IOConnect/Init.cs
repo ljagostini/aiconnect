@@ -722,15 +722,24 @@ namespace Percolore.IOConnect
 
                                 using (SQLiteConnection conn = Util.SQLite.CreateSQLiteConnection(Util.ObjectParametros.PathFile, false))
                                 {
-                                    using (SQLiteCommand cmd = new SQLiteCommand(conn))
+                                    if (!Util.SQLite.IsColumnExists(conn, "Parametros", "PathFilaDAT"))
+										sb.Append("ALTER TABLE Parametros ADD PathFilaDAT TEXT NULL; ");
+
+									if (!Util.SQLite.IsColumnExists(conn, "Parametros", "DesabilitarMonitoramentoFilaDAT"))
+										sb.Append("ALTER TABLE Parametros ADD DesabilitarMonitoramentoFilaDAT TEXT NULL; ");
+
+									if (!Util.SQLite.IsColumnExists(conn, "Parametros", "DelayMonitoramentoFilaDAT"))
+										sb.Append("ALTER TABLE Parametros ADD DelayMonitoramentoFilaDAT TEXT NULL; ");
+
+                                    if (!string.IsNullOrWhiteSpace(sb.ToString()))
                                     {
-                                        conn.Open();
-                                        sb.Append("ALTER TABLE Parametros ADD PathFilaDAT TEXT NULL; ");
-                                        sb.Append("ALTER TABLE Parametros ADD DesabilitarMonitoramentoFilaDAT TEXT NULL; ");
-                                        sb.Append("ALTER TABLE Parametros ADD DelayMonitoramentoFilaDAT TEXT NULL; ");
-                                        cmd.CommandText = sb.ToString();
-                                        cmd.ExecuteNonQuery();
-                                        conn.Close();
+                                        using (SQLiteCommand cmd = new SQLiteCommand(conn))
+                                        {
+                                            conn.Open();
+                                            cmd.CommandText = sb.ToString();
+                                            cmd.ExecuteNonQuery();
+                                            conn.Close();
+                                        }
                                     }
                                 }
 
@@ -749,7 +758,6 @@ namespace Percolore.IOConnect
                                         cmd.ExecuteNonQuery();
                                         conn.Close();
                                         versao_BD = 19;
-
                                     }
                                 }
                             }
@@ -764,14 +772,21 @@ namespace Percolore.IOConnect
 
                                 using (SQLiteConnection conn = Util.SQLite.CreateSQLiteConnection(Util.ObjectParametros.PathFile, false))
                                 {
-                                    using (SQLiteCommand cmd = new SQLiteCommand(conn))
+                                    if (!Util.SQLite.IsColumnExists(conn, "Parametros", "TipoBaseDados"))
+										sb.Append("ALTER TABLE Parametros ADD TipoBaseDados TEXT NULL; ");
+
+									if (!Util.SQLite.IsColumnExists(conn, "Parametros", "PathBasesDados"))
+										sb.Append("ALTER TABLE Parametros ADD PathBasesDados TEXT NULL; ");
+
+                                    if (!string.IsNullOrWhiteSpace(sb.ToString()))
                                     {
-                                        conn.Open();
-                                        sb.Append("ALTER TABLE Parametros ADD TipoBaseDados TEXT NULL; ");
-                                        sb.Append("ALTER TABLE Parametros ADD PathBasesDados TEXT NULL; ");
-                                        cmd.CommandText = sb.ToString();
-                                        cmd.ExecuteNonQuery();
-                                        conn.Close();
+                                        using (SQLiteCommand cmd = new SQLiteCommand(conn))
+                                        {
+                                            conn.Open();
+                                            cmd.CommandText = sb.ToString();
+                                            cmd.ExecuteNonQuery();
+                                            conn.Close();
+                                        }
                                     }
                                 }
 
@@ -789,7 +804,6 @@ namespace Percolore.IOConnect
                                         cmd.ExecuteNonQuery();
                                         conn.Close();
                                         versao_BD = 20;
-
                                     }
                                 }
                             }
@@ -925,29 +939,25 @@ namespace Percolore.IOConnect
 
                         if (versao_BD == 21)
                         {
-                            StringBuilder sb = new StringBuilder();
                             if (File.Exists(Util.ObjectCalibragem.PathFile))
                             {
                                 using (SQLiteConnection conn = Util.SQLite.CreateSQLiteConnection(Util.ObjectCalibragem.PathFile, false))
                                 {
-                                    using (SQLiteCommand cmd = new SQLiteCommand(conn))
+                                    if (!Util.SQLite.IsColumnExists(conn, "Calibragem", "MinimoFaixas"))
                                     {
-                                        conn.Open();
-                                        sb.Append("ALTER TABLE Calibragem ADD MinimoFaixas TEXT NULL; ");
-                                        cmd.CommandText = sb.ToString();
-                                        cmd.ExecuteNonQuery();
-                                        conn.Close();
+                                        using (SQLiteCommand cmd = new SQLiteCommand(conn))
+                                        {
+                                            conn.Open();
+                                            cmd.CommandText = "ALTER TABLE Calibragem ADD MinimoFaixas TEXT NULL; ";
+                                            cmd.ExecuteNonQuery();
+                                            conn.Close();
+                                        }
                                     }
-                                }
-
-                                sb = new StringBuilder();
-                                using (SQLiteConnection conn = Util.SQLite.CreateSQLiteConnection(Util.ObjectCalibragem.PathFile, false))
-                                {
+                                
                                     using (SQLiteCommand cmd = new SQLiteCommand(conn))
                                     {
                                         conn.Open();
-                                        sb.Append("UPDATE Calibragem SET MinimoFaixas = '7'; ");
-                                        cmd.CommandText = sb.ToString();
+                                        cmd.CommandText = "UPDATE Calibragem SET MinimoFaixas = '7'; ";
                                         cmd.ExecuteNonQuery();
                                         conn.Close();
                                     }
@@ -956,18 +966,15 @@ namespace Percolore.IOConnect
 
                             if (File.Exists(Util.ObjectParametros.PathFile))
                             {
-                                sb = new StringBuilder();
                                 using (SQLiteConnection conn = Util.SQLite.CreateSQLiteConnection(Util.ObjectParametros.PathFile, false))
                                 {
                                     using (SQLiteCommand cmd = new SQLiteCommand(conn))
                                     {
                                         conn.Open();
-                                        sb.Append("UPDATE Parametros SET VersaoIoconnect = '22'; ");
-                                        cmd.CommandText = sb.ToString();
+                                        cmd.CommandText = "UPDATE Parametros SET VersaoIoconnect = '22'; ";
                                         cmd.ExecuteNonQuery();
                                         conn.Close();
                                         versao_BD = 22;
-
                                     }
                                 }
                             }
@@ -998,30 +1005,25 @@ namespace Percolore.IOConnect
 
                         if (versao_BD == 23)
                         {
-                            StringBuilder sb = new StringBuilder();
                             if (File.Exists(Util.ObjectCalibracaoAutomatica.PathFile))
                             {
-                                sb = new StringBuilder();
                                 using (SQLiteConnection conn = Util.SQLite.CreateSQLiteConnection(Util.ObjectCalibracaoAutomatica.PathFile, false))
                                 {
-                                    using (SQLiteCommand cmd = new SQLiteCommand(conn))
+                                    if (!Util.SQLite.IsColumnExists(conn, "Recipiente", "MinMassaAdmRecipiente"))
                                     {
-                                        conn.Open();
-                                        sb.Append("ALTER TABLE Recipiente ADD MinMassaAdmRecipiente TEXT NULL; ");
-                                        cmd.CommandText = sb.ToString();
-                                        cmd.ExecuteNonQuery();
-                                        conn.Close();
+                                        using (SQLiteCommand cmd = new SQLiteCommand(conn))
+                                        {
+                                            conn.Open();
+                                            cmd.CommandText = "ALTER TABLE Recipiente ADD MinMassaAdmRecipiente TEXT NULL; ";
+                                            cmd.ExecuteNonQuery();
+                                            conn.Close();
+                                        }
                                     }
-                                }
-
-                                sb = new StringBuilder();
-                                using (SQLiteConnection conn = Util.SQLite.CreateSQLiteConnection(Util.ObjectCalibracaoAutomatica.PathFile, false))
-                                {
+                                    
                                     using (SQLiteCommand cmd = new SQLiteCommand(conn))
                                     {
                                         conn.Open();
-                                        sb.Append("UPDATE Recipiente SET MinMassaAdmRecipiente = '50'; ");
-                                        cmd.CommandText = sb.ToString();
+                                        cmd.CommandText = "UPDATE Recipiente SET MinMassaAdmRecipiente = '50'; ";
                                         cmd.ExecuteNonQuery();
                                         conn.Close();
                                     }
@@ -1030,27 +1032,23 @@ namespace Percolore.IOConnect
 
                             if (File.Exists(Util.ObjectCalibracaoHistorico.PathFile))
                             {
-                                sb = new StringBuilder();
                                 using (SQLiteConnection conn = Util.SQLite.CreateSQLiteConnection(Util.ObjectCalibracaoHistorico.PathFile, false))
                                 {
-                                    using (SQLiteCommand cmd = new SQLiteCommand(conn))
+                                    if (!Util.SQLite.IsColumnExists(conn, "Recipiente", "MinMassaAdmRecipiente"))
                                     {
-                                        conn.Open();
-                                        sb.Append("ALTER TABLE Recipiente ADD MinMassaAdmRecipiente TEXT NULL; ");
-                                        cmd.CommandText = sb.ToString();
-                                        cmd.ExecuteNonQuery();
-                                        conn.Close();
+                                        using (SQLiteCommand cmd = new SQLiteCommand(conn))
+                                        {
+                                            conn.Open();
+                                            cmd.CommandText = "ALTER TABLE Recipiente ADD MinMassaAdmRecipiente TEXT NULL; ";
+                                            cmd.ExecuteNonQuery();
+                                            conn.Close();
+                                        }
                                     }
-                                }
-
-                                sb = new StringBuilder();
-                                using (SQLiteConnection conn = Util.SQLite.CreateSQLiteConnection(Util.ObjectCalibracaoHistorico.PathFile, false))
-                                {
+                                    
                                     using (SQLiteCommand cmd = new SQLiteCommand(conn))
                                     {
                                         conn.Open();
-                                        sb.Append("UPDATE Recipiente SET MinMassaAdmRecipiente = '50'; ");
-                                        cmd.CommandText = sb.ToString();
+                                        cmd.CommandText = "UPDATE Recipiente SET MinMassaAdmRecipiente = '50'; ";
                                         cmd.ExecuteNonQuery();
                                         conn.Close();
                                     }
@@ -1059,14 +1057,12 @@ namespace Percolore.IOConnect
 
                             if (File.Exists(Util.ObjectParametros.PathFile))
                             {
-                                sb = new StringBuilder();
                                 using (SQLiteConnection conn = Util.SQLite.CreateSQLiteConnection(Util.ObjectParametros.PathFile, false))
                                 {
                                     using (SQLiteCommand cmd = new SQLiteCommand(conn))
                                     {
                                         conn.Open();
-                                        sb.Append("UPDATE Parametros SET VersaoIoconnect = '24'; ");
-                                        cmd.CommandText = sb.ToString();
+                                        cmd.CommandText = "UPDATE Parametros SET VersaoIoconnect = '24'; ";
                                         cmd.ExecuteNonQuery();
                                         conn.Close();
                                         versao_BD = 24;
@@ -1077,30 +1073,25 @@ namespace Percolore.IOConnect
 
                         if (versao_BD == 24)
                         {
-                            StringBuilder sb = new StringBuilder();
                             if (File.Exists(Util.ObjectParametros.PathFile))
                             {
-                                sb = new StringBuilder();
                                 using (SQLiteConnection conn = Util.SQLite.CreateSQLiteConnection(Util.ObjectParametros.PathFile, false))
                                 {
-                                    using (SQLiteCommand cmd = new SQLiteCommand(conn))
+                                    if (!Util.SQLite.IsColumnExists(conn, "Parametros", "HabilitarLogAutomateTesterProt"))
                                     {
-                                        conn.Open();
-                                        sb.Append("ALTER TABLE Parametros ADD HabilitarLogAutomateTesterProt TEXT NULL;");
-                                        cmd.CommandText = sb.ToString();
-                                        cmd.ExecuteNonQuery();
-                                        conn.Close();
+                                        using (SQLiteCommand cmd = new SQLiteCommand(conn))
+                                        {
+                                            conn.Open();
+                                            cmd.CommandText = "ALTER TABLE Parametros ADD HabilitarLogAutomateTesterProt TEXT NULL;";
+                                            cmd.ExecuteNonQuery();
+                                            conn.Close();
+                                        }
                                     }
-                                }
-
-                                sb = new StringBuilder();
-                                using (SQLiteConnection conn = Util.SQLite.CreateSQLiteConnection(Util.ObjectParametros.PathFile, false))
-                                {
+                                    
                                     using (SQLiteCommand cmd = new SQLiteCommand(conn))
                                     {
                                         conn.Open();
-                                        sb.Append("UPDATE Parametros SET VersaoIoconnect = '25', HabilitarLogAutomateTesterProt = 'False'; ");
-                                        cmd.CommandText = sb.ToString();
+                                        cmd.CommandText = "UPDATE Parametros SET VersaoIoconnect = '25', HabilitarLogAutomateTesterProt = 'False'; ";
                                         cmd.ExecuteNonQuery();
                                         conn.Close();
                                         versao_BD = 25;
@@ -1111,43 +1102,36 @@ namespace Percolore.IOConnect
 
                         if (versao_BD == 25)
                         {
-                            StringBuilder sb = new StringBuilder();
                             if (File.Exists(Util.ObjectParametros.PathFile))
                             {
-                                sb = new StringBuilder();
                                 using (SQLiteConnection conn = Util.SQLite.CreateSQLiteConnection(Util.ObjectParametros.PathFile, false))
                                 {
-                                    using (SQLiteCommand cmd = new SQLiteCommand(conn))
+                                    if (!Util.SQLite.IsColumnExists(conn, "Parametros", "DesabilitarVolumeMinimoDat"))
                                     {
-                                        conn.Open();
-                                        sb.Append("ALTER TABLE Parametros ADD DesabilitarVolumeMinimoDat TEXT NULL;");
-                                        cmd.CommandText = sb.ToString();
-                                        cmd.ExecuteNonQuery();
-                                        conn.Close();
+                                        using (SQLiteCommand cmd = new SQLiteCommand(conn))
+                                        {
+                                            conn.Open();
+                                            cmd.CommandText = "ALTER TABLE Parametros ADD DesabilitarVolumeMinimoDat TEXT NULL;";
+                                            cmd.ExecuteNonQuery();
+                                            conn.Close();
+                                        }
                                     }
-                                }
 
-                                sb = new StringBuilder();
-                                using (SQLiteConnection conn = Util.SQLite.CreateSQLiteConnection(Util.ObjectParametros.PathFile, false))
-                                {
-                                    using (SQLiteCommand cmd = new SQLiteCommand(conn))
+                                    if (!Util.SQLite.IsColumnExists(conn, "Parametros", "VolumeMinimoDat"))
                                     {
-                                        conn.Open();
-                                        sb.Append("ALTER TABLE Parametros ADD VolumeMinimoDat TEXT NULL;");
-                                        cmd.CommandText = sb.ToString();
-                                        cmd.ExecuteNonQuery();
-                                        conn.Close();
+                                        using (SQLiteCommand cmd = new SQLiteCommand(conn))
+                                        {
+                                            conn.Open();
+                                            cmd.CommandText = "ALTER TABLE Parametros ADD VolumeMinimoDat TEXT NULL;";
+                                            cmd.ExecuteNonQuery();
+                                            conn.Close();
+                                        }
                                     }
-                                }
-
-                                sb = new StringBuilder();
-                                using (SQLiteConnection conn = Util.SQLite.CreateSQLiteConnection(Util.ObjectParametros.PathFile, false))
-                                {
+                                    
                                     using (SQLiteCommand cmd = new SQLiteCommand(conn))
                                     {
                                         conn.Open();
-                                        sb.Append("UPDATE Parametros SET VersaoIoconnect = '26', DesabilitarVolumeMinimoDat = 'True', VolumeMinimoDat = '0.1'; ");
-                                        cmd.CommandText = sb.ToString();
+                                        cmd.CommandText = "UPDATE Parametros SET VersaoIoconnect = '26', DesabilitarVolumeMinimoDat = 'True', VolumeMinimoDat = '0.1'; ";
                                         cmd.ExecuteNonQuery();
                                         conn.Close();
                                         versao_BD = 26;
@@ -1158,32 +1142,25 @@ namespace Percolore.IOConnect
 
                         if (versao_BD == 26)
                         {
-                            StringBuilder sb = new StringBuilder();
                             if (File.Exists(Util.ObjectParametros.PathFile))
                             {
-                                sb = new StringBuilder();
                                 using (SQLiteConnection conn = Util.SQLite.CreateSQLiteConnection(Util.ObjectParametros.PathFile, false))
                                 {
-                                    using (SQLiteCommand cmd = new SQLiteCommand(conn))
+                                    if (!Util.SQLite.IsColumnExists(conn, "Parametros", "HabilitarRecirculacao"))
                                     {
-                                        conn.Open();
-                                        sb.Append("ALTER TABLE Parametros ADD HabilitarRecirculacao TEXT NULL;");
-                                        cmd.CommandText = sb.ToString();
-                                        cmd.ExecuteNonQuery();
-                                        conn.Close();
-
-
+                                        using (SQLiteCommand cmd = new SQLiteCommand(conn))
+                                        {
+                                            conn.Open();
+                                            cmd.CommandText = "ALTER TABLE Parametros ADD HabilitarRecirculacao TEXT NULL;";
+                                            cmd.ExecuteNonQuery();
+                                            conn.Close();
+                                        }
                                     }
-                                }
-
-                                sb = new StringBuilder();
-                                using (SQLiteConnection conn = Util.SQLite.CreateSQLiteConnection(Util.ObjectParametros.PathFile, false))
-                                {
+                                    
                                     using (SQLiteCommand cmd = new SQLiteCommand(conn))
                                     {
                                         conn.Open();
-                                        sb.Append("UPDATE Parametros SET VersaoIoconnect = '27', HabilitarRecirculacao = 'False'; ");
-                                        cmd.CommandText = sb.ToString();
+                                        cmd.CommandText = "UPDATE Parametros SET VersaoIoconnect = '27', HabilitarRecirculacao = 'False'; ";
                                         cmd.ExecuteNonQuery();
                                         conn.Close();
                                         versao_BD = 27;
@@ -1194,30 +1171,25 @@ namespace Percolore.IOConnect
 
                         if (versao_BD == 27)
                         {
-                            StringBuilder sb = new StringBuilder();
                             if (File.Exists(Util.ObjectParametros.PathFile))
                             {
-                                sb = new StringBuilder();
                                 using (SQLiteConnection conn = Util.SQLite.CreateSQLiteConnection(Util.ObjectParametros.PathFile, false))
                                 {
-                                    using (SQLiteCommand cmd = new SQLiteCommand(conn))
+                                    if (!Util.SQLite.IsColumnExists(conn, "Parametros", "DelayMonitRecirculacao"))
                                     {
-                                        conn.Open();
-                                        sb.Append("ALTER TABLE Parametros ADD DelayMonitRecirculacao TEXT NULL;");
-                                        cmd.CommandText = sb.ToString();
-                                        cmd.ExecuteNonQuery();
-                                        conn.Close();
+                                        using (SQLiteCommand cmd = new SQLiteCommand(conn))
+                                        {
+                                            conn.Open();
+                                            cmd.CommandText = "ALTER TABLE Parametros ADD DelayMonitRecirculacao TEXT NULL;";
+                                            cmd.ExecuteNonQuery();
+                                            conn.Close();
+                                        }
                                     }
-                                }
-
-                                sb = new StringBuilder();
-                                using (SQLiteConnection conn = Util.SQLite.CreateSQLiteConnection(Util.ObjectParametros.PathFile, false))
-                                {
+                                    
                                     using (SQLiteCommand cmd = new SQLiteCommand(conn))
                                     {
                                         conn.Open();
-                                        sb.Append("UPDATE Parametros SET VersaoIoconnect = '28', DelayMonitRecirculacao = '4'; ");
-                                        cmd.CommandText = sb.ToString();
+                                        cmd.CommandText = "UPDATE Parametros SET VersaoIoconnect = '28', DelayMonitRecirculacao = '4'; ";
                                         cmd.ExecuteNonQuery();
                                         conn.Close();
                                         versao_BD = 28;
@@ -1228,142 +1200,120 @@ namespace Percolore.IOConnect
 
                         if (versao_BD == 28)
                         {
-                            StringBuilder sb = new StringBuilder();
                             if (File.Exists(Util.ObjectParametros.PathFile))
                             {
-                                sb = new StringBuilder();
                                 using (SQLiteConnection conn = Util.SQLite.CreateSQLiteConnection(Util.ObjectParametros.PathFile, false))
                                 {
-                                    using (SQLiteCommand cmd = new SQLiteCommand(conn))
+                                    if (!Util.SQLite.IsColumnExists(conn, "Parametros", "Dat_06_UNT_Pref"))
                                     {
-                                        conn.Open();
-                                        sb.Append("ALTER TABLE Parametros ADD Dat_06_UNT_Pref TEXT NULL;");
-                                        cmd.CommandText = sb.ToString();
-                                        cmd.ExecuteNonQuery();
-                                        conn.Close();
+                                        using (SQLiteCommand cmd = new SQLiteCommand(conn))
+                                        {
+                                            conn.Open();
+                                            cmd.CommandText = "ALTER TABLE Parametros ADD Dat_06_UNT_Pref TEXT NULL;";
+                                            cmd.ExecuteNonQuery();
+                                            conn.Close();
+                                        }
                                     }
-                                }
 
-                                sb = new StringBuilder();
-                                using (SQLiteConnection conn = Util.SQLite.CreateSQLiteConnection(Util.ObjectParametros.PathFile, false))
-                                {
-                                    using (SQLiteCommand cmd = new SQLiteCommand(conn))
+                                    if (!Util.SQLite.IsColumnExists(conn, "Parametros", "Dat_06_UNT_1_IsPonto"))
                                     {
-                                        conn.Open();
-                                        sb.Append("ALTER TABLE Parametros ADD Dat_06_UNT_1_IsPonto TEXT NULL;");
-                                        cmd.CommandText = sb.ToString();
-                                        cmd.ExecuteNonQuery();
-                                        conn.Close();
+                                        using (SQLiteCommand cmd = new SQLiteCommand(conn))
+                                        {
+                                            conn.Open();
+                                            cmd.CommandText = "ALTER TABLE Parametros ADD Dat_06_UNT_1_IsPonto TEXT NULL;";
+                                            cmd.ExecuteNonQuery();
+                                            conn.Close();
+                                        }
                                     }
-                                }
 
-                                sb = new StringBuilder();
-                                using (SQLiteConnection conn = Util.SQLite.CreateSQLiteConnection(Util.ObjectParametros.PathFile, false))
-                                {
-                                    using (SQLiteCommand cmd = new SQLiteCommand(conn))
+                                    if (!Util.SQLite.IsColumnExists(conn, "Parametros", "Dat_06_UNT_2_IsPonto"))
                                     {
-                                        conn.Open();
-                                        sb.Append("ALTER TABLE Parametros ADD Dat_06_UNT_2_IsPonto TEXT NULL;");
-                                        cmd.CommandText = sb.ToString();
-                                        cmd.ExecuteNonQuery();
-                                        conn.Close();
+                                        using (SQLiteCommand cmd = new SQLiteCommand(conn))
+                                        {
+                                            conn.Open();
+                                            cmd.CommandText = "ALTER TABLE Parametros ADD Dat_06_UNT_2_IsPonto TEXT NULL;";
+                                            cmd.ExecuteNonQuery();
+                                            conn.Close();
+                                        }
                                     }
-                                }
 
-                                sb = new StringBuilder();
-                                using (SQLiteConnection conn = Util.SQLite.CreateSQLiteConnection(Util.ObjectParametros.PathFile, false))
-                                {
-                                    using (SQLiteCommand cmd = new SQLiteCommand(conn))
+                                    if (!Util.SQLite.IsColumnExists(conn, "Parametros", "Dat_06_CAN_Pref"))
                                     {
-                                        conn.Open();
-                                        sb.Append("ALTER TABLE Parametros ADD Dat_06_CAN_Pref TEXT NULL;");
-                                        cmd.CommandText = sb.ToString();
-                                        cmd.ExecuteNonQuery();
-                                        conn.Close();
+                                        using (SQLiteCommand cmd = new SQLiteCommand(conn))
+                                        {
+                                            conn.Open();
+                                            cmd.CommandText = "ALTER TABLE Parametros ADD Dat_06_CAN_Pref TEXT NULL;";
+                                            cmd.ExecuteNonQuery();
+                                            conn.Close();
+                                        }
                                     }
-                                }
 
-                                sb = new StringBuilder();
-                                using (SQLiteConnection conn = Util.SQLite.CreateSQLiteConnection(Util.ObjectParametros.PathFile, false))
-                                {
-                                    using (SQLiteCommand cmd = new SQLiteCommand(conn))
+                                    if (!Util.SQLite.IsColumnExists(conn, "Parametros", "Dat_06_CAN_1_IsPonto"))
                                     {
-                                        conn.Open();
-                                        sb.Append("ALTER TABLE Parametros ADD Dat_06_CAN_1_IsPonto TEXT NULL;");
-                                        cmd.CommandText = sb.ToString();
-                                        cmd.ExecuteNonQuery();
-                                        conn.Close();
+                                        using (SQLiteCommand cmd = new SQLiteCommand(conn))
+                                        {
+                                            conn.Open();
+                                            cmd.CommandText = "ALTER TABLE Parametros ADD Dat_06_CAN_1_IsPonto TEXT NULL;";
+                                            cmd.ExecuteNonQuery();
+                                            conn.Close();
+                                        }
                                     }
-                                }
 
-                                sb = new StringBuilder();
-                                using (SQLiteConnection conn = Util.SQLite.CreateSQLiteConnection(Util.ObjectParametros.PathFile, false))
-                                {
-                                    using (SQLiteCommand cmd = new SQLiteCommand(conn))
+                                    if (!Util.SQLite.IsColumnExists(conn, "Parametros", "Dat_06_FRM_Pref"))
                                     {
-                                        conn.Open();
-                                        sb.Append("ALTER TABLE Parametros ADD Dat_06_FRM_Pref TEXT NULL;");
-                                        cmd.CommandText = sb.ToString();
-                                        cmd.ExecuteNonQuery();
-                                        conn.Close();
+                                        using (SQLiteCommand cmd = new SQLiteCommand(conn))
+                                        {
+                                            conn.Open();
+                                            cmd.CommandText = "ALTER TABLE Parametros ADD Dat_06_FRM_Pref TEXT NULL;";
+                                            cmd.ExecuteNonQuery();
+                                            conn.Close();
+                                        }
                                     }
-                                }
 
-                                sb = new StringBuilder();
-                                using (SQLiteConnection conn = Util.SQLite.CreateSQLiteConnection(Util.ObjectParametros.PathFile, false))
-                                {
-                                    using (SQLiteCommand cmd = new SQLiteCommand(conn))
+                                    if (!Util.SQLite.IsColumnExists(conn, "Parametros", "Dat_06_FRM_SEP"))
                                     {
-                                        conn.Open();
-                                        sb.Append("ALTER TABLE Parametros ADD Dat_06_FRM_SEP TEXT NULL;");
-                                        cmd.CommandText = sb.ToString();
-                                        cmd.ExecuteNonQuery();
-                                        conn.Close();
+                                        using (SQLiteCommand cmd = new SQLiteCommand(conn))
+                                        {
+                                            conn.Open();
+                                            cmd.CommandText = "ALTER TABLE Parametros ADD Dat_06_FRM_SEP TEXT NULL;";
+                                            cmd.ExecuteNonQuery();
+                                            conn.Close();
+                                        }
                                     }
-                                }
 
-                                sb = new StringBuilder();
-                                using (SQLiteConnection conn = Util.SQLite.CreateSQLiteConnection(Util.ObjectParametros.PathFile, false))
-                                {
-                                    using (SQLiteCommand cmd = new SQLiteCommand(conn))
+                                    if (!Util.SQLite.IsColumnExists(conn, "Parametros", "Dat_06_FRM_1_IsPonto"))
                                     {
-                                        conn.Open();
-                                        sb.Append("ALTER TABLE Parametros ADD Dat_06_FRM_1_IsPonto TEXT NULL;");
-                                        cmd.CommandText = sb.ToString();
-                                        cmd.ExecuteNonQuery();
-                                        conn.Close();
+                                        using (SQLiteCommand cmd = new SQLiteCommand(conn))
+                                        {
+                                            conn.Open();
+                                            cmd.CommandText = "ALTER TABLE Parametros ADD Dat_06_FRM_1_IsPonto TEXT NULL;";
+                                            cmd.ExecuteNonQuery();
+                                            conn.Close();
+                                        }
                                     }
-                                }
 
-                                sb = new StringBuilder();
-                                using (SQLiteConnection conn = Util.SQLite.CreateSQLiteConnection(Util.ObjectParametros.PathFile, false))
-                                {
-                                    using (SQLiteCommand cmd = new SQLiteCommand(conn))
+                                    if (!Util.SQLite.IsColumnExists(conn, "Parametros", "Dat_06_BAS_Pref"))
                                     {
-                                        conn.Open();
-                                        sb.Append("ALTER TABLE Parametros ADD Dat_06_BAS_Pref TEXT NULL;");
-                                        cmd.CommandText = sb.ToString();
-                                        cmd.ExecuteNonQuery();
-                                        conn.Close();
+                                        using (SQLiteCommand cmd = new SQLiteCommand(conn))
+                                        {
+                                            conn.Open();
+                                            cmd.CommandText = "ALTER TABLE Parametros ADD Dat_06_BAS_Pref TEXT NULL;";
+                                            cmd.ExecuteNonQuery();
+                                            conn.Close();
+                                        }
                                     }
-                                }
 
-                                sb = new StringBuilder();
-                                using (SQLiteConnection conn = Util.SQLite.CreateSQLiteConnection(Util.ObjectParametros.PathFile, false))
-                                {
-                                    using (SQLiteCommand cmd = new SQLiteCommand(conn))
+                                    if (!Util.SQLite.IsColumnExists(conn, "Parametros", "Dat_06_BAS_1_IsPonto"))
                                     {
-                                        conn.Open();
-                                        sb.Append("ALTER TABLE Parametros ADD Dat_06_BAS_1_IsPonto TEXT NULL;");
-                                        cmd.CommandText = sb.ToString();
-                                        cmd.ExecuteNonQuery();
-                                        conn.Close();
+                                        using (SQLiteCommand cmd = new SQLiteCommand(conn))
+                                        {
+                                            conn.Open();
+                                            cmd.CommandText = "ALTER TABLE Parametros ADD Dat_06_BAS_1_IsPonto TEXT NULL;";
+                                            cmd.ExecuteNonQuery();
+                                            conn.Close();
+                                        }
                                     }
-                                }
-
-                                sb = new StringBuilder();
-                                using (SQLiteConnection conn = Util.SQLite.CreateSQLiteConnection(Util.ObjectParametros.PathFile, false))
-                                {
+                                    
                                     using (SQLiteCommand cmd = new SQLiteCommand(conn))
                                     {
                                         conn.Open();
@@ -1371,8 +1321,7 @@ namespace Percolore.IOConnect
                                         str += "Dat_06_CAN_Pref = '@CAN', Dat_06_CAN_1_IsPonto = '0',";
                                         str += "Dat_06_FRM_Pref = '@FRM', Dat_06_FRM_SEP = ',', Dat_06_FRM_1_IsPonto = '0',";
                                         str += "Dat_06_BAS_Pref = '@BAS', Dat_06_BAS_1_IsPonto = '0';";
-                                        sb.Append(str);
-                                        cmd.CommandText = sb.ToString();
+                                        cmd.CommandText = str;
                                         cmd.ExecuteNonQuery();
                                         conn.Close();
                                         versao_BD = 29;
@@ -1383,31 +1332,25 @@ namespace Percolore.IOConnect
 
                         if (versao_BD == 29)
                         {
-                            StringBuilder sb = new StringBuilder();
                             if (File.Exists(Util.ObjectParametros.PathFile))
                             {
-                                sb = new StringBuilder();
                                 using (SQLiteConnection conn = Util.SQLite.CreateSQLiteConnection(Util.ObjectParametros.PathFile, false))
                                 {
-                                    using (SQLiteCommand cmd = new SQLiteCommand(conn))
+                                    if (!Util.SQLite.IsColumnExists(conn, "Parametros", "Dat_06_BAS_Habilitado"))
                                     {
-                                        conn.Open();
-                                        sb.Append("ALTER TABLE Parametros ADD Dat_06_BAS_Habilitado TEXT NULL;");
-                                        cmd.CommandText = sb.ToString();
-                                        cmd.ExecuteNonQuery();
-                                        conn.Close();
+                                        using (SQLiteCommand cmd = new SQLiteCommand(conn))
+                                        {
+                                            conn.Open();
+                                            cmd.CommandText = "ALTER TABLE Parametros ADD Dat_06_BAS_Habilitado TEXT NULL;";
+                                            cmd.ExecuteNonQuery();
+                                            conn.Close();
+                                        }
                                     }
-                                }
-
-                                sb = new StringBuilder();
-                                using (SQLiteConnection conn = Util.SQLite.CreateSQLiteConnection(Util.ObjectParametros.PathFile, false))
-                                {
+                                    
                                     using (SQLiteCommand cmd = new SQLiteCommand(conn))
                                     {
                                         conn.Open();
-                                        string str = "UPDATE Parametros SET VersaoIoconnect = '30', Dat_06_BAS_Habilitado = '1';";
-                                        sb.Append(str);
-                                        cmd.CommandText = sb.ToString();
+                                        cmd.CommandText = "UPDATE Parametros SET VersaoIoconnect = '30', Dat_06_BAS_Habilitado = '1';";
                                         cmd.ExecuteNonQuery();
                                         conn.Close();
                                         versao_BD = 30;
@@ -1421,28 +1364,23 @@ namespace Percolore.IOConnect
                             StringBuilder sb = new StringBuilder();
                             if (File.Exists(Util.ObjectParametros.PathFile))
                             {
-                                sb = new StringBuilder();
                                 using (SQLiteConnection conn = Util.SQLite.CreateSQLiteConnection(Util.ObjectParametros.PathFile, false))
                                 {
-                                    using (SQLiteCommand cmd = new SQLiteCommand(conn))
+                                    if (!Util.SQLite.IsColumnExists(conn, "Parametros", "Address_PlacaMov"))
                                     {
-                                        conn.Open();
-                                        sb.Append("ALTER TABLE Parametros ADD Address_PlacaMov TEXT NULL;");
-                                        cmd.CommandText = sb.ToString();
-                                        cmd.ExecuteNonQuery();
-                                        conn.Close();
+                                        using (SQLiteCommand cmd = new SQLiteCommand(conn))
+                                        {
+                                            conn.Open();
+                                            cmd.CommandText = "ALTER TABLE Parametros ADD Address_PlacaMov TEXT NULL;";
+                                            cmd.ExecuteNonQuery();
+                                            conn.Close();
+                                        }
                                     }
-                                }
-
-                                sb = new StringBuilder();
-                                using (SQLiteConnection conn = Util.SQLite.CreateSQLiteConnection(Util.ObjectParametros.PathFile, false))
-                                {
+                                    
                                     using (SQLiteCommand cmd = new SQLiteCommand(conn))
                                     {
                                         conn.Open();
-                                        string str = "UPDATE Parametros SET VersaoIoconnect = '31', Address_PlacaMov = '3';";
-                                        sb.Append(str);
-                                        cmd.CommandText = sb.ToString();
+                                        cmd.CommandText = "UPDATE Parametros SET VersaoIoconnect = '31', Address_PlacaMov = '3';";
                                         cmd.ExecuteNonQuery();
                                         conn.Close();
                                         versao_BD = 31;
@@ -1459,143 +1397,48 @@ namespace Percolore.IOConnect
                                 sb = new StringBuilder();
                                 using (SQLiteConnection conn = Util.SQLite.CreateSQLiteConnection(Util.ObjectParametros.PathFile, false))
                                 {
-                                    using (SQLiteCommand cmd = new SQLiteCommand(conn))
-                                    {
-                                        conn.Open();
-                                        sb.Append("ALTER TABLE Parametros ADD Dat_05_UNT_Pref TEXT NULL;");
-                                        cmd.CommandText = sb.ToString();
-                                        cmd.ExecuteNonQuery();
-                                        conn.Close();
-                                    }
-                                }
+									if (!Util.SQLite.IsColumnExists(conn, "Parametros", "Dat_05_UNT_Pref"))
+										sb.Append("ALTER TABLE Parametros ADD Dat_05_UNT_Pref TEXT NULL; ");
 
-                                sb = new StringBuilder();
-                                using (SQLiteConnection conn = Util.SQLite.CreateSQLiteConnection(Util.ObjectParametros.PathFile, false))
-                                {
-                                    using (SQLiteCommand cmd = new SQLiteCommand(conn))
-                                    {
-                                        conn.Open();
-                                        sb.Append("ALTER TABLE Parametros ADD Dat_05_UNT_1_IsPonto TEXT NULL;");
-                                        cmd.CommandText = sb.ToString();
-                                        cmd.ExecuteNonQuery();
-                                        conn.Close();
-                                    }
-                                }
+									if (!Util.SQLite.IsColumnExists(conn, "Parametros", "Dat_05_UNT_1_IsPonto"))
+										sb.Append("ALTER TABLE Parametros ADD Dat_05_UNT_1_IsPonto TEXT NULL; ");
 
-                                sb = new StringBuilder();
-                                using (SQLiteConnection conn = Util.SQLite.CreateSQLiteConnection(Util.ObjectParametros.PathFile, false))
-                                {
-                                    using (SQLiteCommand cmd = new SQLiteCommand(conn))
-                                    {
-                                        conn.Open();
-                                        sb.Append("ALTER TABLE Parametros ADD Dat_05_UNT_2_IsPonto TEXT NULL;");
-                                        cmd.CommandText = sb.ToString();
-                                        cmd.ExecuteNonQuery();
-                                        conn.Close();
-                                    }
-                                }
+									if (!Util.SQLite.IsColumnExists(conn, "Parametros", "Dat_05_UNT_2_IsPonto"))
+										sb.Append("ALTER TABLE Parametros ADD Dat_05_UNT_2_IsPonto TEXT NULL; ");
 
-                                sb = new StringBuilder();
-                                using (SQLiteConnection conn = Util.SQLite.CreateSQLiteConnection(Util.ObjectParametros.PathFile, false))
-                                {
-                                    using (SQLiteCommand cmd = new SQLiteCommand(conn))
-                                    {
-                                        conn.Open();
-                                        sb.Append("ALTER TABLE Parametros ADD Dat_05_CAN_Pref TEXT NULL;");
-                                        cmd.CommandText = sb.ToString();
-                                        cmd.ExecuteNonQuery();
-                                        conn.Close();
-                                    }
-                                }
+									if (!Util.SQLite.IsColumnExists(conn, "Parametros", "Dat_05_CAN_Pref"))
+										sb.Append("ALTER TABLE Parametros ADD Dat_05_CAN_Pref TEXT NULL; ");
 
-                                sb = new StringBuilder();
-                                using (SQLiteConnection conn = Util.SQLite.CreateSQLiteConnection(Util.ObjectParametros.PathFile, false))
-                                {
-                                    using (SQLiteCommand cmd = new SQLiteCommand(conn))
-                                    {
-                                        conn.Open();
-                                        sb.Append("ALTER TABLE Parametros ADD Dat_05_CAN_1_IsPonto TEXT NULL;");
-                                        cmd.CommandText = sb.ToString();
-                                        cmd.ExecuteNonQuery();
-                                        conn.Close();
-                                    }
-                                }
+									if (!Util.SQLite.IsColumnExists(conn, "Parametros", "Dat_05_CAN_1_IsPonto"))
+										sb.Append("ALTER TABLE Parametros ADD Dat_05_CAN_1_IsPonto TEXT NULL; ");
 
-                                sb = new StringBuilder();
-                                using (SQLiteConnection conn = Util.SQLite.CreateSQLiteConnection(Util.ObjectParametros.PathFile, false))
-                                {
-                                    using (SQLiteCommand cmd = new SQLiteCommand(conn))
-                                    {
-                                        conn.Open();
-                                        sb.Append("ALTER TABLE Parametros ADD Dat_05_FRM_Pref TEXT NULL;");
-                                        cmd.CommandText = sb.ToString();
-                                        cmd.ExecuteNonQuery();
-                                        conn.Close();
-                                    }
-                                }
+									if (!Util.SQLite.IsColumnExists(conn, "Parametros", "Dat_05_FRM_Pref"))
+										sb.Append("ALTER TABLE Parametros ADD Dat_05_FRM_Pref TEXT NULL; ");
 
-                                sb = new StringBuilder();
-                                using (SQLiteConnection conn = Util.SQLite.CreateSQLiteConnection(Util.ObjectParametros.PathFile, false))
-                                {
-                                    using (SQLiteCommand cmd = new SQLiteCommand(conn))
-                                    {
-                                        conn.Open();
-                                        sb.Append("ALTER TABLE Parametros ADD Dat_05_FRM_SEP TEXT NULL;");
-                                        cmd.CommandText = sb.ToString();
-                                        cmd.ExecuteNonQuery();
-                                        conn.Close();
-                                    }
-                                }
+									if (!Util.SQLite.IsColumnExists(conn, "Parametros", "Dat_05_FRM_SEP"))
+										sb.Append("ALTER TABLE Parametros ADD Dat_05_FRM_SEP TEXT NULL; ");
 
-                                sb = new StringBuilder();
-                                using (SQLiteConnection conn = Util.SQLite.CreateSQLiteConnection(Util.ObjectParametros.PathFile, false))
-                                {
-                                    using (SQLiteCommand cmd = new SQLiteCommand(conn))
-                                    {
-                                        conn.Open();
-                                        sb.Append("ALTER TABLE Parametros ADD Dat_05_FRM_1_IsPonto TEXT NULL;");
-                                        cmd.CommandText = sb.ToString();
-                                        cmd.ExecuteNonQuery();
-                                        conn.Close();
-                                    }
-                                }
+									if (!Util.SQLite.IsColumnExists(conn, "Parametros", "Dat_05_FRM_1_IsPonto"))
+										sb.Append("ALTER TABLE Parametros ADD Dat_05_FRM_1_IsPonto TEXT NULL; ");
 
-                                sb = new StringBuilder();
-                                using (SQLiteConnection conn = Util.SQLite.CreateSQLiteConnection(Util.ObjectParametros.PathFile, false))
-                                {
-                                    using (SQLiteCommand cmd = new SQLiteCommand(conn))
-                                    {
-                                        conn.Open();
-                                        sb.Append("ALTER TABLE Parametros ADD Dat_05_BAS_Pref TEXT NULL;");
-                                        cmd.CommandText = sb.ToString();
-                                        cmd.ExecuteNonQuery();
-                                        conn.Close();
-                                    }
-                                }
+									if (!Util.SQLite.IsColumnExists(conn, "Parametros", "Dat_05_BAS_Pref"))
+										sb.Append("ALTER TABLE Parametros ADD Dat_05_BAS_Pref TEXT NULL; ");
 
-                                sb = new StringBuilder();
-                                using (SQLiteConnection conn = Util.SQLite.CreateSQLiteConnection(Util.ObjectParametros.PathFile, false))
-                                {
-                                    using (SQLiteCommand cmd = new SQLiteCommand(conn))
-                                    {
-                                        conn.Open();
-                                        sb.Append("ALTER TABLE Parametros ADD Dat_05_BAS_1_IsPonto TEXT NULL;");
-                                        cmd.CommandText = sb.ToString();
-                                        cmd.ExecuteNonQuery();
-                                        conn.Close();
-                                    }
-                                }
+									if (!Util.SQLite.IsColumnExists(conn, "Parametros", "Dat_05_BAS_1_IsPonto"))
+										sb.Append("ALTER TABLE Parametros ADD Dat_05_BAS_1_IsPonto TEXT NULL; ");
 
-                                sb = new StringBuilder();
-                                using (SQLiteConnection conn = Util.SQLite.CreateSQLiteConnection(Util.ObjectParametros.PathFile, false))
-                                {
-                                    using (SQLiteCommand cmd = new SQLiteCommand(conn))
+									if (!Util.SQLite.IsColumnExists(conn, "Parametros", "Dat_05_BAS_Habilitado"))
+										sb.Append("ALTER TABLE Parametros ADD Dat_05_BAS_Habilitado TEXT NULL; ");
+
+                                    if (!string.IsNullOrWhiteSpace(sb.ToString()))
                                     {
-                                        conn.Open();
-                                        sb.Append("ALTER TABLE Parametros ADD Dat_05_BAS_Habilitado TEXT NULL;");
-                                        cmd.CommandText = sb.ToString();
-                                        cmd.ExecuteNonQuery();
-                                        conn.Close();
+                                        using (SQLiteCommand cmd = new SQLiteCommand(conn))
+                                        {
+                                            conn.Open();
+                                            cmd.CommandText = sb.ToString();
+                                            cmd.ExecuteNonQuery();
+                                            conn.Close();
+                                        }
                                     }
                                 }
 
@@ -1608,8 +1451,7 @@ namespace Percolore.IOConnect
                                         string str = "UPDATE Parametros SET VersaoIoconnect = '32', ";
                                         str += "Dat_05_UNT_Pref = '@UNT', Dat_05_UNT_1_IsPonto = '0', Dat_05_UNT_2_IsPonto = '0', ";
                                         str += "Dat_05_CAN_Pref = '@CAN', Dat_05_CAN_1_IsPonto = '0',";
-                                        str += "Dat_05_FRM_Pref = '@CNT', Dat_05_FRM_SEP = '" + '"' + "', Dat_05_FRM_1_IsPonto = '0',"; ;
-
+                                        str += "Dat_05_FRM_Pref = '@CNT', Dat_05_FRM_SEP = '" + '"' + "', Dat_05_FRM_1_IsPonto = '0',";
                                         str += "Dat_05_BAS_Pref = '@BAS', Dat_05_BAS_1_IsPonto = '0', ";
                                         str += "Dat_05_BAS_Habilitado = '1';";
                                         sb.Append(str);
@@ -1624,31 +1466,25 @@ namespace Percolore.IOConnect
 
                         if (versao_BD == 32)
                         {
-                            StringBuilder sb = new StringBuilder();
                             if (File.Exists(Util.ObjectParametros.PathFile))
                             {
-                                sb = new StringBuilder();
                                 using (SQLiteConnection conn = Util.SQLite.CreateSQLiteConnection(Util.ObjectParametros.PathFile, false))
                                 {
-                                    using (SQLiteCommand cmd = new SQLiteCommand(conn))
+                                    if (!Util.SQLite.IsColumnExists(conn, "Parametros", "NomeDispositivo_PlacaMov"))
                                     {
-                                        conn.Open();
-                                        sb.Append("ALTER TABLE Parametros ADD NomeDispositivo_PlacaMov TEXT NULL;");
-                                        cmd.CommandText = sb.ToString();
-                                        cmd.ExecuteNonQuery();
-                                        conn.Close();
+                                        using (SQLiteCommand cmd = new SQLiteCommand(conn))
+                                        {
+                                            conn.Open();
+                                            cmd.CommandText = "ALTER TABLE Parametros ADD NomeDispositivo_PlacaMov TEXT NULL;";
+                                            cmd.ExecuteNonQuery();
+                                            conn.Close();
+                                        }
                                     }
-                                }
-
-                                sb = new StringBuilder();
-                                using (SQLiteConnection conn = Util.SQLite.CreateSQLiteConnection(Util.ObjectParametros.PathFile, false))
-                                {
+                                    
                                     using (SQLiteCommand cmd = new SQLiteCommand(conn))
                                     {
                                         conn.Open();
-                                        string str = "UPDATE Parametros SET VersaoIoconnect = '33', NomeDispositivo_PlacaMov = '';";
-                                        sb.Append(str);
-                                        cmd.CommandText = sb.ToString();
+                                        cmd.CommandText = "UPDATE Parametros SET VersaoIoconnect = '33', NomeDispositivo_PlacaMov = '';";
                                         cmd.ExecuteNonQuery();
                                         conn.Close();
                                         versao_BD = 33;
@@ -1659,7 +1495,6 @@ namespace Percolore.IOConnect
 
                         if (versao_BD == 33)
                         {
-                            StringBuilder sb = new StringBuilder();
                             if (File.Exists(Util.ObjectMotorPlacaMovimentacao.PathFile))
                             {
                                 Util.ObjectMotorPlacaMovimentacao plMov = new Util.ObjectMotorPlacaMovimentacao();
@@ -1676,15 +1511,12 @@ namespace Percolore.IOConnect
 
                             if (File.Exists(Util.ObjectParametros.PathFile))
                             {
-                                sb = new StringBuilder();
                                 using (SQLiteConnection conn = Util.SQLite.CreateSQLiteConnection(Util.ObjectParametros.PathFile, false))
                                 {
                                     using (SQLiteCommand cmd = new SQLiteCommand(conn))
                                     {
                                         conn.Open();
-                                        string str = "UPDATE Parametros SET VersaoIoconnect = '34';";
-                                        sb.Append(str);
-                                        cmd.CommandText = sb.ToString();
+                                        cmd.CommandText = "UPDATE Parametros SET VersaoIoconnect = '34';";
                                         cmd.ExecuteNonQuery();
                                         conn.Close();
                                         versao_BD = 34;
@@ -1695,43 +1527,32 @@ namespace Percolore.IOConnect
 
                         if (versao_BD == 34)
                         {
-                            StringBuilder sb = new StringBuilder();
                             if (File.Exists(Util.ObjectParametros.PathFile))
                             {
-                                sb = new StringBuilder();
+								StringBuilder sb = new StringBuilder();
                                 using (SQLiteConnection conn = Util.SQLite.CreateSQLiteConnection(Util.ObjectParametros.PathFile, false))
                                 {
-                                    using (SQLiteCommand cmd = new SQLiteCommand(conn))
-                                    {
-                                        conn.Open();
-                                        sb.Append("ALTER TABLE Parametros ADD HabilitarRecirculacaoAuto TEXT NULL;");
-                                        cmd.CommandText = sb.ToString();
-                                        cmd.ExecuteNonQuery();
-                                        conn.Close();
-                                    }
-                                }
+									if (!Util.SQLite.IsColumnExists(conn, "Parametros", "HabilitarRecirculacaoAuto"))
+										sb.Append("ALTER TABLE Parametros ADD HabilitarRecirculacaoAuto TEXT NULL;");
 
-                                sb = new StringBuilder();
-                                using (SQLiteConnection conn = Util.SQLite.CreateSQLiteConnection(Util.ObjectParametros.PathFile, false))
-                                {
-                                    using (SQLiteCommand cmd = new SQLiteCommand(conn))
-                                    {
-                                        conn.Open();
-                                        sb.Append("ALTER TABLE Parametros ADD DelayMonitRecirculacaoAuto TEXT NULL;");
-                                        cmd.CommandText = sb.ToString();
-                                        cmd.ExecuteNonQuery();
-                                        conn.Close();
-                                    }
-                                }
+									if (!Util.SQLite.IsColumnExists(conn, "Parametros", "DelayMonitRecirculacaoAuto"))
+										sb.Append("ALTER TABLE Parametros ADD DelayMonitRecirculacaoAuto TEXT NULL;");
 
-                                sb = new StringBuilder();
-                                using (SQLiteConnection conn = Util.SQLite.CreateSQLiteConnection(Util.ObjectParametros.PathFile, false))
-                                {
+                                    if (!string.IsNullOrWhiteSpace(sb.ToString()))
+                                    {
+                                        using (SQLiteCommand cmd = new SQLiteCommand(conn))
+                                        {
+                                            conn.Open();
+                                            cmd.CommandText = sb.ToString();
+                                            cmd.ExecuteNonQuery();
+                                            conn.Close();
+                                        }
+                                    }
+                                    
                                     using (SQLiteCommand cmd = new SQLiteCommand(conn))
                                     {
                                         conn.Open();
-                                        sb.Append("UPDATE Parametros SET VersaoIoconnect = '35', HabilitarRecirculacaoAuto = 'False',  DelayMonitRecirculacaoAuto = '60'; ");
-                                        cmd.CommandText = sb.ToString();
+                                        cmd.CommandText = "UPDATE Parametros SET VersaoIoconnect = '35', HabilitarRecirculacaoAuto = 'False',  DelayMonitRecirculacaoAuto = '60'; ";
                                         cmd.ExecuteNonQuery();
                                         conn.Close();
                                         versao_BD = 35;
@@ -1742,30 +1563,25 @@ namespace Percolore.IOConnect
 
                         if (versao_BD == 35)
                         {
-                            StringBuilder sb = new StringBuilder();
                             if (File.Exists(Util.ObjectParametros.PathFile))
                             {
-                                sb = new StringBuilder();
                                 using (SQLiteConnection conn = Util.SQLite.CreateSQLiteConnection(Util.ObjectParametros.PathFile, false))
                                 {
-                                    using (SQLiteCommand cmd = new SQLiteCommand(conn))
+                                    if (!Util.SQLite.IsColumnExists(conn, "Parametros", "DelayNotificacaotRecirculacaoAuto"))
                                     {
-                                        conn.Open();
-                                        sb.Append("ALTER TABLE Parametros ADD DelayNotificacaotRecirculacaoAuto TEXT NULL;");
-                                        cmd.CommandText = sb.ToString();
-                                        cmd.ExecuteNonQuery();
-                                        conn.Close();
+                                        using (SQLiteCommand cmd = new SQLiteCommand(conn))
+                                        {
+                                            conn.Open();
+                                            cmd.CommandText = "ALTER TABLE Parametros ADD DelayNotificacaotRecirculacaoAuto TEXT NULL;";
+                                            cmd.ExecuteNonQuery();
+                                            conn.Close();
+                                        }
                                     }
-                                }
-
-                                sb = new StringBuilder();
-                                using (SQLiteConnection conn = Util.SQLite.CreateSQLiteConnection(Util.ObjectParametros.PathFile, false))
-                                {
+                                    
                                     using (SQLiteCommand cmd = new SQLiteCommand(conn))
                                     {
                                         conn.Open();
-                                        sb.Append("UPDATE Parametros SET VersaoIoconnect = '36',  DelayNotificacaotRecirculacaoAuto = '5'; ");
-                                        cmd.CommandText = sb.ToString();
+                                        cmd.CommandText = "UPDATE Parametros SET VersaoIoconnect = '36',  DelayNotificacaotRecirculacaoAuto = '5'; ";
                                         cmd.ExecuteNonQuery();
                                         conn.Close();
                                         versao_BD = 36;
@@ -1776,30 +1592,25 @@ namespace Percolore.IOConnect
 
                         if (versao_BD == 36)
                         {
-                            StringBuilder sb = new StringBuilder();
                             if (File.Exists(Util.ObjectParametros.PathFile))
                             {
-                                sb = new StringBuilder();
                                 using (SQLiteConnection conn = Util.SQLite.CreateSQLiteConnection(Util.ObjectParametros.PathFile, false))
                                 {
-                                    using (SQLiteCommand cmd = new SQLiteCommand(conn))
+                                    if (!Util.SQLite.IsColumnExists(conn, "Parametros", "QtdNotificacaotRecirculacaoAuto"))
                                     {
-                                        conn.Open();
-                                        sb.Append("ALTER TABLE Parametros ADD QtdNotificacaotRecirculacaoAuto TEXT NULL;");
-                                        cmd.CommandText = sb.ToString();
-                                        cmd.ExecuteNonQuery();
-                                        conn.Close();
+                                        using (SQLiteCommand cmd = new SQLiteCommand(conn))
+                                        {
+                                            conn.Open();
+                                            cmd.CommandText = "ALTER TABLE Parametros ADD QtdNotificacaotRecirculacaoAuto TEXT NULL;";
+                                            cmd.ExecuteNonQuery();
+                                            conn.Close();
+                                        }
                                     }
-                                }
-
-                                sb = new StringBuilder();
-                                using (SQLiteConnection conn = Util.SQLite.CreateSQLiteConnection(Util.ObjectParametros.PathFile, false))
-                                {
+                                    
                                     using (SQLiteCommand cmd = new SQLiteCommand(conn))
                                     {
                                         conn.Open();
-                                        sb.Append("UPDATE Parametros SET VersaoIoconnect = '37',  QtdNotificacaotRecirculacaoAuto = '3'; ");
-                                        cmd.CommandText = sb.ToString();
+                                        cmd.CommandText = "UPDATE Parametros SET VersaoIoconnect = '37',  QtdNotificacaotRecirculacaoAuto = '3'; ";
                                         cmd.ExecuteNonQuery();
                                         conn.Close();
                                         versao_BD = 37;
@@ -1810,32 +1621,25 @@ namespace Percolore.IOConnect
 
                         if (versao_BD == 37)
                         {
-                            StringBuilder sb = new StringBuilder();
                             if (File.Exists(Util.ObjectParametros.PathFile))
                             {
-                                sb = new StringBuilder();
                                 using (SQLiteConnection conn = Util.SQLite.CreateSQLiteConnection(Util.ObjectParametros.PathFile, false))
                                 {
-                                    using (SQLiteCommand cmd = new SQLiteCommand(conn))
+                                    if (!Util.SQLite.IsColumnExists(conn, "Parametros", "DelayAlertaPlacaMov"))
                                     {
-                                        conn.Open();
-                                        sb.Append("ALTER TABLE Parametros ADD DelayAlertaPlacaMov TEXT NULL;");
-                                        cmd.CommandText = sb.ToString();
-                                        cmd.ExecuteNonQuery();
-                                        conn.Close();
-
-
+                                        using (SQLiteCommand cmd = new SQLiteCommand(conn))
+                                        {
+                                            conn.Open();
+                                            cmd.CommandText = "ALTER TABLE Parametros ADD DelayAlertaPlacaMov TEXT NULL;";
+                                            cmd.ExecuteNonQuery();
+                                            conn.Close();
+                                        }
                                     }
-                                }
-
-                                sb = new StringBuilder();
-                                using (SQLiteConnection conn = Util.SQLite.CreateSQLiteConnection(Util.ObjectParametros.PathFile, false))
-                                {
+                                    
                                     using (SQLiteCommand cmd = new SQLiteCommand(conn))
                                     {
                                         conn.Open();
-                                        sb.Append("UPDATE Parametros SET VersaoIoconnect = '38', DelayAlertaPlacaMov = '5'; ");
-                                        cmd.CommandText = sb.ToString();
+                                        cmd.CommandText = "UPDATE Parametros SET VersaoIoconnect = '38', DelayAlertaPlacaMov = '5'; ";
                                         cmd.ExecuteNonQuery();
                                         conn.Close();
                                         versao_BD = 38;
@@ -1846,181 +1650,152 @@ namespace Percolore.IOConnect
 
                         if (versao_BD == 38)
                         {
-                            StringBuilder sb = new StringBuilder();
                             if (File.Exists(Util.ObjectParametros.PathFile))
                             {
-                                sb = new StringBuilder();
                                 using (SQLiteConnection conn = Util.SQLite.CreateSQLiteConnection(Util.ObjectParametros.PathFile, false))
                                 {
+                                    if (!Util.SQLite.IsColumnExists(conn, "Parametros", "LogAutomateBackup"))
+                                    {
+                                        using (SQLiteCommand cmd = new SQLiteCommand(conn))
+                                        {
+                                            conn.Open();
+                                            cmd.CommandText = "ALTER TABLE Parametros ADD LogAutomateBackup TEXT NULL;";
+                                            cmd.ExecuteNonQuery();
+                                            conn.Close();
+                                        }
+                                    }
+                                    
                                     using (SQLiteCommand cmd = new SQLiteCommand(conn))
                                     {
                                         conn.Open();
-                                        sb.Append("ALTER TABLE Parametros ADD LogAutomateBackup TEXT NULL;");
-                                        cmd.CommandText = sb.ToString();
+                                        cmd.CommandText = "UPDATE Parametros SET VersaoIoconnect = '39', LogAutomateBackup = 'False'; ";
                                         cmd.ExecuteNonQuery();
                                         conn.Close();
-                                    }
-                                }
-
-                                sb = new StringBuilder();
-                                using (SQLiteConnection conn = Util.SQLite.CreateSQLiteConnection(Util.ObjectParametros.PathFile, false))
-                                {
-                                    using (SQLiteCommand cmd = new SQLiteCommand(conn))
-                                    {
-                                        conn.Open();
-                                        sb.Append("UPDATE Parametros SET VersaoIoconnect = '39', LogAutomateBackup = 'False'; ");
-                                        cmd.CommandText = sb.ToString();
-                                        cmd.ExecuteNonQuery();
-                                        conn.Close();
-                                        versao_BD = 39;
-                                    }
+										versao_BD = 39;
+									}
                                 }
                             }
-
-                            versao_BD = 39;
                         }
 
                         if (versao_BD == 39)
                         {
-                            StringBuilder sb = new StringBuilder();
                             if (File.Exists(Util.ObjectParametros.PathFile))
                             {
-                                sb = new StringBuilder();
                                 using (SQLiteConnection conn = Util.SQLite.CreateSQLiteConnection(Util.ObjectParametros.PathFile, false))
                                 {
+                                    if (!Util.SQLite.IsColumnExists(conn, "Parametros", "QtdTentativasConexao"))
+                                    {
+                                        using (SQLiteCommand cmd = new SQLiteCommand(conn))
+                                        {
+                                            conn.Open();
+                                            cmd.CommandText = "ALTER TABLE Parametros ADD QtdTentativasConexao TEXT NULL;";
+                                            cmd.ExecuteNonQuery();
+                                            conn.Close();
+                                        }
+                                    }
+                                    
                                     using (SQLiteCommand cmd = new SQLiteCommand(conn))
                                     {
                                         conn.Open();
-                                        sb.Append("ALTER TABLE Parametros ADD QtdTentativasConexao TEXT NULL;");
-                                        cmd.CommandText = sb.ToString();
+                                        cmd.CommandText = "UPDATE Parametros SET VersaoIoconnect = '40', QtdTentativasConexao = '1'; ";
                                         cmd.ExecuteNonQuery();
                                         conn.Close();
-                                    }
-                                }
-
-                                sb = new StringBuilder();
-                                using (SQLiteConnection conn = Util.SQLite.CreateSQLiteConnection(Util.ObjectParametros.PathFile, false))
-                                {
-                                    using (SQLiteCommand cmd = new SQLiteCommand(conn))
-                                    {
-                                        conn.Open();
-                                        sb.Append("UPDATE Parametros SET VersaoIoconnect = '40', QtdTentativasConexao = '1'; ");
-                                        cmd.CommandText = sb.ToString();
-                                        cmd.ExecuteNonQuery();
-                                        conn.Close();
-                                        versao_BD = 40;
-                                    }
+										versao_BD = 40;
+									}
                                 }
                             }
-                        }
+						}
 
                         if (versao_BD == 40)
                         {
-                            StringBuilder sb = new StringBuilder();
                             if (File.Exists(Util.ObjectParametros.PathFile))
                             {
-                                sb = new StringBuilder();
                                 using (SQLiteConnection conn = Util.SQLite.CreateSQLiteConnection(Util.ObjectColorante.PathFile, false))
                                 {
+                                    if (!Util.SQLite.IsColumnExists(conn, "Corantes", "IsBase"))
+                                    {
+                                        using (SQLiteCommand cmd = new SQLiteCommand(conn))
+                                        {
+                                            conn.Open();
+                                            cmd.CommandText = "ALTER TABLE Corantes ADD IsBase TEXT NULL;";
+                                            cmd.ExecuteNonQuery();
+                                            conn.Close();
+                                        }
+                                    }
+                                    
                                     using (SQLiteCommand cmd = new SQLiteCommand(conn))
                                     {
                                         conn.Open();
-                                        sb.Append("ALTER TABLE Corantes ADD IsBase TEXT NULL;");
-                                        cmd.CommandText = sb.ToString();
+                                        cmd.CommandText = "UPDATE Corantes SET IsBase = 'False';";
                                         cmd.ExecuteNonQuery();
                                         conn.Close();
                                     }
                                 }
 
-                                sb = new StringBuilder();
-                                using (SQLiteConnection conn = Util.SQLite.CreateSQLiteConnection(Util.ObjectColorante.PathFile, false))
-                                {
-                                    using (SQLiteCommand cmd = new SQLiteCommand(conn))
-                                    {
-                                        conn.Open();
-                                        sb.Append("UPDATE Corantes SET IsBase = 'False';");
-                                        cmd.CommandText = sb.ToString();
-                                        cmd.ExecuteNonQuery();
-                                        conn.Close();
-                                    }
-                                }
-
-                                sb = new StringBuilder();
                                 using (SQLiteConnection conn = Util.SQLite.CreateSQLiteConnection(Util.ObjectParametros.PathFile, false))
                                 {
                                     using (SQLiteCommand cmd = new SQLiteCommand(conn))
                                     {
                                         conn.Open();
-                                        sb.Append("UPDATE Parametros SET VersaoIoconnect = '41'; ");
-                                        cmd.CommandText = sb.ToString();
+                                        cmd.CommandText = "UPDATE Parametros SET VersaoIoconnect = '41'; ";
                                         cmd.ExecuteNonQuery();
                                         conn.Close();
-                                        versao_BD = 41;
-                                    }
+										versao_BD = 41;
+									}
                                 }
                             }
-                        }
+						}
 
                         if (versao_BD == 41)
                         {
-                            StringBuilder sb = new StringBuilder();
                             if (File.Exists(Util.ObjectParametros.PathFile))
                             {
-                                sb = new StringBuilder();
-                                using (SQLiteConnection conn = Util.SQLite.CreateSQLiteConnection(Util.ObjectParametros.PathFile, false))
+                                 using (SQLiteConnection conn = Util.SQLite.CreateSQLiteConnection(Util.ObjectParametros.PathFile, false))
                                 {
+                                    if (!Util.SQLite.IsColumnExists(conn, "Parametros", "HabilitarIdentificacaoCopo"))
+                                    {
+                                        using (SQLiteCommand cmd = new SQLiteCommand(conn))
+                                        {
+                                            conn.Open();
+                                            cmd.CommandText = "ALTER TABLE Parametros ADD HabilitarIdentificacaoCopo TEXT NULL;";
+                                            cmd.ExecuteNonQuery();
+                                            conn.Close();
+                                        }
+                                    }
+                                    
                                     using (SQLiteCommand cmd = new SQLiteCommand(conn))
                                     {
                                         conn.Open();
-                                        sb.Append("ALTER TABLE Parametros ADD HabilitarIdentificacaoCopo TEXT NULL;");
-                                        cmd.CommandText = sb.ToString();
+                                        cmd.CommandText = "UPDATE Parametros SET HabilitarIdentificacaoCopo = 'False', VersaoIoconnect = '42';";
                                         cmd.ExecuteNonQuery();
                                         conn.Close();
-                                    }
-                                }
-
-                                sb = new StringBuilder();
-                                using (SQLiteConnection conn = Util.SQLite.CreateSQLiteConnection(Util.ObjectParametros.PathFile, false))
-                                {
-                                    using (SQLiteCommand cmd = new SQLiteCommand(conn))
-                                    {
-                                        conn.Open();
-                                        sb.Append("UPDATE Parametros SET HabilitarIdentificacaoCopo = 'False', VersaoIoconnect = '42';");
-                                        cmd.CommandText = sb.ToString();
-                                        cmd.ExecuteNonQuery();
-                                        conn.Close();
-                                        versao_BD = 42;
-                                    }
+										versao_BD = 42;
+									}
                                 }
                             }
                         }
 
                         if (versao_BD == 42)
                         {
-                            StringBuilder sb = new StringBuilder();
                             if (File.Exists(Util.ObjectParametros.PathFile))
                             {
-                                sb = new StringBuilder();
                                 using (SQLiteConnection conn = Util.SQLite.CreateSQLiteConnection(Util.ObjectParametros.PathFile, false))
                                 {
-                                    using (SQLiteCommand cmd = new SQLiteCommand(conn))
+                                    if (!Util.SQLite.IsColumnExists(conn, "Parametros", "DelayEsponja"))
                                     {
-                                        conn.Open();
-                                        sb.Append("ALTER TABLE Parametros ADD DelayEsponja TEXT NULL;");
-                                        cmd.CommandText = sb.ToString();
-                                        cmd.ExecuteNonQuery();
-                                        conn.Close();
+                                        using (SQLiteCommand cmd = new SQLiteCommand(conn))
+                                        {
+                                            conn.Open();
+                                            cmd.CommandText = "ALTER TABLE Parametros ADD DelayEsponja TEXT NULL;";
+                                            cmd.ExecuteNonQuery();
+                                            conn.Close();
+                                        }
                                     }
-                                }
-
-                                sb = new StringBuilder();
-                                using (SQLiteConnection conn = Util.SQLite.CreateSQLiteConnection(Util.ObjectParametros.PathFile, false))
-                                {
+                                    
                                     using (SQLiteCommand cmd = new SQLiteCommand(conn))
                                     {
                                         conn.Open();
-                                        sb.Append("UPDATE Parametros SET DelayEsponja = '5', VersaoIoconnect = '43';");
-                                        cmd.CommandText = sb.ToString();
+                                        cmd.CommandText = "UPDATE Parametros SET DelayEsponja = '5', VersaoIoconnect = '43';";
                                         cmd.ExecuteNonQuery();
                                         conn.Close();
                                         versao_BD = 43;
@@ -2031,30 +1806,25 @@ namespace Percolore.IOConnect
 
                         if (versao_BD == 43)
                         {
-                            StringBuilder sb = new StringBuilder();
                             if (File.Exists(Util.ObjectParametros.PathFile))
                             {
-                                sb = new StringBuilder();
                                 using (SQLiteConnection conn = Util.SQLite.CreateSQLiteConnection(Util.ObjectParametros.PathFile, false))
                                 {
-                                    using (SQLiteCommand cmd = new SQLiteCommand(conn))
+                                    if (!Util.SQLite.IsColumnExists(conn, "Parametros", "TreinamentoCal"))
                                     {
-                                        conn.Open();
-                                        sb.Append("ALTER TABLE Parametros ADD TreinamentoCal TEXT NULL;");
-                                        cmd.CommandText = sb.ToString();
-                                        cmd.ExecuteNonQuery();
-                                        conn.Close();
+                                        using (SQLiteCommand cmd = new SQLiteCommand(conn))
+                                        {
+                                            conn.Open();
+                                            cmd.CommandText = "ALTER TABLE Parametros ADD TreinamentoCal TEXT NULL;";
+                                            cmd.ExecuteNonQuery();
+                                            conn.Close();
+                                        }
                                     }
-                                }
-
-                                sb = new StringBuilder();
-                                using (SQLiteConnection conn = Util.SQLite.CreateSQLiteConnection(Util.ObjectParametros.PathFile, false))
-                                {
+                                    
                                     using (SQLiteCommand cmd = new SQLiteCommand(conn))
                                     {
                                         conn.Open();
-                                        sb.Append("UPDATE Parametros SET TreinamentoCal = 'True', VersaoIoconnect = '44';");
-                                        cmd.CommandText = sb.ToString();
+                                        cmd.CommandText = "UPDATE Parametros SET TreinamentoCal = 'True', VersaoIoconnect = '44';";
                                         cmd.ExecuteNonQuery();
                                         conn.Close();
                                         versao_BD = 44;
@@ -2065,43 +1835,36 @@ namespace Percolore.IOConnect
 
                         if (versao_BD == 44)
                         {
-                            StringBuilder sb = new StringBuilder();
                             if (File.Exists(Util.ObjectParametros.PathFile))
                             {
-                                sb = new StringBuilder();
                                 using (SQLiteConnection conn = Util.SQLite.CreateSQLiteConnection(Util.ObjectColorante.PathFile, false))
                                 {
+                                    if (!Util.SQLite.IsColumnExists(conn, "Corantes", "Seguidor"))
+                                    {
+                                        using (SQLiteCommand cmd = new SQLiteCommand(conn))
+                                        {
+                                            conn.Open();
+                                            cmd.CommandText = "ALTER TABLE Corantes ADD Seguidor TEXT NULL;";
+                                            cmd.ExecuteNonQuery();
+                                            conn.Close();
+                                        }
+                                    }
+                                    
                                     using (SQLiteCommand cmd = new SQLiteCommand(conn))
                                     {
                                         conn.Open();
-                                        sb.Append("ALTER TABLE Corantes ADD Seguidor TEXT NULL;");
-                                        cmd.CommandText = sb.ToString();
+                                        cmd.CommandText = "UPDATE Corantes SET Seguidor = '-1';";
                                         cmd.ExecuteNonQuery();
                                         conn.Close();
                                     }
                                 }
 
-                                sb = new StringBuilder();
-                                using (SQLiteConnection conn = Util.SQLite.CreateSQLiteConnection(Util.ObjectColorante.PathFile, false))
-                                {
-                                    using (SQLiteCommand cmd = new SQLiteCommand(conn))
-                                    {
-                                        conn.Open();
-                                        sb.Append("UPDATE Corantes SET Seguidor = '-1';");
-                                        cmd.CommandText = sb.ToString();
-                                        cmd.ExecuteNonQuery();
-                                        conn.Close();
-                                    }
-                                }
-
-                                sb = new StringBuilder();
                                 using (SQLiteConnection conn = Util.SQLite.CreateSQLiteConnection(Util.ObjectParametros.PathFile, false))
                                 {
                                     using (SQLiteCommand cmd = new SQLiteCommand(conn))
                                     {
                                         conn.Open();
-                                        sb.Append("UPDATE Parametros SET VersaoIoconnect = '45';");
-                                        cmd.CommandText = sb.ToString();
+                                        cmd.CommandText = "UPDATE Parametros SET VersaoIoconnect = '45';";
                                         cmd.ExecuteNonQuery();
                                         conn.Close();
                                         versao_BD = 45;
@@ -2112,43 +1875,36 @@ namespace Percolore.IOConnect
 
                         if (versao_BD == 45)
                         {
-                            StringBuilder sb = new StringBuilder();
                             if (File.Exists(Util.ObjectParametros.PathFile))
                             {
-                                sb = new StringBuilder();
                                 using (SQLiteConnection conn = Util.SQLite.CreateSQLiteConnection(Util.ObjectColorante.PathFile, false))
                                 {
+                                    if (!Util.SQLite.IsColumnExists(conn, "Corantes", "Step"))
+                                    {
+                                        using (SQLiteCommand cmd = new SQLiteCommand(conn))
+                                        {
+                                            conn.Open();
+                                            cmd.CommandText = "ALTER TABLE Corantes ADD Step TEXT NULL;";
+                                            cmd.ExecuteNonQuery();
+                                            conn.Close();
+                                        }
+                                    }
+                                    
                                     using (SQLiteCommand cmd = new SQLiteCommand(conn))
                                     {
                                         conn.Open();
-                                        sb.Append("ALTER TABLE Corantes ADD Step TEXT NULL;");
-                                        cmd.CommandText = sb.ToString();
+                                        cmd.CommandText = "UPDATE Corantes SET Step = '0';";
                                         cmd.ExecuteNonQuery();
                                         conn.Close();
                                     }
                                 }
 
-                                sb = new StringBuilder();
-                                using (SQLiteConnection conn = Util.SQLite.CreateSQLiteConnection(Util.ObjectColorante.PathFile, false))
-                                {
-                                    using (SQLiteCommand cmd = new SQLiteCommand(conn))
-                                    {
-                                        conn.Open();
-                                        sb.Append("UPDATE Corantes SET Step = '0';");
-                                        cmd.CommandText = sb.ToString();
-                                        cmd.ExecuteNonQuery();
-                                        conn.Close();
-                                    }
-                                }
-
-                                sb = new StringBuilder();
                                 using (SQLiteConnection conn = Util.SQLite.CreateSQLiteConnection(Util.ObjectParametros.PathFile, false))
                                 {
                                     using (SQLiteCommand cmd = new SQLiteCommand(conn))
                                     {
                                         conn.Open();
-                                        sb.Append("UPDATE Parametros SET VersaoIoconnect = '46';");
-                                        cmd.CommandText = sb.ToString();
+                                        cmd.CommandText = "UPDATE Parametros SET VersaoIoconnect = '46';";
                                         cmd.ExecuteNonQuery();
                                         conn.Close();
                                         versao_BD = 46;
@@ -2159,56 +1915,35 @@ namespace Percolore.IOConnect
 
                         if (versao_BD == 46)
                         {
-                            StringBuilder sb = new StringBuilder();
                             if (File.Exists(Util.ObjectParametros.PathFile))
                             {
-                                sb = new StringBuilder();
+								StringBuilder sb = new StringBuilder();
                                 using (SQLiteConnection conn = Util.SQLite.CreateSQLiteConnection(Util.ObjectParametros.PathFile, false))
                                 {
-                                    using (SQLiteCommand cmd = new SQLiteCommand(conn))
-                                    {
-                                        conn.Open();
-                                        sb.Append("ALTER TABLE Parametros ADD DelayUDCP TEXT NULL;");
-                                        cmd.CommandText = sb.ToString();
-                                        cmd.ExecuteNonQuery();
-                                        conn.Close();
-                                    }
-                                }
+									if (!Util.SQLite.IsColumnExists(conn, "Parametros", "DelayUDCP"))
+										sb.Append("ALTER TABLE Parametros ADD DelayUDCP TEXT NULL;");
 
-                                sb = new StringBuilder();
-                                using (SQLiteConnection conn = Util.SQLite.CreateSQLiteConnection(Util.ObjectParametros.PathFile, false))
-                                {
-                                    using (SQLiteCommand cmd = new SQLiteCommand(conn))
-                                    {
-                                        conn.Open();
-                                        sb.Append("ALTER TABLE Parametros ADD CreateFileTmpUDCP TEXT NULL;");
-                                        cmd.CommandText = sb.ToString();
-                                        cmd.ExecuteNonQuery();
-                                        conn.Close();
-                                    }
-                                }
+									if (!Util.SQLite.IsColumnExists(conn, "Parametros", "CreateFileTmpUDCP"))
+										sb.Append("ALTER TABLE Parametros ADD CreateFileTmpUDCP TEXT NULL;");
 
-                                sb = new StringBuilder();
-                                using (SQLiteConnection conn = Util.SQLite.CreateSQLiteConnection(Util.ObjectParametros.PathFile, false))
-                                {
-                                    using (SQLiteCommand cmd = new SQLiteCommand(conn))
-                                    {
-                                        conn.Open();
-                                        sb.Append("ALTER TABLE Parametros ADD ExtFileTmpUDCP TEXT NULL;");
-                                        cmd.CommandText = sb.ToString();
-                                        cmd.ExecuteNonQuery();
-                                        conn.Close();
-                                    }
-                                }
+									if (!Util.SQLite.IsColumnExists(conn, "Parametros", "ExtFileTmpUDCP"))
+										sb.Append("ALTER TABLE Parametros ADD ExtFileTmpUDCP TEXT NULL;");
 
-                                sb = new StringBuilder();
-                                using (SQLiteConnection conn = Util.SQLite.CreateSQLiteConnection(Util.ObjectParametros.PathFile, false))
-                                {
+                                    if (!string.IsNullOrWhiteSpace(sb.ToString()))
+                                    {
+                                        using (SQLiteCommand cmd = new SQLiteCommand(conn))
+                                        {
+                                            conn.Open();
+                                            cmd.CommandText = sb.ToString();
+                                            cmd.ExecuteNonQuery();
+                                            conn.Close();
+                                        }
+                                    }
+                                
                                     using (SQLiteCommand cmd = new SQLiteCommand(conn))
                                     {
                                         conn.Open();
-                                        sb.Append("UPDATE Parametros SET ExtFileTmpUDCP = 'tmp', CreateFileTmpUDCP = '0', DelayUDCP = '0', VersaoIoconnect = '47';");
-                                        cmd.CommandText = sb.ToString();
+                                        cmd.CommandText = "UPDATE Parametros SET ExtFileTmpUDCP = 'tmp', CreateFileTmpUDCP = '0', DelayUDCP = '0', VersaoIoconnect = '47';";
                                         cmd.ExecuteNonQuery();
                                         conn.Close();
                                         versao_BD = 47;
@@ -2219,43 +1954,32 @@ namespace Percolore.IOConnect
 
                         if (versao_BD == 47)
                         {
-                            StringBuilder sb = new StringBuilder();
                             if (File.Exists(Util.ObjectParametros.PathFile))
                             {
-                                sb = new StringBuilder();
-                                using (SQLiteConnection conn = Util.SQLite.CreateSQLiteConnection(Util.ObjectParametros.PathFile, false))
+								StringBuilder sb = new StringBuilder();
+								using (SQLiteConnection conn = Util.SQLite.CreateSQLiteConnection(Util.ObjectParametros.PathFile, false))
                                 {
-                                    using (SQLiteCommand cmd = new SQLiteCommand(conn))
-                                    {
-                                        conn.Open();
-                                        sb.Append("ALTER TABLE Parametros ADD DelayLimpBicos TEXT NULL;");
-                                        cmd.CommandText = sb.ToString();
-                                        cmd.ExecuteNonQuery();
-                                        conn.Close();
-                                    }
-                                }
+									if (!Util.SQLite.IsColumnExists(conn, "Parametros", "DelayLimpBicos"))
+										sb.Append("ALTER TABLE Parametros ADD DelayLimpBicos TEXT NULL;");
 
-                                sb = new StringBuilder();
-                                using (SQLiteConnection conn = Util.SQLite.CreateSQLiteConnection(Util.ObjectParametros.PathFile, false))
-                                {
-                                    using (SQLiteCommand cmd = new SQLiteCommand(conn))
-                                    {
-                                        conn.Open();
-                                        sb.Append("ALTER TABLE Parametros ADD HabLimpBicos TEXT NULL;");
-                                        cmd.CommandText = sb.ToString();
-                                        cmd.ExecuteNonQuery();
-                                        conn.Close();
-                                    }
-                                }
+									if (!Util.SQLite.IsColumnExists(conn, "Parametros", "HabLimpBicos"))
+										sb.Append("ALTER TABLE Parametros ADD HabLimpBicos TEXT NULL;");
 
-                                sb = new StringBuilder();
-                                using (SQLiteConnection conn = Util.SQLite.CreateSQLiteConnection(Util.ObjectParametros.PathFile, false))
-                                {
+                                    if (!string.IsNullOrWhiteSpace(sb.ToString()))
+                                    {
+                                        using (SQLiteCommand cmd = new SQLiteCommand(conn))
+                                        {
+                                            conn.Open();
+                                            cmd.CommandText = sb.ToString();
+                                            cmd.ExecuteNonQuery();
+                                            conn.Close();
+                                        }
+                                    }
+                                
                                     using (SQLiteCommand cmd = new SQLiteCommand(conn))
                                     {
                                         conn.Open();
-                                        sb.Append("UPDATE Parametros SET HabLimpBicos = 'False', DelayLimpBicos = '6', VersaoIoconnect = '48';");
-                                        cmd.CommandText = sb.ToString();
+                                        cmd.CommandText = "UPDATE Parametros SET HabLimpBicos = 'False', DelayLimpBicos = '6', VersaoIoconnect = '48';";
                                         cmd.ExecuteNonQuery();
                                         conn.Close();
                                         versao_BD = 48;
@@ -2266,56 +1990,35 @@ namespace Percolore.IOConnect
 
                         if (versao_BD == 48)
                         {
-                            StringBuilder sb = new StringBuilder();
                             if (File.Exists(Util.ObjectParametros.PathFile))
                             {
-                                sb = new StringBuilder();
-                                using (SQLiteConnection conn = Util.SQLite.CreateSQLiteConnection(Util.ObjectParametros.PathFile, false))
+								StringBuilder sb = new StringBuilder();
+								using (SQLiteConnection conn = Util.SQLite.CreateSQLiteConnection(Util.ObjectParametros.PathFile, false))
                                 {
-                                    using (SQLiteCommand cmd = new SQLiteCommand(conn))
-                                    {
-                                        conn.Open();
-                                        sb.Append("ALTER TABLE Parametros ADD DesabilitaMonitSyncToken TEXT NULL;");
-                                        cmd.CommandText = sb.ToString();
-                                        cmd.ExecuteNonQuery();
-                                        conn.Close();
-                                    }
-                                }
+									if (!Util.SQLite.IsColumnExists(conn, "Parametros", "DesabilitaMonitSyncToken"))
+										sb.Append("ALTER TABLE Parametros ADD DesabilitaMonitSyncToken TEXT NULL;");
+									
+                                    if (!Util.SQLite.IsColumnExists(conn, "Parametros", "IpSincToken"))
+										sb.Append("ALTER TABLE Parametros ADD IpSincToken TEXT NULL;");
 
-                                sb = new StringBuilder();
-                                using (SQLiteConnection conn = Util.SQLite.CreateSQLiteConnection(Util.ObjectParametros.PathFile, false))
-                                {
-                                    using (SQLiteCommand cmd = new SQLiteCommand(conn))
-                                    {
-                                        conn.Open();
-                                        sb.Append("ALTER TABLE Parametros ADD IpSincToken TEXT NULL;");
-                                        cmd.CommandText = sb.ToString();
-                                        cmd.ExecuteNonQuery();
-                                        conn.Close();
-                                    }
-                                }
+									if (!Util.SQLite.IsColumnExists(conn, "Parametros", "PortaSincToken"))
+										sb.Append("ALTER TABLE Parametros ADD PortaSincToken TEXT NULL;");
 
-                                sb = new StringBuilder();
-                                using (SQLiteConnection conn = Util.SQLite.CreateSQLiteConnection(Util.ObjectParametros.PathFile, false))
-                                {
-                                    using (SQLiteCommand cmd = new SQLiteCommand(conn))
+                                    if (!string.IsNullOrWhiteSpace(sb.ToString()))
                                     {
-                                        conn.Open();
-                                        sb.Append("ALTER TABLE Parametros ADD PortaSincToken TEXT NULL;");
-                                        cmd.CommandText = sb.ToString();
-                                        cmd.ExecuteNonQuery();
-                                        conn.Close();
+                                        using (SQLiteCommand cmd = new SQLiteCommand(conn))
+                                        {
+                                            conn.Open();
+                                            cmd.CommandText = sb.ToString();
+                                            cmd.ExecuteNonQuery();
+                                            conn.Close();
+                                        }
                                     }
-                                }
-
-                                sb = new StringBuilder();
-                                using (SQLiteConnection conn = Util.SQLite.CreateSQLiteConnection(Util.ObjectParametros.PathFile, false))
-                                {
+                                    
                                     using (SQLiteCommand cmd = new SQLiteCommand(conn))
                                     {
                                         conn.Open();
-                                        sb.Append("UPDATE Parametros SET DesabilitaMonitSyncToken = 'True', IpSincToken = '192.168.125.116', PortaSincToken = '3112', VersaoIoconnect = '49';");
-                                        cmd.CommandText = sb.ToString();
+                                        cmd.CommandText = "UPDATE Parametros SET DesabilitaMonitSyncToken = 'True', IpSincToken = '192.168.125.116', PortaSincToken = '3112', VersaoIoconnect = '49';";
                                         cmd.ExecuteNonQuery();
                                         conn.Close();
                                         versao_BD = 49;
@@ -2326,30 +2029,25 @@ namespace Percolore.IOConnect
 
                         if (versao_BD == 49)
                         {
-                            StringBuilder sb = new StringBuilder();
                             if (File.Exists(Util.ObjectParametros.PathFile))
                             {
-                                sb = new StringBuilder();
                                 using (SQLiteConnection conn = Util.SQLite.CreateSQLiteConnection(Util.ObjectParametros.PathFile, false))
                                 {
-                                    using (SQLiteCommand cmd = new SQLiteCommand(conn))
+                                    if (!Util.SQLite.IsColumnExists(conn, "Parametros", "TipoEventos"))
                                     {
-                                        conn.Open();
-                                        sb.Append("ALTER TABLE Parametros ADD TipoEventos TEXT NULL;");
-                                        cmd.CommandText = sb.ToString();
-                                        cmd.ExecuteNonQuery();
-                                        conn.Close();
+                                        using (SQLiteCommand cmd = new SQLiteCommand(conn))
+                                        {
+                                            conn.Open();
+                                            cmd.CommandText = "ALTER TABLE Parametros ADD TipoEventos TEXT NULL;";
+                                            cmd.ExecuteNonQuery();
+                                            conn.Close();
+                                        }
                                     }
-                                }
-
-                                sb = new StringBuilder();
-                                using (SQLiteConnection conn = Util.SQLite.CreateSQLiteConnection(Util.ObjectParametros.PathFile, false))
-                                {
+                                    
                                     using (SQLiteCommand cmd = new SQLiteCommand(conn))
                                     {
                                         conn.Open();
-                                        sb.Append("UPDATE Parametros SET TipoEventos = 'HD', VersaoIoconnect = '50';");
-                                        cmd.CommandText = sb.ToString();
+                                        cmd.CommandText = "UPDATE Parametros SET TipoEventos = 'HD', VersaoIoconnect = '50';";
                                         cmd.ExecuteNonQuery();
                                         conn.Close();
                                         versao_BD = 50;
@@ -2360,43 +2058,32 @@ namespace Percolore.IOConnect
 
                         if (versao_BD == 50)
                         {
-                            StringBuilder sb = new StringBuilder();
                             if (File.Exists(Util.ObjectParametros.PathFile))
                             {
-                                sb = new StringBuilder();
-                                using (SQLiteConnection conn = Util.SQLite.CreateSQLiteConnection(Util.ObjectParametros.PathFile, false))
+								StringBuilder sb = new StringBuilder();
+								using (SQLiteConnection conn = Util.SQLite.CreateSQLiteConnection(Util.ObjectParametros.PathFile, false))
                                 {
-                                    using (SQLiteCommand cmd = new SQLiteCommand(conn))
-                                    {
-                                        conn.Open();
-                                        sb.Append("ALTER TABLE Parametros ADD DesabilitaMonitSyncBkpCalibragem TEXT NULL;");
-                                        cmd.CommandText = sb.ToString();
-                                        cmd.ExecuteNonQuery();
-                                        conn.Close();
-                                    }
-                                }
+									if (!Util.SQLite.IsColumnExists(conn, "Parametros", "DesabilitaMonitSyncBkpCalibragem"))
+										sb.Append("ALTER TABLE Parametros ADD DesabilitaMonitSyncBkpCalibragem TEXT NULL;");
 
-                                sb = new StringBuilder();
-                                using (SQLiteConnection conn = Util.SQLite.CreateSQLiteConnection(Util.ObjectParametros.PathFile, false))
-                                {
-                                    using (SQLiteCommand cmd = new SQLiteCommand(conn))
-                                    {
-                                        conn.Open();
-                                        sb.Append("ALTER TABLE Parametros ADD UrlSincBkpCalibragem TEXT NULL;");
-                                        cmd.CommandText = sb.ToString();
-                                        cmd.ExecuteNonQuery();
-                                        conn.Close();
-                                    }
-                                }
+									if (!Util.SQLite.IsColumnExists(conn, "Parametros", "UrlSincBkpCalibragem"))
+										sb.Append("ALTER TABLE Parametros ADD UrlSincBkpCalibragem TEXT NULL;");
 
-                                sb = new StringBuilder();
-                                using (SQLiteConnection conn = Util.SQLite.CreateSQLiteConnection(Util.ObjectParametros.PathFile, false))
-                                {
+                                    if (!string.IsNullOrWhiteSpace(sb.ToString()))
+                                    {
+                                        using (SQLiteCommand cmd = new SQLiteCommand(conn))
+                                        {
+                                            conn.Open();
+                                            cmd.CommandText = sb.ToString();
+                                            cmd.ExecuteNonQuery();
+                                            conn.Close();
+                                        }
+                                    }
+                                    
                                     using (SQLiteCommand cmd = new SQLiteCommand(conn))
                                     {
                                         conn.Open();
-                                        sb.Append("UPDATE Parametros SET DesabilitaMonitSyncBkpCalibragem = 'True', UrlSincBkpCalibragem = 'ftp://192.168.125.116/BdCalicracao', VersaoIoconnect = '51';");
-                                        cmd.CommandText = sb.ToString();
+                                        cmd.CommandText = "UPDATE Parametros SET DesabilitaMonitSyncBkpCalibragem = 'True', UrlSincBkpCalibragem = 'ftp://192.168.125.116/BdCalicracao', VersaoIoconnect = '51';";
                                         cmd.ExecuteNonQuery();
                                         conn.Close();
                                         versao_BD = 51;
@@ -2407,30 +2094,25 @@ namespace Percolore.IOConnect
 
                         if (versao_BD == 51)
                         {
-                            StringBuilder sb = new StringBuilder();
                             if (File.Exists(Util.ObjectParametros.PathFile))
                             {
-                                sb = new StringBuilder();
                                 using (SQLiteConnection conn = Util.SQLite.CreateSQLiteConnection(Util.ObjectParametros.PathFile, false))
                                 {
-                                    using (SQLiteCommand cmd = new SQLiteCommand(conn))
+                                    if (!Util.SQLite.IsColumnExists(conn, "Parametros", "LogBD"))
                                     {
-                                        conn.Open();
-                                        sb.Append("ALTER TABLE Parametros ADD LogBD TEXT NULL;");
-                                        cmd.CommandText = sb.ToString();
-                                        cmd.ExecuteNonQuery();
-                                        conn.Close();
+                                        using (SQLiteCommand cmd = new SQLiteCommand(conn))
+                                        {
+                                            conn.Open();
+                                            cmd.CommandText = "ALTER TABLE Parametros ADD LogBD TEXT NULL;";
+                                            cmd.ExecuteNonQuery();
+                                            conn.Close();
+                                        }
                                     }
-                                }
-
-                                sb = new StringBuilder();
-                                using (SQLiteConnection conn = Util.SQLite.CreateSQLiteConnection(Util.ObjectParametros.PathFile, false))
-                                {
+                                    
                                     using (SQLiteCommand cmd = new SQLiteCommand(conn))
                                     {
                                         conn.Open();
-                                        sb.Append("UPDATE Parametros SET LogBD = 'False', VersaoIoconnect = '52';");
-                                        cmd.CommandText = sb.ToString();
+                                        cmd.CommandText = "UPDATE Parametros SET LogBD = 'False', VersaoIoconnect = '52';";
                                         cmd.ExecuteNonQuery();
                                         conn.Close();
                                         versao_BD = 52;
@@ -2441,30 +2123,25 @@ namespace Percolore.IOConnect
 
                         if (versao_BD == 52)
                         {
-                            StringBuilder sb = new StringBuilder();
                             if (File.Exists(Util.ObjectParametros.PathFile))
                             {
-                                sb = new StringBuilder();
                                 using (SQLiteConnection conn = Util.SQLite.CreateSQLiteConnection(Util.ObjectParametros.PathFile, false))
                                 {
-                                    using (SQLiteCommand cmd = new SQLiteCommand(conn))
+                                    if (!Util.SQLite.IsColumnExists(conn, "Parametros", "NameRemoteAccess"))
                                     {
-                                        conn.Open();
-                                        sb.Append("ALTER TABLE Parametros ADD NameRemoteAccess TEXT NULL;");
-                                        cmd.CommandText = sb.ToString();
-                                        cmd.ExecuteNonQuery();
-                                        conn.Close();
+                                        using (SQLiteCommand cmd = new SQLiteCommand(conn))
+                                        {
+                                            conn.Open();
+                                            cmd.CommandText = "ALTER TABLE Parametros ADD NameRemoteAccess TEXT NULL;";
+                                            cmd.ExecuteNonQuery();
+                                            conn.Close();
+                                        }
                                     }
-                                }
-
-                                sb = new StringBuilder();
-                                using (SQLiteConnection conn = Util.SQLite.CreateSQLiteConnection(Util.ObjectParametros.PathFile, false))
-                                {
+                                
                                     using (SQLiteCommand cmd = new SQLiteCommand(conn))
                                     {
                                         conn.Open();
-                                        sb.Append("UPDATE Parametros SET NameRemoteAccess = 'BASupSrvcCnfg.exe', VersaoIoconnect = '53';");
-                                        cmd.CommandText = sb.ToString();
+                                        cmd.CommandText = "UPDATE Parametros SET NameRemoteAccess = 'BASupSrvcCnfg.exe', VersaoIoconnect = '53';";
                                         cmd.ExecuteNonQuery();
                                         conn.Close();
                                         versao_BD = 53;
@@ -2475,30 +2152,25 @@ namespace Percolore.IOConnect
 
                         if (versao_BD == 53)
                         {
-                            StringBuilder sb = new StringBuilder();
                             if (File.Exists(Util.ObjectParametros.PathFile))
                             {
-                                sb = new StringBuilder();
                                 using (SQLiteConnection conn = Util.SQLite.CreateSQLiteConnection(Util.ObjectParametros.PathFile, false))
                                 {
-                                    using (SQLiteCommand cmd = new SQLiteCommand(conn))
+                                    if (!Util.SQLite.IsColumnExists(conn, "Parametros", "ProcRemoveLataUDCP"))
                                     {
-                                        conn.Open();
-                                        sb.Append("ALTER TABLE Parametros ADD ProcRemoveLataUDCP TEXT NULL;");
-                                        cmd.CommandText = sb.ToString();
-                                        cmd.ExecuteNonQuery();
-                                        conn.Close();
+                                        using (SQLiteCommand cmd = new SQLiteCommand(conn))
+                                        {
+                                            conn.Open();
+                                            cmd.CommandText = "ALTER TABLE Parametros ADD ProcRemoveLataUDCP TEXT NULL;";
+                                            cmd.ExecuteNonQuery();
+                                            conn.Close();
+                                        }
                                     }
-                                }
-
-                                sb = new StringBuilder();
-                                using (SQLiteConnection conn = Util.SQLite.CreateSQLiteConnection(Util.ObjectParametros.PathFile, false))
-                                {
+                                
                                     using (SQLiteCommand cmd = new SQLiteCommand(conn))
                                     {
                                         conn.Open();
-                                        sb.Append("UPDATE Parametros SET ProcRemoveLataUDCP = 'False', VersaoIoconnect = '54';");
-                                        cmd.CommandText = sb.ToString();
+                                        cmd.CommandText = "UPDATE Parametros SET ProcRemoveLataUDCP = 'False', VersaoIoconnect = '54';";
                                         cmd.ExecuteNonQuery();
                                         conn.Close();
                                         versao_BD = 54;
@@ -2509,30 +2181,25 @@ namespace Percolore.IOConnect
 
                         if (versao_BD == 54)
                         {
-                            StringBuilder sb = new StringBuilder();
                             if (File.Exists(Util.ObjectParametros.PathFile))
                             {
-                                sb = new StringBuilder();
                                 using (SQLiteConnection conn = Util.SQLite.CreateSQLiteConnection(Util.ObjectParametros.PathFile, false))
                                 {
-                                    using (SQLiteCommand cmd = new SQLiteCommand(conn))
+                                    if (!Util.SQLite.IsColumnExists(conn, "Parametros", "TipoLimpBicos"))
                                     {
-                                        conn.Open();
-                                        sb.Append("ALTER TABLE Parametros ADD TipoLimpBicos TEXT NULL;");
-                                        cmd.CommandText = sb.ToString();
-                                        cmd.ExecuteNonQuery();
-                                        conn.Close();
+                                        using (SQLiteCommand cmd = new SQLiteCommand(conn))
+                                        {
+                                            conn.Open();
+                                            cmd.CommandText = "ALTER TABLE Parametros ADD TipoLimpBicos TEXT NULL;";
+                                            cmd.ExecuteNonQuery();
+                                            conn.Close();
+                                        }
                                     }
-                                }
-
-                                sb = new StringBuilder();
-                                using (SQLiteConnection conn = Util.SQLite.CreateSQLiteConnection(Util.ObjectParametros.PathFile, false))
-                                {
+                                
                                     using (SQLiteCommand cmd = new SQLiteCommand(conn))
                                     {
                                         conn.Open();
-                                        sb.Append("UPDATE Parametros SET TipoLimpBicos = '1', VersaoIoconnect = '55';");
-                                        cmd.CommandText = sb.ToString();
+                                        cmd.CommandText = "UPDATE Parametros SET TipoLimpBicos = '1', VersaoIoconnect = '55';";
                                         cmd.ExecuteNonQuery();
                                         conn.Close();
                                         versao_BD = 55;
@@ -2543,7 +2210,6 @@ namespace Percolore.IOConnect
 
                         if (versao_BD == 55)
                         {
-                            StringBuilder sb = new StringBuilder();
                             if (File.Exists(Util.ObjectUser.PathFile))
                             {
                                 List<Util.ObjectUser> lUser = Util.ObjectUser.List();
@@ -2576,14 +2242,12 @@ namespace Percolore.IOConnect
 
                             if (File.Exists(Util.ObjectParametros.PathFile))
                             {
-                                sb = new StringBuilder();
                                 using (SQLiteConnection conn = Util.SQLite.CreateSQLiteConnection(Util.ObjectParametros.PathFile, false))
                                 {
                                     using (SQLiteCommand cmd = new SQLiteCommand(conn))
                                     {
                                         conn.Open();
-                                        sb.Append("UPDATE Parametros SET VersaoIoconnect = '56';");
-                                        cmd.CommandText = sb.ToString();
+                                        cmd.CommandText = "UPDATE Parametros SET VersaoIoconnect = '56';";
                                         cmd.ExecuteNonQuery();
                                         conn.Close();
                                         versao_BD = 56;
@@ -2594,31 +2258,25 @@ namespace Percolore.IOConnect
 
                         if (versao_BD == 56)
                         {
-                            StringBuilder sb = new StringBuilder();
-
                             if (File.Exists(Util.ObjectParametros.PathFile))
                             {
-                                sb = new StringBuilder();
                                 using (SQLiteConnection conn = Util.SQLite.CreateSQLiteConnection(Util.ObjectParametros.PathFile, false))
                                 {
-                                    using (SQLiteCommand cmd = new SQLiteCommand(conn))
+                                    if (!Util.SQLite.IsColumnExists(conn, "Parametros", "DisablePopUpDispDat"))
                                     {
-                                        conn.Open();
-                                        sb.Append("ALTER TABLE Parametros ADD DisablePopUpDispDat TEXT NULL;");
-                                        cmd.CommandText = sb.ToString();
-                                        cmd.ExecuteNonQuery();
-                                        conn.Close();
+                                        using (SQLiteCommand cmd = new SQLiteCommand(conn))
+                                        {
+                                            conn.Open();
+                                            cmd.CommandText = "ALTER TABLE Parametros ADD DisablePopUpDispDat TEXT NULL;";
+                                            cmd.ExecuteNonQuery();
+                                            conn.Close();
+                                        }
                                     }
-                                }
-
-                                sb = new StringBuilder();
-                                using (SQLiteConnection conn = Util.SQLite.CreateSQLiteConnection(Util.ObjectParametros.PathFile, false))
-                                {
+                                
                                     using (SQLiteCommand cmd = new SQLiteCommand(conn))
                                     {
                                         conn.Open();
-                                        sb.Append("UPDATE Parametros SET DisablePopUpDispDat = 'True', VersaoIoconnect = '57';");
-                                        cmd.CommandText = sb.ToString();
+                                        cmd.CommandText = "UPDATE Parametros SET DisablePopUpDispDat = 'True', VersaoIoconnect = '57';";
                                         cmd.ExecuteNonQuery();
                                         conn.Close();
                                         versao_BD = 57;
@@ -2629,31 +2287,25 @@ namespace Percolore.IOConnect
 
                         if (versao_BD == 57)
                         {
-                            StringBuilder sb = new StringBuilder();
-
                             if (File.Exists(Util.ObjectParametros.PathFile))
                             {
-                                sb = new StringBuilder();
                                 using (SQLiteConnection conn = Util.SQLite.CreateSQLiteConnection(Util.ObjectParametros.PathFile, false))
                                 {
-                                    using (SQLiteCommand cmd = new SQLiteCommand(conn))
+                                    if (!Util.SQLite.IsColumnExists(conn, "Parametros", "TimeoutPingTcp"))
                                     {
-                                        conn.Open();
-                                        sb.Append("ALTER TABLE Parametros ADD TimeoutPingTcp TEXT NULL;");
-                                        cmd.CommandText = sb.ToString();
-                                        cmd.ExecuteNonQuery();
-                                        conn.Close();
+                                        using (SQLiteCommand cmd = new SQLiteCommand(conn))
+                                        {
+                                            conn.Open();
+                                            cmd.CommandText = "ALTER TABLE Parametros ADD TimeoutPingTcp TEXT NULL;";
+                                            cmd.ExecuteNonQuery();
+                                            conn.Close();
+                                        }
                                     }
-                                }
-
-                                sb = new StringBuilder();
-                                using (SQLiteConnection conn = Util.SQLite.CreateSQLiteConnection(Util.ObjectParametros.PathFile, false))
-                                {
+                                
                                     using (SQLiteCommand cmd = new SQLiteCommand(conn))
                                     {
                                         conn.Open();
-                                        sb.Append("UPDATE Parametros SET TimeoutPingTcp = '5000', VersaoIoconnect = '58';");
-                                        cmd.CommandText = sb.ToString();
+                                        cmd.CommandText = "UPDATE Parametros SET TimeoutPingTcp = '5000', VersaoIoconnect = '58';";
                                         cmd.ExecuteNonQuery();
                                         conn.Close();
                                         versao_BD = 58;
@@ -2664,57 +2316,47 @@ namespace Percolore.IOConnect
 
                         if (versao_BD == 58)
                         {
-                            StringBuilder sb = new StringBuilder();
-
                             if (File.Exists(Util.ObjectParametros.PathFile) && File.Exists(Util.ObjectColorante.PathFile))
                             {
-                                sb = new StringBuilder();
                                 using (SQLiteConnection conn = Util.SQLite.CreateSQLiteConnection(Util.ObjectColorante.PathFile, false))
                                 {
+                                    if (!Util.SQLite.IsColumnExists(conn, "Corantes", "VolumePurga"))
+                                    {
+                                        using (SQLiteCommand cmd = new SQLiteCommand(conn))
+                                        {
+                                            conn.Open();
+                                            cmd.CommandText = "ALTER TABLE Corantes ADD VolumePurga TEXT NULL;";
+                                            cmd.ExecuteNonQuery();
+                                            conn.Close();
+                                        }
+                                    }
+                                
                                     using (SQLiteCommand cmd = new SQLiteCommand(conn))
                                     {
                                         conn.Open();
-                                        sb.Append("ALTER TABLE Corantes ADD VolumePurga TEXT NULL;");
-                                        cmd.CommandText = sb.ToString();
+                                        cmd.CommandText = "UPDATE Corantes SET VolumePurga = '" + parametros.VolumePurga.ToString().Replace(",", ".") + "';";
                                         cmd.ExecuteNonQuery();
                                         conn.Close();
                                     }
                                 }
 
-                                sb = new StringBuilder();
-                                using (SQLiteConnection conn = Util.SQLite.CreateSQLiteConnection(Util.ObjectColorante.PathFile, false))
-                                {
-                                    using (SQLiteCommand cmd = new SQLiteCommand(conn))
-                                    {
-                                        conn.Open();
-                                        sb.Append("UPDATE Corantes SET VolumePurga = '" + parametros.VolumePurga.ToString().Replace(",", ".") + "';");
-                                        cmd.CommandText = sb.ToString();
-                                        cmd.ExecuteNonQuery();
-                                        conn.Close();
-                                    }
-                                }
-
-                                sb = new StringBuilder();
                                 using (SQLiteConnection conn = Util.SQLite.CreateSQLiteConnection(Util.ObjectParametros.PathFile, false))
                                 {
-                                    using (SQLiteCommand cmd = new SQLiteCommand(conn))
+                                    if (!Util.SQLite.IsColumnExists(conn, "Parametros", "ViewMessageProc"))
                                     {
-                                        conn.Open();
-                                        sb.Append("ALTER TABLE Parametros ADD ViewMessageProc TEXT NULL;");
-                                        cmd.CommandText = sb.ToString();
-                                        cmd.ExecuteNonQuery();
-                                        conn.Close();
+                                        using (SQLiteCommand cmd = new SQLiteCommand(conn))
+                                        {
+                                            conn.Open();
+                                            cmd.CommandText = "ALTER TABLE Parametros ADD ViewMessageProc TEXT NULL;";
+                                            cmd.ExecuteNonQuery();
+                                            conn.Close();
+                                        }
                                     }
-                                }
-
-                                sb = new StringBuilder();
-                                using (SQLiteConnection conn = Util.SQLite.CreateSQLiteConnection(Util.ObjectParametros.PathFile, false))
-                                {
+                                
                                     using (SQLiteCommand cmd = new SQLiteCommand(conn))
                                     {
                                         conn.Open();
-                                        sb.Append("UPDATE Parametros SET ViewMessageProc = 'True',  VersaoIoconnect = '59';");
-                                        cmd.CommandText = sb.ToString();
+                                        cmd.CommandText = "UPDATE Parametros SET ViewMessageProc = 'True',  VersaoIoconnect = '59';";
                                         cmd.ExecuteNonQuery();
                                         conn.Close();
                                         versao_BD = 59;
@@ -2725,8 +2367,6 @@ namespace Percolore.IOConnect
 
                         if (versao_BD == 59)
                         {
-                            StringBuilder sb = new StringBuilder();
-
                             if (File.Exists(Util.ObjectParametros.PathFile))
                             {
                                 bool existeColum = false;
@@ -2739,6 +2379,7 @@ namespace Percolore.IOConnect
                                             if (dc.ColumnName == "TipoDosagemExec")
                                             {
                                                 existeColum = true;
+                                                break;
                                             }
                                         }
                                     }
@@ -2751,21 +2392,15 @@ namespace Percolore.IOConnect
                                         using (SQLiteCommand cmd = new SQLiteCommand(conn))
                                         {
                                             conn.Open();
-                                            sb.Append("ALTER TABLE Parametros ADD TipoDosagemExec TEXT NULL;");
-                                            cmd.CommandText = sb.ToString();
+                                            cmd.CommandText = "ALTER TABLE Parametros ADD TipoDosagemExec TEXT NULL;";
                                             cmd.ExecuteNonQuery();
                                             conn.Close();
                                         }
-                                    }
-
-                                    sb = new StringBuilder();
-                                    using (SQLiteConnection conn = Util.SQLite.CreateSQLiteConnection(Util.ObjectParametros.PathFile, false))
-                                    {
+                                    
                                         using (SQLiteCommand cmd = new SQLiteCommand(conn))
                                         {
                                             conn.Open();
-                                            sb.Append("UPDATE Parametros SET TipoDosagemExec = '1',  VersaoIoconnect = '60';");
-                                            cmd.CommandText = sb.ToString();
+                                            cmd.CommandText = "UPDATE Parametros SET TipoDosagemExec = '1',  VersaoIoconnect = '60';";
                                             cmd.ExecuteNonQuery();
                                             conn.Close();
                                             versao_BD = 60;
@@ -2774,14 +2409,12 @@ namespace Percolore.IOConnect
                                 }
                                 else
                                 {
-                                    sb = new StringBuilder();
                                     using (SQLiteConnection conn = Util.SQLite.CreateSQLiteConnection(Util.ObjectParametros.PathFile, false))
                                     {
                                         using (SQLiteCommand cmd = new SQLiteCommand(conn))
                                         {
                                             conn.Open();
-                                            sb.Append("UPDATE Parametros SET VersaoIoconnect = '60';");
-                                            cmd.CommandText = sb.ToString();
+                                            cmd.CommandText = "UPDATE Parametros SET VersaoIoconnect = '60';";
                                             cmd.ExecuteNonQuery();
                                             conn.Close();
                                             versao_BD = 60;
@@ -2793,8 +2426,6 @@ namespace Percolore.IOConnect
 
                         if (versao_BD == 60)
                         {
-                            StringBuilder sb = new StringBuilder();
-
                             if (File.Exists(Util.ObjectParametros.PathFile))
                             {
                                 bool existeColum = false;
@@ -2807,10 +2438,12 @@ namespace Percolore.IOConnect
                                             if (dc.ColumnName == "ValorFraction")
                                             {
                                                 existeColum = true;
+                                                break;
                                             }
                                         }
                                     }
                                 }
+
                                 if (!existeColum)
                                 {
                                     using (SQLiteConnection conn = Util.SQLite.CreateSQLiteConnection(Util.ObjectParametros.PathFile, false))
@@ -2818,21 +2451,15 @@ namespace Percolore.IOConnect
                                         using (SQLiteCommand cmd = new SQLiteCommand(conn))
                                         {
                                             conn.Open();
-                                            sb.Append("ALTER TABLE Parametros ADD ValorFraction TEXT NULL;");
-                                            cmd.CommandText = sb.ToString();
+                                            cmd.CommandText = "ALTER TABLE Parametros ADD ValorFraction TEXT NULL;";
                                             cmd.ExecuteNonQuery();
                                             conn.Close();
                                         }
-                                    }
-
-                                    sb = new StringBuilder();
-                                    using (SQLiteConnection conn = Util.SQLite.CreateSQLiteConnection(Util.ObjectParametros.PathFile, false))
-                                    {
+                                    
                                         using (SQLiteCommand cmd = new SQLiteCommand(conn))
                                         {
                                             conn.Open();
-                                            sb.Append("UPDATE Parametros SET ValorFraction = '800',  VersaoIoconnect = '61';");
-                                            cmd.CommandText = sb.ToString();
+                                            cmd.CommandText = "UPDATE Parametros SET ValorFraction = '800',  VersaoIoconnect = '61';";
                                             cmd.ExecuteNonQuery();
                                             conn.Close();
                                             versao_BD = 61;
@@ -2841,14 +2468,12 @@ namespace Percolore.IOConnect
                                 }
                                 else
                                 {
-                                    sb = new StringBuilder();
                                     using (SQLiteConnection conn = Util.SQLite.CreateSQLiteConnection(Util.ObjectParametros.PathFile, false))
                                     {
                                         using (SQLiteCommand cmd = new SQLiteCommand(conn))
                                         {
                                             conn.Open();
-                                            sb.Append("UPDATE Parametros SET VersaoIoconnect = '61';");
-                                            cmd.CommandText = sb.ToString();
+                                            cmd.CommandText = "UPDATE Parametros SET VersaoIoconnect = '61';";
                                             cmd.ExecuteNonQuery();
                                             conn.Close();
                                             versao_BD = 61;
@@ -2860,8 +2485,6 @@ namespace Percolore.IOConnect
 
                         if (versao_BD == 61)
                         {
-                            StringBuilder sb = new StringBuilder();
-
                             if (File.Exists(Util.ObjectColorante.PathFile))
                             {
                                 bool existeColum = false;
@@ -2874,6 +2497,7 @@ namespace Percolore.IOConnect
                                             if (dc.ColumnName == "ColorRGB")
                                             {
                                                 existeColum = true;
+                                                break;
                                             }
                                         }
                                     }
@@ -2886,35 +2510,27 @@ namespace Percolore.IOConnect
                                         using (SQLiteCommand cmd = new SQLiteCommand(conn))
                                         {
                                             conn.Open();
-                                            sb.Append("ALTER TABLE Corantes ADD ColorRGB TEXT NULL;");
-                                            cmd.CommandText = sb.ToString();
+                                            cmd.CommandText = "ALTER TABLE Corantes ADD ColorRGB TEXT NULL;";
                                             cmd.ExecuteNonQuery();
                                             conn.Close();
                                         }
-                                    }
-
-                                    sb = new StringBuilder();
-                                    using (SQLiteConnection conn = Util.SQLite.CreateSQLiteConnection(Util.ObjectColorante.PathFile, false))
-                                    {
+                                    
                                         using (SQLiteCommand cmd = new SQLiteCommand(conn))
                                         {
                                             conn.Open();
-                                            sb.Append("UPDATE Corantes SET  ColorRGB = '255;255;255;';");
-                                            cmd.CommandText = sb.ToString();
+                                            cmd.CommandText = "UPDATE Corantes SET  ColorRGB = '255;255;255;';";
                                             cmd.ExecuteNonQuery();
                                             conn.Close();
                                             versao_BD = 62;
                                         }
                                     }
 
-                                    sb = new StringBuilder();
                                     using (SQLiteConnection conn = Util.SQLite.CreateSQLiteConnection(Util.ObjectParametros.PathFile, false))
                                     {
                                         using (SQLiteCommand cmd = new SQLiteCommand(conn))
                                         {
                                             conn.Open();
-                                            sb.Append("UPDATE Parametros SET  VersaoIoconnect = '62';");
-                                            cmd.CommandText = sb.ToString();
+                                            cmd.CommandText = "UPDATE Parametros SET VersaoIoconnect = '62';";
                                             cmd.ExecuteNonQuery();
                                             conn.Close();
                                             versao_BD = 62;
@@ -2923,14 +2539,12 @@ namespace Percolore.IOConnect
                                 }
                                 else
                                 {
-                                    sb = new StringBuilder();
                                     using (SQLiteConnection conn = Util.SQLite.CreateSQLiteConnection(Util.ObjectParametros.PathFile, false))
                                     {
                                         using (SQLiteCommand cmd = new SQLiteCommand(conn))
                                         {
                                             conn.Open();
-                                            sb.Append("UPDATE Parametros SET VersaoIoconnect = '62';");
-                                            cmd.CommandText = sb.ToString();
+                                            cmd.CommandText = "UPDATE Parametros SET VersaoIoconnect = '62';";
                                             cmd.ExecuteNonQuery();
                                             conn.Close();
                                             versao_BD = 62;
@@ -2956,6 +2570,7 @@ namespace Percolore.IOConnect
                                             {
                                                 existeColum = true;
                                             }
+
                                             if (dc.ColumnName == "isAuto")
                                             {
                                                 existeColumAuto = true;
@@ -2964,75 +2579,46 @@ namespace Percolore.IOConnect
                                     }
                                 }
 
-                                StringBuilder sb = new StringBuilder();
                                 if (!existeColum)
                                 {
-                                    sb = new StringBuilder();
-                                    using (SQLiteConnection conn = Util.SQLite.CreateSQLiteConnection(Util.ObjectRecircular.PathFile, false))
+									using (SQLiteConnection conn = Util.SQLite.CreateSQLiteConnection(Util.ObjectRecircular.PathFile, false))
                                     {
                                         using (SQLiteCommand cmd = new SQLiteCommand(conn))
                                         {
                                             conn.Open();
-                                            sb.Append("ALTER TABLE Recircular ADD isValve TEXT NULL;");
-                                            cmd.CommandText = sb.ToString();
+                                            cmd.CommandText = "ALTER TABLE Recircular ADD isValve TEXT NULL;";
+                                            cmd.ExecuteNonQuery();
+                                            
+                                            cmd.CommandText = "UPDATE Recircular SET isValve = 'False';";
                                             cmd.ExecuteNonQuery();
                                             conn.Close();
-                                        }
-                                    }
-
-                                    sb = new StringBuilder();
-                                    using (SQLiteConnection conn = Util.SQLite.CreateSQLiteConnection(Util.ObjectRecircular.PathFile, false))
-                                    {
-                                        using (SQLiteCommand cmd = new SQLiteCommand(conn))
-                                        {
-                                            conn.Open();
-                                            sb.Append("UPDATE Recircular SET isValve = 'False';");
-                                            cmd.CommandText = sb.ToString();
-                                            cmd.ExecuteNonQuery();
-                                            conn.Close();
-
                                         }
                                     }
                                 }
 
                                 if (!existeColumAuto)
                                 {
-                                    sb = new StringBuilder();
                                     using (SQLiteConnection conn = Util.SQLite.CreateSQLiteConnection(Util.ObjectRecircular.PathFile, false))
                                     {
                                         using (SQLiteCommand cmd = new SQLiteCommand(conn))
                                         {
                                             conn.Open();
-                                            sb.Append("ALTER TABLE Recircular ADD isAuto TEXT NULL;");
-                                            cmd.CommandText = sb.ToString();
+                                            cmd.CommandText = "ALTER TABLE Recircular ADD isAuto TEXT NULL;";
+                                            cmd.ExecuteNonQuery();
+                                            
+                                            cmd.CommandText = "UPDATE Recircular SET isAuto = 'False';";
                                             cmd.ExecuteNonQuery();
                                             conn.Close();
-                                        }
-                                    }
-
-                                    sb = new StringBuilder();
-                                    using (SQLiteConnection conn = Util.SQLite.CreateSQLiteConnection(Util.ObjectRecircular.PathFile, false))
-                                    {
-                                        using (SQLiteCommand cmd = new SQLiteCommand(conn))
-                                        {
-                                            conn.Open();
-                                            sb.Append("UPDATE Recircular SET isAuto = 'False';");
-                                            cmd.CommandText = sb.ToString();
-                                            cmd.ExecuteNonQuery();
-                                            conn.Close();
-
                                         }
                                     }
                                 }
 
-                                sb = new StringBuilder();
                                 using (SQLiteConnection conn = Util.SQLite.CreateSQLiteConnection(Util.ObjectParametros.PathFile, false))
                                 {
                                     using (SQLiteCommand cmd = new SQLiteCommand(conn))
                                     {
                                         conn.Open();
-                                        sb.Append("UPDATE Parametros SET VersaoIoconnect = '63';");
-                                        cmd.CommandText = sb.ToString();
+                                        cmd.CommandText = "UPDATE Parametros SET VersaoIoconnect = '63';";
                                         cmd.ExecuteNonQuery();
                                         conn.Close();
                                         versao_BD = 63;
@@ -3043,8 +2629,6 @@ namespace Percolore.IOConnect
 
                         if (versao_BD == 63)
                         {
-                            StringBuilder sb = new StringBuilder();
-
                             if (File.Exists(Util.ObjectParametros.PathFile))
                             {
                                 bool existeColum = false;
@@ -3057,6 +2641,7 @@ namespace Percolore.IOConnect
                                             if (dc.ColumnName == "TempoReciAuto")
                                             {
                                                 existeColum = true;
+                                                break;
                                             }
                                         }
                                     }
@@ -3069,21 +2654,10 @@ namespace Percolore.IOConnect
                                         using (SQLiteCommand cmd = new SQLiteCommand(conn))
                                         {
                                             conn.Open();
-                                            sb.Append("ALTER TABLE Parametros ADD TempoReciAuto TEXT NULL;");
-                                            cmd.CommandText = sb.ToString();
+                                            cmd.CommandText = "ALTER TABLE Parametros ADD TempoReciAuto TEXT NULL;";
                                             cmd.ExecuteNonQuery();
-                                            conn.Close();
-                                        }
-                                    }
-
-                                    sb = new StringBuilder();
-                                    using (SQLiteConnection conn = Util.SQLite.CreateSQLiteConnection(Util.ObjectParametros.PathFile, false))
-                                    {
-                                        using (SQLiteCommand cmd = new SQLiteCommand(conn))
-                                        {
-                                            conn.Open();
-                                            sb.Append("UPDATE Parametros SET TempoReciAuto = '1',  VersaoIoconnect = '64';");
-                                            cmd.CommandText = sb.ToString();
+                                            
+                                            cmd.CommandText = "UPDATE Parametros SET TempoReciAuto = '1',  VersaoIoconnect = '64';";
                                             cmd.ExecuteNonQuery();
                                             conn.Close();
                                             versao_BD = 64;
@@ -3092,14 +2666,12 @@ namespace Percolore.IOConnect
                                 }
                                 else
                                 {
-                                    sb = new StringBuilder();
                                     using (SQLiteConnection conn = Util.SQLite.CreateSQLiteConnection(Util.ObjectParametros.PathFile, false))
                                     {
                                         using (SQLiteCommand cmd = new SQLiteCommand(conn))
                                         {
                                             conn.Open();
-                                            sb.Append("UPDATE Parametros SET VersaoIoconnect = '64';");
-                                            cmd.CommandText = sb.ToString();
+                                            cmd.CommandText = "UPDATE Parametros SET VersaoIoconnect = '64';";
                                             cmd.ExecuteNonQuery();
                                             conn.Close();
                                             versao_BD = 64;
@@ -3114,73 +2686,43 @@ namespace Percolore.IOConnect
                             StringBuilder sb = new StringBuilder();
                             if (File.Exists(Util.ObjectColorante.PathFile))
                             {
-                                bool existeColum = false;
-                                if (dsTablesCol != null)
+                                using (SQLiteConnection conn = Util.SQLite.CreateSQLiteConnection(Util.ObjectColorante.PathFile, false))
                                 {
-                                    foreach (DataTable dt in dsTablesCol.Tables)
+									if (!Util.SQLite.IsColumnExists(conn, "Corantes", "IsBicoIndividual"))
+										sb.Append("ALTER TABLE Corantes ADD IsBicoIndividual TEXT NULL;");
+
+									if (!Util.SQLite.IsColumnExists(conn, "Corantes", "VolumeBicoIndividual"))
+										sb.Append("ALTER TABLE Corantes ADD VolumeBicoIndividual TEXT NULL;");
+
+                                    if (!string.IsNullOrWhiteSpace(sb.ToString()))
                                     {
-                                        foreach (DataColumn dc in dt.Columns)
+                                        using (SQLiteCommand cmd = new SQLiteCommand(conn))
                                         {
-                                            if (dc.ColumnName == "IsBicoIndividual")
-                                            {
-                                                existeColum = true;
-                                            }
+                                            conn.Open();
+                                            cmd.CommandText = sb.ToString();
+                                            cmd.ExecuteNonQuery();
+                                            conn.Close();
                                         }
+                                    }
+                                
+                                    using (SQLiteCommand cmd = new SQLiteCommand(conn))
+                                    {
+                                        conn.Open();
+                                        cmd.CommandText = "UPDATE Corantes SET VolumeBicoIndividual = '5', IsBicoIndividual = 'False';";
+                                        cmd.ExecuteNonQuery();
+                                        conn.Close();
                                     }
                                 }
 
-                                if (!existeColum)
+                                using (SQLiteConnection conn = Util.SQLite.CreateSQLiteConnection(Util.ObjectParametros.PathFile, false))
                                 {
-                                    using (SQLiteConnection conn = Util.SQLite.CreateSQLiteConnection(Util.ObjectColorante.PathFile, false))
+                                    using (SQLiteCommand cmd = new SQLiteCommand(conn))
                                     {
-                                        using (SQLiteCommand cmd = new SQLiteCommand(conn))
-                                        {
-                                            conn.Open();
-                                            sb.Append("ALTER TABLE Corantes ADD IsBicoIndividual TEXT NULL;");
-                                            cmd.CommandText = sb.ToString();
-                                            cmd.ExecuteNonQuery();
-                                            conn.Close();
-                                        }
-                                    }
-
-                                    sb = new StringBuilder();
-                                    using (SQLiteConnection conn = Util.SQLite.CreateSQLiteConnection(Util.ObjectColorante.PathFile, false))
-                                    {
-                                        using (SQLiteCommand cmd = new SQLiteCommand(conn))
-                                        {
-                                            conn.Open();
-                                            sb.Append("ALTER TABLE Corantes ADD VolumeBicoIndividual TEXT NULL;");
-                                            cmd.CommandText = sb.ToString();
-                                            cmd.ExecuteNonQuery();
-                                            conn.Close();
-                                        }
-                                    }
-
-                                    sb = new StringBuilder();
-                                    using (SQLiteConnection conn = Util.SQLite.CreateSQLiteConnection(Util.ObjectColorante.PathFile, false))
-                                    {
-                                        using (SQLiteCommand cmd = new SQLiteCommand(conn))
-                                        {
-                                            conn.Open();
-                                            sb.Append("UPDATE Corantes SET VolumeBicoIndividual = '5', IsBicoIndividual = 'False';");
-                                            cmd.CommandText = sb.ToString();
-                                            cmd.ExecuteNonQuery();
-                                            conn.Close();
-                                        }
-                                    }
-
-                                    sb = new StringBuilder();
-                                    using (SQLiteConnection conn = Util.SQLite.CreateSQLiteConnection(Util.ObjectParametros.PathFile, false))
-                                    {
-                                        using (SQLiteCommand cmd = new SQLiteCommand(conn))
-                                        {
-                                            conn.Open();
-                                            sb.Append("UPDATE Parametros SET  VersaoIoconnect = '65';");
-                                            cmd.CommandText = sb.ToString();
-                                            cmd.ExecuteNonQuery();
-                                            conn.Close();
-                                            versao_BD = 65;
-                                        }
+                                        conn.Open();
+                                        cmd.CommandText = "UPDATE Parametros SET  VersaoIoconnect = '65';";
+                                        cmd.ExecuteNonQuery();
+                                        conn.Close();
+                                        versao_BD = 65;
                                     }
                                 }
                             }
@@ -3188,7 +2730,6 @@ namespace Percolore.IOConnect
 
                         if (versao_BD == 65)
                         {
-                            StringBuilder sb = new StringBuilder();
                             if (File.Exists(Util.ObjectParametros.PathFile))
                             {
                                 bool existeColum = false;
@@ -3201,6 +2742,7 @@ namespace Percolore.IOConnect
                                             if (dc.ColumnName == "LogStatusMaquina")
                                             {
                                                 existeColum = true;
+                                                break;
                                             }
                                         }
                                     }
@@ -3208,27 +2750,15 @@ namespace Percolore.IOConnect
 
                                 if (!existeColum)
                                 {
-                                    sb = new StringBuilder();
                                     using (SQLiteConnection conn = Util.SQLite.CreateSQLiteConnection(Util.ObjectParametros.PathFile, false))
                                     {
                                         using (SQLiteCommand cmd = new SQLiteCommand(conn))
                                         {
                                             conn.Open();
-                                            sb.Append("ALTER TABLE Parametros ADD LogStatusMaquina TEXT NULL;");
-                                            cmd.CommandText = sb.ToString();
+                                            cmd.CommandText = "ALTER TABLE Parametros ADD LogStatusMaquina TEXT NULL;";
                                             cmd.ExecuteNonQuery();
-                                            conn.Close();
-                                        }
-                                    }
-
-                                    sb = new StringBuilder();
-                                    using (SQLiteConnection conn = Util.SQLite.CreateSQLiteConnection(Util.ObjectParametros.PathFile, false))
-                                    {
-                                        using (SQLiteCommand cmd = new SQLiteCommand(conn))
-                                        {
-                                            conn.Open();
-                                            sb.Append("UPDATE Parametros SET LogStatusMaquina = 'False',  VersaoIoconnect = '66';");
-                                            cmd.CommandText = sb.ToString();
+                                            
+                                            cmd.CommandText = "UPDATE Parametros SET LogStatusMaquina = 'False',  VersaoIoconnect = '66';";
                                             cmd.ExecuteNonQuery();
                                             conn.Close();
                                             versao_BD = 66;

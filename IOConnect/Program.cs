@@ -263,24 +263,29 @@ namespace Percolore.IOConnect
                 Util.ObjectParametros.InitLoad();
                 retorno = Util.ObjectParametros.Load();
 
-                for (int i = lCor.Count + 1; i <= 32; i++)
+                if (retorno != null)
                 {
-                    Util.ObjectColorante objCor = new Util.ObjectColorante();
-                    objCor.Circuito = i;
-                    objCor.Correspondencia = i;
-                    objCor.Dispositivo = 2;
-                    objCor.Habilitado = false;
-                    objCor.MassaEspecifica = 0;
-                    objCor.NivelMaximo = retorno.VolumeMaximo;
-                    objCor.NivelMinimo = retorno.VolumeMinimo;
-                    objCor.Nome = "";
-                    objCor.Volume = 0;
-                    objCor.IsBase = false;
-                    objCor.Seguidor = -1;
-                    lObjCor.Add(objCor);
-                }
-                Util.ObjectColorante.Persist(lObjCor);
+                    for (int i = lCor.Count + 1; i <= 32; i++)
+                    {
+                        Util.ObjectColorante objCor = new Util.ObjectColorante();
+                        objCor.Circuito = i;
+                        objCor.Correspondencia = i;
+                        objCor.Dispositivo = 2;
+                        objCor.Habilitado = false;
+                        objCor.MassaEspecifica = 0;
+                        objCor.NivelMaximo = retorno.VolumeMaximo;
+                        objCor.NivelMinimo = retorno.VolumeMinimo;
+                        objCor.Nome = "";
+                        objCor.Volume = 0;
+                        objCor.IsBase = false;
+                        objCor.Seguidor = -1;
+                        lObjCor.Add(objCor);
+                    }
 
+                    Util.ObjectColorante.Persist(lObjCor);
+                }
+                else
+                    LogManager.LogInformation("Parâmetros de colorante não encontrados.");
             }
 
             if (!File.Exists(Util.ObjectFormula.PathFile))
@@ -330,9 +335,9 @@ namespace Percolore.IOConnect
                         Calibragem cal = Calibragem.Load(i);
                         lCal.Add(cal);
                     }
-                    catch (Exception e)
+                    catch
 					{
-						LogManager.LogError($"Erro no módulo {typeof(Program).Name}: ", e);
+						LogManager.LogInformation($"Calibração não encontrada para o motor '{i}'. Carregando última calibração válida.");
 					
                         if (i > 16)
                         {
@@ -341,11 +346,10 @@ namespace Percolore.IOConnect
                                 Calibragem cal = Calibragem.Load(i - 16);
                                 cal.Motor = i;
                                 lCal.Add(cal);
-
                             }
 							catch (Exception ex)
 							{
-								LogManager.LogError($"Erro no módulo {typeof(Program).Name}: ", ex);
+								LogManager.LogError($"Não foi possível carregar calibração válida para o motor {i}.", ex);
 							}
 						}
                     }
@@ -568,8 +572,15 @@ namespace Percolore.IOConnect
             #endregion
 
             Util.ObjectParametros parametros = Util.ObjectParametros.Load();
-            Negocio.IdiomaResx.GetIDiomaREsx(parametros.IdIdioma);
-            Init.DefineCultura();
+
+            if (parametros != null)
+            {
+                Negocio.IdiomaResx.GetIDiomaREsx(parametros.IdIdioma);
+                Init.DefineCultura();
+            }
+            else
+                LogManager.LogInformation("Parâmetros de idioma não encontrados.");
+
             try
             {
                 if (!File.Exists(Util.ObjectMensagem.PathFile))
@@ -770,7 +781,20 @@ namespace Percolore.IOConnect
             #endregion
 
             #region Recircular
-            List<Util.ObjectRecircularAuto> lEc_Auto_Exc = Util.ObjectRecircularAuto.List();
+
+            if (!File.Exists(Util.ObjectRecircularAuto.PathFile))
+            {
+                try
+                {
+                    Util.ObjectRecircularAuto.CreateBD();
+                }
+                catch (Exception e)
+                {
+                    LogManager.LogError($"Erro no módulo {typeof(Program).Name}: ", e);
+                }
+            }
+
+			List<Util.ObjectRecircularAuto> lEc_Auto_Exc = Util.ObjectRecircularAuto.List();
             for (int i = 33; i <= lEc_Auto_Exc.Count; i++)
             {
                 Util.ObjectRecircularAuto.Delete(i);
