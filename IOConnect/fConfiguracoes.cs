@@ -3403,7 +3403,7 @@ namespace Percolore.IOConnect
 
                 if (_parametros.TempoReciAuto < 3)
                 {
-                    cbTipoTempoMonitRecirculacaoAuto.SelectedIndex = _parametros.TempoReciAuto - 1;
+                    cbTipoTempoMonitRecirculacaoAuto.SelectedIndex = (_parametros.TempoReciAuto <= 0) ? 0 : _parametros.TempoReciAuto - 1;
                 }
 
                 atualizaDataGridRecircularProdutos();
