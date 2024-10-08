@@ -110,6 +110,78 @@ Se você precisar alterar algo ou recompilar a solução, repita os passos acima
 
  - [Tutorial: Compilar um aplicativo no Visual Studio 2022](https://learn.microsoft.com/pt-br/visualstudio/ide/walkthrough-building-an-application?view=vs-2022)
 
+# Troubleshooting
+### Logging de Erros com Serilog
+
+A aplicação IOConnect agora conta com um mecanismo de log de erros implementado utilizando o componente **Serilog**, o que permite capturar e armazenar logs de maneira estruturada, facilitando a identificação e resolução de problemas. O Serilog está configurado para gravar logs tanto no console quanto em arquivos de log no disco, com um modelo de rotação diária.
+
+#### Configuração do Logging
+
+Para configurar o comportamento de logging, ajuste o arquivo `appsettings.json` no seu projeto. Abaixo está um exemplo de configuração padrão, seguido de uma explicação de cada campo:
+
+    "Serilog": {
+      "MinimumLevel": {
+        "Default": "Information",
+        "Override": {
+          "Microsoft": "Error",
+          "System": "Error"
+        }
+      },
+      "Using": [ "Serilog.Sinks.File" ],
+      "WriteTo": [
+        { "Name": "Console" },
+        {
+          "Name": "File",
+          "Args": {
+            "path": "logs/log-.log",
+            "rollingInterval": "Day",
+            "outputTemplate": "{Timestamp:yyyy-MM-dd HH:mm:ss.fff zzz}|{SourceContext}|{ConnectionId}|{ElasticApmTraceId}|{ElasticApmTransactionId}|[{Level:u4}]|{Message:lj}{NewLine}{Exception}"
+          }
+        }
+      ]
+    }
+
+#### Explicação dos Campos
+
+1.  **MinimumLevel**: Define o nível mínimo de severidade para os eventos que serão logados. Os níveis possíveis são: `Verbose`, `Debug`, `Information`, `Warning`, `Error`, e `Fatal`.
+    
+    -   **Default**: Especifica o nível padrão para logs. No exemplo, está configurado para `Information`, ou seja, qualquer evento a partir do nível "Information" será registrado.
+    -   **Override**: Permite modificar o nível de log para namespaces específicos.
+        -   **Microsoft** e **System**: Ambos estão configurados para `Error`, o que significa que apenas erros desses namespaces serão registrados.
+2.  **Using**: Lista os pacotes que o Serilog usará. Aqui estamos utilizando o sink `Serilog.Sinks.File`, que permite gravar logs em arquivos.
+    
+3.  **WriteTo**: Define os destinos para onde os logs serão enviados. Nesse exemplo, estamos enviando os logs para o console e para um arquivo.
+    
+    -   **Console**: Especifica que os logs também serão exibidos no console da aplicação.
+        
+    -   **File**: Define a configuração para gravação dos logs em arquivo.
+        
+        -   **path**: Especifica o caminho onde os arquivos de log serão salvos. O valor `logs/log-.log` significa que os arquivos de log serão criados na pasta `logs` com nomes no formato `log-YYYYMMDD.log`, onde `YYYYMMDD` será a data do log.
+        -   **rollingInterval**: Define o intervalo de rotação dos arquivos de log. No exemplo, a rotação ocorre diariamente (`Day`), o que significa que um novo arquivo de log será criado a cada dia.
+        -   **outputTemplate**: Especifica o formato da mensagem de log. Os campos incluídos no template são:
+            -   **Timestamp**: Data e hora do log, no formato `yyyy-MM-dd HH:mm:ss.fff zzz`.
+            -   **SourceContext**: O contexto de origem do log, útil para identificar de qual parte do código o log foi gerado.
+            -   **ConnectionId**, **ElasticApmTraceId**, **ElasticApmTransactionId**: Campos opcionais para identificar conexões e transações, caso estejam sendo utilizadas.
+            -   **Level**: O nível de severidade do log (`Information`, `Error`, etc.).
+            -   **Message**: A mensagem de log.
+            -   **Exception**: Informações detalhadas sobre exceções, caso existam.
+
+#### Valores Permitidos
+
+-   **MinimumLevel**: Aceita os valores `Verbose`, `Debug`, `Information`, `Warning`, `Error`, `Fatal`.
+-   **Override**: Aceita os mesmos valores do campo `MinimumLevel` para namespaces específicos.
+-   **rollingInterval**: Aceita `Infinite`, `Year`, `Month`, `Day`, `Hour`, `Minute`.
+-   **outputTemplate**: Permite a customização com variáveis padrão do Serilog. O exemplo acima é uma configuração recomendada, mas pode ser adaptada conforme necessário.
+
+#### Ajuste e Testes
+
+Depois de configurar o `appsettings.json`, reinicie a aplicação para que as mudanças entrem em vigor. Acesse os arquivos de log na pasta configurada para verificar se o comportamento do log está de acordo com as expectativas.
+
+Caso tenha problemas para configurar ou visualizar os logs, entre em contato com o suporte técnico.
+
+#### Referência
+Maiores informações sobre a configuração do Serilog podem ser encontradas no site oficial do componente em [https://serilog.net](https://serilog.net/)
+
 # Contribuição
 
 
