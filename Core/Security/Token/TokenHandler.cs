@@ -1,5 +1,7 @@
 ﻿using Percolore.Core.Security.Cryptography;
 using System.Reflection;
+using System.Security.Cryptography;
+using System.Text;
 using System.Text.RegularExpressions;
 
 namespace Percolore.Core.Security.Token
@@ -149,9 +151,11 @@ namespace Percolore.Core.Security.Token
 
         string GetCheckHash(string text)
         {
-            string hashCode = text.GetHashCode().ToString();
-            string hashToken = hashCode.Substring(hashCode.Length - 4, 4);
-            return hashToken;
-        }
+            using SHA256 sha256 = SHA256.Create();
+			byte[] bytes = sha256.ComputeHash(Encoding.UTF8.GetBytes(text));
+			string hashCode = BitConverter.ToUInt32(bytes, 0).ToString();
+			string hashToken = hashCode.Substring(hashCode.Length - 4, 4);
+			return hashToken;
+		}
     }
 }
