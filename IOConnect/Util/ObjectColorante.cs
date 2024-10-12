@@ -403,7 +403,7 @@ namespace Percolore.IOConnect.Util
                                 using (SQLiteCommand cmd = new SQLiteCommand(conn))
                                 {
                                     conn.Open();
-                                    sb.Append("INSERT INTO Corantes (Motor, Nome, MassaEspecifica, Habilitado, Volume, Correspondencia, Dispositivo, NivelMinimo, NivelMaximo, IsBase, Seguidor, Step, VolumePurga) VALUES (");
+                                    sb.Append("INSERT INTO Corantes (Motor, Nome, MassaEspecifica, Habilitado, Volume, Correspondencia, Dispositivo, NivelMinimo, NivelMaximo, IsBase, Seguidor, Step, VolumePurga, ColorRGB, IsBicoIndividual, VolumeBicoIndividual) VALUES (");
                                     sb.Append("'" + colorante.Circuito.ToString() + "', ");
                                     sb.Append("'" + colorante.Nome.ToString() + "', ");
                                     sb.Append("'" + colorante.MassaEspecifica.ToString().Replace(",", ".") + "', ");
@@ -416,13 +416,15 @@ namespace Percolore.IOConnect.Util
                                     sb.Append("'" + (colorante.IsBase ? "True" : "False") + "', ");
                                     sb.Append("'" + colorante.Seguidor.ToString() + "', ");
                                     sb.Append("'" + colorante.Step.ToString() + "', ");
-                                    sb.Append("'" + colorante.VolumePurga.ToString().Replace(",", ".") + "' ");
-                                    sb.Append(");");
+                                    sb.Append("'" + colorante.VolumePurga.ToString().Replace(",", ".") + "', ");
+									
+                                    sb.Append("'" + colorante.ColorRGB + "', ");
+									sb.Append("'" + (colorante.IsBicoIndividual ? "True" : "False") + "', ");
+									sb.Append("'" + colorante.VolumeBicoIndividual.ToString().Replace(",", ".") + "' ");
+									sb.Append(");");
 
                                     cmd.CommandText = sb.ToString();
-
                                     cmd.ExecuteNonQuery();
-
                                     conn.Close();
                                 }
                             }

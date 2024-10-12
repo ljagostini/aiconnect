@@ -1773,7 +1773,9 @@ namespace Percolore.IOConnect.Util
                             sb.Append(" HabilitarDispensaSequencial, ");
                             sb.Append(" HabilitarFormulaPersonalizada, ");
                             sb.Append(" HabilitarTesteRecipiente, ");
-                            sb.Append(" IdDispositivo, ");
+							sb.Append(" HabilitarIdentificacaoCopo, ");
+							sb.Append(" IdIdioma, ");
+							sb.Append(" IdDispositivo, ");
                             sb.Append(" HabilitarPurgaIndividual, ");
                             sb.Append(" HabilitarTouchScrenn, ");
                             sb.Append(" VersaoIoconnect, ");
@@ -1782,12 +1784,20 @@ namespace Percolore.IOConnect.Util
                             sb.Append(" NomeDispositivo2, ");
                             sb.Append(" HabilitarDispensaSequencialP1, ");
                             sb.Append(" HabilitarDispensaSequencialP2, ");
+							sb.Append(" TreinamentoCal, ");
+							sb.Append(" ViewMessageProc, ");
+							sb.Append(" QtdTentativasConexao, ");
+							sb.Append(" DelayEsponja, ");
+							sb.Append(" HabLimpBicos , ");
+							sb.Append(" DelayLimpBicos, ");
+							sb.Append(" TipoLimpBicos, ");
+							sb.Append(" TipoDosagemExec, ");
 
-                            #endregion
+							#endregion
 
-                            #region DAT
+							#region DAT
 
-                            sb.Append(" PathDAT, ");
+							sb.Append(" PathDAT, ");
                             sb.Append(" PathRepositorioDAT, ");
                             sb.Append(" PadraoConteudoDAT, ");
                             sb.Append(" BasePosicaoCircuitoDAT, ");
@@ -1797,15 +1807,47 @@ namespace Percolore.IOConnect.Util
                             sb.Append(" DesabilitarInterfaceInicializacaoCircuito, ");
                             sb.Append(" DesabilitarInterfacePurga, ");
 
-                            sb.Append(" DesabilitarVolumeMinimoDat, ");
+							sb.Append(" PathFilaDAT, ");
+							sb.Append(" DesabilitarMonitoramentoFilaDAT, ");
+							sb.Append(" DelayMonitoramentoFilaDAT, ");
+							sb.Append(" DesabilitarVolumeMinimoDat, ");
                             sb.Append(" VolumeMinimoDat, ");
+
+							sb.Append(" Dat_06_UNT_Pref, ");
+							sb.Append(" Dat_06_UNT_1_IsPonto, ");
+							sb.Append(" Dat_06_UNT_2_IsPonto, ");
+							sb.Append(" Dat_06_CAN_Pref, ");
+							sb.Append(" Dat_06_CAN_1_IsPonto, ");
+							sb.Append(" Dat_06_FRM_Pref, ");
+							sb.Append(" Dat_06_FRM_SEP, ");
+                            sb.Append(" Dat_06_FRM_1_IsPonto, ");
+                            sb.Append(" Dat_06_BAS_Pref, ");
+                            sb.Append(" Dat_06_BAS_1_IsPonto, ");
+                            sb.Append(" Dat_06_BAS_Habilitado, ");
+                            sb.Append(" Dat_05_UNT_Pref, ");
+                            sb.Append(" Dat_05_UNT_1_IsPonto, ");
+                            sb.Append(" Dat_05_UNT_2_IsPonto, ");
+                            sb.Append(" Dat_05_CAN_Pref, ");
+                            sb.Append(" Dat_05_CAN_1_IsPonto, ");
+                            sb.Append(" Dat_05_FRM_Pref, ");
+                            sb.Append(" Dat_05_FRM_SEP, ");
+                            sb.Append(" Dat_05_FRM_1_IsPonto, ");
+                            sb.Append(" Dat_05_BAS_Pref, ");
+                            sb.Append(" Dat_05_BAS_1_IsPonto, ");
+                            sb.Append(" Dat_05_BAS_Habilitado, ");
+                            sb.Append(" ExtFileTmpUDCP, ");
+                            sb.Append(" CreateFileTmpUDCP, ");
+                            sb.Append(" DelayUDCP, ");
+                            sb.Append(" ProcRemoveLataUDCP, ");
+                            sb.Append(" DisablePopUpDispDat, ");
 
                             #endregion
 
                             #region Purga
 
                             sb.Append(" PrazoExecucaoPurga, ");
-                            sb.Append(" VolumePurga, ");
+							sb.Append(" DataExecucaoPurga, ");
+							sb.Append(" VolumePurga, ");
                             sb.Append(" VelocidadePurga, ");
                             sb.Append(" AceleracaoPurga, ");
                             sb.Append(" DelayPurga, ");
@@ -1861,7 +1903,6 @@ namespace Percolore.IOConnect.Util
                             sb.Append(" HabilitarMililitro, ");
                             sb.Append(" HabilitarGrama, ");
                             sb.Append(" UnidadeMedidaNivelColorante, ");
-
                             sb.Append(" ValorFraction, ");
                             
                             #endregion
@@ -1872,12 +1913,14 @@ namespace Percolore.IOConnect.Util
                             sb.Append(" PathLogControleDispensa, ");
                             sb.Append(" HabilitarLogComunicacao, ");
                             sb.Append(" PathLogComunicacao, ");
-                            
-                            #endregion
+							sb.Append(" HabilitarLogAutomateTesterProt, ");
+							sb.Append(" LogAutomateBackup, ");
 
-                            #region Produção
+							#endregion
 
-                            sb.Append(" TipoProducao, ");
+							#region Produção
+
+							sb.Append(" TipoProducao, ");
                             sb.Append(" IpProducao, ");
                             sb.Append(" PortaProducao, ");
                             sb.Append(" DesabilitaMonitProcessoProducao, ");
@@ -1887,7 +1930,34 @@ namespace Percolore.IOConnect.Util
                             #region Sinc Formula
                             sb.Append(" DesabilitaMonitSincFormula, ");
                             sb.Append(" PortaSincFormula, ");
-                            sb.Append(" IpSincFormula ");
+                            sb.Append(" IpSincFormula, ");
+
+                            #endregion
+
+                            #region Miscelanea
+
+                            sb.Append(" TimeoutPingTcp, ");
+                            sb.Append(" DesabilitaMonitSyncToken, ");
+                            sb.Append(" IpSincToken, ");
+                            sb.Append(" PortaSincToken, ");
+                            sb.Append(" TipoEventos, ");
+                            sb.Append(" DesabilitaMonitSyncBkpCalibragem, ");
+                            sb.Append(" UrlSincBkpCalibragem, ");
+                            sb.Append(" HabilitarRecirculacao, ");
+                            sb.Append(" DelayMonitRecirculacao, ");
+                            sb.Append(" Address_PlacaMov, ");
+                            sb.Append(" NomeDispositivo_PlacaMov, ");
+                            sb.Append(" DelayAlertaPlacaMov, ");
+                            sb.Append(" HabilitarRecirculacaoAuto, ");
+                            sb.Append(" DelayMonitRecirculacaoAuto, ");
+                            sb.Append(" DelayNotificacaotRecirculacaoAuto, ");
+                            sb.Append(" QtdNotificacaotRecirculacaoAuto, ");
+                            sb.Append(" TempoReciAuto, ");
+                            sb.Append(" LogBD, ");
+                            sb.Append(" NameRemoteAccess, ");
+                            sb.Append(" TipoBaseDados, ");
+                            sb.Append(" PathBasesDados, ");
+                            sb.Append(" LogStatusMaquina ");
 
                             #endregion
 
@@ -1906,7 +1976,9 @@ namespace Percolore.IOConnect.Util
                             sb.Append("'" + (p.HabilitarDispensaSequencial ? "True" : "False") + "', ");
                             sb.Append("'" + (p.HabilitarFormulaPersonalizada ? "True" : "False") + "', ");
                             sb.Append("'" + (p.HabilitarTesteRecipiente ? "True" : "False") + "', ");
-                            sb.Append("'" + p.IdDispositivo.ToString() + "', ");
+                            sb.Append("'" + (p.HabilitarIdentificacaoCopo ? "True" : "False") + "', ");
+                            sb.Append("'" + p.IdIdioma.ToString() + "', ");
+							sb.Append("'" + p.IdDispositivo.ToString() + "', ");
                             sb.Append("'" + (p.HabilitarPurgaIndividual ? "True" : "False") + "', ");
                             sb.Append("'" + (p.HabilitarTouchScrenn ? "True" : "False") + "', ");
                             sb.Append("'" + p.VersaoIoconnect + "', ");
@@ -1915,12 +1987,20 @@ namespace Percolore.IOConnect.Util
                             sb.Append("'" + p.NomeDispositivo2 + "', ");
                             sb.Append("'" + (p.HabilitarDispensaSequencialP1 ? "True" : "False") + "', ");
                             sb.Append("'" + (p.HabilitarDispensaSequencialP2 ? "True" : "False") + "', ");
+                            sb.Append("'" + (p.TreinamentoCal ? "True" : "False") + "', ");
+                            sb.Append("'" + (p.ViewMessageProc ? "True" : "False") + "', ");
+                            sb.Append("'" + p.QtdTentativasConexao.ToString() + "', ");
+                            sb.Append("'" + p.DelayEsponja.ToString() + "', ");
+                            sb.Append("'" + (p.HabLimpBicos ? "True" : "False") + "', ");
+                            sb.Append("'" + p.DelayLimpBicos.ToString() + "', ");
+                            sb.Append("'" + p.TipoLimpBicos.ToString() + "', ");
+                            sb.Append("'" + p.TipoDosagemExec.ToString() + "', ");
 
-                            #endregion
-                            
-                            #region DAT
+							#endregion
 
-                            sb.Append("'" + p.PathMonitoramentoDAT + "', ");
+							#region DAT
+
+							sb.Append("'" + p.PathMonitoramentoDAT + "', ");
                             sb.Append("'" + p.PathRepositorioDAT + "', ");
                             sb.Append("'" + p.PadraoConteudoDAT.ToString() + "', ");
                             sb.Append("'" + p.BasePosicaoCircuitoDAT.ToString() + "', ");
@@ -1930,15 +2010,46 @@ namespace Percolore.IOConnect.Util
                             sb.Append("'" + (p.DesabilitarInterfaceInicializacaoCircuito ? "True" : "False") + "', ");
                             sb.Append("'" + (p.DesabilitarInterfacePurga ? "True" : "False") + "', ");
 
-                            sb.Append("'" + (p.DesabilitarVolumeMinimoDat ? "True" : "False") + "', ");
+                            sb.Append("'" + p.PathMonitoramentoFilaDAT + "', ");
+                            sb.Append("'" + (p.DesabilitarMonitoramentoFilaDAT ? "True" : "False") + "', ");
+                            sb.Append("'" + p.DelayMonitoramentoFilaDAT.ToString() + "', ");
+							sb.Append("'" + (p.DesabilitarVolumeMinimoDat ? "True" : "False") + "', ");
                             sb.Append("'" + p.VolumeMinimoDat.ToString().Replace(",", ".") + "', ");
+                            sb.Append("'" + p.Dat_06_UNT_Pref + "', ");
+                            sb.Append("'" + p.Dat_06_UNT_1_IsPonto + "', ");
+                            sb.Append("'" + p.Dat_06_UNT_2_IsPonto + "', ");
+                            sb.Append("'" + p.Dat_06_CAN_Pref + "', ");
+                            sb.Append("'" + p.Dat_06_CAN_1_IsPonto + "', ");
+							sb.Append("'" + p.Dat_06_FRM_Pref + "', ");
+							sb.Append("'" + p.Dat_06_FRM_SEP + "', ");
+                            sb.Append("'" + p.Dat_06_FRM_1_IsPonto + "', ");
+                            sb.Append("'" + p.Dat_06_BAS_Pref + "', ");
+                            sb.Append("'" + p.Dat_06_BAS_1_IsPonto + "', ");
+                            sb.Append("'" + p.Dat_06_BAS_Habilitado + "', ");
+                            sb.Append("'" + p.Dat_05_UNT_Pref + "', ");
+                            sb.Append("'" + p.Dat_05_UNT_1_IsPonto + "', ");
+                            sb.Append("'" + p.Dat_05_UNT_2_IsPonto + "', ");
+                            sb.Append("'" + p.Dat_05_CAN_Pref + "', ");
+                            sb.Append("'" + p.Dat_05_CAN_1_IsPonto + "', ");
+                            sb.Append("'" + p.Dat_05_FRM_Pref + "', ");
+                            sb.Append("'" + p.Dat_05_FRM_SEP + "', ");
+                            sb.Append("'" + p.Dat_05_FRM_1_IsPonto + "', ");
+                            sb.Append("'" + p.Dat_05_BAS_Pref + "', ");
+                            sb.Append("'" + p.Dat_05_BAS_1_IsPonto + "', ");
+                            sb.Append("'" + p.Dat_05_BAS_Habilitado + "', ");
+                            sb.Append("'" + p.ExtFileTmpUDCP + "', ");
+                            sb.Append("'" + p.CreateFileTmpUDCP + "', ");
+                            sb.Append("'" + p.DelayUDCP + "', ");
+                            sb.Append("'" + (p.ProcRemoveLataUDCP ? "True" : "False") + "', ");
+                            sb.Append("'" + (p.DisablePopUpDispDat ? "True" : "False") + "', ");
 
-                            #endregion
+							#endregion
 
-                            #region Purga
+							#region Purga
 
-                            sb.Append("'" + RetunStringFromTimespan(p.PrazoExecucaoPurga) + "', ");
-                            sb.Append("'" + p.VolumePurga.ToString().Replace(",", ".") + "', ");
+							sb.Append("'" + RetunStringFromTimespan(p.PrazoExecucaoPurga) + "', ");
+                            sb.Append("'" + p.DataExecucaoPurga.ToString() + "', ");
+							sb.Append("'" + p.VolumePurga.ToString().Replace(",", ".") + "', ");
                             sb.Append("'" + p.VelocidadePurga.ToString() + "', ");
                             sb.Append("'" + p.AceleracaoPurga.ToString() + "', ");
                             sb.Append("'" + p.DelayPurga.ToString() + "', ");
@@ -2005,12 +2116,14 @@ namespace Percolore.IOConnect.Util
                             sb.Append("'" + p.PathLogControleDispensa + "', ");
                             sb.Append("'" + (p.HabilitarLogComunicacao ? "True" : "False") + "', ");
                             sb.Append("'" + p.PathLogComunicacao + "', ");
-                            
-                            #endregion
+                            sb.Append("'" + (p.HabilitarLogAutomateTesterProt ? "True" : "False") + "', ");
+                            sb.Append("'" + (p.LogAutomateBackup ? "True" : "False") + "', ");
 
-                            #region Produção
+							#endregion
 
-                            sb.Append("'" + p.TipoProducao + "', ");
+							#region Produção
+
+							sb.Append("'" + p.TipoProducao + "', ");
                             sb.Append("'" + p.IpProducao + "', ");
                             sb.Append("'" + p.PortaProducao + "', ");
                             sb.Append("'" + (p.DesabilitaMonitProcessoProducao ? "True" : "False") + "', ");
@@ -2020,11 +2133,38 @@ namespace Percolore.IOConnect.Util
                             #region Sinc Formula
                             sb.Append("'" + (p.DesabilitaMonitSincFormula ? "True" : "False") + "', ");
                             sb.Append("'" + p.PortaSincFormula + "', ");
-                            sb.Append("'" + p.IpSincFormula + "'); ");
+                            sb.Append("'" + p.IpSincFormula + "', ");
 
-                            #endregion
+							#endregion
 
-                            cmd.CommandText = sb.ToString();
+							#region Miscelanea
+
+							sb.Append("'" + p.TimeoutPingTcp + "', ");
+							sb.Append("'" + (p.DesabilitaMonitSyncToken ? "True" : "False") + "', ");
+							sb.Append("'" + p.IpSincToken + "', ");
+							sb.Append("'" + p.PortaSincToken + "', ");
+							sb.Append("'" + p.TipoEventos + "', ");
+							sb.Append("'" + (p.DesabilitaMonitSyncBkpCalibragem ? "True" : "False") + "', ");
+							sb.Append("'" + p.UrlSincBkpCalibragem + "', ");
+							sb.Append("'" + (p.HabilitarRecirculacao ? "True" : "False") + "', ");
+							sb.Append("'" + p.DelayMonitRecirculacao + "', ");
+							sb.Append("'" + p.Address_PlacaMov + "', ");
+							sb.Append("'" + p.NomeDispositivo_PlacaMov + "', ");
+							sb.Append("'" + p.DelayAlertaPlacaMov + "', ");
+							sb.Append("'" + (p.HabilitarRecirculacaoAuto ? "True" : "False") + "', ");
+							sb.Append("'" + p.DelayMonitRecirculacaoAuto + "', ");
+							sb.Append("'" + p.DelayNotificacaotRecirculacaoAuto + "', ");
+							sb.Append("'" + p.QtdNotificacaotRecirculacaoAuto + "', ");
+							sb.Append("'" + p.TempoReciAuto + "', ");
+							sb.Append("'" + (p.LogBD ? "True" : "False") + "', ");
+							sb.Append("'" + p.NameRemoteAccess + "', ");
+							sb.Append("'" + p.TipoBaseDados + "', ");
+							sb.Append("'" + p.PathBasesDados + "', ");
+							sb.Append("'" + (p.LogStatusMaquina ? "True" : "False") + "' ); ");
+
+							#endregion
+
+							cmd.CommandText = sb.ToString();
 
                             cmd.ExecuteNonQuery();
 

@@ -255,6 +255,7 @@ namespace Percolore.IOConnect
                     objCor.Seguidor = -1;
                     objCor.IsBicoIndividual = false;
                     objCor.VolumePurga = 5;
+                    objCor.VolumeBicoIndividual = 0.0;
 
                     lObjCor.Add(objCor);
                 }
@@ -279,6 +280,8 @@ namespace Percolore.IOConnect
                         objCor.Volume = 0;
                         objCor.IsBase = false;
                         objCor.Seguidor = -1;
+                        objCor.IsBicoIndividual = false;
+                        objCor.VolumeBicoIndividual = 0.0;
                         lObjCor.Add(objCor);
                     }
 
