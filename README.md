@@ -110,6 +110,29 @@ Se você precisar alterar algo ou recompilar a solução, repita os passos acima
 
  - [Tutorial: Compilar um aplicativo no Visual Studio 2022](https://learn.microsoft.com/pt-br/visualstudio/ide/walkthrough-building-an-application?view=vs-2022)
 
+## Atualização de Compatibilidade do Gerador de Tokens
+
+### Introdução
+
+O **Gerador** é o componente responsável pela geração de tokens de máquina para a aplicação **IOConnect**. Recentemente, com a migração do sistema para o .NET 8, foram identificadas inconsistências na geração e validação de tokens devido a mudanças no comportamento de alguns métodos de criptografia utilizados nas versões anteriores (.NET Framework 4.6.2).
+
+### Mudanças Implementadas
+
+Após a migração do IOConnect para .NET 8, identificou-se que o método utilizado anteriormente para a geração de hashes de assinatura dos tokens sofreu alterações no seu comportamento, tornando a geração de tokens incompatível entre as versões antigas e novas do framework.
+
+Para resolver este problema, o algoritmo utilizado foi substituído pelo **SHA256**, um algoritmo de criptografia moderno e amplamente utilizado para garantir a consistência e segurança na geração de hashes. Essa atualização assegura que os tokens gerados sejam confiáveis e compatíveis com as novas especificações da aplicação.
+
+### Compatibilidade de Versões
+
+Devido à alteração no algoritmo de geração de tokens, é importante ressaltar que **os tokens gerados nas versões anteriores do IOConnect não são compatíveis com a versão atual da aplicação (v.5 e superiores)**. Abaixo está um resumo das versões e suas respectivas dependências de gerador:
+
+-   **IOConnect v.4 e anteriores**: Utilizam o **Gerador v.1.0.2** (.NET Framework 4.6.2)
+-   **IOConnect v.5 e posteriores**: Devem utilizar o **Gerador v.2.0.0** (.NET 8)
+
+### Impacto e Recomendações
+
+Com essa mudança, qualquer migração da aplicação para o .NET 8 exigirá a utilização do **Gerador v.2.0.0** para garantir a correta geração de tokens. É recomendável que, após a atualização, todos os tokens antigos sejam descartados e novos tokens sejam gerados utilizando o gerador atualizado, para evitar problemas de compatibilidade.
+
 # Troubleshooting
 ### Logging de Erros com Serilog
 
