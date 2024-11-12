@@ -66,7 +66,9 @@ namespace Percolore.IOConnect
 
         private void btnGravar_Click(object sender, EventArgs e)
         {
-            ObjDropBox opd = lDropBox[cboUnidade.SelectedIndex];
+			// Copiamos os colorantes para evitar persistir valores que excedem os limites de volume dos colorantes
+			List<Util.ObjectColorante> tmpColorantes = _colorantes.Select(item => (Util.ObjectColorante)item.Clone()).ToList();
+			ObjDropBox opd = lDropBox[cboUnidade.SelectedIndex];
             int _id_unidade = Convert.ToInt32(opd.value);
             bool isOk = true;
             double valorCount = txtDecimal.ToDouble() + txtOncaY.ToInt() + txtOnca48.ToDouble();
@@ -121,7 +123,7 @@ namespace Percolore.IOConnect
                     case (int)Percolore.IOConnect.Core.UnidadeMedida.Mililitro:
                         {
                             double mililitro = txtDecimal.ToDouble();
-                            _colorantes.ForEach(c => c.Volume += mililitro);
+							tmpColorantes.ForEach(c => c.Volume += mililitro);
                             break;
                         }
                     case (int)Percolore.IOConnect.Core.UnidadeMedida.Onca:
@@ -129,7 +131,7 @@ namespace Percolore.IOConnect
                             double mililitro = Percolore.IOConnect.Core.UnidadeMedidaHelper.OncaFracionadaToMililitro(
                                 txtOncaY.ToInt(), txtOnca48.ToDouble());
 
-                            _colorantes.ForEach(c => c.Volume += mililitro);
+							tmpColorantes.ForEach(c => c.Volume += mililitro);
                             break;
                         }
                     case (int)Percolore.IOConnect.Core.UnidadeMedida.Shot:
@@ -137,14 +139,14 @@ namespace Percolore.IOConnect
                             double mililitro = Percolore.IOConnect.Core.UnidadeMedidaHelper.ShotToMililitro(
                                 txtDecimal.ToDouble(), _parametros.ValorShot);
 
-                            _colorantes.ForEach(c => c.Volume += mililitro);
+							tmpColorantes.ForEach(c => c.Volume += mililitro);
                             break;
                         }
                     case (int)Percolore.IOConnect.Core.UnidadeMedida.Grama:
                         {
                             double grama = txtDecimal.ToDouble();
 
-                            _colorantes.ForEach
+							tmpColorantes.ForEach
                                 (
                                     c => c.Volume +=
                                         Percolore.IOConnect.Core.UnidadeMedidaHelper.GramaToMililitro(grama, c.MassaEspecifica)
@@ -161,12 +163,12 @@ namespace Percolore.IOConnect
                                     if (abast.UnMed == (int)Percolore.IOConnect.Core.UnidadeMedida.Mililitro)
                                     {
                                         double mililitro = Convert.ToDouble(abast.Conteudo);
-                                        _colorantes.ForEach(c => c.Volume += mililitro);
+										tmpColorantes.ForEach(c => c.Volume += mililitro);
                                     }
                                     else
                                     {
                                         double grama = Convert.ToDouble(abast.Conteudo);
-                                        _colorantes.ForEach
+										tmpColorantes.ForEach
                                             (
                                             c => c.Volume += Percolore.IOConnect.Core.UnidadeMedidaHelper.GramaToMililitro(grama, c.MassaEspecifica)
                                             );
@@ -185,7 +187,7 @@ namespace Percolore.IOConnect
                     string excedentes = string.Empty;
                     bool primeiro = true;
 
-                    foreach (Util.ObjectColorante c in this._colorantes)
+                    foreach (Util.ObjectColorante c in tmpColorantes)
                     {
                         //if (c.Volume > _parametros.VolumeMaximo)
                         if (c.Volume > c.NivelMaximo)
@@ -221,7 +223,9 @@ namespace Percolore.IOConnect
 
                 try
                 {
-                    Util.ObjectColorante.Persist(this._colorantes);
+                    // Se chegamos aqui, os niveis de colorantes e valido. Passamos os colorantes temporarios para o field.
+                    this._colorantes = tmpColorantes;
+					Util.ObjectColorante.Persist(this._colorantes);
 
                     #region Log de processo
 

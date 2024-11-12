@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Percolore.IOConnect.Util
 {
-	public class ObjectColorante
+	public class ObjectColorante : ICloneable
     {
         public static readonly string PathFile = Path.Combine(Environment.CurrentDirectory, "Colorantes.db");
         public static readonly string FileName = Path.GetFileName(PathFile);
@@ -38,9 +38,13 @@ namespace Percolore.IOConnect.Util
         public bool IsBicoIndividual { get; set; } = false;
         public double VolumeBicoIndividual { get; set; } = 0;
 
-
-
         public ObjectColorante() { }
+
+        /// <inheritdoc />
+        public object Clone()
+        {
+            return this.MemberwiseClone();
+        }
 
         public static void CreateBD()
         {
