@@ -6139,29 +6139,41 @@ namespace Percolore.IOConnect
                 {
                     if (_parametros.ControlarNivel)
                     {
-                        _notifyIcon.ContextMenuStrip.
-                            Items[OpcaoMenu.GerenciarNivel.ToString()].Visible = _parametros.ControlarNivel;
+                        var item = _notifyIcon.ContextMenuStrip.Items[OpcaoMenu.GerenciarNivel.ToString()];
+
+                        if (item != null)
+						    item.Visible = _parametros.ControlarNivel;
                     }
 
                     if (_parametros.HabilitarFormulaPersonalizada)
                     {
-                        _notifyIcon.ContextMenuStrip.
-                            Items[OpcaoMenu.FormulaPersonalizada.ToString()].Visible = _parametros.HabilitarFormulaPersonalizada;
+                        var item = _notifyIcon.ContextMenuStrip.Items[OpcaoMenu.FormulaPersonalizada.ToString()];
+                        
+                        if (item != null)
+                            item.Visible = _parametros.HabilitarFormulaPersonalizada;
                     }
 
                     if (_parametros.HabilitarPurgaIndividual)
                     {
-                        _notifyIcon.ContextMenuStrip.
-                           Items[OpcaoMenu.PurgarIndividual.ToString()].Visible = _parametros.HabilitarPurgaIndividual;
+                        var item = _notifyIcon.ContextMenuStrip.Items[OpcaoMenu.PurgarIndividual.ToString()];
+                        
+                        if (item != null)
+                            item.Visible = _parametros.HabilitarPurgaIndividual;
                     }
 
                     if (_parametros.HabilitarLogAutomateTesterProt)
                     {
-                        _notifyIcon.ContextMenuStrip.Items[OpcaoMenu.MenuAutomaticDispensa.ToString()].Visible = _parametros.HabilitarLogAutomateTesterProt;
+                        var item = _notifyIcon.ContextMenuStrip.Items[OpcaoMenu.MenuAutomaticDispensa.ToString()];
+                        
+                        if (item != null)
+                            item.Visible = _parametros.HabilitarLogAutomateTesterProt;
                     }
                     if (_parametros.HabilitarRecirculacao)
                     {
-                        _notifyIcon.ContextMenuStrip.Items[OpcaoMenu.Recircular.ToString()].Visible = _parametros.HabilitarRecirculacao;
+                        var item = _notifyIcon.ContextMenuStrip.Items[OpcaoMenu.Recircular.ToString()];
+                        
+                        if (item != null)
+                            item.Visible = _parametros.HabilitarRecirculacao;
                     }
                 }
             }
