@@ -509,458 +509,515 @@ namespace Percolore.IOConnect.Util
 
                                 #region Geral
 
-                                objPar.ResponseTimeout = Convert.ToInt32(reader["ResponseTimeout"].ToString());
-                                objPar.Velocidade = Convert.ToInt32(reader["Velocidade"].ToString());
-                                objPar.Aceleracao = Convert.ToInt32(reader["Aceleracao"].ToString());
-                                objPar.DelayReverso = Convert.ToInt32(reader["RevDelay"].ToString());
-                                objPar.PulsoReverso = Convert.ToInt32(reader["RevPulsos"].ToString());
+                                if (int.TryParse(reader["ResponseTimeout"].ToString(), out var responseTimeout))
+                                    objPar.ResponseTimeout = responseTimeout;
+
+								if (int.TryParse(reader["Velocidade"].ToString(), out var velocidade))
+									objPar.Velocidade = velocidade;
+
+								if (int.TryParse(reader["Aceleracao"].ToString(), out var aceleracao))
+									objPar.Aceleracao = aceleracao;
+
+								if (int.TryParse(reader["RevDelay"].ToString(), out var revDelay))
+									objPar.DelayReverso = revDelay;
+
+								if (int.TryParse(reader["RevPulsos"].ToString(), out var revPulsos))
+									objPar.PulsoReverso = revPulsos;
+
                                 //objPar.SomarPulsoReverso = Convert.ToBoolean(reader["SomarRevPulsos"].ToString());
                                 objPar.SomarPulsoReverso = true;
-                                objPar.HabilitarTecladoVirtual = Convert.ToBoolean(reader["HabilitarTecladoVirtual"].ToString());
-                                objPar.HabilitarDispensaSequencial = Convert.ToBoolean(reader["HabilitarDispensaSequencial"].ToString());
-                                objPar.HabilitarFormulaPersonalizada = Convert.ToBoolean(reader["HabilitarFormulaPersonalizada"].ToString());
-                                objPar.HabilitarTesteRecipiente = Convert.ToBoolean(reader["HabilitarTesteRecipiente"].ToString());
-                                
-                                if (!bool.TryParse(reader["HabilitarIdentificacaoCopo"].ToString(), out bool habilitarIdentificacaoCopo))
-									LogManager.LogInformation("Parâmetro 'HabilitarIdentificacaoCopo' inválido. Usando valor default 'false'.");
 
-								objPar.HabilitarIdentificacaoCopo = habilitarIdentificacaoCopo;
+                                if (bool.TryParse(reader["HabilitarTecladoVirtual"].ToString(), out var habilitarTecladoVirtual))
+                                    objPar.HabilitarTecladoVirtual = habilitarTecladoVirtual;
 
-                                if (!bool.TryParse(reader["TreinamentoCal"].ToString(), out bool treinamentoCal))
-                                    LogManager.LogInformation("Parâmetro 'TreinamentoCal' inválido. Utilizando o valor default 'false'.");
-                                
-                                objPar.TreinamentoCal = treinamentoCal;
+								if (bool.TryParse(reader["HabilitarDispensaSequencial"].ToString(), out var habilitarDispensaSequencial))
+									objPar.HabilitarDispensaSequencial = habilitarDispensaSequencial;
 
-								if (!int.TryParse(reader["DelayEsponja"].ToString(), out int delayEsponja))
-									LogManager.LogInformation("Parâmetro 'DelayEsponja' inválido. Utilizando o valor default '0'.");
+								if (bool.TryParse(reader["HabilitarFormulaPersonalizada"].ToString(), out var habilitarFormulaPersonalizada))
+									objPar.HabilitarFormulaPersonalizada = habilitarFormulaPersonalizada;
 
-								objPar.DelayEsponja = delayEsponja;
+								if (bool.TryParse(reader["HabilitarTesteRecipiente"].ToString(), out var habilitarTesteRecipiente))
+									objPar.HabilitarTesteRecipiente = habilitarTesteRecipiente;
 
-                                if (!int.TryParse(reader["IdIdioma"].ToString(), out int idIdioma))
-                                {
-                                    LogManager.LogInformation("Parâmetro 'IdIdioma' inválido. Utilizando o valor default '1'.");
-                                    idIdioma = 1;
-                                }
+                                if (bool.TryParse(reader["HabilitarIdentificacaoCopo"].ToString(), out var habilitarIdentificacaoCopo))
+                                    objPar.HabilitarIdentificacaoCopo = habilitarIdentificacaoCopo;
 
-								objPar.IdIdioma = idIdioma;
+                                if (bool.TryParse(reader["TreinamentoCal"].ToString(), out var treinamentoCal))
+                                    objPar.TreinamentoCal = treinamentoCal;
 
-								if (!bool.TryParse(reader["ViewMessageProc"].ToString(), out bool viewMessageProc))
-									LogManager.LogInformation("Parâmetro 'ViewMessageProc' inválido. Utilizando o valor default 'false'.");
+                                if (int.TryParse(reader["DelayEsponja"].ToString(), out var delayEsponja))
+                                    objPar.DelayEsponja = delayEsponja;
 
-								objPar.ViewMessageProc = viewMessageProc;
+                                if (int.TryParse(reader["IdIdioma"].ToString(), out var idIdioma))
+                                    objPar.IdIdioma = idIdioma;
 
-								if (!int.TryParse(reader["IdDispositivo"].ToString(), out int idDispositivo))
-								{
-									LogManager.LogInformation("Parâmetro 'IdDispositivo' inválido. Utilizando o valor default '1'.");
-									idIdioma = 1;
-								}
+                                if (bool.TryParse(reader["ViewMessageProc"].ToString(), out var viewMessageProc))
+                                    objPar.ViewMessageProc = viewMessageProc;
 
-								objPar.IdDispositivo = idDispositivo;                                
-                                objPar.HabilitarPurgaIndividual = Convert.ToBoolean(reader["HabilitarPurgaIndividual"].ToString());
-                                objPar.HabilitarTouchScrenn = Convert.ToBoolean(reader["HabilitarTouchScrenn"].ToString());
-                                objPar.IdDispositivo2 = Convert.ToInt32(reader["IdDispositivo2"].ToString());
-                                objPar.NomeDispositivo = reader["NomeDispositivo"].ToString();
-                                objPar.NomeDispositivo2 = reader["NomeDispositivo2"].ToString();
-                                objPar.VersaoIoconnect = reader["VersaoIoconnect"].ToString();
-                                objPar.HabilitarDispensaSequencialP1 = Convert.ToBoolean(reader["HabilitarDispensaSequencialP1"].ToString());
-                                objPar.HabilitarDispensaSequencialP2 = Convert.ToBoolean(reader["HabilitarDispensaSequencialP2"].ToString());
+								if (int.TryParse(reader["IdDispositivo"].ToString(), out var idDispositivo))
+								    objPar.IdDispositivo = idDispositivo;
 
-								if (!int.TryParse(reader["QtdTentativasConexao"].ToString(), out int qtdTentativasConexao))
-								{
-									LogManager.LogInformation("Parâmetro 'QtdTentativasConexao' inválido. Utilizando o valor default '1'.");
-									qtdTentativasConexao = 1;
-								}
+								if (bool.TryParse(reader["HabilitarPurgaIndividual"].ToString(), out var habilitarPurgaIndividual))
+									objPar.HabilitarPurgaIndividual = habilitarPurgaIndividual;
 
-                                objPar.QtdTentativasConexao = qtdTentativasConexao;
+								if (bool.TryParse(reader["HabilitarTouchScrenn"].ToString(), out var habilitarTouchScrenn))
+									objPar.HabilitarTouchScrenn = habilitarTouchScrenn;
 
-								if (!bool.TryParse(reader["HabLimpBicos"].ToString(), out bool habLimpBicos))
-									LogManager.LogInformation("Parâmetro 'HabLimpBicos' inválido. Utilizando o valor default 'false'.");
+								if (int.TryParse(reader["IdDispositivo2"].ToString(), out var idDispositivo2))
+									objPar.IdDispositivo2 = idDispositivo2;
 
-                                objPar.HabLimpBicos = habLimpBicos;
+                                if (!string.IsNullOrWhiteSpace(reader["NomeDispositivo"].ToString()))
+                                    objPar.NomeDispositivo = reader["NomeDispositivo"].ToString();
 
-								if (!int.TryParse(reader["DelayLimpBicos"].ToString(), out int delayLimpBicos))
-								{
-									LogManager.LogInformation("Parâmetro 'DelayLimpBicos' inválido. Utilizando o valor default '1'.");
-									delayLimpBicos = 1;
-								}
+								if (!string.IsNullOrWhiteSpace(reader["NomeDispositivo2"].ToString()))
+									objPar.NomeDispositivo2 = reader["NomeDispositivo2"].ToString();
 
-                                objPar.DelayLimpBicos = delayLimpBicos;
+								if (!string.IsNullOrWhiteSpace(reader["VersaoIoconnect"].ToString()))
+									objPar.VersaoIoconnect = reader["VersaoIoconnect"].ToString();
 
-								if (!int.TryParse(reader["TipoLimpBicos"].ToString(), out int tipoLimpBicos))
-								{
-									LogManager.LogInformation("Parâmetro 'TipoLimpBicos' inválido. Utilizando o valor default '1'.");
-									tipoLimpBicos = 1;
-								}
+								if (bool.TryParse(reader["HabilitarDispensaSequencialP1"].ToString(), out var habilitarDispensaSequencialP1))
+									objPar.HabilitarDispensaSequencialP1 = habilitarDispensaSequencialP1;
 
-                                objPar.TipoLimpBicos = tipoLimpBicos;
+								if (bool.TryParse(reader["HabilitarDispensaSequencialP2"].ToString(), out var habilitarDispensaSequencialP2))
+									objPar.HabilitarDispensaSequencialP2 = habilitarDispensaSequencialP2;
 
-								if (!int.TryParse(reader["TipoDosagemExec"].ToString(), out int tipoDosagemExec))
-								    LogManager.LogInformation("Parâmetro 'TipoDosagemExec' inválido. Utilizando o valor default '0'.");
-								
-                                objPar.TipoDosagemExec = tipoDosagemExec;
+								if (int.TryParse(reader["QtdTentativasConexao"].ToString(), out var qtdTentativasConexao))
+								    objPar.QtdTentativasConexao = qtdTentativasConexao;
 
-                                #endregion
+                                if (bool.TryParse(reader["HabLimpBicos"].ToString(), out var habLimpBicos))
+                                    objPar.HabLimpBicos = habLimpBicos;
 
-                                #region DAT
+								if (int.TryParse(reader["DelayLimpBicos"].ToString(), out var delayLimpBicos))
+								    objPar.DelayLimpBicos = delayLimpBicos;
 
-                                objPar.PathMonitoramentoDAT = reader["PathDAT"].ToString();
-                                objPar.PathRepositorioDAT = reader["PathRepositorioDAT"].ToString();
-                                objPar.PadraoConteudoDAT = Convert.ToInt32(reader["PadraoConteudoDAT"].ToString());
-                                objPar.BasePosicaoCircuitoDAT = Convert.ToInt32(reader["BasePosicaoCircuitoDAT"].ToString());
-                                objPar.UtilizarCorrespondenciaDAT = Convert.ToBoolean(reader["UtilizarCorrespondenciaDAT"].ToString());
-                                objPar.DesabilitarInterfaceDispensaSequencial = Convert.ToBoolean(reader["DesabilitarInterfaceDispensaSequencial"].ToString());
-                                objPar.DesabilitarInterfaceDispensaSimultanea = Convert.ToBoolean(reader["DesabilitarInterfaceDispensaSimultanea"].ToString());
-                                objPar.DesabilitarInterfaceInicializacaoCircuito = Convert.ToBoolean(reader["DesabilitarInterfaceInicializacaoCircuito"].ToString());
-                                objPar.DesabilitarInterfacePurga = Convert.ToBoolean(reader["DesabilitarInterfacePurga"].ToString());
+								if (int.TryParse(reader["TipoLimpBicos"].ToString(), out var tipoLimpBicos))
+								    objPar.TipoLimpBicos = tipoLimpBicos;
 
-                                //Versão 19
-                                objPar.PathMonitoramentoFilaDAT = reader["PathFilaDAT"].ToString();
-                                
-                                if (!bool.TryParse(reader["DesabilitarMonitoramentoFilaDAT"].ToString(), out bool desabilitarMonitoramentoFilaDAT))
-									LogManager.LogInformation("Parâmetro 'DesabilitarMonitoramentoFilaDAT' inválido. Utilizando o valor default 'false'.");
+                                if (int.TryParse(reader["TipoDosagemExec"].ToString(), out var tipoDosagemExec))
+                                    objPar.TipoDosagemExec = tipoDosagemExec;
 
-								objPar.DesabilitarMonitoramentoFilaDAT = desabilitarMonitoramentoFilaDAT;
+								#endregion
 
-								if (!int.TryParse(reader["DelayMonitoramentoFilaDAT"].ToString(), out int delayMonitoramentoFilaDAT))
-									LogManager.LogInformation("Parâmetro 'DelayMonitoramentoFilaDAT' inválido. Utilizando o valor default '0'.");
+								#region DAT
 
-								objPar.DelayMonitoramentoFilaDAT = delayMonitoramentoFilaDAT;
+								if (!string.IsNullOrWhiteSpace(reader["PathDAT"].ToString()))
+									objPar.PathMonitoramentoDAT = reader["PathDAT"].ToString();
 
-                                //Versão 25
-                                objPar.DesabilitarVolumeMinimoDat = Convert.ToBoolean(reader["DesabilitarVolumeMinimoDat"].ToString());
-                                objPar.VolumeMinimoDat = double.Parse(reader["VolumeMinimoDat"].ToString(), System.Globalization.CultureInfo.InvariantCulture);
+								if (!string.IsNullOrWhiteSpace(reader["PathRepositorioDAT"].ToString()))
+									objPar.PathRepositorioDAT = reader["PathRepositorioDAT"].ToString();
 
-                                //Versão 29
-                                objPar.Dat_06_BAS_Pref = reader["Dat_06_BAS_Pref"].ToString();
-                                objPar.Dat_06_CAN_Pref = reader["Dat_06_CAN_Pref"].ToString();
-                                objPar.Dat_06_FRM_Pref = reader["Dat_06_FRM_Pref"].ToString();
-                                objPar.Dat_06_FRM_SEP = reader["Dat_06_FRM_SEP"].ToString();
-                                objPar.Dat_06_UNT_Pref = reader["Dat_06_UNT_Pref"].ToString();
+								if (int.TryParse(reader["PadraoConteudoDAT"].ToString(), out var padraoConteudoDAT))
+									objPar.PadraoConteudoDAT = padraoConteudoDAT;
 
-                                objPar.Dat_06_CAN_1_IsPonto = reader["Dat_06_CAN_1_IsPonto"].ToString() == "0" ? 0 : 1 ;
-                                objPar.Dat_06_FRM_1_IsPonto= reader["Dat_06_FRM_1_IsPonto"].ToString() == "0" ? 0 : 1;
-                                objPar.Dat_06_UNT_1_IsPonto = reader["Dat_06_UNT_1_IsPonto"].ToString() == "0" ? 0 : 1;
-                                objPar.Dat_06_UNT_2_IsPonto= reader["Dat_06_UNT_2_IsPonto"].ToString() == "0" ? 0 : 1;
-                                objPar.Dat_06_BAS_1_IsPonto = reader["Dat_06_BAS_1_IsPonto"].ToString() == "0" ? 0 : 1;
+								if (int.TryParse(reader["BasePosicaoCircuitoDAT"].ToString(), out var basePosicaoCircuitoDAT))
+									objPar.BasePosicaoCircuitoDAT = Convert.ToInt32(reader["BasePosicaoCircuitoDAT"].ToString());
 
-                                objPar.Dat_06_BAS_Habilitado = reader["Dat_06_BAS_Habilitado"].ToString() == "0" ? 0 : 1;
+								if (bool.TryParse(reader["UtilizarCorrespondenciaDAT"].ToString(), out var utilizarCorrespondenciaDAT))
+									objPar.UtilizarCorrespondenciaDAT = utilizarCorrespondenciaDAT;
 
-                                //Versão 32
-                                objPar.Dat_05_BAS_Pref = reader["Dat_05_BAS_Pref"].ToString();
-                                objPar.Dat_05_CAN_Pref = reader["Dat_05_CAN_Pref"].ToString();
-                                objPar.Dat_05_FRM_Pref = reader["Dat_05_FRM_Pref"].ToString();
-                                objPar.Dat_05_FRM_SEP = reader["Dat_05_FRM_SEP"].ToString();
-                                objPar.Dat_05_UNT_Pref = reader["Dat_05_UNT_Pref"].ToString();
+								if (bool.TryParse(reader["DesabilitarInterfaceDispensaSequencial"].ToString(), out var desabilitarInterfaceDispensaSequencial))
+									objPar.DesabilitarInterfaceDispensaSequencial = desabilitarInterfaceDispensaSequencial;
 
-                                objPar.Dat_05_CAN_1_IsPonto = reader["Dat_05_CAN_1_IsPonto"].ToString() == "0" ? 0 : 1;
-                                objPar.Dat_05_FRM_1_IsPonto = reader["Dat_05_FRM_1_IsPonto"].ToString() == "0" ? 0 : 1;
-                                objPar.Dat_05_UNT_1_IsPonto = reader["Dat_05_UNT_1_IsPonto"].ToString() == "0" ? 0 : 1;
-                                objPar.Dat_05_UNT_2_IsPonto = reader["Dat_05_UNT_2_IsPonto"].ToString() == "0" ? 0 : 1;
-                                objPar.Dat_05_BAS_1_IsPonto = reader["Dat_05_BAS_1_IsPonto"].ToString() == "0" ? 0 : 1;
+								if (bool.TryParse(reader["DesabilitarInterfaceDispensaSimultanea"].ToString(), out var desabilitarInterfaceDispensaSimultanea))
+									objPar.DesabilitarInterfaceDispensaSimultanea = desabilitarInterfaceDispensaSimultanea;
 
-                                objPar.Dat_05_BAS_Habilitado = reader["Dat_05_BAS_Habilitado"].ToString() == "0" ? 0 : 1;
+								if (bool.TryParse(reader["DesabilitarInterfaceInicializacaoCircuito"].ToString(), out var desabilitarInterfaceInicializacaoCircuito))
+									objPar.DesabilitarInterfaceInicializacaoCircuito = desabilitarInterfaceInicializacaoCircuito;
+
+								if (bool.TryParse(reader["DesabilitarInterfacePurga"].ToString(), out var desabilitarInterfacePurga))
+									objPar.DesabilitarInterfacePurga = desabilitarInterfacePurga;
+
+								//Versão 19
+								if (!string.IsNullOrWhiteSpace(reader["PathFilaDAT"].ToString()))
+									objPar.PathMonitoramentoFilaDAT = reader["PathFilaDAT"].ToString();
+
+                                if (bool.TryParse(reader["DesabilitarMonitoramentoFilaDAT"].ToString(), out var desabilitarMonitoramentoFilaDAT))
+                                    objPar.DesabilitarMonitoramentoFilaDAT = desabilitarMonitoramentoFilaDAT;
+
+                                if (int.TryParse(reader["DelayMonitoramentoFilaDAT"].ToString(), out var delayMonitoramentoFilaDAT))
+                                    objPar.DelayMonitoramentoFilaDAT = delayMonitoramentoFilaDAT;
+
+								//Versão 25
+								if (bool.TryParse(reader["DesabilitarVolumeMinimoDat"].ToString(), out var desabilitarVolumeMinimoDat))
+									objPar.DesabilitarVolumeMinimoDat = desabilitarVolumeMinimoDat;
+
+                                if (double.TryParse(reader["VolumeMinimoDat"].ToString(), System.Globalization.CultureInfo.InvariantCulture, out var volumeMinimoDat))
+                                    objPar.VolumeMinimoDat = volumeMinimoDat;
+
+								//Versão 29
+								if (!string.IsNullOrWhiteSpace(reader["Dat_06_BAS_Pref"].ToString()))
+									objPar.Dat_06_BAS_Pref = reader["Dat_06_BAS_Pref"].ToString();
+
+								if (!string.IsNullOrWhiteSpace(reader["Dat_06_CAN_Pref"].ToString()))
+									objPar.Dat_06_CAN_Pref = reader["Dat_06_CAN_Pref"].ToString();
+
+								if (!string.IsNullOrWhiteSpace(reader["Dat_06_FRM_Pref"].ToString()))
+									objPar.Dat_06_FRM_Pref = reader["Dat_06_FRM_Pref"].ToString();
+
+								if (!string.IsNullOrWhiteSpace(reader["Dat_06_FRM_SEP"].ToString()))
+									objPar.Dat_06_FRM_SEP = reader["Dat_06_FRM_SEP"].ToString();
+
+								if (!string.IsNullOrWhiteSpace(reader["Dat_06_UNT_Pref"].ToString()))
+									objPar.Dat_06_UNT_Pref = reader["Dat_06_UNT_Pref"].ToString();
+
+								if (!string.IsNullOrWhiteSpace(reader["Dat_06_CAN_1_IsPonto"].ToString()))
+									objPar.Dat_06_CAN_1_IsPonto = reader["Dat_06_CAN_1_IsPonto"].ToString() == "0" ? 0 : 1 ;
+
+								if (!string.IsNullOrWhiteSpace(reader["Dat_06_FRM_1_IsPonto"].ToString()))
+									objPar.Dat_06_FRM_1_IsPonto= reader["Dat_06_FRM_1_IsPonto"].ToString() == "0" ? 0 : 1;
+
+								if (!string.IsNullOrWhiteSpace(reader["Dat_06_UNT_1_IsPonto"].ToString()))
+									objPar.Dat_06_UNT_1_IsPonto = reader["Dat_06_UNT_1_IsPonto"].ToString() == "0" ? 0 : 1;
+
+								if (!string.IsNullOrWhiteSpace(reader["Dat_06_UNT_2_IsPonto"].ToString()))
+									objPar.Dat_06_UNT_2_IsPonto= reader["Dat_06_UNT_2_IsPonto"].ToString() == "0" ? 0 : 1;
+
+								if (!string.IsNullOrWhiteSpace(reader["Dat_06_BAS_1_IsPonto"].ToString()))
+									objPar.Dat_06_BAS_1_IsPonto = reader["Dat_06_BAS_1_IsPonto"].ToString() == "0" ? 0 : 1;
+
+								if (!string.IsNullOrWhiteSpace(reader["Dat_06_BAS_Habilitado"].ToString()))
+									objPar.Dat_06_BAS_Habilitado = reader["Dat_06_BAS_Habilitado"].ToString() == "0" ? 0 : 1;
+
+								//Versão 32
+								if (!string.IsNullOrWhiteSpace(reader["Dat_05_BAS_Pref"].ToString()))
+									objPar.Dat_05_BAS_Pref = reader["Dat_05_BAS_Pref"].ToString();
+
+								if (!string.IsNullOrWhiteSpace(reader["Dat_05_CAN_Pref"].ToString()))
+									objPar.Dat_05_CAN_Pref = reader["Dat_05_CAN_Pref"].ToString();
+
+								if (!string.IsNullOrWhiteSpace(reader["Dat_05_FRM_Pref"].ToString()))
+									objPar.Dat_05_FRM_Pref = reader["Dat_05_FRM_Pref"].ToString();
+
+								if (!string.IsNullOrWhiteSpace(reader["Dat_05_FRM_SEP"].ToString()))
+									objPar.Dat_05_FRM_SEP = reader["Dat_05_FRM_SEP"].ToString();
+
+								if (!string.IsNullOrWhiteSpace(reader["Dat_05_UNT_Pref"].ToString()))
+									objPar.Dat_05_UNT_Pref = reader["Dat_05_UNT_Pref"].ToString();
+
+								if (!string.IsNullOrWhiteSpace(reader["Dat_05_CAN_1_IsPonto"].ToString()))
+									objPar.Dat_05_CAN_1_IsPonto = reader["Dat_05_CAN_1_IsPonto"].ToString() == "0" ? 0 : 1;
+
+								if (!string.IsNullOrWhiteSpace(reader["Dat_05_FRM_1_IsPonto"].ToString()))
+									objPar.Dat_05_FRM_1_IsPonto = reader["Dat_05_FRM_1_IsPonto"].ToString() == "0" ? 0 : 1;
+
+								if (!string.IsNullOrWhiteSpace(reader["Dat_05_UNT_1_IsPonto"].ToString()))
+									objPar.Dat_05_UNT_1_IsPonto = reader["Dat_05_UNT_1_IsPonto"].ToString() == "0" ? 0 : 1;
+
+								if (!string.IsNullOrWhiteSpace(reader["Dat_05_UNT_2_IsPonto"].ToString()))
+									objPar.Dat_05_UNT_2_IsPonto = reader["Dat_05_UNT_2_IsPonto"].ToString() == "0" ? 0 : 1;
+
+								if (!string.IsNullOrWhiteSpace(reader["Dat_05_BAS_1_IsPonto"].ToString()))
+									objPar.Dat_05_BAS_1_IsPonto = reader["Dat_05_BAS_1_IsPonto"].ToString() == "0" ? 0 : 1;
+
+								if (!string.IsNullOrWhiteSpace(reader["Dat_05_BAS_Habilitado"].ToString()))
+									objPar.Dat_05_BAS_Habilitado = reader["Dat_05_BAS_Habilitado"].ToString() == "0" ? 0 : 1;
 
                                 #region Version 56
 
-                                if (!bool.TryParse(reader["DisablePopUpDispDat"].ToString(), out bool disablePopUpDispDat))
-                                {
-                                    LogManager.LogInformation("Parâmetro 'DisablePopUpDispDat' inválido. Utilizando o valor default 'true'.");
-                                    disablePopUpDispDat = true;
-								}
+                                if (bool.TryParse(reader["DisablePopUpDispDat"].ToString(), out var disablePopUpDispDat))
+                                    objPar.DisablePopUpDispDat = disablePopUpDispDat;
 
-                                objPar.DisablePopUpDispDat = disablePopUpDispDat;
+                                #endregion
+                                #endregion
 
-								#endregion
-								#endregion
+                                #region Version 46
 
-								#region Version 46
-
-								if (!int.TryParse(reader["DelayUDCP"].ToString(), out int delayUDCP))
-									LogManager.LogInformation("Parâmetro 'DelayUDCP' inválido. Utilizando o valor default '0'.");
-
-								objPar.DelayUDCP = delayUDCP;
+                                if (int.TryParse(reader["DelayUDCP"].ToString(), out var delayUDCP))
+                                    objPar.DelayUDCP = delayUDCP;
 
 								if (objPar.DelayUDCP < 0)
 								{
 									objPar.DelayUDCP = 0;
 								}
 
-								objPar.CreateFileTmpUDCP = reader["CreateFileTmpUDCP"].ToString() == "0" ? 0 : 1;
-                                objPar.ExtFileTmpUDCP = reader["ExtFileTmpUDCP"].ToString();
+								if (!string.IsNullOrWhiteSpace(reader["CreateFileTmpUDCP"].ToString()))
+									objPar.CreateFileTmpUDCP = reader["CreateFileTmpUDCP"].ToString() == "0" ? 0 : 1;
 
-								if (!bool.TryParse(reader["ProcRemoveLataUDCP"].ToString(), out var procRemoveLataUDCP))
-								    LogManager.LogInformation("Parâmetro 'ProcRemoveLataUDCP' inválido. Utilizando o valor default 'false'.");
+								if (!string.IsNullOrWhiteSpace(reader["ExtFileTmpUDCP"].ToString()))
+									objPar.ExtFileTmpUDCP = reader["ExtFileTmpUDCP"].ToString();
 
-								objPar.ProcRemoveLataUDCP = procRemoveLataUDCP;
+                                if (bool.TryParse(reader["ProcRemoveLataUDCP"].ToString(), out var procRemoveLataUDCP))
+                                    objPar.ProcRemoveLataUDCP = procRemoveLataUDCP;
 
                                 #endregion
 
                                 #region Purga
 
                                 if (TimeSpan.TryParse(reader["PrazoExecucaoPurga"].ToString(), out ts))
-                                {
                                     objPar.PrazoExecucaoPurga = ts;
-                                }
 
-                                if (!DateTime.TryParse(reader["DataExecucaoPurga"].ToString(), out DateTime dataExecucaoPurga))
-                                {
-									LogManager.LogInformation($"Parâmetro 'DataExecucaoPurga' inválido. Utilizando o valor default '{DateTime.MinValue}'.");
-                                    dataExecucaoPurga = DateTime.MinValue;
-								}
+								if (DateTime.TryParse(reader["DataExecucaoPurga"].ToString(), out var dataExecucaoPurga))
+                                    objPar.DataExecucaoPurga = dataExecucaoPurga;
 
-								objPar.DataExecucaoPurga = dataExecucaoPurga;
+                                if(double.TryParse(reader["VolumePurga"].ToString(), System.Globalization.CultureInfo.InvariantCulture, out var volumePurga))
+                                    objPar.VolumePurga = volumePurga;
 
-                                objPar.VolumePurga = double.Parse(reader["VolumePurga"].ToString(), System.Globalization.CultureInfo.InvariantCulture);
+								if (int.TryParse(reader["VelocidadePurga"].ToString(), out var velocidadePurga))
+									objPar.VelocidadePurga = velocidadePurga;
 
-                                objPar.VelocidadePurga = Convert.ToInt32((reader["VelocidadePurga"].ToString()));
+								if (int.TryParse(reader["AceleracaoPurga"].ToString(), out var aceleracaoPurga))
+									objPar.AceleracaoPurga = aceleracaoPurga;
 
-                                objPar.AceleracaoPurga = Convert.ToInt32(reader["AceleracaoPurga"].ToString());
+								if (int.TryParse(reader["DelayPurga"].ToString(), out var delayPurga))
+									objPar.DelayPurga = delayPurga;
 
-                                objPar.DelayPurga = Convert.ToInt32(reader["DelayPurga"].ToString());
+								if (bool.TryParse(reader["ControlarExecucaoPurga"].ToString(), out var controlarExecucaoPurga))
+									objPar.ControlarExecucaoPurga = controlarExecucaoPurga;
 
-                                objPar.ControlarExecucaoPurga = Convert.ToBoolean(reader["ControlarExecucaoPurga"].ToString());
-                                objPar.ExigirExecucaoPurga = Convert.ToBoolean(reader["ExigirExecucaoPurga"].ToString());
-                                objPar.PurgaSequencial = Convert.ToBoolean(reader["PurgaSequencial"].ToString());
+								if (bool.TryParse(reader["ExigirExecucaoPurga"].ToString(), out var exigirExecucaoPurga))
+									objPar.ExigirExecucaoPurga = exigirExecucaoPurga;
+
+								if (bool.TryParse(reader["PurgaSequencial"].ToString(), out var purgaSequencial))
+									objPar.PurgaSequencial = purgaSequencial;
 
                                 #endregion
 
                                 #region Controle de volume
 
-                                objPar.VolumeMinimo = double.Parse(reader["VolumeMinimo"].ToString(), System.Globalization.CultureInfo.InvariantCulture);
+                                if (double.TryParse(reader["VolumeMinimo"].ToString(), System.Globalization.CultureInfo.InvariantCulture, out var volumeMinimo))
+                                    objPar.VolumeMinimo = volumeMinimo;
 
-                                objPar.VolumeMaximo = double.Parse(reader["VolumeMaximo"].ToString(), System.Globalization.CultureInfo.InvariantCulture);
+                                if (double.TryParse(reader["VolumeMaximo"].ToString(), System.Globalization.CultureInfo.InvariantCulture, out var volumeMaximo))
+                                    objPar.VolumeMaximo = volumeMaximo;
 
-                                objPar.ControlarNivel = Convert.ToBoolean(reader["ControlarVolume"].ToString());
+								if (bool.TryParse(reader["ControlarVolume"].ToString(), out var controlarVolume))
+									objPar.ControlarNivel = controlarVolume;
 
-                                #endregion
+								#endregion
 
-                                #region Inicialização dos circuitos
+								#region Inicialização dos circuitos
 
-                                objPar.IniPulsoInicial = Convert.ToInt32(reader["IniPulsoInicial"].ToString());
+								if (int.TryParse(reader["IniPulsoInicial"].ToString(), out var iniPulsoInicial))
+									objPar.IniPulsoInicial = iniPulsoInicial;
 
-                                objPar.IniPulsoLimite = Convert.ToInt32(reader["IniPulsoLimite"].ToString());
+								if (int.TryParse(reader["IniPulsoLimite"].ToString(), out var iniPulsoLimite))
+									objPar.IniPulsoLimite = iniPulsoLimite;
 
-                                objPar.IniVariacaoPulso = Convert.ToInt32(reader["IniVariacaoPulso"].ToString());
+								if (int.TryParse(reader["IniVariacaoPulso"].ToString(), out var iniVariacaoPulso))
+									objPar.IniVariacaoPulso = iniVariacaoPulso;
 
-                                objPar.IniStepVariacao = double.Parse(reader["IniStepVariacao"].ToString(), System.Globalization.CultureInfo.InvariantCulture);
+								if (double.TryParse(reader["IniStepVariacao"].ToString(), System.Globalization.CultureInfo.InvariantCulture, out var iniStepVariacao))
+									objPar.IniStepVariacao = iniStepVariacao;
 
-                                objPar.IniVelocidade = Convert.ToInt32(reader["IniVelocidade"].ToString());
+								if (int.TryParse(reader["IniVelocidade"].ToString(), out var iniVelocidade))
+									objPar.IniVelocidade = iniVelocidade;
 
-                                objPar.IniAceleracao = Convert.ToInt32(reader["IniAceleracao"].ToString());
+								if (int.TryParse(reader["IniAceleracao"].ToString(), out var iniAceleracao))
+									objPar.IniAceleracao = iniAceleracao;
 
-                                objPar.IniMovimentoReverso = Convert.ToBoolean(reader["IniMovimentoReverso"].ToString());
+								if (bool.TryParse(reader["IniMovimentoReverso"].ToString(), out var iniMovimentoReverso))
+									objPar.IniMovimentoReverso = iniMovimentoReverso;
 
-                                objPar.InicializarCircuitosPurga = Convert.ToBoolean(reader["InicializarCircuitosPurga"].ToString());
+								if (bool.TryParse(reader["InicializarCircuitosPurga"].ToString(), out var inicializarCircuitosPurga))
+									objPar.InicializarCircuitosPurga = inicializarCircuitosPurga;
 
-                                objPar.InicializarCircuitosPurgaIndividual = Convert.ToBoolean(reader["InicializarCircuitosPurgaIndividual"].ToString());
+								if (bool.TryParse(reader["InicializarCircuitosPurgaIndividual"].ToString(), out var inicializarCircuitosPurgaIndividual))
+									objPar.InicializarCircuitosPurgaIndividual = inicializarCircuitosPurgaIndividual;
 
-                                objPar.QtdeCircuitoGrupo = Convert.ToInt32(reader["QtdeCircuitoGrupo"].ToString());
+								if (int.TryParse(reader["QtdeCircuitoGrupo"].ToString(), out var qtdeCircuitoGrupo))
+									objPar.QtdeCircuitoGrupo = qtdeCircuitoGrupo;
 
-                                #endregion
+								#endregion
 
-                                #region Unidade de medida
+								#region Unidade de medida
 
-                                objPar.ValorShot = double.Parse(reader["ValorShot"].ToString(), System.Globalization.CultureInfo.InvariantCulture);
+								if (double.TryParse(reader["ValorShot"].ToString(), System.Globalization.CultureInfo.InvariantCulture, out var valorShot))
+									objPar.ValorShot = valorShot;
 
-                                objPar.HabilitarShot = Convert.ToBoolean(reader["HabilitarShot"].ToString());
+								if (bool.TryParse(reader["HabilitarShot"].ToString(), out var habilitarShot))
+									objPar.HabilitarShot = habilitarShot;
 
-                                objPar.HabilitarOnca = Convert.ToBoolean(reader["HabilitarOnca"].ToString());
+								if (bool.TryParse(reader["HabilitarOnca"].ToString(), out var habilitarOnca))
+									objPar.HabilitarOnca = habilitarOnca;
 
-                                objPar.HabilitarMililitro = Convert.ToBoolean(reader["HabilitarMililitro"].ToString());
+								if (bool.TryParse(reader["HabilitarMililitro"].ToString(), out var habilitarMililitro))
+									objPar.HabilitarMililitro = habilitarMililitro;
 
-                                objPar.HabilitarGrama = Convert.ToBoolean(reader["HabilitarGrama"].ToString());
+								if (bool.TryParse(reader["HabilitarGrama"].ToString(), out var habilitarGrama))
+									objPar.HabilitarGrama = habilitarGrama;
 
-                                objPar.UnidadeMedidaNivelColorante = Convert.ToInt32(reader["UnidadeMedidaNivelColorante"].ToString());
+								if (int.TryParse(reader["UnidadeMedidaNivelColorante"].ToString(), out var unidadeMedidaNivelColorante))
+									objPar.UnidadeMedidaNivelColorante = unidadeMedidaNivelColorante;
 
-                                if (!int.TryParse(reader["ValorFraction"].ToString(), out int valorFraction))
-                                {
-                                    LogManager.LogInformation("Parâmetro 'ValorFraction' inválido. Utilizando o valor default '800'.");
-                                    valorFraction = 800;
-                                }
-								
-                                objPar.ValorFraction = valorFraction;
+                                if (int.TryParse(reader["ValorFraction"].ToString(), out var valorFraction))
+                                    objPar.ValorFraction = valorFraction;
 
                                 #endregion
 
                                 #region Log
 
-                                objPar.PathLogProcessoDispensa = reader["PathLogProcessoDispensa"].ToString();
+                                if (!string.IsNullOrWhiteSpace(reader["PathLogProcessoDispensa"].ToString()))
+                                    objPar.PathLogProcessoDispensa = reader["PathLogProcessoDispensa"].ToString();
 
-                                objPar.PathLogControleDispensa = reader["PathLogControleDispensa"].ToString();
+								if (!string.IsNullOrWhiteSpace(reader["PathLogControleDispensa"].ToString()))
+									objPar.PathLogControleDispensa = reader["PathLogControleDispensa"].ToString();
 
-                                objPar.HabilitarLogComunicacao = Convert.ToBoolean(reader["HabilitarLogComunicacao"].ToString());
+								if (!string.IsNullOrWhiteSpace(reader["HabilitarLogComunicacao"].ToString()))
+									objPar.HabilitarLogComunicacao = Convert.ToBoolean(reader["HabilitarLogComunicacao"].ToString());
 
-                                objPar.PathLogComunicacao = reader["PathLogComunicacao"].ToString();
+								if (!string.IsNullOrWhiteSpace(reader["PathLogComunicacao"].ToString()))
+									objPar.PathLogComunicacao = reader["PathLogComunicacao"].ToString();
 
-                                if (!bool.TryParse(reader["HabilitarLogAutomateTesterProt"].ToString(), out bool habilitarLogAutomateTesterProt))
-								    LogManager.LogInformation("Parâmetro 'HabilitarLogAutomateTesterProt' inválido. Utilizando o valor default 'false'.");
-								
-                                objPar.HabilitarLogAutomateTesterProt = habilitarLogAutomateTesterProt;
+                                if (bool.TryParse(reader["HabilitarLogAutomateTesterProt"].ToString(), out var habilitarLogAutomateTesterProt))
+                                    objPar.HabilitarLogAutomateTesterProt = habilitarLogAutomateTesterProt;
 
-								if (!bool.TryParse(reader["LogAutomateBackup"].ToString(), out bool logAutomateBackup))
-									LogManager.LogInformation("Parâmetro 'LogAutomateBackup' inválido. Utilizando o valor default 'false'.");
-								
-                                objPar.LogAutomateBackup = logAutomateBackup;
-                                
-                                #endregion
+                                if (bool.TryParse(reader["LogAutomateBackup"].ToString(), out var logAutomateBackup))
+                                    objPar.LogAutomateBackup = logAutomateBackup;
 
-                                #region Monitoramento dos circuitos
+								#endregion
 
-                                objPar.QtdeMonitCircuitoGrupo = Convert.ToInt32(reader["QtdeMonitCircuitoGrupo"].ToString());
+								#region Monitoramento dos circuitos
 
-                                objPar.MonitVelocidade = Convert.ToInt32(reader["MonitVelocidade"].ToString());
+								if (int.TryParse(reader["QtdeMonitCircuitoGrupo"].ToString(), out var qtdeMonitCircuitoGrupo))
+									objPar.QtdeMonitCircuitoGrupo = qtdeMonitCircuitoGrupo;
 
-                                objPar.MonitAceleracao = Convert.ToInt32(reader["MonitAceleracao"].ToString());
+								if (int.TryParse(reader["MonitVelocidade"].ToString(), out var monitVelocidade))
+									objPar.MonitVelocidade = monitVelocidade;
 
-                                objPar.MonitDelay = Convert.ToInt32(reader["MonitDelay"].ToString());
+								if (int.TryParse(reader["MonitAceleracao"].ToString(), out var monitAceleracao))
+									objPar.MonitAceleracao = monitAceleracao;
 
-                                objPar.MonitTimerDelay = Convert.ToInt32(reader["MonitTimerDelay"].ToString());
+								if (int.TryParse(reader["MonitDelay"].ToString(), out var monitDelay))
+									objPar.MonitDelay = monitDelay;
 
-                                objPar.MonitTimerDelayIni = Convert.ToInt32(reader["MonitTimerDelayIni"].ToString());
+								if (int.TryParse(reader["MonitTimerDelay"].ToString(), out var monitTimerDelay))
+									objPar.MonitTimerDelay = monitTimerDelay;
 
-                                objPar.DesabilitarInterfaceMonitCircuito = Convert.ToBoolean(reader["DesabilitarInterfaceMonitCircuito"].ToString());
+								if (int.TryParse(reader["MonitTimerDelayIni"].ToString(), out var monitTimerDelayIni))
+									objPar.MonitTimerDelayIni = monitTimerDelayIni;
 
-                                objPar.DesabilitarProcessoMonitCircuito = Convert.ToBoolean(reader["DesabilitarProcessoMonitCircuito"].ToString());
+								if (bool.TryParse(reader["DesabilitarInterfaceMonitCircuito"].ToString(), out var desabilitarInterfaceMonitCircuito))
+									objPar.DesabilitarInterfaceMonitCircuito = desabilitarInterfaceMonitCircuito;
 
-                                objPar.MonitMovimentoReverso = Convert.ToBoolean(reader["MonitMovimentoReverso"].ToString());
+								if (bool.TryParse(reader["DesabilitarProcessoMonitCircuito"].ToString(), out var desabilitarProcessoMonitCircuito))
+									objPar.DesabilitarProcessoMonitCircuito = desabilitarProcessoMonitCircuito;
 
-                                objPar.MonitPulsos = Convert.ToInt32(reader["MonitPulsos"].ToString());
+								if (bool.TryParse(reader["MonitMovimentoReverso"].ToString(), out var monitMovimentoReverso))
+									objPar.MonitMovimentoReverso = monitMovimentoReverso;
+
+								if (int.TryParse(reader["MonitPulsos"].ToString(), out var monitPulsos))
+									objPar.MonitPulsos = monitPulsos;
 
                                 #endregion
 
                                 #region Producao
 
-                                objPar.TipoProducao = reader["TipoProducao"].ToString();
+                                if (!string.IsNullOrWhiteSpace(reader["TipoProducao"].ToString()))
+                                    objPar.TipoProducao = reader["TipoProducao"].ToString();
 
-                                objPar.IpProducao = reader["IpProducao"].ToString();
+								if (!string.IsNullOrWhiteSpace(reader["IpProducao"].ToString()))
+									objPar.IpProducao = reader["IpProducao"].ToString();
 
-                                objPar.PortaProducao = reader["PortaProducao"].ToString();
+								if (!string.IsNullOrWhiteSpace(reader["PortaProducao"].ToString()))
+									objPar.PortaProducao = reader["PortaProducao"].ToString();
 
-                                objPar.DesabilitaMonitProcessoProducao = Convert.ToBoolean(reader["DesabilitaMonitProcessoProducao"].ToString());
+								if (bool.TryParse(reader["DesabilitaMonitProcessoProducao"].ToString(), out var desabilitaMonitProcessoProducao))
+									objPar.DesabilitaMonitProcessoProducao = desabilitaMonitProcessoProducao;
+
+								#endregion
+
+								#region Sinc Formula
+
+								if (bool.TryParse(reader["DesabilitaMonitSincFormula"].ToString(), out var desabilitaMonitSincFormula))
+									objPar.DesabilitaMonitSincFormula = desabilitaMonitSincFormula;
+
+								if (!string.IsNullOrWhiteSpace(reader["PortaSincFormula"].ToString()))
+									objPar.PortaSincFormula = reader["PortaSincFormula"].ToString();
+
+								if (!string.IsNullOrWhiteSpace(reader["IpSincFormula"].ToString()))
+									objPar.IpSincFormula = reader["IpSincFormula"].ToString();
+
+								if (!string.IsNullOrWhiteSpace(reader["TipoBaseDados"].ToString()))
+									objPar.TipoBaseDados = reader["TipoBaseDados"].ToString();
+
+								if (!string.IsNullOrWhiteSpace(reader["PathBasesDados"].ToString()))
+									objPar.PathBasesDados = reader["PathBasesDados"].ToString();
 
                                 #endregion
 
-                                #region Sinc Formula
-                                
-                                objPar.DesabilitaMonitSincFormula = Convert.ToBoolean(reader["DesabilitaMonitSincFormula"].ToString());
+                                #region sync Token
 
-                                objPar.PortaSincFormula = reader["PortaSincFormula"].ToString();
+                                if (bool.TryParse(reader["DesabilitaMonitSyncToken"].ToString(), out var desabilitaMonitSyncToken))
+									objPar.DesabilitaMonitSyncToken = desabilitaMonitSyncToken;
 
-                                objPar.IpSincFormula = reader["IpSincFormula"].ToString();
+								if (!string.IsNullOrWhiteSpace(reader["TipoEventos"].ToString()))
+									objPar.TipoEventos = reader["TipoEventos"].ToString();
 
-                                objPar.TipoBaseDados = reader["TipoBaseDados"].ToString();
+								if (!string.IsNullOrWhiteSpace(reader["IpSincToken"].ToString()))
+									objPar.IpSincToken = reader["IpSincToken"].ToString();
 
-                                objPar.PathBasesDados = reader["PathBasesDados"].ToString();
+								if (!string.IsNullOrWhiteSpace(reader["PortaSincToken"].ToString()))
+									objPar.PortaSincToken = reader["PortaSincToken"].ToString();
 
-								#endregion
+                                #endregion
 
-								#region sync Token
+                                if (int.TryParse(reader["TimeoutPingTcp"].ToString(), out var timeoutPingTcp))
+                                    objPar.TimeoutPingTcp = timeoutPingTcp;
 
-								if (!bool.TryParse(reader["DesabilitaMonitSyncToken"].ToString(), out bool desabilitaMonitSyncToken))
-									LogManager.LogInformation("Parâmetro 'DesabilitaMonitSyncToken' inválido. Utilizando o valor default 'false'.");
+                                #region sync BkpCalibragem
 
-								objPar.DesabilitaMonitSyncToken = desabilitaMonitSyncToken;
-                                objPar.IpSincToken = reader["IpSincToken"].ToString();
-                                objPar.PortaSincToken = reader["PortaSincToken"].ToString();
-                                objPar.TipoEventos = reader["TipoEventos"].ToString();
+                                if (bool.TryParse(reader["DesabilitaMonitSyncBkpCalibragem"].ToString(), out var desabilitaMonitSyncBkpCalibragem))
+                                    objPar.DesabilitaMonitSyncBkpCalibragem = desabilitaMonitSyncBkpCalibragem;
 
-								#endregion
+								if (!string.IsNullOrWhiteSpace(reader["UrlSincBkpCalibragem"].ToString()))
+									objPar.UrlSincBkpCalibragem = reader["UrlSincBkpCalibragem"].ToString();
 
-                                if (!int.TryParse(reader["TimeoutPingTcp"].ToString(), out var timeoutPingTcp))
-								    LogManager.LogInformation("Parâmetro 'TimeoutPingTcp' inválido. Utilizando o valor default '0'.");
-								
-                                objPar.TimeoutPingTcp = timeoutPingTcp;
+                                #endregion
 
-								#region sync BkpCalibragem
+                                #region Recirculacao
 
-								if (!bool.TryParse(reader["DesabilitaMonitSyncBkpCalibragem"].ToString(), out var desabilitaMonitSyncBkpCalibragem))
-									LogManager.LogInformation("Parâmetro 'DesabilitaMonitSyncBkpCalibragem' inválido. Utilizando o valor default 'false'.");
+                                if (bool.TryParse(reader["HabilitarRecirculacao"].ToString(), out var habilitarRecirculacao))
+                                    objPar.HabilitarRecirculacao = habilitarRecirculacao;
 
-								objPar.DesabilitaMonitSyncBkpCalibragem = desabilitaMonitSyncBkpCalibragem;
-                                objPar.UrlSincBkpCalibragem = reader["UrlSincBkpCalibragem"].ToString();
+                                if (int.TryParse(reader["DelayMonitRecirculacao"].ToString(), out var delayMonitRecirculacao))
+                                    objPar.DelayMonitRecirculacao = delayMonitRecirculacao;
 
-								#endregion
+                                #endregion
 
-								#region Recirculacao
+                                #region Placa Movimentacao
 
-								if (!bool.TryParse(reader["HabilitarRecirculacao"].ToString(), out var habilitarRecirculacao))
-									LogManager.LogInformation("Parâmetro 'HabilitarRecirculacao' inválido. Utilizando o valor default 'false'.");
+                                if (int.TryParse(reader["Address_PlacaMov"].ToString(), out var addressPlacaMov))
+                                    objPar.Address_PlacaMov = addressPlacaMov;
 
-								objPar.HabilitarRecirculacao = habilitarRecirculacao;
+                                if (!string.IsNullOrWhiteSpace(reader["NomeDispositivo_PlacaMov"].ToString()))
+                                    objPar.NomeDispositivo_PlacaMov = reader["NomeDispositivo_PlacaMov"].ToString();
 
-								if (!int.TryParse(reader["DelayMonitRecirculacao"].ToString(), out var delayMonitRecirculacao))
-									LogManager.LogInformation("Parâmetro 'DelayMonitRecirculacao' inválido. Utilizando o valor default '0'.");
+                                if (int.TryParse(reader["DelayAlertaPlacaMov"].ToString(), out var delayAlertaPlacaMov))
+                                    objPar.DelayAlertaPlacaMov = delayAlertaPlacaMov;
 
-								objPar.DelayMonitRecirculacao = delayMonitRecirculacao;
+                                #endregion
 
-								#endregion
+                                #region RecirculacaoAuto
 
-								#region Placa Movimentacao
+                                if (bool.TryParse(reader["HabilitarRecirculacaoAuto"].ToString(), out var habilitarRecirculacaoAuto))
+                                    objPar.HabilitarRecirculacaoAuto = habilitarRecirculacaoAuto;
 
-								if (!int.TryParse(reader["Address_PlacaMov"].ToString(), out var addressPlacaMov))
-									LogManager.LogInformation("Parâmetro 'Address_PlacaMov' inválido. Utilizando o valor default '0'.");
+                                if (int.TryParse(reader["DelayMonitRecirculacaoAuto"].ToString(), out var delayMonitRecirculacaoAuto))
+                                    objPar.DelayMonitRecirculacaoAuto = delayMonitRecirculacaoAuto;
 
-								objPar.Address_PlacaMov = addressPlacaMov;
+                                if (int.TryParse(reader["DelayNotificacaotRecirculacaoAuto"].ToString(), out var delayNotificacaotRecirculacaoAuto))
+                                    objPar.DelayNotificacaotRecirculacaoAuto = delayNotificacaotRecirculacaoAuto;
 
-                                objPar.NomeDispositivo_PlacaMov = reader["NomeDispositivo_PlacaMov"].ToString();
-
-								if (!int.TryParse(reader["DelayAlertaPlacaMov"].ToString(), out var delayAlertaPlacaMov))
-									LogManager.LogInformation("Parâmetro 'DelayAlertaPlacaMov' inválido. Utilizando o valor default '0'.");
-
-								objPar.DelayAlertaPlacaMov = delayAlertaPlacaMov;
-
-								#endregion
-
-								#region RecirculacaoAuto
-
-								if (!bool.TryParse(reader["HabilitarRecirculacaoAuto"].ToString(), out var habilitarRecirculacaoAuto))
-									LogManager.LogInformation("Parâmetro 'HabilitarRecirculacaoAuto' inválido. Utilizando o valor default 'false'.");
-
-								objPar.HabilitarRecirculacaoAuto = habilitarRecirculacaoAuto;
-
-								if (!int.TryParse(reader["DelayMonitRecirculacaoAuto"].ToString(), out var delayMonitRecirculacaoAuto))
-									LogManager.LogInformation("Parâmetro 'DelayMonitRecirculacaoAuto' inválido. Utilizando o valor default '0'.");
-
-								objPar.DelayMonitRecirculacaoAuto = delayMonitRecirculacaoAuto;
-
-								if (!int.TryParse(reader["DelayNotificacaotRecirculacaoAuto"].ToString(), out var delayNotificacaotRecirculacaoAuto))
-									LogManager.LogInformation("Parâmetro 'DelayNotificacaotRecirculacaoAuto' inválido. Utilizando o valor default '0'.");
-
-								objPar.DelayNotificacaotRecirculacaoAuto = delayNotificacaotRecirculacaoAuto;
-
-                                if (!int.TryParse(reader["QtdNotificacaotRecirculacaoAuto"].ToString(), out var qtdNotificacaotRecirculacaoAuto))
-                                {
-                                    LogManager.LogInformation("Parâmetro 'QtdNotificacaotRecirculacaoAuto' inválido. Utilizando o valor default '1'.");
-									qtdNotificacaotRecirculacaoAuto = 1;
-								}
-
-								objPar.QtdNotificacaotRecirculacaoAuto = qtdNotificacaotRecirculacaoAuto;
+                                if (int.TryParse(reader["QtdNotificacaotRecirculacaoAuto"].ToString(), out var qtdNotificacaotRecirculacaoAuto))
+                                    objPar.QtdNotificacaotRecirculacaoAuto = qtdNotificacaotRecirculacaoAuto;
 
                                 #endregion
 
                                 #region LogBD
 
-                                if (!bool.TryParse(reader["LogBD"].ToString(), out var logBD))
-                                {
-                                    LogManager.LogInformation("Parâmetro 'LogBD' inválido. Utilizando o valor default 'true'.");
-                                    logBD = true;
-								}
+                                if (bool.TryParse(reader["LogBD"].ToString(), out var logBD))
+                                    objPar.LogBD = logBD;
 
-								objPar.LogBD = logBD;
-                                
                                 #endregion
-                                
-                                objPar.NameRemoteAccess = reader["NameRemoteAccess"].ToString();
 
-                                if (!int.TryParse(reader["TempoReciAuto"].ToString(), out int tempoReciAuto))
-								    LogManager.LogInformation("Parâmetro 'TempoReciAuto' inválido. Utilizando o valor default '0'.");
-								
-                                objPar.TempoReciAuto = tempoReciAuto;
+                                if (!string.IsNullOrWhiteSpace(reader["NameRemoteAccess"].ToString()))
+                                    objPar.NameRemoteAccess = reader["NameRemoteAccess"].ToString();
 
-								if (!bool.TryParse(reader["LogStatusMaquina"].ToString(), out bool logStatusMaquina))
-									LogManager.LogInformation("Parâmetro 'LogStatusMaquina' inválido. Utilizando o valor default 'false'.");
-								
-                                objPar.LogStatusMaquina = logStatusMaquina;
+								if (int.TryParse(reader["TempoReciAuto"].ToString(), out int tempoReciAuto))
+								    objPar.TempoReciAuto = tempoReciAuto;
+
+                                if (bool.TryParse(reader["LogStatusMaquina"].ToString(), out bool logStatusMaquina))
+                                    objPar.LogStatusMaquina = logStatusMaquina;
                                 
                                 break;
                             }
