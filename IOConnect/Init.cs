@@ -241,33 +241,39 @@ namespace Percolore.IOConnect
             //Cria cultura padrão
             CultureInfo Culture = new CultureInfo("pt-BR");
 
-            //Personaliza itens da cultura padrão
-            Culture.NumberFormat.NumberDecimalSeparator = ".";
-            Culture.NumberFormat.NumberGroupSeparator = "";
-            Culture.NumberFormat.PercentDecimalSeparator = ".";
-            Culture.NumberFormat.PercentGroupSeparator = "";
-            Culture.NumberFormat.CurrencySymbol = "R$";
-
             //Recupera idioma selecionado pelo usuário
             Idioma idioma = (Idioma)Util.ObjectParametros.Load().IdIdioma;
             switch (idioma)
             {
                 case Idioma.Español:
                     {
-                        Culture.NumberFormat.CurrencySymbol = "$";
-                        CultureInfo.DefaultThreadCurrentUICulture = new CultureInfo("es");
+						Culture = new CultureInfo("es");
+						Culture.NumberFormat.CurrencySymbol = "$";
                         break;
                     }
+                case Idioma.English:
+                    {
+						Culture = new CultureInfo("en-US");
+						Culture.NumberFormat.CurrencySymbol = "$";
+						break;
+					}
+                case Idioma.Português:
                 default:
                     {
-                        CultureInfo.DefaultThreadCurrentUICulture = Culture;
-                        break;
+						//Personaliza itens da cultura padrão
+						Culture.NumberFormat.NumberDecimalSeparator = ".";
+						Culture.NumberFormat.NumberGroupSeparator = "";
+						Culture.NumberFormat.PercentDecimalSeparator = ".";
+						Culture.NumberFormat.PercentGroupSeparator = "";
+						Culture.NumberFormat.CurrencySymbol = "R$";
+						break;
                     }
             }
 
             //Define culture utilizada pela aplicação
             CultureInfo.DefaultThreadCurrentCulture = Culture;
-        }
+			CultureInfo.DefaultThreadCurrentUICulture = Culture;
+		}
 
         /// <summary>
         /// Valida se número serial foi informado e caso não exibe interface

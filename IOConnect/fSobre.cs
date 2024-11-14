@@ -121,9 +121,11 @@ namespace Percolore.IOConnect
         {
             Util.ObjectParametros.SetIdIdioma(cboIdioma.SelectedIndex + 1);
             Util.ObjectParametros.InitLoad();
-            Util.ObjectMensagem.LoadMessage();
-            Init.DefineCultura();
-            Globalizar();
+			this.parametros = Util.ObjectParametros.Load();
+			Init.DefineCultura();
+			Negocio.IdiomaResx.GetIDiomaREsx(parametros.IdIdioma); // Reload do idioma para o sistema em geral
+			Util.ObjectMensagem.LoadMessage();
+			Globalizar(); // Reload do idioma para a tela Sobre
         }       
 
         #endregion
