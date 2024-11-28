@@ -167,7 +167,7 @@ namespace Percolore.Core.UserControl
         public double ToDouble()
         {
             double outDouble = 0;
-            double.TryParse(Text, out outDouble);
+            double.TryParse(Text, NumberStyles.Any, CultureInfo.InvariantCulture, out outDouble);
             return outDouble;
         }
 

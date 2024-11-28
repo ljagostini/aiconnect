@@ -7,6 +7,7 @@ using Percolore.Core.UserControl;
 using Percolore.Core.Util;
 using Percolore.IOConnect.Util;
 using System.Data;
+using System.Globalization;
 using System.IO.Ports;
 using System.Reflection;
 using System.Resources;
@@ -4274,7 +4275,7 @@ namespace Percolore.IOConnect
                     else if (e.ColumnIndex == 6 || e.ColumnIndex == 7)
                     {
                         double _d = 0;
-                        if (!double.TryParse(e.FormattedValue.ToString(), out _d))
+                        if (!double.TryParse(e.FormattedValue.ToString(), NumberStyles.Any, CultureInfo.InvariantCulture, out _d))
                         {
                             dgvCalibracao.Rows[e.RowIndex].ErrorText = "Erro campo inválido!";
                             e.Cancel = true;
@@ -4899,7 +4900,7 @@ namespace Percolore.IOConnect
                 else if (e.ColumnIndex == 3)
                 {
                     double _d = 0;
-                    if (!double.TryParse(e.FormattedValue.ToString(), out _d))
+                    if (!double.TryParse(e.FormattedValue.ToString(), NumberStyles.Any, CultureInfo.InvariantCulture, out _d))
                     {
                         dgvCalibracao.Rows[e.RowIndex].ErrorText = "Erro campo inválido!";
                         e.Cancel = true;

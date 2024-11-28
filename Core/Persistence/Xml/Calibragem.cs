@@ -74,21 +74,21 @@ namespace Percolore.Core.Persistence.Xml
 				atributoXml = v.Attribute("Volume");
                 if (atributoXml != null)
                 {
-                    double.TryParse(atributoXml.Value, out double volume);
+                    double.TryParse(atributoXml.Value, NumberStyles.Any, CultureInfo.InvariantCulture, out double volume);
                     Volume = volume;
                 }
 
 				atributoXml = v.Attribute("MassaMedia");
                 if (atributoXml != null)
                 {
-                    double.TryParse(atributoXml.Value, out double massaMedia);
+                    double.TryParse(atributoXml.Value, NumberStyles.Any, CultureInfo.InvariantCulture, out double massaMedia);
                     MassaMedia = massaMedia;
                 }
 
 				atributoXml = v.Attribute("DesvioMedio");
                 if (atributoXml != null)
                 {
-                    double.TryParse(atributoXml.Value, out double desvioMedio);
+                    double.TryParse(atributoXml.Value, NumberStyles.Any, CultureInfo.InvariantCulture, out double desvioMedio);
                     DesvioMedio = desvioMedio;
                 }
 

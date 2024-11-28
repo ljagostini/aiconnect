@@ -1,6 +1,7 @@
 ﻿using Percolore.Core.Logging;
 using System.Data;
 using System.Data.SQLite;
+using System.Globalization;
 using System.Text;
 
 namespace Percolore.IOConnect.Util
@@ -237,7 +238,7 @@ namespace Percolore.IOConnect.Util
                                     colorante.corCorante = Color.White;
                                 }
 
-                                if (!double.TryParse(reader["VolumeBicoIndividual"].ToString(), System.Globalization.CultureInfo.InvariantCulture, out var volumeBicoIndividual))
+                                if (!double.TryParse(reader["VolumeBicoIndividual"].ToString(), NumberStyles.Any, CultureInfo.InvariantCulture, out var volumeBicoIndividual))
 									LogManager.LogInformation($"Parâmetro 'VolumeBicoIndividual' inválido. Utilizando o valor default '0.0'.");
 
 								colorante.VolumeBicoIndividual = volumeBicoIndividual;

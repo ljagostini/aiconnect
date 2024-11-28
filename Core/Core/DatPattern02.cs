@@ -1,4 +1,5 @@
-﻿using System.Text.RegularExpressions;
+﻿using System.Globalization;
+using System.Text.RegularExpressions;
 
 namespace Percolore.Core
 {
@@ -78,7 +79,7 @@ namespace Percolore.Core
                     }
 
                     double QUANTIDADE = 0;
-                    double.TryParse(vQtde[index + 1], out QUANTIDADE);
+                    double.TryParse(vQtde[index + 1], NumberStyles.Any, CultureInfo.InvariantCulture, out QUANTIDADE);
 
                     qtdes.Add(CIRCUITO, QUANTIDADE);
                 }

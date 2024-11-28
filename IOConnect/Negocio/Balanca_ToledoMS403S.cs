@@ -1,4 +1,5 @@
 ﻿using Percolore.Core.Logging;
+using System.Globalization;
 using System.IO.Ports;
 
 namespace Percolore.IOConnect.Negocio
@@ -295,7 +296,7 @@ namespace Percolore.IOConnect.Negocio
                         }
                     }
                     double _vl;
-                    if (double.TryParse(caracteres_valor, out _vl))
+                    if (double.TryParse(caracteres_valor, NumberStyles.Any, CultureInfo.InvariantCulture, out _vl))
                     {
                         if (temSinal)
                         {

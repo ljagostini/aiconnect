@@ -1,4 +1,5 @@
-﻿using System.Text.RegularExpressions;
+﻿using System.Globalization;
+using System.Text.RegularExpressions;
 
 namespace Percolore.Core
 {
@@ -57,15 +58,15 @@ namespace Percolore.Core
             _linhaFRM = RGX_FRM.Match(conteudo).Value;
             _linhaBAS = RGX_BAS.Match(conteudo).Value;
             _linhaCRL = RGX_CLR.Match(conteudo).Value;
-            /*
+			/*
             string[] vUNT = _linhaUNT.Split(new char[] { ' ', '\"' }, StringSplitOptions.RemoveEmptyEntries);
 
             double FATOR = 0;
-            double.TryParse(vUNT[1], out FATOR);
+            double.TryParse(vUNT[1], NumberStyles.Any, CultureInfo.InvariantCulture, out FATOR);
             double FRACAO = 0;
-            double.TryParse(vUNT[2], out FRACAO);
+            double.TryParse(vUNT[2], NumberStyles.Any, CultureInfo.InvariantCulture, out FRACAO);
             */
-            _codigoCor = _linhaCAN + ";" + _linhaCRL + ";" + _linhaBAS + ";";
+			_codigoCor = _linhaCAN + ";" + _linhaCRL + ";" + _linhaBAS + ";";
         }
 
         public bool Validar()
@@ -85,16 +86,16 @@ namespace Percolore.Core
 
 
             double FATOR = 0;
-            double.TryParse(vUNT[1], out FATOR);
+            double.TryParse(vUNT[1], NumberStyles.Any, CultureInfo.InvariantCulture, out FATOR);
             double FRACAO = 0;
-            double.TryParse(vUNT[2], out FRACAO);
+            double.TryParse(vUNT[2], NumberStyles.Any, CultureInfo.InvariantCulture, out FRACAO);
 
             //[Quantidade da embalagem de dispensa]
             string[] vCAN =
                _linhaCAN.Split(new char[] { ' ', '\"' }, StringSplitOptions.RemoveEmptyEntries);
 
             double EMB_DISP = 0;
-            double.TryParse(vCAN[vCAN.GetUpperBound(0)], out EMB_DISP);
+            double.TryParse(vCAN[vCAN.GetUpperBound(0)], NumberStyles.Any, CultureInfo.InvariantCulture, out EMB_DISP);
 
             //[Vetor com valores da linha FRM]
             string[] vFRM =
@@ -102,7 +103,7 @@ namespace Percolore.Core
 
             //[Quantidade da embalagem de referência]
             double EMB_REF = 0;
-            double.TryParse(vFRM[2], out EMB_REF);
+            double.TryParse(vFRM[2], NumberStyles.Any, CultureInfo.InvariantCulture, out EMB_REF);
 
             //[Posição e quantidade dos colorantes que serão dispensados]
             string[] vShots = vFRM[1].Split(new char[] { ',' });
@@ -131,7 +132,7 @@ namespace Percolore.Core
                 }
 
                 double SHOT = 0;
-                double.TryParse(vShots[index + 1], out SHOT);
+                double.TryParse(vShots[index + 1], NumberStyles.Any, CultureInfo.InvariantCulture, out SHOT);
 
                 double QUANTIDADE = ((FATOR / FRACAO) * (EMB_DISP / EMB_REF)) * SHOT;
                 qtdes.Add(CIRCUITO, QUANTIDADE);

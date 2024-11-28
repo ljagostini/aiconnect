@@ -333,11 +333,11 @@ namespace Percolore.IOConnect.Core
                 {
                     CIRCUITO = _lCorv.Circuito;
                     double SHOT = double.Parse(vShots[index + 1].Replace(",", "."), CultureInfo.InvariantCulture);
-                    //double.TryParse(vShots[index + 1], out SHOT);
+					//double.TryParse(vShots[index + 1], NumberStyles.Any, CultureInfo.InvariantCulture, out SHOT);
 
 
-                    //double QUANTIDADE = (this.vFatorUNT / this.vFracaoUNT) * (this.vEmbdisp / this.vEmbref) * SHOT;
-                    double QUANTIDADE = 0.462 * SHOT;
+					//double QUANTIDADE = (this.vFatorUNT / this.vFracaoUNT) * (this.vEmbdisp / this.vEmbref) * SHOT;
+					double QUANTIDADE = 0.462 * SHOT;
                     qtdes.Add(CIRCUITO, QUANTIDADE);
                 }
 

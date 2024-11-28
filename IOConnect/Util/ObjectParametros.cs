@@ -3,6 +3,7 @@ using Percolore.Core.Logging;
 using Percolore.Core.Persistence.WindowsRegistry;
 using System.Data;
 using System.Data.SQLite;
+using System.Globalization;
 using System.Text;
 
 namespace Percolore.IOConnect.Util
@@ -641,7 +642,7 @@ namespace Percolore.IOConnect.Util
 								if (bool.TryParse(reader["DesabilitarVolumeMinimoDat"].ToString(), out var desabilitarVolumeMinimoDat))
 									objPar.DesabilitarVolumeMinimoDat = desabilitarVolumeMinimoDat;
 
-                                if (double.TryParse(reader["VolumeMinimoDat"].ToString(), System.Globalization.CultureInfo.InvariantCulture, out var volumeMinimoDat))
+                                if (double.TryParse(reader["VolumeMinimoDat"].ToString(), NumberStyles.Any, CultureInfo.InvariantCulture, out var volumeMinimoDat))
                                     objPar.VolumeMinimoDat = volumeMinimoDat;
 
 								//Versão 29
@@ -749,7 +750,7 @@ namespace Percolore.IOConnect.Util
 								if (DateTime.TryParse(reader["DataExecucaoPurga"].ToString(), out var dataExecucaoPurga))
                                     objPar.DataExecucaoPurga = dataExecucaoPurga;
 
-                                if(double.TryParse(reader["VolumePurga"].ToString(), System.Globalization.CultureInfo.InvariantCulture, out var volumePurga))
+                                if(double.TryParse(reader["VolumePurga"].ToString(), NumberStyles.Any, CultureInfo.InvariantCulture, out var volumePurga))
                                     objPar.VolumePurga = volumePurga;
 
 								if (int.TryParse(reader["VelocidadePurga"].ToString(), out var velocidadePurga))
@@ -774,10 +775,10 @@ namespace Percolore.IOConnect.Util
 
                                 #region Controle de volume
 
-                                if (double.TryParse(reader["VolumeMinimo"].ToString(), System.Globalization.CultureInfo.InvariantCulture, out var volumeMinimo))
+                                if (double.TryParse(reader["VolumeMinimo"].ToString(), NumberStyles.Any, CultureInfo.InvariantCulture, out var volumeMinimo))
                                     objPar.VolumeMinimo = volumeMinimo;
 
-                                if (double.TryParse(reader["VolumeMaximo"].ToString(), System.Globalization.CultureInfo.InvariantCulture, out var volumeMaximo))
+                                if (double.TryParse(reader["VolumeMaximo"].ToString(), NumberStyles.Any, CultureInfo.InvariantCulture, out var volumeMaximo))
                                     objPar.VolumeMaximo = volumeMaximo;
 
 								if (bool.TryParse(reader["ControlarVolume"].ToString(), out var controlarVolume))
@@ -796,7 +797,7 @@ namespace Percolore.IOConnect.Util
 								if (int.TryParse(reader["IniVariacaoPulso"].ToString(), out var iniVariacaoPulso))
 									objPar.IniVariacaoPulso = iniVariacaoPulso;
 
-								if (double.TryParse(reader["IniStepVariacao"].ToString(), System.Globalization.CultureInfo.InvariantCulture, out var iniStepVariacao))
+								if (double.TryParse(reader["IniStepVariacao"].ToString(), NumberStyles.Any, CultureInfo.InvariantCulture, out var iniStepVariacao))
 									objPar.IniStepVariacao = iniStepVariacao;
 
 								if (int.TryParse(reader["IniVelocidade"].ToString(), out var iniVelocidade))
@@ -821,7 +822,7 @@ namespace Percolore.IOConnect.Util
 
 								#region Unidade de medida
 
-								if (double.TryParse(reader["ValorShot"].ToString(), System.Globalization.CultureInfo.InvariantCulture, out var valorShot))
+								if (double.TryParse(reader["ValorShot"].ToString(), NumberStyles.Any, CultureInfo.InvariantCulture, out var valorShot))
 									objPar.ValorShot = valorShot;
 
 								if (bool.TryParse(reader["HabilitarShot"].ToString(), out var habilitarShot))

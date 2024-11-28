@@ -1,5 +1,6 @@
 ﻿using Percolore.Core;
 using Percolore.Core.Logging;
+using System.Globalization;
 
 namespace Percolore.IOConnect
 {
@@ -24,7 +25,7 @@ namespace Percolore.IOConnect
             int delay = 0;
             int pulsoRev = 0;
 
-            double.TryParse(txtVolume.Text, out volume);
+            double.TryParse(txtVolume.Text, NumberStyles.Any, CultureInfo.InvariantCulture, out volume);
             int.TryParse(txtPulsos.Text, out pulsos);
             int.TryParse(txtAceleracao.Text, out acel);
             int.TryParse(txtDelay.Text, out delay);

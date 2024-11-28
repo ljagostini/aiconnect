@@ -2,6 +2,7 @@
 using Percolore.Core.Logging;
 using Percolore.IOConnect.Util;
 using System.ComponentModel;
+using System.Globalization;
 using System.IO.Ports;
 
 namespace Percolore.IOConnect
@@ -182,7 +183,7 @@ namespace Percolore.IOConnect
             if (_valores != null)
             {
                 double massaVerificada = 0;
-                double.TryParse(txtPesagemMassaVerificada.Text, out massaVerificada);
+                double.TryParse(txtPesagemMassaVerificada.Text, NumberStyles.Any, CultureInfo.InvariantCulture, out massaVerificada);
                 double desvio = Operar.CalcularDesvio(massaVerificada, _valores.MassaIdeal);
                 txtPesagemDesvio.Text = string.Format("{0:P2}", desvio);
             }
@@ -632,7 +633,7 @@ namespace Percolore.IOConnect
             {
                 //Recupera massa informada pelo usuário
                 double massaVerificada = 0;
-                double.TryParse(txtPesagemMassaVerificada.Text, out massaVerificada);
+                double.TryParse(txtPesagemMassaVerificada.Text, NumberStyles.Any, CultureInfo.InvariantCulture, out massaVerificada);
 
                 //Valida massa
                 if (massaVerificada == 0)
