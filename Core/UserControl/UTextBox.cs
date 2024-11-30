@@ -12,6 +12,16 @@ namespace Percolore.Core.UserControl
         public TipoConteudo Conteudo { get; set; }
         public Color BorderColor { get; set; }
 
+        private bool _habilitarTecladoVirtual = true;
+        /// <summary>
+        /// Habilita ou desabilita o teclado virtual.
+        /// </summary>
+        public bool HabilitarTecladoVirtual
+        {
+            get { return _habilitarTecladoVirtual; }
+            set { _habilitarTecladoVirtual = value; }
+        }
+
         public bool isTecladoShow = true;
         public bool isTouchScrenn = false;
         public bool isOpenTeclado = false;
@@ -125,7 +135,11 @@ namespace Percolore.Core.UserControl
             if (this.isTecladoShow)
             {
                 this.isOpenTeclado = KeyboardHelper.IsOpen();
-                if (UseSystemPasswordChar || PasswordChar != '\0')
+
+				if (!_habilitarTecladoVirtual)
+					return;
+
+				if (UseSystemPasswordChar || PasswordChar != '\0')
                 //if (UseSystemPasswordChar || (PasswordChar != '\0' && PasswordChar != '●'))
                 //if ((PasswordChar != '\0' && PasswordChar != '●'))
                 {
@@ -145,7 +159,7 @@ namespace Percolore.Core.UserControl
                 Focus();
                 if (!this.isTouchScrenn || !this.isOpenTeclado)
                 {
-                    KeyboardHelper.Show();
+					KeyboardHelper.Show();
                 }
             }
         }

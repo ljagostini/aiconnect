@@ -19,8 +19,17 @@ namespace Percolore.Core.UserControl
         private Color _ButtonColor = Color.Yellow;
         private int _borderSize = 1;
 
+		private bool _habilitarTecladoVirtual = true;
+		/// <summary>
+		/// Habilita ou desabilita o teclado virtual.
+		/// </summary>
+		public bool HabilitarTecladoVirtual
+		{
+			get { return _habilitarTecladoVirtual; }
+			set { _habilitarTecladoVirtual = value; }
+		}
 
-        [Category("Appearance")]
+		[Category("Appearance")]
         public Color BorderColor
         {
             get { return _borderColor; }
@@ -103,7 +112,7 @@ namespace Percolore.Core.UserControl
             {
                 if (!this.DroppedDown)
                 {
-                    /* 27.06.2017 - Referente à tarefa 138
+					/* 27.06.2017 - Referente à tarefa 138
                      * No Windows 10, o teclado virtual é chamado em apenas um cenário:
                      * Quando uma ComboBox com estilo editável habilitado recebe entrada de toque.
                      * EM todos os outros cenários e versões do Windows o teclado tem de ser chamado
@@ -116,11 +125,14 @@ namespace Percolore.Core.UserControl
                      * estiver aberta pois um clique será gerado, selecionando automaticamente 
                      * o primeiro item e fechando a mesma. */
 
-                    if (isWin10)
+					if (!_habilitarTecladoVirtual)
+						return;
+
+					if (isWin10)
                         KeyboardHelper.Kill();
 
-                    /* O teclado virtual é chamado manualmente no Windows 7, 8 e 10 */
-                    KeyboardHelper.Show();
+					/* O teclado virtual é chamado manualmente no Windows 7, 8 e 10 */
+					KeyboardHelper.Show();
                 }
             }
         }

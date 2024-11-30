@@ -5,68 +5,75 @@ using System.Reflection;
 namespace Percolore.Gerador
 {
 	public partial class vPainelControle : Form
-    {
-        public vPainelControle()
-        {
-            InitializeComponent();
+	{
+		public static bool HabilitarTecladoVirtual { get; private set; }
 
-            //Posicionamento
-            int X = (Screen.PrimaryScreen.Bounds.Width / 2) - (this.Width / 2);
-            int Y = 30;
-            this.Location = new Point(X, Y);
+		public vPainelControle()
+		{
+			InitializeComponent();
 
-            AssemblyInfo info = new AssemblyInfo(Assembly.GetExecutingAssembly());
-            lblTitulo.Text = $"Gerador de chaves - {info.AssemblyComercialVersion}";
+			//Posicionamento
+			int X = (Screen.PrimaryScreen.Bounds.Width / 2) - (this.Width / 2);
+			int Y = 30;
+			this.Location = new Point(X, Y);
 
-            #region Configura imagem e texto dos botões
+			AssemblyInfo info = new AssemblyInfo(Assembly.GetExecutingAssembly());
+			lblTitulo.Text = $"Gerador de chaves - {info.AssemblyComercialVersion}";
 
-            btnSair.Text = string.Empty;
-            btnSair.Image =
-                ImageHelper.Base64ToImage(Properties.Resources.Sair);
+			#region Configura imagem e texto dos botões
 
-            #endregion
-        }
+			btnSair.Text = string.Empty;
+			btnSair.Image =
+				ImageHelper.Base64ToImage(Properties.Resources.Sair);
 
-        private void vPainelControle_Paint(object sender, PaintEventArgs e)
-        {
-            Color COR_BORDA = pnlBarraTitulo.BackColor;
-            int BORDER_SIZE = 1;
+			#endregion
 
-            Form frm = (Form)sender;
-            ControlPaint.DrawBorder(e.Graphics, frm.ClientRectangle,
-            COR_BORDA, BORDER_SIZE, ButtonBorderStyle.Solid,
-            COR_BORDA, BORDER_SIZE, ButtonBorderStyle.Solid,
-            COR_BORDA, BORDER_SIZE, ButtonBorderStyle.Solid,
-            COR_BORDA, BORDER_SIZE, ButtonBorderStyle.Solid);
-        }
+			HabilitarTecladoVirtual = chkHabilitarTecladoVirtual.Checked;
+		}
 
-        private void btnSair_Click(object sender, System.EventArgs e)
-        {
-            Close();
-        }
+		private void vPainelControle_Paint(object sender, PaintEventArgs e)
+		{
+			Color COR_BORDA = pnlBarraTitulo.BackColor;
+			int BORDER_SIZE = 1;
 
-        private void btnLicense_Click(object sender, EventArgs e)
-        {
-            using (vLicenca l = new vLicenca())
-            {
-                l.ShowDialog();
-            }
-        }
+			Form frm = (Form)sender;
+			ControlPaint.DrawBorder(e.Graphics, frm.ClientRectangle,
+			COR_BORDA, BORDER_SIZE, ButtonBorderStyle.Solid,
+			COR_BORDA, BORDER_SIZE, ButtonBorderStyle.Solid,
+			COR_BORDA, BORDER_SIZE, ButtonBorderStyle.Solid,
+			COR_BORDA, BORDER_SIZE, ButtonBorderStyle.Solid);
+		}
 
-        private void btnAccessToken_Click(object sender, EventArgs e)
-        {
-            using (vTokenAcesso ta = new vTokenAcesso())
-            {
-                ta.ShowDialog();
-            }
-        }
+		private void btnSair_Click(object sender, System.EventArgs e)
+		{
+			Close();
+		}
 
-        private void btnMaintenanceValidity_Click(object sender, EventArgs e)
-        {
-            using (vTokenValidadeManutencao ta = new vTokenValidadeManutencao())
-            {
-                ta.ShowDialog();
-            }
-        }
-    }
+		private void btnLicense_Click(object sender, EventArgs e)
+		{
+			using (vLicenca l = new vLicenca())
+			{
+				l.ShowDialog();
+			}
+		}
+
+		private void btnAccessToken_Click(object sender, EventArgs e)
+		{
+			using (vTokenAcesso ta = new vTokenAcesso())
+			{
+				ta.ShowDialog();
+			}
+		}
+
+		private void btnMaintenanceValidity_Click(object sender, EventArgs e)
+		{
+			using (vTokenValidadeManutencao ta = new vTokenValidadeManutencao())
+			{
+				ta.ShowDialog();
+			}
+		}
+
+		private void chkHabilitarTecladoVirtual_CheckedChanged(object sender, EventArgs e) =>
+			HabilitarTecladoVirtual = chkHabilitarTecladoVirtual.Checked;
+	}
 }

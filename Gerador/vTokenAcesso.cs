@@ -33,6 +33,12 @@ namespace Percolore.Gerador
             
             /* Lista perfis de acesso*/
             cboPerfil.DataSource = EnumHelper.ToList<Profile>();
+
+            txtPrazoExpiracao.HabilitarTecladoVirtual = vPainelControle.HabilitarTecladoVirtual;
+            txtSerial.HabilitarTecladoVirtual = vPainelControle.HabilitarTecladoVirtual;
+            txtToken.HabilitarTecladoVirtual = vPainelControle.HabilitarTecladoVirtual;
+            cboAplicacao.HabilitarTecladoVirtual = vPainelControle.HabilitarTecladoVirtual;
+            cboPerfil.HabilitarTecladoVirtual = vPainelControle.HabilitarTecladoVirtual;
         }
 
         #region Eventos

@@ -88,14 +88,22 @@ namespace Percolore.Core.Util
                 return;
             }
 
-            using var p = new Process();
-            p.StartInfo = new ProcessStartInfo
-			{
-				FileName = pathKeyboardFile,
-				UseShellExecute = true,
-				Verb = "runas"
-			};
-			p.Start();
+            try
+            {
+                using var p = new Process();
+                p.StartInfo = new ProcessStartInfo
+                {
+                    FileName = pathKeyboardFile,
+				    UseShellExecute = true,
+				    Verb = "runas"
+                };
+
+                p.Start();
+            }
+            catch
+            {
+                // Ignora caso o usuario cancele a operacao.
+            }
         }
 
         public static bool IsOpen()

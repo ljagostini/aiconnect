@@ -22,6 +22,9 @@ namespace Percolore.Gerador
                 ImageHelper.Base64ToImage(Properties.Resources.Sair);
 
             #endregion
+
+            txtKey.HabilitarTecladoVirtual = vPainelControle.HabilitarTecladoVirtual;
+            txtLicence.HabilitarTecladoVirtual = vPainelControle.HabilitarTecladoVirtual;
         }
 
         private void vPainelControle_Paint(object sender, PaintEventArgs e)

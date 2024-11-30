@@ -13,7 +13,17 @@ namespace Percolore.Core.UserControl
         public bool isTouchScrenn = false;
         public bool isOpenTeclado = false;
 
-        bool isWin10 = false;
+		private bool _habilitarTecladoVirtual = true;
+		/// <summary>
+		/// Habilita ou desabilita o teclado virtual.
+		/// </summary>
+		public bool HabilitarTecladoVirtual
+		{
+			get { return _habilitarTecladoVirtual; }
+			set { _habilitarTecladoVirtual = value; }
+		}
+
+		bool isWin10 = false;
         public UMaskedTextBox()
         {
             this.SetStyle(
@@ -63,7 +73,11 @@ namespace Percolore.Core.UserControl
             if (isTecladoShow)
             {
                 this.isOpenTeclado = KeyboardHelper.IsOpen();
-                if (UseSystemPasswordChar || PasswordChar != '\0')
+
+				if (!_habilitarTecladoVirtual)
+					return;
+
+				if (UseSystemPasswordChar || PasswordChar != '\0')
                 {
                     /* 27.06.2017 - Referente à tarefa 138
                      * No Windows 10, quando uma caixa de texto com PasswordChar habilitado 

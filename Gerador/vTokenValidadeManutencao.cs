@@ -29,6 +29,12 @@ namespace Percolore.Gerador
             cboAplicacao.DataSource = new AppPercolore().AppList;
             cboAplicacao.DisplayMember = "Name";
             cboAplicacao.ValueMember = "Guid";
+
+            txtPrazoExpiracao.HabilitarTecladoVirtual = vPainelControle.HabilitarTecladoVirtual;
+            txtSerial.HabilitarTecladoVirtual = vPainelControle.HabilitarTecladoVirtual;
+            txtToken.HabilitarTecladoVirtual = vPainelControle.HabilitarTecladoVirtual;
+            mskValidadeManutencao.HabilitarTecladoVirtual = vPainelControle.HabilitarTecladoVirtual;
+            cboAplicacao.HabilitarTecladoVirtual = vPainelControle.HabilitarTecladoVirtual;
         }
 
         #region Eventos
