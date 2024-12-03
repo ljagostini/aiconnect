@@ -53,11 +53,11 @@ namespace Percolore.Core
             UTILIZAR_CORRESPONDENCIA = utilizarCorrespondencia;
             LISTA_CORRESPONDENCIA = listaCorrespondencia;
 
-            _linhaUNT = RGX_UNT.Match(conteudo).Value;
-            _linhaCAN = RGX_CAN.Match(conteudo).Value;
-            _linhaFRM = RGX_FRM.Match(conteudo).Value;
-            _linhaBAS = RGX_BAS.Match(conteudo).Value;
-            _linhaCRL = RGX_CLR.Match(conteudo).Value;
+            _linhaUNT = RGX_UNT.Match(conteudo).Value.TrimEnd();
+            _linhaCAN = RGX_CAN.Match(conteudo).Value.TrimEnd();
+            _linhaFRM = RGX_FRM.Match(conteudo).Value.TrimEnd();
+            _linhaBAS = RGX_BAS.Match(conteudo).Value.TrimEnd();
+            _linhaCRL = RGX_CLR.Match(conteudo).Value.TrimEnd();
 			/*
             string[] vUNT = _linhaUNT.Split(new char[] { ' ', '\"' }, StringSplitOptions.RemoveEmptyEntries);
 

@@ -68,11 +68,11 @@ namespace Percolore.Core
             LISTA_CORRESPONDENCIA = listaCorrespondencia;
 
             this._conteudo = conteudo;
-            _linhaFRM = RGX_FRM.Match(_conteudo).Value;
-            _linhaCOR = RGX_COR.Match(_conteudo).Value;
-            _linhaBAS = RGX_BAS.Match(_conteudo).Value;
-            _linhaPRD = RGX_PRD.Match(_conteudo).Value;
-            _linhaEMB = RGX_EMB.Match(_conteudo).Value;
+            _linhaFRM = RGX_FRM.Match(_conteudo).Value.TrimEnd();
+            _linhaCOR = RGX_COR.Match(_conteudo).Value.TrimEnd();
+            _linhaBAS = RGX_BAS.Match(_conteudo).Value.TrimEnd();
+            _linhaPRD = RGX_PRD.Match(_conteudo).Value.TrimEnd();
+            _linhaEMB = RGX_EMB.Match(_conteudo).Value.TrimEnd();
            
             _codigoCor = _linhaEMB + ";" + _linhaPRD + ";" + _linhaCOR.Replace("|", ",") + ";" + _linhaBAS + ";";
            

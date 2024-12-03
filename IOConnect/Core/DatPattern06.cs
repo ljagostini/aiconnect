@@ -81,7 +81,7 @@ namespace Percolore.IOConnect.Core
                         }
                         else if (strLinha.Contains("@CLR"))
                         {
-                            this._linhaCLR = strLinha;
+                            this._linhaCLR = strLinha.Replace("\n", "");
                         }
                         else if (strLinha.Contains("@SV"))
                         {
