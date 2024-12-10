@@ -849,10 +849,7 @@ namespace Percolore.IOConnect
 			
                 if (!this.isDispensou)
                 {
-					string customMessage = string.Empty;
-					if (ex.Message.Contains("Could not read status register:"))
-						customMessage = Negocio.IdiomaResxExtensao.Global_Falha_PerdaConexaoDispositivo;
-
+					string customMessage = ErrorMessageHandler.GetFriendlyErrorMessage(ex);
 					Falha(ex, customMessage);
                 }
             }

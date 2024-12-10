@@ -1008,10 +1008,7 @@ namespace Percolore.IOConnect
             catch (Exception ex)
             {
                 this.isRunning2 = false;
-				string customMessage = string.Empty;
-				if (ex.Message.Contains("Could not read status register:"))
-					customMessage = Negocio.IdiomaResxExtensao.Global_Falha_PerdaConexaoDispositivo;
-
+				string customMessage = ErrorMessageHandler.GetFriendlyErrorMessage(ex);
 				Falha2(ex, customMessage);
             }
         }

@@ -932,10 +932,7 @@ namespace Percolore.IOConnect
 			{
 				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
 				
-                string customMessage = string.Empty;
-				if (ex.Message.Contains("Could not read status register:"))
-					customMessage = Negocio.IdiomaResxExtensao.Global_Falha_PerdaConexaoDispositivo;
-
+                string customMessage = ErrorMessageHandler.GetFriendlyErrorMessage(ex);
 				Falha(ex, customMessage);
 			}
 		}

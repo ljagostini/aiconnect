@@ -3829,6 +3829,17 @@ namespace Percolore.IOConnect.Properties {
 		}
 
 		/// <summary>
+		///   Looks up a localized string similar to A comunicação com o dispositivo foi interrompida. Isso pode ter acontecido porque o processamento do computador está lento ou o Bluetooth do computador/dispositivo parou de funcionar..
+		/// </summary>
+		internal static string Global_Falha_PerdaConexaoBluetooh
+		{
+			get
+			{
+				return ResourceManager.GetString("Global_Falha_PerdaConexaoBluetooh", resourceCulture);
+			}
+		}
+
+		/// <summary>
 		///   Looks up a localized string similar to Falha ao Ressetar data na purga e recirculação  :.
 		/// </summary>
 		internal static string Global_Falha_RessetData {

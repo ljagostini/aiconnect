@@ -3820,11 +3820,22 @@ namespace Percolore.IOConnect.Properties {
                 return ResourceManager.GetString("Global_Falha_PerdaConexaoDispositivo", resourceCulture);
             }
         }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Falha ao Ressetar data na purga e recirculação  :.
-        /// </summary>
-        internal static string Global_Falha_RessetData {
+
+		/// <summary>
+		///   Looks up a localized string similar to Se ha interrumpido la comunicación con el dispositivo. Esto podría deberse a que el procesamiento de la computadora es lento o que el Bluetooth de la computadora/dispositivo ha dejado de funcionar..
+		/// </summary>
+		internal static string Global_Falha_PerdaConexaoBluetooh
+		{
+			get
+			{
+				return ResourceManager.GetString("Global_Falha_PerdaConexaoBluetooh", resourceCulture);
+			}
+		}
+
+		/// <summary>
+		///   Looks up a localized string similar to Falha ao Ressetar data na purga e recirculação  :.
+		/// </summary>
+		internal static string Global_Falha_RessetData {
             get {
                 return ResourceManager.GetString("Global_Falha_RessetData", resourceCulture);
             }

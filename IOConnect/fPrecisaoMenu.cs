@@ -1,6 +1,7 @@
 ﻿using Percolore.Core;
 using Percolore.Core.Logging;
 using Percolore.Core.Persistence.WindowsRegistry;
+using Percolore.IOConnect.Util;
 using System.ComponentModel;
 using System.Data;
 using System.IO.Ports;
@@ -1862,10 +1863,7 @@ namespace Percolore.IOConnect
 			
                 if (!this.IsDispensou)
                 {
-					string customMessage = string.Empty;
-					if (ex.Message.Contains("Could not read status register:"))
-						customMessage = Negocio.IdiomaResxExtensao.Global_Falha_PerdaConexaoDispositivo;
-
+					string customMessage = ErrorMessageHandler.GetFriendlyErrorMessage(ex);
 					Falha2(ex, customMessage);
                 }
 

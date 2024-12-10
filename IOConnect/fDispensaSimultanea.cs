@@ -1,5 +1,6 @@
 ﻿using Percolore.Core;
 using Percolore.Core.Logging;
+using Percolore.IOConnect.Util;
 using System.ComponentModel;
 using System.Text;
 
@@ -792,10 +793,7 @@ namespace Percolore.IOConnect
             {
                 if ((this.counterFalhaConexao > _parametros.QtdTentativasConexao) || (this.modBusDispenser_P3 != null))
                 {
-					string customMessage = string.Empty;
-					if (ex.Message.Contains("Could not read status register:"))
-						customMessage = Negocio.IdiomaResxExtensao.Global_Falha_PerdaConexaoDispositivo;
-
+					string customMessage = ErrorMessageHandler.GetFriendlyErrorMessage(ex);
 					Falha(ex, customMessage);
                 }
                 else

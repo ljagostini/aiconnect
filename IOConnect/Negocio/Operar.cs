@@ -2,6 +2,7 @@
 using Percolore.Core;
 using Percolore.Core.Logging;
 using Percolore.Core.Persistence.WindowsRegistry;
+using Percolore.IOConnect.Util;
 using System.CodeDom;
 
 namespace Percolore.IOConnect
@@ -191,10 +192,7 @@ namespace Percolore.IOConnect
 
                     using (fMensagem m = new fMensagem(fMensagem.TipoMensagem.Erro))
                     {
-                        string mensagem =
-                            Negocio.IdiomaResxExtensao.Global_Falha_DispositivoSemConectividade
-							+ Environment.NewLine
-                            + Negocio.IdiomaResxExtensao.Global_Confirmar_DesejaTentarNovamente;
+                        string mensagem = ErrorMessageHandler.GetFriendlyErrorMessage(ex);
 
 						booFullScreenReturn = m.ShowDialog(
                             mensagem, Negocio.IdiomaResxExtensao.Global_Sim, Negocio.IdiomaResxExtensao.Global_Nao);
@@ -268,10 +266,7 @@ namespace Percolore.IOConnect
                 {
                     using (fMensagem m = new fMensagem(fMensagem.TipoMensagem.Erro))
                     {
-                        string mensagem =
-                            Negocio.IdiomaResxExtensao.Global_Falha_DispositivoSemConectividade
-							+ Environment.NewLine
-                            + Negocio.IdiomaResxExtensao.Global_Confirmar_DesejaTentarNovamente;
+                        string mensagem = ErrorMessageHandler.GetFriendlyErrorMessage(ex);
 
                         booFullScreenReturn = m.ShowDialog(
                             mensagem, Negocio.IdiomaResxExtensao.Global_Sim, Negocio.IdiomaResxExtensao.Global_Nao);

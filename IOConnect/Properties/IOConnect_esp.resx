@@ -2372,4 +2372,7 @@ Contacto con el cliente ¡Fallo de comunicación de Percolore Ethernet!</value>
   <data name="Global_Falha_PerdaConexaoDispositivo" xml:space="preserve">
     <value>Se ha interrumpido la comunicación con el dispositivo. Esto pudo haber sucedido porque hubo un corte de energía en el equipo o se presionó el botón de emergencia.</value>
   </data>
+  <data name="Global_Falha_PerdaConexaoBluetooh" xml:space="preserve">
+    <value>Se ha interrumpido la comunicación con el dispositivo. Esto podría deberse a que el procesamiento de la computadora es lento o que el Bluetooth de la computadora/dispositivo ha dejado de funcionar.</value>
+  </data>
 </root>
