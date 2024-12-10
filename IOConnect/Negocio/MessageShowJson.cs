@@ -60,7 +60,8 @@ namespace Percolore.IOConnect.Negocio
         public  string Global_Falha_NaoFoiPossivelConectar { get; set; } = string.Empty;
         public string Global_Falha_DispositivoSemConectividade { get; set; } = string.Empty;
 		public  string Global_Falha_PerdaDeConexao { get; set; } = string.Empty;
-        public  string Global_Falha_RessetData { get; set; } = string.Empty;
+        public string Global_Falha_PerdaConexaoDispositivo { get; set; } = string.Empty;
+		public  string Global_Falha_RessetData { get; set; } = string.Empty;
         public  string Global_Falha_TestarRecipiente { get; set; } = string.Empty;
         public  string Global_Falha_VolumeMinimoDat { get; set; } = string.Empty;
         public  string Global_FalhaDosagem { get; set; } = string.Empty;

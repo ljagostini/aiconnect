@@ -2348,4 +2348,7 @@ Customer contact Percolore Ethernet communication failure!</value>
   <data name="Global_Falha_DispositivoSemConectividade" xml:space="preserve">
     <value>Unable to connect to the device. Check that the emergency button is pressed and that the serial connection is configured.</value>
   </data>
+  <data name="Global_Falha_PerdaConexaoDispositivo" xml:space="preserve">
+    <value>Communication with the device has been interrupted. This may be due to a power outage on the device or the emergency button being pressed.</value>
+  </data>
 </root>

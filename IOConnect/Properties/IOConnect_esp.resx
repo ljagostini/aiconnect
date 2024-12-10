@@ -2369,4 +2369,7 @@ Contacto con el cliente ¡Fallo de comunicación de Percolore Ethernet!</value>
   <data name="Global_Falha_DispositivoSemConectividade" xml:space="preserve">
     <value>No se puede conectar al dispositivo. Comprobar que el botón de emergencia esté pulsado y que la conexión serie esté configurada.</value>
   </data>
+  <data name="Global_Falha_PerdaConexaoDispositivo" xml:space="preserve">
+    <value>Se ha interrumpido la comunicación con el dispositivo. Esto pudo haber sucedido porque hubo un corte de energía en el equipo o se presionó el botón de emergencia.</value>
+  </data>
 </root>

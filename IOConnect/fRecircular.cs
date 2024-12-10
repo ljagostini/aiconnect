@@ -849,7 +849,11 @@ namespace Percolore.IOConnect
 			
                 if (!this.isDispensou)
                 {
-                    Falha(ex);
+					string customMessage = string.Empty;
+					if (ex.Message.Contains("Could not read status register:"))
+						customMessage = Negocio.IdiomaResxExtensao.Global_Falha_PerdaConexaoDispositivo;
+
+					Falha(ex, customMessage);
                 }
             }
         }
@@ -1273,13 +1277,15 @@ namespace Percolore.IOConnect
         }
         #region Métodos privados
 
-        void Falha(Exception ex)
+        void Falha(Exception ex, string customMessage = null)
         {
             PausarMonitoramento();
             gerarEventoRecircular(3);
             using (fMensagem m = new fMensagem(fMensagem.TipoMensagem.Erro))
             {
-                m.ShowDialog(Negocio.IdiomaResxExtensao.Global_Falha_ExecucaoPorcesso + ex.Message);
+                m.ShowDialog(
+					string.IsNullOrWhiteSpace(customMessage) ? Negocio.IdiomaResxExtensao.Global_Falha_ExecucaoPorcesso + ex.Message
+                                                             : customMessage);
             }
 
             DialogResult = DialogResult.No;

@@ -3817,11 +3817,21 @@ namespace Percolore.IOConnect.Properties {
                 return ResourceManager.GetString("Global_Falha_PerdaDeConexao", resourceCulture);
             }
         }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Falha ao Ressetar data na purga e recirculação  :.
-        /// </summary>
-        internal static string Global_Falha_RessetData {
+
+		/// <summary>
+		///   Looks up a localized string similar to A comunicação com o dispositivo foi interrompida. Isso pode ter acontecido porque houve uma queda de energia no equipamento ou o botão de emergência foi pressionado..
+		/// </summary>
+		internal static string Global_Falha_PerdaConexaoDispositivo	{
+			get
+			{
+				return ResourceManager.GetString("Global_Falha_PerdaConexaoDispositivo", resourceCulture);
+			}
+		}
+
+		/// <summary>
+		///   Looks up a localized string similar to Falha ao Ressetar data na purga e recirculação  :.
+		/// </summary>
+		internal static string Global_Falha_RessetData {
             get {
                 return ResourceManager.GetString("Global_Falha_RessetData", resourceCulture);
             }

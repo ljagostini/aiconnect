@@ -57,7 +57,8 @@ namespace Percolore.IOConnect.Negocio
         public static string Global_Falha_NaoFoiPossivelConectar{ get; set; } = string.Empty;
 		public static string Global_Falha_DispositivoSemConectividade { get; set; } = string.Empty;
 		public static string Global_Falha_PerdaDeConexao{ get; set; } = string.Empty;
-        public static string Global_Falha_RessetData{ get; set; } = string.Empty;
+        public static string Global_Falha_PerdaConexaoDispositivo { get; set; } = string.Empty;
+		public static string Global_Falha_RessetData{ get; set; } = string.Empty;
         public static string Global_Falha_TestarRecipiente{ get; set; } = string.Empty;
         public static string Global_Falha_VolumeMinimoDat{ get; set; } = string.Empty;
         public static string Global_FalhaDosagem{ get; set; } = string.Empty;
@@ -1165,7 +1166,8 @@ namespace Percolore.IOConnect.Negocio
             Global_Falha_NaoFoiPossivelConectar = Negocio.IdiomaResx.Global_Falha_NaoFoiPossivelConectar;
             Global_Falha_DispositivoSemConectividade = Negocio.IdiomaResx.Global_Falha_DispositivoSemConectividade;
 			Global_Falha_PerdaDeConexao = Negocio.IdiomaResx.Global_Falha_PerdaDeConexao;
-            Global_Falha_TestarRecipiente = Negocio.IdiomaResx.Global_Falha_TestarRecipiente;
+            Global_Falha_PerdaConexaoDispositivo = Negocio.IdiomaResx.Global_Falha_PerdaConexaoDispositivo;
+			Global_Falha_TestarRecipiente = Negocio.IdiomaResx.Global_Falha_TestarRecipiente;
             Global_FalhaDosagem = Negocio.IdiomaResx.Global_FalhaDosagem;
             Global_FalhaMonit = Negocio.IdiomaResx.Global_FalhaMonit;
             Global_FalhaPurgar = Negocio.IdiomaResx.Global_FalhaPurgar;
@@ -1889,7 +1891,8 @@ namespace Percolore.IOConnect.Negocio
             msg.Global_Falha_NaoFoiPossivelConectar = Global_Falha_NaoFoiPossivelConectar;
             msg.Global_Falha_DispositivoSemConectividade = Global_Falha_DispositivoSemConectividade;
 			msg.Global_Falha_PerdaDeConexao = Global_Falha_PerdaDeConexao;
-            msg.Global_Falha_RessetData = Global_Falha_RessetData;
+            msg.Global_Falha_PerdaConexaoDispositivo = Global_Falha_PerdaConexaoDispositivo;
+			msg.Global_Falha_RessetData = Global_Falha_RessetData;
             msg.Global_Falha_TestarRecipiente = Global_Falha_TestarRecipiente;
             msg.Global_Falha_VolumeMinimoDat = Global_Falha_VolumeMinimoDat;
             msg.Global_FalhaDosagem = Global_FalhaDosagem;
@@ -2787,6 +2790,7 @@ namespace Percolore.IOConnect.Negocio
                 lMensagem.Add(getMensagem(op.IdIdioma.ToString(), "Global_Falha_NaoFoiPossivelConectar", msg.Global_Falha_NaoFoiPossivelConectar));
                 lMensagem.Add(getMensagem(op.IdIdioma.ToString(), "Global_Falha_DispositivoSemConectividade", msg.Global_Falha_DispositivoSemConectividade));
                 lMensagem.Add(getMensagem(op.IdIdioma.ToString(), "Global_Falha_PerdaDeConexao", msg.Global_Falha_PerdaDeConexao));
+                lMensagem.Add(getMensagem(op.IdIdioma.ToString(), "Global_Falha_PerdaConexaoDispositivo", msg.Global_Falha_PerdaConexaoDispositivo));
                 lMensagem.Add(getMensagem(op.IdIdioma.ToString(), "Global_Falha_RessetData", msg.Global_Falha_RessetData));
                 lMensagem.Add(getMensagem(op.IdIdioma.ToString(), "Global_Falha_TestarRecipiente", msg.Global_Falha_TestarRecipiente));
                 lMensagem.Add(getMensagem(op.IdIdioma.ToString(), "Global_Falha_VolumeMinimoDat", msg.Global_Falha_VolumeMinimoDat));

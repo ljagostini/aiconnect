@@ -3817,6 +3817,15 @@ namespace Percolore.IOConnect.Properties {
                 return ResourceManager.GetString("Global_Falha_PerdaDeConexao", resourceCulture);
             }
         }
+
+		/// <summary>
+		///   Looks up a localized string similar to Communication with the device has been interrupted. This may be due to a power outage on the device or the emergency button being pressed..
+		/// </summary>
+		internal static string Global_Falha_PerdaConexaoDispositivo {
+            get {
+                return ResourceManager.GetString("Global_Falha_PerdaConexaoDispositivo", resourceCulture);
+            }
+        }
         
         /// <summary>
         ///   Looks up a localized string similar to Falha ao Ressetar data na purga e recirculação  :.

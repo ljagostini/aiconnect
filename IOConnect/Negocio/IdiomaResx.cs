@@ -217,7 +217,8 @@ namespace Percolore.IOConnect.Negocio
         public static string Global_Falha_NaoFoiPossivelConectar;
         public static string Global_Falha_DispositivoSemConectividade;
 		public static string Global_Falha_PerdaDeConexao;
-        public static string Global_Falha_TestarRecipiente;
+        public static string Global_Falha_PerdaConexaoDispositivo;
+		public static string Global_Falha_TestarRecipiente;
         public static string Global_FalhaDosagem;
         public static string Global_FalhaMonit;
         public static string Global_FalhaPurgar;
@@ -1166,7 +1167,8 @@ namespace Percolore.IOConnect.Negocio
                 Global_Falha_NaoFoiPossivelConectar = Properties.IOConnect_esp.Global_Falha_NaoFoiPossivelConectar;
                 Global_Falha_DispositivoSemConectividade = Properties.IOConnect_esp.Global_Falha_DispositivoSemConectividade;
 				Global_Falha_PerdaDeConexao = Properties.IOConnect_esp.Global_Falha_PerdaDeConexao;
-                Global_Falha_TestarRecipiente = Properties.IOConnect_esp.Global_Falha_TestarRecipiente;
+                Global_Falha_PerdaConexaoDispositivo = Properties.IOConnect_esp.Global_Falha_PerdaConexaoDispositivo;
+				Global_Falha_TestarRecipiente = Properties.IOConnect_esp.Global_Falha_TestarRecipiente;
                 Global_FalhaDosagem = Properties.IOConnect_esp.Global_FalhaDosagem;
                 Global_FalhaMonit = Properties.IOConnect_esp.Global_FalhaMonit;
                 Global_FalhaPurgar = Properties.IOConnect_esp.Global_FalhaPurgar;
@@ -2032,7 +2034,8 @@ namespace Percolore.IOConnect.Negocio
                 Global_Falha_NaoFoiPossivelConectar = Properties.IOConnect_eng.Global_Falha_NaoFoiPossivelConectar;
                 Global_Falha_DispositivoSemConectividade = Properties.IOConnect_eng.Global_Falha_DispositivoSemConectividade;
 				Global_Falha_PerdaDeConexao = Properties.IOConnect_eng.Global_Falha_PerdaDeConexao;
-                Global_Falha_TestarRecipiente = Properties.IOConnect_eng.Global_Falha_TestarRecipiente;
+                Global_Falha_PerdaConexaoDispositivo = Properties.IOConnect_eng.Global_Falha_PerdaConexaoDispositivo;
+				Global_Falha_TestarRecipiente = Properties.IOConnect_eng.Global_Falha_TestarRecipiente;
                 Global_FalhaDosagem = Properties.IOConnect_eng.Global_FalhaDosagem;
                 Global_FalhaMonit = Properties.IOConnect_eng.Global_FalhaMonit;
                 Global_FalhaPurgar = Properties.IOConnect_eng.Global_FalhaPurgar;
@@ -2907,7 +2910,8 @@ namespace Percolore.IOConnect.Negocio
                 Global_Falha_NaoFoiPossivelConectar = Properties.IOConnect.Global_Falha_NaoFoiPossivelConectar;
                 Global_Falha_DispositivoSemConectividade = Properties.IOConnect.Global_Falha_DispositivoSemConectividade;
 				Global_Falha_PerdaDeConexao = Properties.IOConnect.Global_Falha_PerdaDeConexao;
-                Global_Falha_TestarRecipiente = Properties.IOConnect.Global_Falha_TestarRecipiente;
+                Global_Falha_PerdaConexaoDispositivo = Properties.IOConnect.Global_Falha_PerdaConexaoDispositivo;
+				Global_Falha_TestarRecipiente = Properties.IOConnect.Global_Falha_TestarRecipiente;
                 Global_FalhaDosagem = Properties.IOConnect.Global_FalhaDosagem;
                 Global_FalhaMonit = Properties.IOConnect.Global_FalhaMonit;
                 Global_FalhaPurgar = Properties.IOConnect.Global_FalhaPurgar;
