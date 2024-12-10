@@ -1008,11 +1008,15 @@ namespace Percolore.IOConnect
             catch (Exception ex)
             {
                 this.isRunning2 = false;
-                Falha2(ex);
+				string customMessage = string.Empty;
+				if (ex.Message.Contains("Could not read status register:"))
+					customMessage = Negocio.IdiomaResxExtensao.Global_Falha_PerdaConexaoDispositivo;
+
+				Falha2(ex, customMessage);
             }
         }
 
-        void Falha2(Exception ex)
+        void Falha2(Exception ex, string customMessage = null)
 		{
             LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
 			PausarMonitoramento2();
@@ -1035,10 +1039,9 @@ namespace Percolore.IOConnect
 			using (fMensagem m = new fMensagem(fMensagem.TipoMensagem.Erro))
             {
                 m.ShowDialog(
-                    Negocio.IdiomaResxExtensao.Global_Falha_ExecucaoPorcesso + ex.Message);
+					string.IsNullOrWhiteSpace(customMessage) ? Negocio.IdiomaResxExtensao.Global_Falha_ExecucaoPorcesso + ex.Message
+                                                             : customMessage);
             }
-
-
         }
         
         void PausarMonitoramento2()

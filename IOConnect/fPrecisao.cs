@@ -1011,19 +1011,25 @@ namespace Percolore.IOConnect
 			
                 if (!this.IsDispensou)
                 {
-                    Falha2(ex);
+					string customMessage = string.Empty;
+					if (ex.Message.Contains("Could not read status register:"))
+						customMessage = Negocio.IdiomaResxExtensao.Global_Falha_PerdaConexaoDispositivo;
+
+					Falha2(ex, customMessage);
                 }
                 this.isRunning2 = false;
             }
         }
 
-        void Falha2(Exception ex)
+        void Falha2(Exception ex, string customMessage = null)
         {
             PausarMonitoramento2();
 
             using (fMensagem m = new fMensagem(fMensagem.TipoMensagem.Erro))
             {
-                m.ShowDialog(Negocio.IdiomaResxExtensao.Global_Falha_ExecucaoPorcesso + ex.Message);
+                m.ShowDialog(
+					string.IsNullOrWhiteSpace(customMessage) ? Negocio.IdiomaResxExtensao.Global_Falha_ExecucaoPorcesso + ex.Message
+                                                             : customMessage);
             }
         }
 

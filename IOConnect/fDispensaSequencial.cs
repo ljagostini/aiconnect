@@ -422,7 +422,7 @@ namespace Percolore.IOConnect
 
         #region Métodos privados
 
-        void Falha(Exception ex)
+        void Falha(Exception ex, string customMessage = null)
         {
 			LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
 			PausarMonitoramento();
@@ -430,7 +430,8 @@ namespace Percolore.IOConnect
             using (fMensagem m = new fMensagem(fMensagem.TipoMensagem.Erro))
             {
                 m.ShowDialog(
-                    Negocio.IdiomaResxExtensao.Global_Falha_ExecucaoPorcesso + ex.Message);
+					string.IsNullOrWhiteSpace(customMessage) ? Negocio.IdiomaResxExtensao.Global_Falha_ExecucaoPorcesso + ex.Message
+                                                             : customMessage);
             }
 
             DialogResult = DialogResult.No;
@@ -903,7 +904,11 @@ namespace Percolore.IOConnect
             {
                 if (this.counterFalha > _parametros.QtdTentativasConexao)
                 {
-                    Falha(ex);
+					string customMessage = string.Empty;
+					if (ex.Message.Contains("Could not read status register:"))
+						customMessage = Negocio.IdiomaResxExtensao.Global_Falha_PerdaConexaoDispositivo;
+
+					Falha(ex, customMessage);
                 }
                 else
                 {
