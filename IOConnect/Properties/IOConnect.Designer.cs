@@ -3797,11 +3797,22 @@ namespace Percolore.IOConnect.Properties {
                 return ResourceManager.GetString("Global_Falha_NaoFoiPossivelConectar", resourceCulture);
             }
         }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Perda de conexão..
-        /// </summary>
-        internal static string Global_Falha_PerdaDeConexao {
+
+		/// <summary>
+		///   Looks up a localized string similar to Não foi possível conectar ao dispositivo. Verifique se o botão de emergência está pressionado e se a conexão serial está configurada..
+		/// </summary>
+		internal static string Global_Falha_DispositivoSemConectividade
+		{
+			get
+			{
+				return ResourceManager.GetString("Global_Falha_DispositivoSemConectividade", resourceCulture);
+			}
+		}
+
+		/// <summary>
+		///   Looks up a localized string similar to Perda de conexão..
+		/// </summary>
+		internal static string Global_Falha_PerdaDeConexao {
             get {
                 return ResourceManager.GetString("Global_Falha_PerdaDeConexao", resourceCulture);
             }

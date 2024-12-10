@@ -2366,4 +2366,7 @@ Contacto con el cliente ¡Fallo de comunicación de Percolore Ethernet!</value>
   <data name="Configuracao_LogStatusMaquina" xml:space="preserve">
     <value>Habilitar log Serial Status da Máquina</value>
   </data>
+  <data name="Global_Falha_DispositivoSemConectividade" xml:space="preserve">
+    <value>No se puede conectar al dispositivo. Comprobar que el botón de emergencia esté pulsado y que la conexión serie esté configurada.</value>
+  </data>
 </root>

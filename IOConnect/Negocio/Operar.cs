@@ -192,14 +192,13 @@ namespace Percolore.IOConnect
                     using (fMensagem m = new fMensagem(fMensagem.TipoMensagem.Erro))
                     {
                         string mensagem =
-                            Negocio.IdiomaResxExtensao.Global_Falha_NaoFoiPossivelConectar
-                            + Environment.NewLine
-                            + Negocio.IdiomaResxExtensao.Global_Confirmar_DesejaTentarNovamente + 
-                            Environment.NewLine + Negocio.IdiomaResxExtensao.FalhaPortaSerial;
+                            Negocio.IdiomaResxExtensao.Global_Falha_DispositivoSemConectividade
+							+ Environment.NewLine
+                            + Negocio.IdiomaResxExtensao.Global_Confirmar_DesejaTentarNovamente;
 
-                        booFullScreenReturn = m.ShowDialog(
+						booFullScreenReturn = m.ShowDialog(
                             mensagem, Negocio.IdiomaResxExtensao.Global_Sim, Negocio.IdiomaResxExtensao.Global_Nao);
-                        geraEventoFalhaComunicacao(Negocio.IdiomaResxExtensao.Global_Falha_NaoFoiPossivelConectar);
+                        geraEventoFalhaComunicacao(Negocio.IdiomaResxExtensao.Global_Falha_DispositivoSemConectividade);
                     };
                 }
                 else
@@ -270,14 +269,13 @@ namespace Percolore.IOConnect
                     using (fMensagem m = new fMensagem(fMensagem.TipoMensagem.Erro))
                     {
                         string mensagem =
-                            Negocio.IdiomaResxExtensao.Global_Falha_NaoFoiPossivelConectar
-                            + Environment.NewLine
-                            + Negocio.IdiomaResxExtensao.Global_Confirmar_DesejaTentarNovamente +
-                            Environment.NewLine + Negocio.IdiomaResxExtensao.FalhaPortaSerial;
+                            Negocio.IdiomaResxExtensao.Global_Falha_DispositivoSemConectividade
+							+ Environment.NewLine
+                            + Negocio.IdiomaResxExtensao.Global_Confirmar_DesejaTentarNovamente;
 
                         booFullScreenReturn = m.ShowDialog(
                             mensagem, Negocio.IdiomaResxExtensao.Global_Sim, Negocio.IdiomaResxExtensao.Global_Nao);
-                        geraEventoFalhaComunicacao(Negocio.IdiomaResxExtensao.Global_Falha_NaoFoiPossivelConectar);
+                        geraEventoFalhaComunicacao(Negocio.IdiomaResxExtensao.Global_Falha_DispositivoSemConectividade);
                     };
                 }
                 else

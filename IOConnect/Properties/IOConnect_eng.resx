@@ -2345,4 +2345,7 @@ Customer contact Percolore Ethernet communication failure!</value>
   <data name="Configuracao_LogStatusMaquina" xml:space="preserve">
     <value>Habilitar log Serial Status da Máquina</value>
   </data>
+  <data name="Global_Falha_DispositivoSemConectividade" xml:space="preserve">
+    <value>Unable to connect to the device. Check that the emergency button is pressed and that the serial connection is configured.</value>
+  </data>
 </root>
