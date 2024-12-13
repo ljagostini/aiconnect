@@ -1271,7 +1271,7 @@
     <value>Data saved successfuly</value>
   </data>
   <data name="Global_informacao_DatRenomeado" xml:space="preserve">
-    <value>DAT file renamed</value>
+    <value>The system recorded the event and the dat file was saved.</value>
   </data>
   <data name="Global_Informacao_DispensaAbortada" xml:space="preserve">
     <value>Dispensing aborted</value>
@@ -1289,7 +1289,7 @@
     <value>Insufficient product level.</value>
   </data>
   <data name="Global_Informacao_NivelMinimo" xml:space="preserve">
-    <value>Quantity of colorant to dispense exceed quantity stored. Refill: </value>
+    <value>Unable to dispense because the level of these products would fall below the configured minimum:</value>
   </data>
   <data name="Global_Informacao_NumeroSerialInvalido" xml:space="preserve">
     <value>Invalid serial number. Serial number must be 4 digits.</value>
@@ -1499,7 +1499,7 @@
     <value>Cannot find file</value>
   </data>
   <data name="Init_Confirmacao_ManutencaoExpirada" xml:space="preserve">
-    <value>License expired. Cannot start IOConnect until it's performed.Would like to validate expiration date now?</value>
+    <value>The IOConnect license validity has expired and will need to be renewed by the Percolore support team. Do you want to reset the validity date now?</value>
   </data>
   <data name="Init_Falha_Diretorio" xml:space="preserve">
     <value>Directory not found and failed to created it:</value>
@@ -1673,7 +1673,7 @@
     <value>User canceled recirculation</value>
   </data>
   <data name="PainelControle_DesejaRecircular" xml:space="preserve">
-    <value>Do you want to recirculate the products?</value>
+    <value>We recommend performing individual recirculation in some of the circuits. Do you want to do it now?</value>
   </data>
   <data name="PainelControle_DispensarValorMinVolume" xml:space="preserve">
     <value>Confirm dispensing with values below the allowed minimum of {0} ml?</value>
@@ -1973,7 +1973,7 @@
     <value>Usuário utilize o copo da Esponja</value>
   </data>
   <data name="PurgarIndividualMonit_lblStatus_Msg01" xml:space="preserve">
-    <value>Click on specific circuit to start process!</value>
+    <value>To purge a circuit, click on the corresponding button.</value>
   </data>
   <data name="PurgarIndividual_gbIndividual" xml:space="preserve">
     <value>Individual</value>
@@ -2030,7 +2030,7 @@
     <value>Recirculação Automática</value>
   </data>
   <data name="RecircularIndividualMonit_lblStatus_Msg01" xml:space="preserve">
-    <value>Click the product button to perform the process!</value>
+    <value>To recirculate a circuit, click on the corresponding button.</value>
   </data>
   <data name="RecircularIndividual_gbIndividual" xml:space="preserve">
     <value>Individual</value>
@@ -2346,12 +2346,12 @@ Customer contact Percolore Ethernet communication failure!</value>
     <value>Habilitar log Serial Status da Máquina</value>
   </data>
   <data name="Global_Falha_DispositivoSemConectividade" xml:space="preserve">
-    <value>Unable to connect to the device. Check that the emergency button is pressed and that the serial connection is configured.</value>
+    <value>Couldn't connect to the device. Check that the emergency button is unpressed and that the serial connection is configured.</value>
   </data>
   <data name="Global_Falha_PerdaConexaoDispositivo" xml:space="preserve">
-    <value>Communication with the device has been interrupted. This may be due to a power outage on the device or the emergency button being pressed.</value>
+    <value>Communication with the device has been interrupted. This may be due to a power outage on the device or the emergency button was pressed.</value>
   </data>
   <data name="Global_Falha_PerdaConexaoBluetooh" xml:space="preserve">
-    <value>Communication with the device has been interrupted. This may be because the computer's processing is slow or the computer/device's Bluetooth has stopped working.</value>
+    <value>Communication with the device has been interrupted. This may be because the computer's processing is slow or the computer's Bluetooth has stopped working.</value>
   </data>
 </root>

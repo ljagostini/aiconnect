@@ -1274,7 +1274,7 @@
     <value>Os dados foram registrados com sucesso.</value>
   </data>
   <data name="Global_informacao_DatRenomeado" xml:space="preserve">
-    <value>O arquivo Dat foi renomeado.</value>
+    <value>O sistema registrou o ocorrido e o arquivo dat foi salvo.</value>
   </data>
   <data name="Global_Informacao_DispensaAbortada" xml:space="preserve">
     <value>Dispensa abortada.</value>
@@ -1292,7 +1292,7 @@
     <value>Nível de produto insuficiente.</value>
   </data>
   <data name="Global_Informacao_NivelMinimo" xml:space="preserve">
-    <value>A quantidade de dispensa dos seguintes produtos fará com que o nível armazenado na máquina fique abaixo do mínimo configurado: </value>
+    <value>Não foi possível dispensar pois o nível destes produtos ficaria abaixo do mínimo configurado:</value>
   </data>
   <data name="Global_Informacao_NumeroSerialInvalido" xml:space="preserve">
     <value>Número serial inválido. O número serial deve ter 4 dígitos.</value>
@@ -1502,7 +1502,7 @@
     <value>Não foi possível encontrar o arquivo</value>
   </data>
   <data name="Init_Confirmacao_ManutencaoExpirada" xml:space="preserve">
-    <value>A validade da licença expirou. Não será possível executar o IOConnect até que a mesma seja realizada. Deseja redefinir a data de validade agora?</value>
+    <value>A validade da licença do IOConnect expirou e precisará ser renovada pela equipe de suporte da Percolore. Deseja redefinir a data de validade agora?</value>
   </data>
   <data name="Init_Falha_Diretorio" xml:space="preserve">
     <value>O seguinte diretório não foi encontrado e uma tentativa de criá-lo falhou:</value>
@@ -1676,7 +1676,7 @@
     <value>Usuário cancelou Recirculação</value>
   </data>
   <data name="PainelControle_DesejaRecircular" xml:space="preserve">
-    <value>Usuário deseja Recircular os produtos</value>
+    <value>Recomendamos fazer a recirculação individual em alguns dos circuitos. Deseja fazer agora?</value>
   </data>
   <data name="PainelControle_DispensarValorMinVolume" xml:space="preserve">
     <value>Confirmar dispensar com valores inferiores ao mínimo permitido de {0} ml?</value>
@@ -1709,7 +1709,7 @@
     <value>Executar purga individual</value>
   </data>
   <data name="PainelControle_Menu_RecircularProdutos" xml:space="preserve">
-    <value>Recircular Produtos</value>
+    <value>Executar recirculação</value>
   </data>
   <data name="PainelControle_Menu_Sair" xml:space="preserve">
     <value>Sair</value>
@@ -1976,7 +1976,7 @@
     <value>Usuário inserir o copo da esponja na gaveta!</value>
   </data>
   <data name="PurgarIndividualMonit_lblStatus_Msg01" xml:space="preserve">
-    <value>Clique no botão circuito específico para executar o processo!</value>
+    <value>Para purgar um circuito, clique no botão correspondente.</value>
   </data>
   <data name="PurgarIndividual_gbIndividual" xml:space="preserve">
     <value>Individual</value>
@@ -2033,7 +2033,7 @@
     <value>Recirculação Automática</value>
   </data>
   <data name="RecircularIndividualMonit_lblStatus_Msg01" xml:space="preserve">
-    <value>Clique no botão circuito específico para executar o processo!</value>
+    <value>Para recircular um circuito, clique no botão correspondente.</value>
   </data>
   <data name="RecircularIndividual_gbIndividual" xml:space="preserve">
     <value>Individual</value>
@@ -2344,12 +2344,21 @@ Cliente entre em contato com a Percolore Falha de comunicação Ethernet!</value
     <value>Habilitar log Serial Status da Máquina</value>
   </data>
   <data name="Global_Falha_DispositivoSemConectividade" xml:space="preserve">
-    <value>Não foi possível conectar ao dispositivo. Verifique se o botão de emergência está pressionado e se a conexão serial está configurada.</value>
+    <value>Não foi possível conectar ao dispositivo. Verifique se o botão de emergência está solto (não pressionado) e se a conexão serial está configurada.</value>
   </data>
   <data name="Global_Falha_PerdaConexaoDispositivo" xml:space="preserve">
     <value>A comunicação com o dispositivo foi interrompida. Isso pode ter acontecido porque houve uma queda de energia no equipamento ou o botão de emergência foi pressionado.</value>
   </data>
   <data name="Global_Falha_PerdaConexaoBluetooh" xml:space="preserve">
-    <value>A comunicação com o dispositivo foi interrompida. Isso pode ter acontecido porque o processamento do computador está lento ou o Bluetooth do computador/dispositivo parou de funcionar.</value>
+    <value>A comunicação com o dispositivo foi interrompida. Isso pode ter acontecido porque o processamento do computador está lento ou o Bluetooth do computador parou de funcionar.</value>
+  </data>
+  <data name="Configuracoes_lblPurgaParâmetrosDispensa" xml:space="preserve">
+    <value />
+  </data>
+  <data name="PainelControle_Menu_Configurações" xml:space="preserve">
+    <value />
+  </data>
+  <data name="String1" xml:space="preserve">
+    <value />
   </data>
 </root>

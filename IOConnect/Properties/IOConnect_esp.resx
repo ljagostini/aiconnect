@@ -688,7 +688,7 @@ La aplicación se cerrará.</value>
     <value>Grabación de los datos hecha con éxito.</value>
   </data>
   <data name="Global_informacao_DatRenomeado" xml:space="preserve">
-    <value>Archivo Dat renombrado.</value>
+    <value>El sistema registró el suceso y el archivo dat fue guardado.</value>
   </data>
   <data name="Global_Informacao_DispensaAbortada" xml:space="preserve">
     <value>Dispensa abortada.</value>
@@ -706,7 +706,7 @@ La aplicación se cerrará.</value>
     <value>El nivel de colorante es insuficiente.</value>
   </data>
   <data name="Global_Informacao_NivelMinimo" xml:space="preserve">
-    <value>La cantidad de colorante de dispensación de la siguiente formula hará que el nivel almacenado en la máquina cae por debajo del mínimo configurado:</value>
+    <value>No fue posible dispensar porque el nivel de estos productos quedaría por debajo del mínimo configurado:</value>
   </data>
   <data name="Global_Informacao_NumeroSerialInvalido" xml:space="preserve">
     <value>Número de serie válido.
@@ -815,10 +815,7 @@ El número de serie debe tener 4 dígitos.</value>
     <value>Historico de los valores confirmados</value>
   </data>
   <data name="Init_Confirmacao_ManutencaoExpirada" xml:space="preserve">
-    <value>La validad de la  licencia ha expirado.
-No se puede ejecutar el IOConnect hasta que se ingrese la clave de activación.
-
-¿Quieres que reajustar la fecha de caducidad ahora?</value>
+    <value>La validez de la licencia de IOConnect ha expirado y necesitará ser renovada por el equipo de soporte de Percolore. ¿Desea restablecer la fecha de validez ahora?</value>
   </data>
   <data name="Licenca_Informacao_ChaveIncorreta" xml:space="preserve">
     <value>Clave de activación incorrecta.</value>
@@ -1037,7 +1034,7 @@ No se puede ejecutar el IOConnect hasta que se ingrese la clave de activación.
     <value>Ejecutar purga individual</value>
   </data>
   <data name="PurgarIndividualMonit_lblStatus_Msg01" xml:space="preserve">
-    <value>Haga clic en el botón del circuito específico para ejecutar el proceso!</value>
+    <value>Para purgar un circuito, haga clic en el botón correspondiente.</value>
   </data>
   <data name="PurgarIndividual_lblSubStatus_Msg01" xml:space="preserve">
     <value>Listo para purgar individualmente el circuito de producto.</value>
@@ -1643,7 +1640,7 @@ Detalhes:
     <value>Recircular Produtos</value>
   </data>
   <data name="RecircularIndividualMonit_lblStatus_Msg01" xml:space="preserve">
-    <value>Clique no botão circuito específico para executar o processo!</value>
+    <value>Para recircular un circuito, haga clic en el botón correspondiente.</value>
   </data>
   <data name="RecircularIndividual_gbIndividual" xml:space="preserve">
     <value>Individual</value>
@@ -1682,7 +1679,7 @@ Detalhes:
     <value>Usuário cancelou Recirculação</value>
   </data>
   <data name="PainelControle_DesejaRecircular" xml:space="preserve">
-    <value>Usuário deseja Recircular os produtos</value>
+    <value>Recomendamos hacer la recirculación individual en algunos de los circuitos. ¿Desea hacerlo ahora?</value>
   </data>
   <data name="PainelControle_DispensarValorMinVolume" xml:space="preserve">
     <value>Confirmar dispensar com valores inferiores ao mínimo permitido de {0} ml?</value>
@@ -2367,12 +2364,12 @@ Contacto con el cliente ¡Fallo de comunicación de Percolore Ethernet!</value>
     <value>Habilitar log Serial Status da Máquina</value>
   </data>
   <data name="Global_Falha_DispositivoSemConectividade" xml:space="preserve">
-    <value>No se puede conectar al dispositivo. Comprobar que el botón de emergencia esté pulsado y que la conexión serie esté configurada.</value>
+    <value>No se pudo conectar al dispositivo. Compruebe que el botón de emergencia esté despresionado y que la conexión serie esté configurada.</value>
   </data>
   <data name="Global_Falha_PerdaConexaoDispositivo" xml:space="preserve">
     <value>Se ha interrumpido la comunicación con el dispositivo. Esto pudo haber sucedido porque hubo un corte de energía en el equipo o se presionó el botón de emergencia.</value>
   </data>
   <data name="Global_Falha_PerdaConexaoBluetooh" xml:space="preserve">
-    <value>Se ha interrumpido la comunicación con el dispositivo. Esto podría deberse a que el procesamiento de la computadora es lento o que el Bluetooth de la computadora/dispositivo ha dejado de funcionar.</value>
+    <value>Se ha interrumpido la comunicación con el dispositivo. Esto pudo deberse a que el procesamiento de la computadora esté lento o que el Bluetooth de la computadora haya dejado de funcionar.</value>
   </data>
 </root>
