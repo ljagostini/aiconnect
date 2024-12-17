@@ -49,154 +49,148 @@ namespace Percolore.IOConnect
             }
             #endregion
 
+            // Conversão do arquivo de parâmetros
             if (!File.Exists(Util.ObjectParametros.PathFile))
             {
                 /*Atualiza estrutura do arquivo xml*/
                 Parametros.UpdateStructure();
 
                 /*Persiste valores padrões*/
-                Parametros _parametros = Parametros.Load();
-                Parametros.Persist(_parametros);
+                Parametros tmp = Parametros.Load();
+                Parametros.Persist(tmp);
 
+                Parametros parametrosXML = Parametros.Load();
 
                 Util.ObjectParametros.CreateBD();
-                Parametros objPar = Parametros.Load();
-
-                Util.ObjectParametros retorno = new Util.ObjectParametros();
+                Util.ObjectParametros parametrosDB = new Util.ObjectParametros();
 
                 #region Geral
 
-                retorno.ResponseTimeout = objPar.ResponseTimeout;
-                retorno.Velocidade = objPar.Velocidade;
+                parametrosDB.ResponseTimeout = parametrosXML.ResponseTimeout;
+                parametrosDB.Velocidade = parametrosXML.Velocidade;
 
-                retorno.Aceleracao = objPar.Aceleracao;
-                retorno.DelayReverso = objPar.DelayReverso;
-                retorno.PulsoReverso = objPar.PulsoReverso;
-                retorno.SomarPulsoReverso = objPar.SomarPulsoReverso;
-                retorno.HabilitarTecladoVirtual = objPar.HabilitarTecladoVirtual;
-                retorno.HabilitarDispensaSequencial = objPar.HabilitarDispensaSequencial;
-                retorno.HabilitarFormulaPersonalizada = objPar.HabilitarFormulaPersonalizada;
-                retorno.HabilitarTesteRecipiente = objPar.HabilitarTesteRecipiente;
-                retorno.IdIdioma = objPar.IdIdioma;
-                retorno.IdDispositivo = objPar.IdDispositivo;
-                retorno.HabilitarPurgaIndividual = objPar.HabilitarPurgaIndividual;
-                retorno.HabilitarTouchScrenn = objPar.HabilitarTouchScrenn;
-                retorno.IdDispositivo2 = objPar.IdDispositivo2;
-                retorno.NomeDispositivo = objPar.NomeDispositivo;
-                retorno.NomeDispositivo2 = objPar.NomeDispositivo2;
-                retorno.VersaoIoconnect = objPar.VersaoIoconnect;
-                retorno.HabilitarDispensaSequencialP1 = objPar.HabilitarDispensaSequencialP1;
-                retorno.HabilitarDispensaSequencialP2 = objPar.HabilitarDispensaSequencialP2;
+                parametrosDB.Aceleracao = parametrosXML.Aceleracao;
+                parametrosDB.DelayReverso = parametrosXML.DelayReverso;
+                parametrosDB.PulsoReverso = parametrosXML.PulsoReverso;
+                parametrosDB.SomarPulsoReverso = parametrosXML.SomarPulsoReverso;
+                parametrosDB.HabilitarTecladoVirtual = parametrosXML.HabilitarTecladoVirtual;
+                parametrosDB.HabilitarDispensaSequencial = parametrosXML.HabilitarDispensaSequencial;
+                parametrosDB.HabilitarFormulaPersonalizada = parametrosXML.HabilitarFormulaPersonalizada;
+                parametrosDB.HabilitarTesteRecipiente = parametrosXML.HabilitarTesteRecipiente;
+                parametrosDB.IdIdioma = parametrosXML.IdIdioma;
+                parametrosDB.IdDispositivo = parametrosXML.IdDispositivo;
+                parametrosDB.HabilitarPurgaIndividual = parametrosXML.HabilitarPurgaIndividual;
+                parametrosDB.HabilitarTouchScrenn = parametrosXML.HabilitarTouchScrenn;
+                parametrosDB.IdDispositivo2 = parametrosXML.IdDispositivo2;
+                parametrosDB.NomeDispositivo = parametrosXML.NomeDispositivo;
+                parametrosDB.NomeDispositivo2 = parametrosXML.NomeDispositivo2;
+                parametrosDB.VersaoIoconnect = parametrosXML.VersaoIoconnect;
+                parametrosDB.HabilitarDispensaSequencialP1 = parametrosXML.HabilitarDispensaSequencialP1;
+                parametrosDB.HabilitarDispensaSequencialP2 = parametrosXML.HabilitarDispensaSequencialP2;
 
                 #endregion
 
                 #region DAT
 
-                retorno.PathMonitoramentoDAT = objPar.PathMonitoramentoDAT;
-                retorno.PathRepositorioDAT = objPar.PathRepositorioDAT;
-                retorno.PadraoConteudoDAT = objPar.PadraoConteudoDAT;
-                retorno.BasePosicaoCircuitoDAT = objPar.BasePosicaoCircuitoDAT;
-                retorno.UtilizarCorrespondenciaDAT = objPar.UtilizarCorrespondenciaDAT;
-                retorno.DesabilitarInterfaceDispensaSequencial = objPar.DesabilitarInterfaceDispensaSequencial;
-                retorno.DesabilitarInterfaceDispensaSimultanea = objPar.DesabilitarInterfaceDispensaSimultanea;
-                retorno.DesabilitarInterfaceInicializacaoCircuito = objPar.DesabilitarInterfaceInicializacaoCircuito;
-                retorno.DesabilitarInterfacePurga = objPar.DesabilitarInterfacePurga;
+                parametrosDB.PathMonitoramentoDAT = parametrosXML.PathMonitoramentoDAT;
+                parametrosDB.PathRepositorioDAT = parametrosXML.PathRepositorioDAT;
+                parametrosDB.PadraoConteudoDAT = parametrosXML.PadraoConteudoDAT;
+                parametrosDB.BasePosicaoCircuitoDAT = parametrosXML.BasePosicaoCircuitoDAT;
+                parametrosDB.UtilizarCorrespondenciaDAT = parametrosXML.UtilizarCorrespondenciaDAT;
+                parametrosDB.DesabilitarInterfaceDispensaSequencial = parametrosXML.DesabilitarInterfaceDispensaSequencial;
+                parametrosDB.DesabilitarInterfaceDispensaSimultanea = parametrosXML.DesabilitarInterfaceDispensaSimultanea;
+                parametrosDB.DesabilitarInterfaceInicializacaoCircuito = parametrosXML.DesabilitarInterfaceInicializacaoCircuito;
+                parametrosDB.DesabilitarInterfacePurga = parametrosXML.DesabilitarInterfacePurga;
 
                 #endregion
 
                 #region Purga
 
-                retorno.PrazoExecucaoPurga = objPar.PrazoExecucaoPurga;
-                retorno.DataExecucaoPurga = objPar.DataExecucaoPurga;
-                retorno.VolumePurga = objPar.VolumePurga;
-                retorno.VelocidadePurga = objPar.VelocidadePurga;
-                retorno.AceleracaoPurga = objPar.AceleracaoPurga;
-                retorno.DelayPurga = objPar.DelayPurga;
-                retorno.ControlarExecucaoPurga = objPar.ControlarExecucaoPurga;
-                retorno.ExigirExecucaoPurga = objPar.ExigirExecucaoPurga;
-                retorno.PurgaSequencial = objPar.PurgaSequencial;
+                parametrosDB.PrazoExecucaoPurga = parametrosXML.PrazoExecucaoPurga;
+                parametrosDB.DataExecucaoPurga = parametrosXML.DataExecucaoPurga;
+                parametrosDB.VolumePurga = parametrosXML.VolumePurga;
+                parametrosDB.VelocidadePurga = parametrosXML.VelocidadePurga;
+                parametrosDB.AceleracaoPurga = parametrosXML.AceleracaoPurga;
+                parametrosDB.DelayPurga = parametrosXML.DelayPurga;
+                parametrosDB.ControlarExecucaoPurga = parametrosXML.ControlarExecucaoPurga;
+                parametrosDB.ExigirExecucaoPurga = parametrosXML.ExigirExecucaoPurga;
+                parametrosDB.PurgaSequencial = parametrosXML.PurgaSequencial;
 
                 #endregion
 
                 #region Controle de volume
 
-                retorno.VolumeMinimo = objPar.VolumeMinimo;
-                retorno.VolumeMaximo = objPar.VolumeMaximo;
-                retorno.ControlarNivel = objPar.ControlarNivel;
+                parametrosDB.VolumeMinimo = parametrosXML.VolumeMinimo;
+                parametrosDB.VolumeMaximo = parametrosXML.VolumeMaximo;
+                parametrosDB.ControlarNivel = parametrosXML.ControlarNivel;
 
                 #endregion
 
                 #region Inicialização dos circuitos
 
-                retorno.IniPulsoInicial = objPar.IniPulsoInicial;
-                retorno.IniPulsoLimite = objPar.IniPulsoLimite;
-                retorno.IniVariacaoPulso = objPar.IniVariacaoPulso;
-                retorno.IniStepVariacao = objPar.IniStepVariacao;
-                retorno.IniVelocidade = objPar.IniVelocidade;
-                retorno.IniAceleracao = objPar.IniAceleracao;
-                retorno.IniMovimentoReverso = objPar.IniMovimentoReverso;
-                retorno.InicializarCircuitosPurga = objPar.InicializarCircuitosPurga;
-                retorno.InicializarCircuitosPurgaIndividual = objPar.InicializarCircuitosPurgaIndividual;
-                retorno.QtdeCircuitoGrupo = objPar.QtdeCircuitoGrupo;
+                parametrosDB.IniPulsoInicial = parametrosXML.IniPulsoInicial;
+                parametrosDB.IniPulsoLimite = parametrosXML.IniPulsoLimite;
+                parametrosDB.IniVariacaoPulso = parametrosXML.IniVariacaoPulso;
+                parametrosDB.IniStepVariacao = parametrosXML.IniStepVariacao;
+                parametrosDB.IniVelocidade = parametrosXML.IniVelocidade;
+                parametrosDB.IniAceleracao = parametrosXML.IniAceleracao;
+                parametrosDB.IniMovimentoReverso = parametrosXML.IniMovimentoReverso;
+                parametrosDB.InicializarCircuitosPurga = parametrosXML.InicializarCircuitosPurga;
+                parametrosDB.InicializarCircuitosPurgaIndividual = parametrosXML.InicializarCircuitosPurgaIndividual;
+                parametrosDB.QtdeCircuitoGrupo = parametrosXML.QtdeCircuitoGrupo;
 
                 #endregion
 
                 #region Unidade de medida
 
-                retorno.ValorShot = objPar.ValorShot;
-                retorno.HabilitarShot = objPar.HabilitarShot;
-                retorno.HabilitarOnca = objPar.HabilitarOnca;
-                retorno.HabilitarMililitro = objPar.HabilitarMililitro;
-                retorno.HabilitarGrama = objPar.HabilitarGrama;
-                retorno.UnidadeMedidaNivelColorante = objPar.UnidadeMedidaNivelColorante;
+                parametrosDB.ValorShot = parametrosXML.ValorShot;
+                parametrosDB.HabilitarShot = parametrosXML.HabilitarShot;
+                parametrosDB.HabilitarOnca = parametrosXML.HabilitarOnca;
+                parametrosDB.HabilitarMililitro = parametrosXML.HabilitarMililitro;
+                parametrosDB.HabilitarGrama = parametrosXML.HabilitarGrama;
+                parametrosDB.UnidadeMedidaNivelColorante = parametrosXML.UnidadeMedidaNivelColorante;
 
                 #endregion
 
                 #region Log
 
-                retorno.PathLogProcessoDispensa = objPar.PathLogProcessoDispensa;
-                retorno.PathLogControleDispensa = objPar.PathLogControleDispensa;
-                retorno.HabilitarLogComunicacao = objPar.HabilitarLogComunicacao;
-                retorno.PathLogComunicacao = objPar.PathLogComunicacao;
+                parametrosDB.PathLogProcessoDispensa = parametrosXML.PathLogProcessoDispensa;
+                parametrosDB.PathLogControleDispensa = parametrosXML.PathLogControleDispensa;
+                parametrosDB.HabilitarLogComunicacao = parametrosXML.HabilitarLogComunicacao;
+                parametrosDB.PathLogComunicacao = parametrosXML.PathLogComunicacao;
 
                 #endregion
 
                 #region Monitoramento dos circuitos
 
-                retorno.QtdeMonitCircuitoGrupo = objPar.QtdeMonitCircuitoGrupo;
-                retorno.MonitVelocidade = objPar.MonitVelocidade;
-                retorno.MonitAceleracao = objPar.MonitAceleracao;
-                retorno.MonitDelay = objPar.MonitDelay;
-                retorno.MonitTimerDelay = objPar.MonitTimerDelay;
-                retorno.MonitTimerDelayIni = objPar.MonitTimerDelayIni;
-                retorno.DesabilitarInterfaceMonitCircuito = objPar.DesabilitarInterfaceMonitCircuito;
-                retorno.DesabilitarProcessoMonitCircuito = objPar.DesabilitarProcessoMonitCircuito;
-                retorno.MonitMovimentoReverso = objPar.MonitMovimentoReverso;
-                retorno.MonitPulsos = objPar.MonitPulsos;
+                parametrosDB.QtdeMonitCircuitoGrupo = parametrosXML.QtdeMonitCircuitoGrupo;
+                parametrosDB.MonitVelocidade = parametrosXML.MonitVelocidade;
+                parametrosDB.MonitAceleracao = parametrosXML.MonitAceleracao;
+                parametrosDB.MonitDelay = parametrosXML.MonitDelay;
+                parametrosDB.MonitTimerDelay = parametrosXML.MonitTimerDelay;
+                parametrosDB.MonitTimerDelayIni = parametrosXML.MonitTimerDelayIni;
+                parametrosDB.DesabilitarInterfaceMonitCircuito = parametrosXML.DesabilitarInterfaceMonitCircuito;
+                parametrosDB.DesabilitarProcessoMonitCircuito = parametrosXML.DesabilitarProcessoMonitCircuito;
+                parametrosDB.MonitMovimentoReverso = parametrosXML.MonitMovimentoReverso;
+                parametrosDB.MonitPulsos = parametrosXML.MonitPulsos;
 
                 #endregion
 
                 #region Producao
 
-                retorno.TipoProducao = objPar.TipoProducao;
-
-                retorno.IpProducao = objPar.IpProducao;
-
-                retorno.PortaProducao = objPar.PortaProducao;
-
-                retorno.DesabilitaMonitProcessoProducao = objPar.DesabilitaMonitProcessoProducao;
+                parametrosDB.TipoProducao = parametrosXML.TipoProducao;
+                parametrosDB.IpProducao = parametrosXML.IpProducao;
+                parametrosDB.PortaProducao = parametrosXML.PortaProducao;
+                parametrosDB.DesabilitaMonitProcessoProducao = parametrosXML.DesabilitaMonitProcessoProducao;
 
                 #endregion
 
                 #region Sinc Formula
                 try
                 {
-                    retorno.DesabilitaMonitSincFormula = objPar.DesabilitaMonitSincFormula;
-
-                    retorno.PortaSincFormula = objPar.PortaSincFormula;
-
-                    retorno.IpSincFormula = objPar.IpSincFormula;
-
+                    parametrosDB.DesabilitaMonitSincFormula = parametrosXML.DesabilitaMonitSincFormula;
+                    parametrosDB.PortaSincFormula = parametrosXML.PortaSincFormula;
+                    parametrosDB.IpSincFormula = parametrosXML.IpSincFormula;
                 }
                 catch (Exception e)
                 {
@@ -205,116 +199,122 @@ namespace Percolore.IOConnect
 
                 #endregion
 
-                Util.ObjectParametros.PersistInsert(retorno);
+                Util.ObjectParametros.PersistInsert(parametrosDB);
 
                 Util.ObjectParametros.InitLoad();
 
             }
 
+            // Conversão do arquivo de colorantes
             if (!File.Exists(Util.ObjectColorante.PathFile))
             {
+                List<Colorante> colorantesXML = Colorante.List();
+
                 Util.ObjectColorante.CreateBD();
+                List<Util.ObjectColorante> colorantesDB = new List<Util.ObjectColorante>();
 
-                List<Colorante> lCor = Colorante.List();
-                List<Util.ObjectColorante> lObjCor = new List<Util.ObjectColorante>();
-                foreach (Colorante cor in lCor)
+                foreach (Colorante unitColoranteXML in colorantesXML)
                 {
-                    Util.ObjectColorante objCor = new Util.ObjectColorante();
-                    objCor.Circuito = cor.Circuito;
-                    objCor.Correspondencia = cor.Correspondencia;
-                    objCor.Dispositivo = cor.Dispositivo;
-                    objCor.Habilitado = cor.Habilitado;
-                    objCor.MassaEspecifica = cor.MassaEspecifica;
-                    objCor.NivelMaximo = cor.NivelMaximo;
-                    objCor.NivelMinimo = cor.NivelMinimo;
-                    objCor.Nome = cor.Nome;
-                    objCor.Volume = cor.Volume;
-                    objCor.IsBase = false;
-                    objCor.Seguidor = -1;
-                    objCor.IsBicoIndividual = false;
-                    objCor.VolumePurga = 5;
-                    objCor.VolumeBicoIndividual = 0.0;
+                    Util.ObjectColorante unitColoranteDB = new Util.ObjectColorante();
+                    unitColoranteDB.Circuito = unitColoranteXML.Circuito;
+                    unitColoranteDB.Correspondencia = unitColoranteXML.Correspondencia;
+                    unitColoranteDB.Dispositivo = unitColoranteXML.Dispositivo;
+                    unitColoranteDB.Habilitado = unitColoranteXML.Habilitado;
+                    unitColoranteDB.MassaEspecifica = unitColoranteXML.MassaEspecifica;
+                    unitColoranteDB.NivelMaximo = unitColoranteXML.NivelMaximo;
+                    unitColoranteDB.NivelMinimo = unitColoranteXML.NivelMinimo;
+                    unitColoranteDB.Nome = unitColoranteXML.Nome;
+                    unitColoranteDB.Volume = unitColoranteXML.Volume;
+                    unitColoranteDB.IsBase = false;
+                    unitColoranteDB.Seguidor = -1;
+                    unitColoranteDB.IsBicoIndividual = false;
+                    unitColoranteDB.VolumePurga = 5;
+                    unitColoranteDB.VolumeBicoIndividual = 0.0;
 
-                    lObjCor.Add(objCor);
+                    colorantesDB.Add(unitColoranteDB);
                 }
 
-                Util.ObjectParametros retorno = new Util.ObjectParametros();
+                Util.ObjectParametros parametrosDB = new Util.ObjectParametros();
                 Util.ObjectParametros.InitLoad();
-                retorno = Util.ObjectParametros.Load();
+                parametrosDB = Util.ObjectParametros.Load();
 
-                if (retorno != null)
+                // completar com dados padrão, caso não informados no XML
+                if (parametrosDB != null)
                 {
-                    for (int i = lCor.Count + 1; i <= 32; i++)
+                    for (int i = colorantesXML.Count + 1; i <= 32; i++)
                     {
-                        Util.ObjectColorante objCor = new Util.ObjectColorante();
-                        objCor.Circuito = i;
-                        objCor.Correspondencia = i;
-                        objCor.Dispositivo = 2;
-                        objCor.Habilitado = false;
-                        objCor.MassaEspecifica = 0;
-                        objCor.NivelMaximo = retorno.VolumeMaximo;
-                        objCor.NivelMinimo = retorno.VolumeMinimo;
-                        objCor.Nome = "";
-                        objCor.Volume = 0;
-                        objCor.IsBase = false;
-                        objCor.Seguidor = -1;
-                        objCor.IsBicoIndividual = false;
-                        objCor.VolumeBicoIndividual = 0.0;
-                        lObjCor.Add(objCor);
+                        Util.ObjectColorante unitColoranteDB = new Util.ObjectColorante();
+                        unitColoranteDB.Circuito = i;
+                        unitColoranteDB.Correspondencia = i;
+                        unitColoranteDB.Dispositivo = 2;
+                        unitColoranteDB.Habilitado = false;
+                        unitColoranteDB.MassaEspecifica = 0;
+                        unitColoranteDB.NivelMaximo = parametrosDB.VolumeMaximo;
+                        unitColoranteDB.NivelMinimo = parametrosDB.VolumeMinimo;
+                        unitColoranteDB.Nome = "";
+                        unitColoranteDB.Volume = 0;
+                        unitColoranteDB.IsBase = false;
+                        unitColoranteDB.Seguidor = -1;
+                        unitColoranteDB.IsBicoIndividual = false;
+                        unitColoranteDB.VolumeBicoIndividual = 0.0;
+                        colorantesDB.Add(unitColoranteDB);
                     }
 
-                    Util.ObjectColorante.Persist(lObjCor);
+                    Util.ObjectColorante.Persist(colorantesDB);
                 }
                 else
-                    LogManager.LogInformation("Parâmetros de colorante não encontrados.");
+                    LogManager.LogInformation("Não foi possível carregar os parâmetros do sistema.");
             }
 
+            // Conversão do arquivo de fórmulas
             if (!File.Exists(Util.ObjectFormula.PathFile))
-            {
+            {                
+                List<Formula> formulasXML = Formula.List();
+
                 Util.ObjectFormula.CreateBD();
 
-                List<Formula> lFor = Formula.List();
-
-                foreach (Formula formula in lFor)
+                foreach (Formula unitFormulaXML in formulasXML)
                 {
-                    Util.ObjectFormula objFor = new Util.ObjectFormula();
-                    objFor.Itens = new List<Util.ObjectFormulaItem>();
-                    objFor.Nome = formula.Nome;
-                    foreach (FormulaItem fitem in formula.Itens)
+                    Util.ObjectFormula formulasDB = new Util.ObjectFormula();
+                    formulasDB.Itens = new List<Util.ObjectFormulaItem>();
+                    formulasDB.Nome = unitFormulaXML.Nome;
+                    foreach (FormulaItem formulaItemXML in unitFormulaXML.Itens)
                     {
-                        Util.ObjectFormulaItem item = new Util.ObjectFormulaItem();
-                        item.IdColorante = fitem.IdColorante;
-                        item.Mililitros = fitem.Mililitros;
-                        objFor.Itens.Add(item);
+                        Util.ObjectFormulaItem formulaItemDB = new Util.ObjectFormulaItem();
+                        formulaItemDB.IdColorante = formulaItemXML.IdColorante;
+                        formulaItemDB.Mililitros = formulaItemXML.Mililitros;
+                        formulasDB.Itens.Add(formulaItemDB);
                     }
-                    Util.ObjectFormula.Persist(objFor);
+                    Util.ObjectFormula.Persist(formulasDB);
                 }
 
             }
 
+            // Conversão do arquivo de calibrações
             if (!File.Exists(Util.ObjectCalibragem.PathFile))
             {
                 Util.ObjectCalibragem.CreateBD();
                 Util.ObjectCalibracaoAutomatica.CreateBD();
 
-                Util.ObjectCalibracaoAutomatica _calibracao = new Util.ObjectCalibracaoAutomatica();
+                Util.ObjectCalibracaoAutomatica calibragemAutoDB = new Util.ObjectCalibracaoAutomatica();
 
-                _calibracao.CapacideMaxBalanca = 420;
-                _calibracao.MaxMassaAdmRecipiente = 100;
-                _calibracao.NumeroMaxTentativaRec = 3;
-                _calibracao.VolumeMaxRecipiente = 200;
-                _calibracao._calibragem = new Util.ObjectCalibragem();
-                _calibracao._calibragem.Motor = 1;
-                _calibracao.listOperacaoAutomatica = new List<Negocio.OperacaoAutomatica>();
-                Util.ObjectCalibracaoAutomatica.Add(_calibracao, true);
+                calibragemAutoDB.CapacideMaxBalanca = 420;
+                calibragemAutoDB.MaxMassaAdmRecipiente = 100;
+                calibragemAutoDB.NumeroMaxTentativaRec = 3;
+                calibragemAutoDB.VolumeMaxRecipiente = 200;
+                calibragemAutoDB._calibragem = new Util.ObjectCalibragem();
+                calibragemAutoDB._calibragem.Motor = 1;
+                calibragemAutoDB.listOperacaoAutomatica = new List<Negocio.OperacaoAutomatica>();
+                Util.ObjectCalibracaoAutomatica.Add(calibragemAutoDB, true);
 
-                List<Calibragem> lCal = new List<Calibragem>();
+                // lendo e reparando arquivo XML
+                List<Calibragem> calibragemXML = new List<Calibragem>();
                 for (int i = 1; i <= 32; i++)
                 {
                     try
                     {
-                        Calibragem cal = Calibragem.Load(i);
-                        lCal.Add(cal);
+                        Calibragem unitCalibragemXML = Calibragem.Load(i);
+                        calibragemXML.Add(unitCalibragemXML);
                     }
                     catch
                     {
@@ -324,9 +324,9 @@ namespace Percolore.IOConnect
                         {
                             try
                             {
-                                Calibragem cal = Calibragem.Load(i - 16);
-                                cal.Motor = i;
-                                lCal.Add(cal);
+                                Calibragem unitCalibragemXML = Calibragem.Load(i - 16);
+                                unitCalibragemXML.Motor = i;
+                                calibragemXML.Add(unitCalibragemXML);
                             }
                             catch (Exception ex)
                             {
@@ -335,54 +335,58 @@ namespace Percolore.IOConnect
                         }
                     }
                 }
-                foreach (Calibragem cal in lCal)
+
+                // convertendo para o formato do banco de dados
+                foreach (Calibragem unitCalibragemXML in calibragemXML)
                 {
-                    Util.ObjectCalibragem objCal = new Util.ObjectCalibragem();
-                    objCal.Motor = cal.Motor;
-                    objCal.UltimoPulsoReverso = cal.UltimoPulsoReverso;
-                    objCal.Valores = new List<ValoresVO>();
-                    foreach (ValoresVO vO in cal.Valores)
+                    Util.ObjectCalibragem unitCalibragemDB = new Util.ObjectCalibragem();
+                    unitCalibragemDB.Motor = unitCalibragemXML.Motor;
+                    unitCalibragemDB.UltimoPulsoReverso = unitCalibragemXML.UltimoPulsoReverso;
+                    unitCalibragemDB.Valores = new List<ValoresVO>();
+                    foreach (ValoresVO calibragemValoresXML in unitCalibragemXML.Valores)
                     {
-                        ValoresVO _vO = new ValoresVO();
-                        _vO.Aceleracao = vO.Aceleracao;
-                        _vO.Delay = vO.Delay;
-                        _vO.DesvioMedio = vO.DesvioMedio;
-                        _vO.MassaMedia = vO.MassaMedia;
-                        _vO.PulsoHorario = vO.PulsoHorario;
-                        _vO.PulsoReverso = vO.PulsoReverso;
-                        _vO.Velocidade = vO.Velocidade;
-                        _vO.Volume = vO.Volume;
-                        objCal.Valores.Add(_vO);
+                        ValoresVO calibragemValoresDB = new ValoresVO();
+                        calibragemValoresDB.Aceleracao = calibragemValoresXML.Aceleracao;
+                        calibragemValoresDB.Delay = calibragemValoresXML.Delay;
+                        calibragemValoresDB.DesvioMedio = calibragemValoresXML.DesvioMedio;
+                        calibragemValoresDB.MassaMedia = calibragemValoresXML.MassaMedia;
+                        calibragemValoresDB.PulsoHorario = calibragemValoresXML.PulsoHorario;
+                        calibragemValoresDB.PulsoReverso = calibragemValoresXML.PulsoReverso;
+                        calibragemValoresDB.Velocidade = calibragemValoresXML.Velocidade;
+                        calibragemValoresDB.Volume = calibragemValoresXML.Volume;
+                        unitCalibragemDB.Valores.Add(calibragemValoresDB);
                     }
-                    Util.ObjectCalibragem.Add(objCal);
+                    Util.ObjectCalibragem.Add(unitCalibragemDB);
                 }
 
             }
 
+            // Criação do arquivo de configurações de recirculação
             if (!File.Exists(Util.ObjectRecircular.PathFile))
             {
                 Util.ObjectRecircular.CreateBD();
                 if (File.Exists(Util.ObjectRecircular.PathFile))
                 {
-                    List<Util.ObjectColorante> lCol = Util.ObjectColorante.List();
-                    List<Util.ObjectRecircular> lRecirc = new List<Util.ObjectRecircular>();
+                    List<Util.ObjectColorante> colorantesDB = Util.ObjectColorante.List();
+                    List<Util.ObjectRecircular> recircularDB = new List<Util.ObjectRecircular>();
                     DateTime dtAgora = DateTime.Now;
-                    foreach (Util.ObjectColorante _col in lCol)
+                    foreach (Util.ObjectColorante unitColorantesDB in colorantesDB)
                     {
-                        Util.ObjectRecircular _rec = new Util.ObjectRecircular();
-                        _rec.Circuito = _col.Circuito;
-                        _rec.Dias = 10;
-                        _rec.Habilitado = false;
-                        _rec.VolumeDin = 0.03;
-                        _rec.VolumeRecircular = 0.5;
-                        _rec.VolumeDosado = 0;
-                        _rec.DtInicio = dtAgora;
-                        lRecirc.Add(_rec);
+                        Util.ObjectRecircular unitRecircularDB = new Util.ObjectRecircular();
+                        unitRecircularDB.Circuito = unitColorantesDB.Circuito;
+                        unitRecircularDB.Dias = 10;
+                        unitRecircularDB.Habilitado = false;
+                        unitRecircularDB.VolumeDin = 0.03;
+                        unitRecircularDB.VolumeRecircular = 0.5;
+                        unitRecircularDB.VolumeDosado = 0;
+                        unitRecircularDB.DtInicio = dtAgora;
+                        recircularDB.Add(unitRecircularDB);
                     }
-                    Util.ObjectRecircular.Persist(lRecirc);
+                    Util.ObjectRecircular.Persist(recircularDB);
                 }
             }
 
+            // Criação do arquivo de configurações de usuário
             if (!File.Exists(Util.ObjectUser.PathFile))
             {
                 Util.ObjectUser.CreateBD();
@@ -415,6 +419,7 @@ namespace Percolore.IOConnect
 
             }
 
+            // Criação do arquivo BasDat06.db
             if (!File.Exists(Util.ObjectBasDat06.PathFile))
             {
                 Util.ObjectBasDat06.CreateBD();
@@ -442,6 +447,7 @@ namespace Percolore.IOConnect
 
             }
 
+            // Criação do arquivo PlMov.db
             if (!File.Exists(Util.ObjectMotorPlacaMovimentacao.PathFile))
             {
                 Util.ObjectMotorPlacaMovimentacao.CreateBD();
@@ -486,6 +492,7 @@ namespace Percolore.IOConnect
                 }
             }
 
+            // Criação do arquivo BasDat05.db
             if (!File.Exists(Util.ObjectBasDat05.PathFile))
             {
                 Util.ObjectBasDat05.CreateBD();
@@ -512,12 +519,13 @@ namespace Percolore.IOConnect
                 Util.ObjectBasDat05.Persist(White_);
             }
 
-
+            // Criação do arquivo Abastecimento.db
             if (!File.Exists(Util.ObjectAbastecimento.PathFile))
             {
                 Util.ObjectAbastecimento.CreateBD();
             }
 
+            // Criação do arquivo Eventos.db
             if (!File.Exists(Util.ObjectEventos.PathFile))
             {
                 Util.ObjectEventos.CreateBD();
