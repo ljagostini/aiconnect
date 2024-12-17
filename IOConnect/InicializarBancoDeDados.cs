@@ -102,152 +102,22 @@ namespace Percolore.IOConnect
             // Conversão do arquivo de parâmetros
             if (!File.Exists(Util.ObjectParametros.PathFile))
             {
-                /*Atualiza estrutura do arquivo xml*/
-                Parametros.UpdateStructure();
-
-                /*Persiste valores padrões*/
-                Parametros tmp = Parametros.Load();
-                Parametros.Persist(tmp);
-
                 Parametros parametrosXML = Parametros.Load();
 
                 Util.ObjectParametros.CreateBD();
                 Util.ObjectParametros parametrosDB = new Util.ObjectParametros();
 
-                #region Geral
-
-                parametrosDB.ResponseTimeout = parametrosXML.ResponseTimeout;
-                parametrosDB.Velocidade = parametrosXML.Velocidade;
-
-                parametrosDB.Aceleracao = parametrosXML.Aceleracao;
-                parametrosDB.DelayReverso = parametrosXML.DelayReverso;
-                parametrosDB.PulsoReverso = parametrosXML.PulsoReverso;
-                parametrosDB.SomarPulsoReverso = parametrosXML.SomarPulsoReverso;
-                parametrosDB.HabilitarTecladoVirtual = parametrosXML.HabilitarTecladoVirtual;
-                parametrosDB.HabilitarDispensaSequencial = parametrosXML.HabilitarDispensaSequencial;
-                parametrosDB.HabilitarFormulaPersonalizada = parametrosXML.HabilitarFormulaPersonalizada;
-                parametrosDB.HabilitarTesteRecipiente = parametrosXML.HabilitarTesteRecipiente;
-                parametrosDB.IdIdioma = parametrosXML.IdIdioma;
-                parametrosDB.IdDispositivo = parametrosXML.IdDispositivo;
-                parametrosDB.HabilitarPurgaIndividual = parametrosXML.HabilitarPurgaIndividual;
-                parametrosDB.HabilitarTouchScrenn = parametrosXML.HabilitarTouchScrenn;
-                parametrosDB.IdDispositivo2 = parametrosXML.IdDispositivo2;
-                parametrosDB.NomeDispositivo = parametrosXML.NomeDispositivo;
-                parametrosDB.NomeDispositivo2 = parametrosXML.NomeDispositivo2;
-                parametrosDB.VersaoIoconnect = parametrosXML.VersaoIoconnect;
-                parametrosDB.HabilitarDispensaSequencialP1 = parametrosXML.HabilitarDispensaSequencialP1;
-                parametrosDB.HabilitarDispensaSequencialP2 = parametrosXML.HabilitarDispensaSequencialP2;
-
-                #endregion
-
-                #region DAT
-
-                parametrosDB.PathMonitoramentoDAT = parametrosXML.PathMonitoramentoDAT;
-                parametrosDB.PathRepositorioDAT = parametrosXML.PathRepositorioDAT;
-                parametrosDB.PadraoConteudoDAT = parametrosXML.PadraoConteudoDAT;
-                parametrosDB.BasePosicaoCircuitoDAT = parametrosXML.BasePosicaoCircuitoDAT;
-                parametrosDB.UtilizarCorrespondenciaDAT = parametrosXML.UtilizarCorrespondenciaDAT;
-                parametrosDB.DesabilitarInterfaceDispensaSequencial = parametrosXML.DesabilitarInterfaceDispensaSequencial;
-                parametrosDB.DesabilitarInterfaceDispensaSimultanea = parametrosXML.DesabilitarInterfaceDispensaSimultanea;
-                parametrosDB.DesabilitarInterfaceInicializacaoCircuito = parametrosXML.DesabilitarInterfaceInicializacaoCircuito;
-                parametrosDB.DesabilitarInterfacePurga = parametrosXML.DesabilitarInterfacePurga;
-
-                #endregion
-
-                #region Purga
-
-                parametrosDB.PrazoExecucaoPurga = parametrosXML.PrazoExecucaoPurga;
-                parametrosDB.DataExecucaoPurga = parametrosXML.DataExecucaoPurga;
-                parametrosDB.VolumePurga = parametrosXML.VolumePurga;
-                parametrosDB.VelocidadePurga = parametrosXML.VelocidadePurga;
-                parametrosDB.AceleracaoPurga = parametrosXML.AceleracaoPurga;
-                parametrosDB.DelayPurga = parametrosXML.DelayPurga;
-                parametrosDB.ControlarExecucaoPurga = parametrosXML.ControlarExecucaoPurga;
-                parametrosDB.ExigirExecucaoPurga = parametrosXML.ExigirExecucaoPurga;
-                parametrosDB.PurgaSequencial = parametrosXML.PurgaSequencial;
-
-                #endregion
-
-                #region Controle de volume
-
-                parametrosDB.VolumeMinimo = parametrosXML.VolumeMinimo;
-                parametrosDB.VolumeMaximo = parametrosXML.VolumeMaximo;
-                parametrosDB.ControlarNivel = parametrosXML.ControlarNivel;
-
-                #endregion
-
-                #region Inicialização dos circuitos
-
-                parametrosDB.IniPulsoInicial = parametrosXML.IniPulsoInicial;
-                parametrosDB.IniPulsoLimite = parametrosXML.IniPulsoLimite;
-                parametrosDB.IniVariacaoPulso = parametrosXML.IniVariacaoPulso;
-                parametrosDB.IniStepVariacao = parametrosXML.IniStepVariacao;
-                parametrosDB.IniVelocidade = parametrosXML.IniVelocidade;
-                parametrosDB.IniAceleracao = parametrosXML.IniAceleracao;
-                parametrosDB.IniMovimentoReverso = parametrosXML.IniMovimentoReverso;
-                parametrosDB.InicializarCircuitosPurga = parametrosXML.InicializarCircuitosPurga;
-                parametrosDB.InicializarCircuitosPurgaIndividual = parametrosXML.InicializarCircuitosPurgaIndividual;
-                parametrosDB.QtdeCircuitoGrupo = parametrosXML.QtdeCircuitoGrupo;
-
-                #endregion
-
-                #region Unidade de medida
-
-                parametrosDB.ValorShot = parametrosXML.ValorShot;
-                parametrosDB.HabilitarShot = parametrosXML.HabilitarShot;
-                parametrosDB.HabilitarOnca = parametrosXML.HabilitarOnca;
-                parametrosDB.HabilitarMililitro = parametrosXML.HabilitarMililitro;
-                parametrosDB.HabilitarGrama = parametrosXML.HabilitarGrama;
-                parametrosDB.UnidadeMedidaNivelColorante = parametrosXML.UnidadeMedidaNivelColorante;
-
-                #endregion
-
-                #region Log
-
-                parametrosDB.PathLogProcessoDispensa = parametrosXML.PathLogProcessoDispensa;
-                parametrosDB.PathLogControleDispensa = parametrosXML.PathLogControleDispensa;
-                parametrosDB.HabilitarLogComunicacao = parametrosXML.HabilitarLogComunicacao;
-                parametrosDB.PathLogComunicacao = parametrosXML.PathLogComunicacao;
-
-                #endregion
-
-                #region Monitoramento dos circuitos
-
-                parametrosDB.QtdeMonitCircuitoGrupo = parametrosXML.QtdeMonitCircuitoGrupo;
-                parametrosDB.MonitVelocidade = parametrosXML.MonitVelocidade;
-                parametrosDB.MonitAceleracao = parametrosXML.MonitAceleracao;
-                parametrosDB.MonitDelay = parametrosXML.MonitDelay;
-                parametrosDB.MonitTimerDelay = parametrosXML.MonitTimerDelay;
-                parametrosDB.MonitTimerDelayIni = parametrosXML.MonitTimerDelayIni;
-                parametrosDB.DesabilitarInterfaceMonitCircuito = parametrosXML.DesabilitarInterfaceMonitCircuito;
-                parametrosDB.DesabilitarProcessoMonitCircuito = parametrosXML.DesabilitarProcessoMonitCircuito;
-                parametrosDB.MonitMovimentoReverso = parametrosXML.MonitMovimentoReverso;
-                parametrosDB.MonitPulsos = parametrosXML.MonitPulsos;
-
-                #endregion
-
-                #region Producao
-
-                parametrosDB.TipoProducao = parametrosXML.TipoProducao;
-                parametrosDB.IpProducao = parametrosXML.IpProducao;
-                parametrosDB.PortaProducao = parametrosXML.PortaProducao;
-                parametrosDB.DesabilitaMonitProcessoProducao = parametrosXML.DesabilitaMonitProcessoProducao;
-
-                #endregion
-
-                #region Sinc Formula
-                try
+                // loop para copiar os valores do XML para o banco de dados
+                foreach (var item in parametrosXML.GetType().GetProperties())
                 {
-                    parametrosDB.DesabilitaMonitSincFormula = parametrosXML.DesabilitaMonitSincFormula;
-                    parametrosDB.PortaSincFormula = parametrosXML.PortaSincFormula;
-                    parametrosDB.IpSincFormula = parametrosXML.IpSincFormula;
+                    if (parametrosDB.GetType().GetProperty(item.Name).GetSetMethod() != null)
+                    {
+                        parametrosDB.GetType().GetProperty(item.Name).SetValue(parametrosDB, item.GetValue(parametrosXML));
+                    } else
+                    {
+                        LogManager.LogWarning($"Não foi possível converter a propriedade '{item.Name}' a partir do XML.");
+                    }
                 }
-                catch (Exception e)
-                {
-                    LogManager.LogError($"Erro no módulo {typeof(Program).Name}: ", e);
-                }
-
-                #endregion
 
                 Util.ObjectParametros.PersistInsert(parametrosDB);
 
