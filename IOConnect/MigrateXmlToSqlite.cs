@@ -1,0 +1,556 @@
+﻿using System;
+using Microsoft.Extensions.Configuration;
+using Percolore.Core;
+using Percolore.Core.Logging;
+using Percolore.Core.Persistence.WindowsRegistry;
+using Percolore.Core.Persistence.Xml;
+
+namespace Percolore.IOConnect
+{
+    class MigrateXmlToSqlite
+    {
+        public static void Main()
+        {
+            #region excluindo os arquivo db caso exista xml referente por default
+            if (File.Exists(Parametros.PathFile))
+            {
+                if (File.Exists(Util.ObjectParametros.PathFile))
+                {
+                    File.Delete(Util.ObjectParametros.PathFile);
+                    Thread.Sleep(2000);
+                }
+            }
+
+            if (File.Exists(Colorante.PathFile))
+            {
+                if (File.Exists(Util.ObjectColorante.PathFile))
+                {
+                    File.Delete(Util.ObjectColorante.PathFile);
+                    Thread.Sleep(2000);
+                }
+            }
+
+            if (File.Exists(Formula.PathFile))
+            {
+                if (File.Exists(Util.ObjectFormula.PathFile))
+                {
+                    File.Delete(Util.ObjectFormula.PathFile);
+                    Thread.Sleep(2000);
+                }
+            }
+
+            if (File.Exists(Calibragem.PathFile))
+            {
+                if (File.Exists(Util.ObjectCalibragem.PathFile))
+                {
+                    File.Delete(Util.ObjectCalibragem.PathFile);
+                    Thread.Sleep(2000);
+                }
+            }
+            #endregion
+
+            if (!File.Exists(Util.ObjectParametros.PathFile))
+            {
+                /*Atualiza estrutura do arquivo xml*/
+                Parametros.UpdateStructure();
+
+                /*Persiste valores padrões*/
+                Parametros _parametros = Parametros.Load();
+                Parametros.Persist(_parametros);
+
+
+                Util.ObjectParametros.CreateBD();
+                Parametros objPar = Parametros.Load();
+
+                Util.ObjectParametros retorno = new Util.ObjectParametros();
+
+                #region Geral
+
+                retorno.ResponseTimeout = objPar.ResponseTimeout;
+                retorno.Velocidade = objPar.Velocidade;
+
+                retorno.Aceleracao = objPar.Aceleracao;
+                retorno.DelayReverso = objPar.DelayReverso;
+                retorno.PulsoReverso = objPar.PulsoReverso;
+                retorno.SomarPulsoReverso = objPar.SomarPulsoReverso;
+                retorno.HabilitarTecladoVirtual = objPar.HabilitarTecladoVirtual;
+                retorno.HabilitarDispensaSequencial = objPar.HabilitarDispensaSequencial;
+                retorno.HabilitarFormulaPersonalizada = objPar.HabilitarFormulaPersonalizada;
+                retorno.HabilitarTesteRecipiente = objPar.HabilitarTesteRecipiente;
+                retorno.IdIdioma = objPar.IdIdioma;
+                retorno.IdDispositivo = objPar.IdDispositivo;
+                retorno.HabilitarPurgaIndividual = objPar.HabilitarPurgaIndividual;
+                retorno.HabilitarTouchScrenn = objPar.HabilitarTouchScrenn;
+                retorno.IdDispositivo2 = objPar.IdDispositivo2;
+                retorno.NomeDispositivo = objPar.NomeDispositivo;
+                retorno.NomeDispositivo2 = objPar.NomeDispositivo2;
+                retorno.VersaoIoconnect = objPar.VersaoIoconnect;
+                retorno.HabilitarDispensaSequencialP1 = objPar.HabilitarDispensaSequencialP1;
+                retorno.HabilitarDispensaSequencialP2 = objPar.HabilitarDispensaSequencialP2;
+
+                #endregion
+
+                #region DAT
+
+                retorno.PathMonitoramentoDAT = objPar.PathMonitoramentoDAT;
+                retorno.PathRepositorioDAT = objPar.PathRepositorioDAT;
+                retorno.PadraoConteudoDAT = objPar.PadraoConteudoDAT;
+                retorno.BasePosicaoCircuitoDAT = objPar.BasePosicaoCircuitoDAT;
+                retorno.UtilizarCorrespondenciaDAT = objPar.UtilizarCorrespondenciaDAT;
+                retorno.DesabilitarInterfaceDispensaSequencial = objPar.DesabilitarInterfaceDispensaSequencial;
+                retorno.DesabilitarInterfaceDispensaSimultanea = objPar.DesabilitarInterfaceDispensaSimultanea;
+                retorno.DesabilitarInterfaceInicializacaoCircuito = objPar.DesabilitarInterfaceInicializacaoCircuito;
+                retorno.DesabilitarInterfacePurga = objPar.DesabilitarInterfacePurga;
+
+                #endregion
+
+                #region Purga
+
+                retorno.PrazoExecucaoPurga = objPar.PrazoExecucaoPurga;
+                retorno.DataExecucaoPurga = objPar.DataExecucaoPurga;
+                retorno.VolumePurga = objPar.VolumePurga;
+                retorno.VelocidadePurga = objPar.VelocidadePurga;
+                retorno.AceleracaoPurga = objPar.AceleracaoPurga;
+                retorno.DelayPurga = objPar.DelayPurga;
+                retorno.ControlarExecucaoPurga = objPar.ControlarExecucaoPurga;
+                retorno.ExigirExecucaoPurga = objPar.ExigirExecucaoPurga;
+                retorno.PurgaSequencial = objPar.PurgaSequencial;
+
+                #endregion
+
+                #region Controle de volume
+
+                retorno.VolumeMinimo = objPar.VolumeMinimo;
+                retorno.VolumeMaximo = objPar.VolumeMaximo;
+                retorno.ControlarNivel = objPar.ControlarNivel;
+
+                #endregion
+
+                #region Inicialização dos circuitos
+
+                retorno.IniPulsoInicial = objPar.IniPulsoInicial;
+                retorno.IniPulsoLimite = objPar.IniPulsoLimite;
+                retorno.IniVariacaoPulso = objPar.IniVariacaoPulso;
+                retorno.IniStepVariacao = objPar.IniStepVariacao;
+                retorno.IniVelocidade = objPar.IniVelocidade;
+                retorno.IniAceleracao = objPar.IniAceleracao;
+                retorno.IniMovimentoReverso = objPar.IniMovimentoReverso;
+                retorno.InicializarCircuitosPurga = objPar.InicializarCircuitosPurga;
+                retorno.InicializarCircuitosPurgaIndividual = objPar.InicializarCircuitosPurgaIndividual;
+                retorno.QtdeCircuitoGrupo = objPar.QtdeCircuitoGrupo;
+
+                #endregion
+
+                #region Unidade de medida
+
+                retorno.ValorShot = objPar.ValorShot;
+                retorno.HabilitarShot = objPar.HabilitarShot;
+                retorno.HabilitarOnca = objPar.HabilitarOnca;
+                retorno.HabilitarMililitro = objPar.HabilitarMililitro;
+                retorno.HabilitarGrama = objPar.HabilitarGrama;
+                retorno.UnidadeMedidaNivelColorante = objPar.UnidadeMedidaNivelColorante;
+
+                #endregion
+
+                #region Log
+
+                retorno.PathLogProcessoDispensa = objPar.PathLogProcessoDispensa;
+                retorno.PathLogControleDispensa = objPar.PathLogControleDispensa;
+                retorno.HabilitarLogComunicacao = objPar.HabilitarLogComunicacao;
+                retorno.PathLogComunicacao = objPar.PathLogComunicacao;
+
+                #endregion
+
+                #region Monitoramento dos circuitos
+
+                retorno.QtdeMonitCircuitoGrupo = objPar.QtdeMonitCircuitoGrupo;
+                retorno.MonitVelocidade = objPar.MonitVelocidade;
+                retorno.MonitAceleracao = objPar.MonitAceleracao;
+                retorno.MonitDelay = objPar.MonitDelay;
+                retorno.MonitTimerDelay = objPar.MonitTimerDelay;
+                retorno.MonitTimerDelayIni = objPar.MonitTimerDelayIni;
+                retorno.DesabilitarInterfaceMonitCircuito = objPar.DesabilitarInterfaceMonitCircuito;
+                retorno.DesabilitarProcessoMonitCircuito = objPar.DesabilitarProcessoMonitCircuito;
+                retorno.MonitMovimentoReverso = objPar.MonitMovimentoReverso;
+                retorno.MonitPulsos = objPar.MonitPulsos;
+
+                #endregion
+
+                #region Producao
+
+                retorno.TipoProducao = objPar.TipoProducao;
+
+                retorno.IpProducao = objPar.IpProducao;
+
+                retorno.PortaProducao = objPar.PortaProducao;
+
+                retorno.DesabilitaMonitProcessoProducao = objPar.DesabilitaMonitProcessoProducao;
+
+                #endregion
+
+                #region Sinc Formula
+                try
+                {
+                    retorno.DesabilitaMonitSincFormula = objPar.DesabilitaMonitSincFormula;
+
+                    retorno.PortaSincFormula = objPar.PortaSincFormula;
+
+                    retorno.IpSincFormula = objPar.IpSincFormula;
+
+                }
+                catch (Exception e)
+                {
+                    LogManager.LogError($"Erro no módulo {typeof(Program).Name}: ", e);
+                }
+
+                #endregion
+
+                Util.ObjectParametros.PersistInsert(retorno);
+
+                Util.ObjectParametros.InitLoad();
+
+            }
+
+            if (!File.Exists(Util.ObjectColorante.PathFile))
+            {
+                Util.ObjectColorante.CreateBD();
+
+                List<Colorante> lCor = Colorante.List();
+                List<Util.ObjectColorante> lObjCor = new List<Util.ObjectColorante>();
+                foreach (Colorante cor in lCor)
+                {
+                    Util.ObjectColorante objCor = new Util.ObjectColorante();
+                    objCor.Circuito = cor.Circuito;
+                    objCor.Correspondencia = cor.Correspondencia;
+                    objCor.Dispositivo = cor.Dispositivo;
+                    objCor.Habilitado = cor.Habilitado;
+                    objCor.MassaEspecifica = cor.MassaEspecifica;
+                    objCor.NivelMaximo = cor.NivelMaximo;
+                    objCor.NivelMinimo = cor.NivelMinimo;
+                    objCor.Nome = cor.Nome;
+                    objCor.Volume = cor.Volume;
+                    objCor.IsBase = false;
+                    objCor.Seguidor = -1;
+                    objCor.IsBicoIndividual = false;
+                    objCor.VolumePurga = 5;
+                    objCor.VolumeBicoIndividual = 0.0;
+
+                    lObjCor.Add(objCor);
+                }
+
+                Util.ObjectParametros retorno = new Util.ObjectParametros();
+                Util.ObjectParametros.InitLoad();
+                retorno = Util.ObjectParametros.Load();
+
+                if (retorno != null)
+                {
+                    for (int i = lCor.Count + 1; i <= 32; i++)
+                    {
+                        Util.ObjectColorante objCor = new Util.ObjectColorante();
+                        objCor.Circuito = i;
+                        objCor.Correspondencia = i;
+                        objCor.Dispositivo = 2;
+                        objCor.Habilitado = false;
+                        objCor.MassaEspecifica = 0;
+                        objCor.NivelMaximo = retorno.VolumeMaximo;
+                        objCor.NivelMinimo = retorno.VolumeMinimo;
+                        objCor.Nome = "";
+                        objCor.Volume = 0;
+                        objCor.IsBase = false;
+                        objCor.Seguidor = -1;
+                        objCor.IsBicoIndividual = false;
+                        objCor.VolumeBicoIndividual = 0.0;
+                        lObjCor.Add(objCor);
+                    }
+
+                    Util.ObjectColorante.Persist(lObjCor);
+                }
+                else
+                    LogManager.LogInformation("Parâmetros de colorante não encontrados.");
+            }
+
+            if (!File.Exists(Util.ObjectFormula.PathFile))
+            {
+                Util.ObjectFormula.CreateBD();
+
+                List<Formula> lFor = Formula.List();
+
+                foreach (Formula formula in lFor)
+                {
+                    Util.ObjectFormula objFor = new Util.ObjectFormula();
+                    objFor.Itens = new List<Util.ObjectFormulaItem>();
+                    objFor.Nome = formula.Nome;
+                    foreach (FormulaItem fitem in formula.Itens)
+                    {
+                        Util.ObjectFormulaItem item = new Util.ObjectFormulaItem();
+                        item.IdColorante = fitem.IdColorante;
+                        item.Mililitros = fitem.Mililitros;
+                        objFor.Itens.Add(item);
+                    }
+                    Util.ObjectFormula.Persist(objFor);
+                }
+
+            }
+
+            if (!File.Exists(Util.ObjectCalibragem.PathFile))
+            {
+                Util.ObjectCalibragem.CreateBD();
+                Util.ObjectCalibracaoAutomatica.CreateBD();
+
+                Util.ObjectCalibracaoAutomatica _calibracao = new Util.ObjectCalibracaoAutomatica();
+
+                _calibracao.CapacideMaxBalanca = 420;
+                _calibracao.MaxMassaAdmRecipiente = 100;
+                _calibracao.NumeroMaxTentativaRec = 3;
+                _calibracao.VolumeMaxRecipiente = 200;
+                _calibracao._calibragem = new Util.ObjectCalibragem();
+                _calibracao._calibragem.Motor = 1;
+                _calibracao.listOperacaoAutomatica = new List<Negocio.OperacaoAutomatica>();
+                Util.ObjectCalibracaoAutomatica.Add(_calibracao, true);
+
+                List<Calibragem> lCal = new List<Calibragem>();
+                for (int i = 1; i <= 32; i++)
+                {
+                    try
+                    {
+                        Calibragem cal = Calibragem.Load(i);
+                        lCal.Add(cal);
+                    }
+                    catch
+                    {
+                        LogManager.LogInformation($"Calibração não encontrada para o motor '{i}'. Carregando última calibração válida.");
+
+                        if (i > 16)
+                        {
+                            try
+                            {
+                                Calibragem cal = Calibragem.Load(i - 16);
+                                cal.Motor = i;
+                                lCal.Add(cal);
+                            }
+                            catch (Exception ex)
+                            {
+                                LogManager.LogError($"Não foi possível carregar calibração válida para o motor {i}.", ex);
+                            }
+                        }
+                    }
+                }
+                foreach (Calibragem cal in lCal)
+                {
+                    Util.ObjectCalibragem objCal = new Util.ObjectCalibragem();
+                    objCal.Motor = cal.Motor;
+                    objCal.UltimoPulsoReverso = cal.UltimoPulsoReverso;
+                    objCal.Valores = new List<ValoresVO>();
+                    foreach (ValoresVO vO in cal.Valores)
+                    {
+                        ValoresVO _vO = new ValoresVO();
+                        _vO.Aceleracao = vO.Aceleracao;
+                        _vO.Delay = vO.Delay;
+                        _vO.DesvioMedio = vO.DesvioMedio;
+                        _vO.MassaMedia = vO.MassaMedia;
+                        _vO.PulsoHorario = vO.PulsoHorario;
+                        _vO.PulsoReverso = vO.PulsoReverso;
+                        _vO.Velocidade = vO.Velocidade;
+                        _vO.Volume = vO.Volume;
+                        objCal.Valores.Add(_vO);
+                    }
+                    Util.ObjectCalibragem.Add(objCal);
+                }
+
+            }
+
+            if (!File.Exists(Util.ObjectRecircular.PathFile))
+            {
+                Util.ObjectRecircular.CreateBD();
+                if (File.Exists(Util.ObjectRecircular.PathFile))
+                {
+                    List<Util.ObjectColorante> lCol = Util.ObjectColorante.List();
+                    List<Util.ObjectRecircular> lRecirc = new List<Util.ObjectRecircular>();
+                    DateTime dtAgora = DateTime.Now;
+                    foreach (Util.ObjectColorante _col in lCol)
+                    {
+                        Util.ObjectRecircular _rec = new Util.ObjectRecircular();
+                        _rec.Circuito = _col.Circuito;
+                        _rec.Dias = 10;
+                        _rec.Habilitado = false;
+                        _rec.VolumeDin = 0.03;
+                        _rec.VolumeRecircular = 0.5;
+                        _rec.VolumeDosado = 0;
+                        _rec.DtInicio = dtAgora;
+                        lRecirc.Add(_rec);
+                    }
+                    Util.ObjectRecircular.Persist(lRecirc);
+                }
+            }
+
+            if (!File.Exists(Util.ObjectUser.PathFile))
+            {
+                Util.ObjectUser.CreateBD();
+
+                Util.ObjectUser userInit = new Util.ObjectUser();
+
+                userInit.Nome = "master";
+                userInit.Senha = "1500k";
+                userInit.Tecnico = false;
+                userInit.Tipo = 1;
+
+                Util.ObjectUser.Persist(userInit);
+
+                Util.ObjectUser userTecnico = new Util.ObjectUser();
+
+                userTecnico.Nome = "tec";
+                userTecnico.Senha = "1234";
+                userTecnico.Tecnico = true;
+                userTecnico.Tipo = 2;
+                Util.ObjectUser.Persist(userTecnico);
+
+                Util.ObjectUser userMan = new Util.ObjectUser();
+
+                userMan.Nome = "manager";
+                userMan.Senha = "avsb";
+                userMan.Tecnico = false;
+                userMan.Tipo = 3;
+
+                Util.ObjectUser.Persist(userMan);
+
+            }
+
+            if (!File.Exists(Util.ObjectBasDat06.PathFile))
+            {
+                Util.ObjectBasDat06.CreateBD();
+
+                Util.ObjectBasDat06 Accent = new Util.ObjectBasDat06();
+                Accent.Name = "ACCENT";
+                Accent.Circuito = 14;
+                Accent.Volume = 0.92;
+
+                Util.ObjectBasDat06.Persist(Accent);
+
+                Util.ObjectBasDat06 Neutral = new Util.ObjectBasDat06();
+                Neutral.Name = "NEUTRAL";
+                Neutral.Circuito = 15;
+                Neutral.Volume = 0.82;
+
+                Util.ObjectBasDat06.Persist(Neutral);
+
+                Util.ObjectBasDat06 White_ = new Util.ObjectBasDat06();
+                White_.Name = "WHITE";
+                White_.Circuito = 16;
+                White_.Volume = 0.935;
+
+                Util.ObjectBasDat06.Persist(White_);
+
+            }
+
+            if (!File.Exists(Util.ObjectMotorPlacaMovimentacao.PathFile))
+            {
+                Util.ObjectMotorPlacaMovimentacao.CreateBD();
+                if (File.Exists(Util.ObjectMotorPlacaMovimentacao.PathFile))
+                {
+                    List<Util.ObjectMotorPlacaMovimentacao> lPlaMov = new List<Util.ObjectMotorPlacaMovimentacao>();
+                    Util.ObjectMotorPlacaMovimentacao plMov = new Util.ObjectMotorPlacaMovimentacao();
+                    plMov.Circuito = 1;
+                    plMov.NameTag = "Gaveta";
+                    plMov.TipoMotor = 0;
+                    plMov.Pulsos = 100;
+                    plMov.Aceleracao = 100;
+                    plMov.Delay = 100;
+                    plMov.Habilitado = true;
+                    plMov.Velocidade = 100;
+                    lPlaMov.Add(plMov);
+
+                    plMov = new Util.ObjectMotorPlacaMovimentacao();
+                    plMov.Circuito = 2;
+                    plMov.NameTag = "Válvula";
+                    plMov.TipoMotor = 0;
+                    plMov.Pulsos = 100;
+                    plMov.Aceleracao = 100;
+                    plMov.Delay = 100;
+                    plMov.Habilitado = true;
+                    plMov.Velocidade = 100;
+                    lPlaMov.Add(plMov);
+
+                    plMov = new Util.ObjectMotorPlacaMovimentacao();
+                    plMov.Circuito = 3;
+                    plMov.NameTag = "Bico";
+                    plMov.TipoMotor = 0;
+                    plMov.Pulsos = 100;
+                    plMov.Aceleracao = 100;
+                    plMov.Delay = 100;
+                    plMov.Habilitado = true;
+                    plMov.Velocidade = 100;
+                    lPlaMov.Add(plMov);
+
+                    Util.ObjectMotorPlacaMovimentacao.Persist(lPlaMov);
+
+                }
+            }
+
+            if (!File.Exists(Util.ObjectBasDat05.PathFile))
+            {
+                Util.ObjectBasDat05.CreateBD();
+
+                Util.ObjectBasDat05 Accent = new Util.ObjectBasDat05();
+                Accent.Name = "ACCENT";
+                Accent.Circuito = 14;
+                Accent.Volume = 0.92;
+
+                Util.ObjectBasDat05.Persist(Accent);
+
+                Util.ObjectBasDat05 Neutral = new Util.ObjectBasDat05();
+                Neutral.Name = "NEUTRAL";
+                Neutral.Circuito = 15;
+                Neutral.Volume = 0.82;
+
+                Util.ObjectBasDat05.Persist(Neutral);
+
+                Util.ObjectBasDat05 White_ = new Util.ObjectBasDat05();
+                White_.Name = "WHITE";
+                White_.Circuito = 16;
+                White_.Volume = 0.935;
+
+                Util.ObjectBasDat05.Persist(White_);
+            }
+
+
+            if (!File.Exists(Util.ObjectAbastecimento.PathFile))
+            {
+                Util.ObjectAbastecimento.CreateBD();
+            }
+
+            if (!File.Exists(Util.ObjectEventos.PathFile))
+            {
+                Util.ObjectEventos.CreateBD();
+            }
+
+            #region excluindo os Xml
+
+            if (File.Exists(Parametros.PathFile))
+            {
+                File.Delete(Parametros.PathFile);
+                Thread.Sleep(2000);
+            }
+
+            if (File.Exists(Colorante.PathFile))
+            {
+                File.Delete(Colorante.PathFile);
+                Thread.Sleep(2000);
+            }
+
+            if (File.Exists(Formula.PathFile))
+            {
+                File.Delete(Formula.PathFile);
+                Thread.Sleep(2000);
+            }
+
+            if (File.Exists(Calibragem.PathFile))
+            {
+                File.Delete(Calibragem.PathFile);
+                Thread.Sleep(2000);
+            }
+            #endregion
+
+        }
+
+    }
+}
