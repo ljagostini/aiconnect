@@ -31,9 +31,22 @@ namespace Percolore.IOConnect
             ApplicationConfiguration.Initialize();
             string log_inicializacao = string.Empty;
 
-            // Migrar XML para SQLite
-            MigrateXmlToSqlite.Main();
+            // Inicializando o banco de dados SQLite e convertendo o XML antigo, caso necessário
+            fAguarde _fAguarde = null;
+            try
+            {
+                _fAguarde = new fAguarde("Inicializando banco de dados...");
+                _fAguarde.Show();
+                _fAguarde.Refresh();
+            }
+            catch (Exception e)
+            {
+                LogManager.LogError($"Erro no módulo {typeof(Program).Name}: ", e);
+            }
+            InicializarBancoDeDados.Main();
+            _fAguarde.Close();
 
+            // Aplicativo em execução
             Util.ObjectParametros parametros = Util.ObjectParametros.Load();
 
             if (parametros != null)

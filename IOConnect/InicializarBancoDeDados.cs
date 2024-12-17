@@ -7,7 +7,7 @@ using Percolore.Core.Persistence.Xml;
 
 namespace Percolore.IOConnect
 {
-    class MigrateXmlToSqlite
+    class InicializarBancoDeDados
     {
         public static void Main()
         {
@@ -70,6 +70,30 @@ namespace Percolore.IOConnect
             else if (!File.Exists(Formula.PathFile) && !File.Exists(Util.ObjectFormula.PathFile))
             {
                 Util.ObjectFormula.CreateBD();
+            }
+            #endregion
+
+            #region verificar integridade dos bancos de dados SQLite obrigatórios
+
+            // Parametros
+            if (File.Exists(Util.ObjectParametros.PathFile))
+            {
+                try { Util.ObjectParametros.Load(); }
+                catch (Exception e) { LogManager.LogError($"Erro ao carregar o banco de dados {Util.ObjectParametros.PathFile}: ", e); return; }
+            }
+
+            // Colorantes
+            if (File.Exists(Util.ObjectColorante.PathFile))
+            {
+                try { Util.ObjectColorante.List(); }
+                catch (Exception e) { LogManager.LogError($"Erro ao carregar o banco de dados {Util.ObjectColorante.PathFile}: ", e); return; }
+            }
+
+            // Calibragem
+            if (File.Exists(Util.ObjectCalibragem.PathFile))
+            {
+                try { Util.ObjectCalibragem.List(); }
+                catch (Exception e) { LogManager.LogError($"Erro ao carregar o banco de dados {Util.ObjectCalibragem.PathFile}: ", e); return; }
             }
             #endregion
 
