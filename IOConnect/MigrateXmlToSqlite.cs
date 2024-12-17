@@ -11,43 +11,69 @@ namespace Percolore.IOConnect
     {
         public static void Main()
         {
-            #region excluindo os arquivo db caso exista xml referente por default
-            if (File.Exists(Parametros.PathFile))
+            #region verificando bancos de dados obrigatórios e com conversão XML disponível
+
+            /* Arquivos obrigatórios para primeira execução:
+             * Parametros, Colorantes, Calibragem
+             * 
+             * Arquivos opcionais com conversão disponível:
+             * Formulas, Recircular, Abastecimento
+             * 
+             * Arquivos opcionais não convertidos:
+             * Eventos, MotorPlacaMovimentacao, BasDat05, BasDat06, Users, CalibragemAuto, CalibragemAutoHist, RecircularAuto, PlMov
+             * 
+             * TODO: Implementar conversão dos arquivos opcionais
+             */
+
+            // Parametros
+            if (File.Exists(Parametros.PathFile) && File.Exists(Util.ObjectParametros.PathFile))
             {
-                if (File.Exists(Util.ObjectParametros.PathFile))
-                {
-                    File.Delete(Util.ObjectParametros.PathFile);
-                    Thread.Sleep(2000);
-                }
+                File.Delete(Parametros.PathFile);
+                Thread.Sleep(2000);
+            }
+            else if (!File.Exists(Parametros.PathFile) && !File.Exists(Util.ObjectParametros.PathFile))
+            {
+                LogManager.LogInformation($"Um dos bancos de dados obrigatórios não foi encontrado: {Util.ObjectParametros.PathFile}");
+                return;
             }
 
-            if (File.Exists(Colorante.PathFile))
+            // Colorantes
+            if (File.Exists(Colorante.PathFile) && File.Exists(Util.ObjectColorante.PathFile))
             {
-                if (File.Exists(Util.ObjectColorante.PathFile))
-                {
-                    File.Delete(Util.ObjectColorante.PathFile);
-                    Thread.Sleep(2000);
-                }
+                File.Delete(Colorante.PathFile);
+                Thread.Sleep(2000);
+            }
+            else if (!File.Exists(Colorante.PathFile) && !File.Exists(Util.ObjectColorante.PathFile))
+            {
+                LogManager.LogInformation($"Um dos bancos de dados obrigatórios não foi encontrado: {Util.ObjectColorante.PathFile}");
+                return;
             }
 
-            if (File.Exists(Formula.PathFile))
+            // Calibragem
+            if (File.Exists(Calibragem.PathFile) && File.Exists(Util.ObjectCalibragem.PathFile))
             {
-                if (File.Exists(Util.ObjectFormula.PathFile))
-                {
-                    File.Delete(Util.ObjectFormula.PathFile);
-                    Thread.Sleep(2000);
-                }
+                File.Delete(Calibragem.PathFile);
+                Thread.Sleep(2000);
+            }
+            else if (!File.Exists(Calibragem.PathFile) && !File.Exists(Util.ObjectCalibragem.PathFile))
+            {
+                LogManager.LogInformation($"Um dos bancos de dados obrigatórios não foi encontrado: {Util.ObjectCalibragem.PathFile}");
+                return;
             }
 
-            if (File.Exists(Calibragem.PathFile))
+            // Formulas
+            if (File.Exists(Formula.PathFile) && File.Exists(Util.ObjectFormula.PathFile))
             {
-                if (File.Exists(Util.ObjectCalibragem.PathFile))
-                {
-                    File.Delete(Util.ObjectCalibragem.PathFile);
-                    Thread.Sleep(2000);
-                }
+                File.Delete(Formula.PathFile);
+                Thread.Sleep(2000);
+            }
+            else if (!File.Exists(Formula.PathFile) && !File.Exists(Util.ObjectFormula.PathFile))
+            {
+                Util.ObjectFormula.CreateBD();
             }
             #endregion
+
+            #region métodos de conversão do banco de dados XML antigo para SQLite
 
             // Conversão do arquivo de parâmetros
             if (!File.Exists(Util.ObjectParametros.PathFile))
@@ -268,7 +294,7 @@ namespace Percolore.IOConnect
 
             // Conversão do arquivo de fórmulas
             if (!File.Exists(Util.ObjectFormula.PathFile))
-            {                
+            {
                 List<Formula> formulasXML = Formula.List();
 
                 Util.ObjectFormula.CreateBD();
@@ -385,6 +411,10 @@ namespace Percolore.IOConnect
                     Util.ObjectRecircular.Persist(recircularDB);
                 }
             }
+
+            #endregion
+
+            #region métodos de criação de outros bancos de dados SQLite
 
             // Criação do arquivo de configurações de usuário
             if (!File.Exists(Util.ObjectUser.PathFile))
@@ -530,6 +560,8 @@ namespace Percolore.IOConnect
             {
                 Util.ObjectEventos.CreateBD();
             }
+
+            #endregion
 
             #region excluindo os Xml
 
