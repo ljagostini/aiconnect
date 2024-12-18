@@ -31,7 +31,6 @@ namespace Percolore.Core.Persistence.Xml
                 FormulaItem item = new FormulaItem();
                 item.Mililitros = double.Parse(xeItem.Attribute("Volume").Value, System.Globalization.CultureInfo.InvariantCulture);
                 item.IdColorante = _IdCorante;
-                item.Colorante = Colorante.Load(_IdCorante);
 
                 Itens.Add(item);
                 item = null;

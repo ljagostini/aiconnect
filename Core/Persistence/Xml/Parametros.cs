@@ -256,7 +256,7 @@ namespace Percolore.Core.Persistence.Xml
             #region Geral
 
             elemento = xml.Element("ResponseTimeout");
-            if (xml.Element("ResponseTimeout") != null)
+            if (elemento != null)
                 p.ResponseTimeout = XmlConvert.ToInt32(elemento.Value);
 
             elemento = xml.Element("Velocidade");
