@@ -28,48 +28,44 @@ namespace Percolore.IOConnect
             // Parametros
             if (File.Exists(Parametros.PathFile) && File.Exists(Util.ObjectParametros.PathFile))
             {
-                File.Delete(Parametros.PathFile);
+                File.Delete(Util.ObjectParametros.PathFile);
                 Thread.Sleep(2000);
             }
             else if (!File.Exists(Parametros.PathFile) && !File.Exists(Util.ObjectParametros.PathFile))
             {
-                LogManager.LogInformation($"Um dos bancos de dados obrigatórios não foi encontrado: {Util.ObjectParametros.PathFile}");
+                LogManager.LogWarning($"Um dos bancos de dados obrigatórios não foi encontrado: {Util.ObjectParametros.PathFile}");
                 return;
             }
 
             // Colorantes
             if (File.Exists(Colorante.PathFile) && File.Exists(Util.ObjectColorante.PathFile))
             {
-                File.Delete(Colorante.PathFile);
+                File.Delete(Util.ObjectColorante.PathFile);
                 Thread.Sleep(2000);
             }
             else if (!File.Exists(Colorante.PathFile) && !File.Exists(Util.ObjectColorante.PathFile))
             {
-                LogManager.LogInformation($"Um dos bancos de dados obrigatórios não foi encontrado: {Util.ObjectColorante.PathFile}");
+                LogManager.LogWarning($"Um dos bancos de dados obrigatórios não foi encontrado: {Util.ObjectColorante.PathFile}");
                 return;
             }
 
             // Calibragem
             if (File.Exists(Calibragem.PathFile) && File.Exists(Util.ObjectCalibragem.PathFile))
             {
-                File.Delete(Calibragem.PathFile);
+                File.Delete(Util.ObjectCalibragem.PathFile);
                 Thread.Sleep(2000);
             }
             else if (!File.Exists(Calibragem.PathFile) && !File.Exists(Util.ObjectCalibragem.PathFile))
             {
-                LogManager.LogInformation($"Um dos bancos de dados obrigatórios não foi encontrado: {Util.ObjectCalibragem.PathFile}");
+                LogManager.LogWarning($"Um dos bancos de dados obrigatórios não foi encontrado: {Util.ObjectCalibragem.PathFile}");
                 return;
             }
 
             // Formulas
             if (File.Exists(Formula.PathFile) && File.Exists(Util.ObjectFormula.PathFile))
             {
-                File.Delete(Formula.PathFile);
+                File.Delete(Util.ObjectFormula.PathFile);
                 Thread.Sleep(2000);
-            }
-            else if (!File.Exists(Formula.PathFile) && !File.Exists(Util.ObjectFormula.PathFile))
-            {
-                Util.ObjectFormula.CreateBD();
             }
             #endregion
 
@@ -113,7 +109,8 @@ namespace Percolore.IOConnect
                     if (parametrosDB.GetType().GetProperty(item.Name).GetSetMethod() != null)
                     {
                         parametrosDB.GetType().GetProperty(item.Name).SetValue(parametrosDB, item.GetValue(parametrosXML));
-                    } else
+                    }
+                    else
                     {
                         LogManager.LogWarning($"Não foi possível converter a propriedade '{item.Name}' a partir do XML.");
                     }
@@ -123,6 +120,12 @@ namespace Percolore.IOConnect
 
                 Util.ObjectParametros.InitLoad();
 
+                // removendo o arquivo XML
+                if (File.Exists(Parametros.PathFile))
+                {
+                    File.Delete(Parametros.PathFile);
+                    Thread.Sleep(2000);
+                }
             }
 
             // Conversão do arquivo de colorantes
@@ -184,30 +187,13 @@ namespace Percolore.IOConnect
                 }
                 else
                     LogManager.LogInformation("Não foi possível carregar os parâmetros do sistema.");
-            }
 
-            // Conversão do arquivo de fórmulas
-            if (!File.Exists(Util.ObjectFormula.PathFile))
-            {
-                List<Formula> formulasXML = Formula.List();
-
-                Util.ObjectFormula.CreateBD();
-
-                foreach (Formula unitFormulaXML in formulasXML)
+                // removendo o arquivo XML
+                if (File.Exists(Colorante.PathFile))
                 {
-                    Util.ObjectFormula formulasDB = new Util.ObjectFormula();
-                    formulasDB.Itens = new List<Util.ObjectFormulaItem>();
-                    formulasDB.Nome = unitFormulaXML.Nome;
-                    foreach (FormulaItem formulaItemXML in unitFormulaXML.Itens)
-                    {
-                        Util.ObjectFormulaItem formulaItemDB = new Util.ObjectFormulaItem();
-                        formulaItemDB.IdColorante = formulaItemXML.IdColorante;
-                        formulaItemDB.Mililitros = formulaItemXML.Mililitros;
-                        formulasDB.Itens.Add(formulaItemDB);
-                    }
-                    Util.ObjectFormula.Persist(formulasDB);
+                    File.Delete(Colorante.PathFile);
+                    Thread.Sleep(2000);
                 }
-
             }
 
             // Conversão do arquivo de calibrações
@@ -279,6 +265,50 @@ namespace Percolore.IOConnect
                     Util.ObjectCalibragem.Add(unitCalibragemDB);
                 }
 
+                // removendo o arquivo XML
+                if (File.Exists(Calibragem.PathFile))
+                {
+                    File.Delete(Calibragem.PathFile);
+                    Thread.Sleep(2000);
+                }
+            }
+
+            // Conversão do arquivo de fórmulas
+            if (!File.Exists(Util.ObjectFormula.PathFile))
+            {
+                List<Formula> formulasXML = null;
+                try
+                {
+                    formulasXML = Formula.List();
+                }
+                catch (Exception)
+                {
+                    formulasXML = new List<Formula>();
+                }
+
+                Util.ObjectFormula.CreateBD();
+
+                foreach (Formula unitFormulaXML in formulasXML)
+                {
+                    Util.ObjectFormula formulasDB = new Util.ObjectFormula();
+                    formulasDB.Itens = new List<Util.ObjectFormulaItem>();
+                    formulasDB.Nome = unitFormulaXML.Nome;
+                    foreach (FormulaItem formulaItemXML in unitFormulaXML.Itens)
+                    {
+                        Util.ObjectFormulaItem formulaItemDB = new Util.ObjectFormulaItem();
+                        formulaItemDB.IdColorante = formulaItemXML.IdColorante;
+                        formulaItemDB.Mililitros = formulaItemXML.Mililitros;
+                        formulasDB.Itens.Add(formulaItemDB);
+                    }
+                    Util.ObjectFormula.Persist(formulasDB);
+                }
+
+                // removendo o arquivo XML
+                if (File.Exists(Formula.PathFile))
+                {
+                    File.Delete(Formula.PathFile);
+                    Thread.Sleep(2000);
+                }
             }
 
             // Criação do arquivo de configurações de recirculação
@@ -303,6 +333,13 @@ namespace Percolore.IOConnect
                         recircularDB.Add(unitRecircularDB);
                     }
                     Util.ObjectRecircular.Persist(recircularDB);
+                }
+
+                // removendo o arquivo XML
+                if (File.Exists(Recircular.PathFile))
+                {
+                    File.Delete(Recircular.PathFile);
+                    Thread.Sleep(2000);
                 }
             }
 
@@ -456,35 +493,6 @@ namespace Percolore.IOConnect
             }
 
             #endregion
-
-            #region excluindo os Xml
-
-            if (File.Exists(Parametros.PathFile))
-            {
-                File.Delete(Parametros.PathFile);
-                Thread.Sleep(2000);
-            }
-
-            if (File.Exists(Colorante.PathFile))
-            {
-                File.Delete(Colorante.PathFile);
-                Thread.Sleep(2000);
-            }
-
-            if (File.Exists(Formula.PathFile))
-            {
-                File.Delete(Formula.PathFile);
-                Thread.Sleep(2000);
-            }
-
-            if (File.Exists(Calibragem.PathFile))
-            {
-                File.Delete(Calibragem.PathFile);
-                Thread.Sleep(2000);
-            }
-            #endregion
-
         }
-
     }
 }
