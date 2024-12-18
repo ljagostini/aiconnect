@@ -67,6 +67,13 @@ namespace Percolore.IOConnect
                 File.Delete(Util.ObjectFormula.PathFile);
                 Thread.Sleep(2000);
             }
+
+            // Recircular
+            if (File.Exists(Recircular.PathFile) && File.Exists(Util.ObjectRecircular.PathFile))
+            {
+                File.Delete(Util.ObjectRecircular.PathFile);
+                Thread.Sleep(2000);
+            }
             #endregion
 
             #region verificar integridade dos bancos de dados SQLite obrigatórios
@@ -317,21 +324,24 @@ namespace Percolore.IOConnect
                 Util.ObjectRecircular.CreateBD();
                 if (File.Exists(Util.ObjectRecircular.PathFile))
                 {
-                    List<Util.ObjectColorante> colorantesDB = Util.ObjectColorante.List();
                     List<Util.ObjectRecircular> recircularDB = new List<Util.ObjectRecircular>();
-                    DateTime dtAgora = DateTime.Now;
-                    foreach (Util.ObjectColorante unitColorantesDB in colorantesDB)
+
+                    // Lendo dados do XML
+                    List<Recircular> recircularXML = Recircular.List();
+
+                    foreach (Recircular unitRecircularXML in recircularXML)
                     {
                         Util.ObjectRecircular unitRecircularDB = new Util.ObjectRecircular();
-                        unitRecircularDB.Circuito = unitColorantesDB.Circuito;
-                        unitRecircularDB.Dias = 10;
-                        unitRecircularDB.Habilitado = false;
-                        unitRecircularDB.VolumeDin = 0.03;
-                        unitRecircularDB.VolumeRecircular = 0.5;
-                        unitRecircularDB.VolumeDosado = 0;
-                        unitRecircularDB.DtInicio = dtAgora;
+                        unitRecircularDB.Circuito = unitRecircularXML.Circuito;
+                        unitRecircularDB.Dias = unitRecircularXML.Dias;
+                        unitRecircularDB.Habilitado = unitRecircularXML.Habilitado;
+                        unitRecircularDB.VolumeDin = unitRecircularXML.VolumeDin;
+                        unitRecircularDB.VolumeRecircular = unitRecircularXML.VolumeRecircular;
+                        unitRecircularDB.VolumeDosado = unitRecircularXML.VolumeDosado;
+                        unitRecircularDB.DtInicio = unitRecircularXML.DtInicio;
                         recircularDB.Add(unitRecircularDB);
                     }
+
                     Util.ObjectRecircular.Persist(recircularDB);
                 }
 
