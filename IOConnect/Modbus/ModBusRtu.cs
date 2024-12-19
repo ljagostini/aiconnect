@@ -466,7 +466,7 @@ namespace Percolore.IOConnect
             }
             else
             {
-                modbusStatusStr = "Serial port not open";
+                modbusStatusStr = "Write multiple registers failed. Serial port not open";
                 modbusStatus = false;
                 return false;
             }
@@ -547,7 +547,7 @@ namespace Percolore.IOConnect
             }
             else
             {
-                modbusStatusStr = "Serial port not open";
+                modbusStatusStr = "Write preset registers failed. Serial port not open";
                 modbusStatus = false;
                 return false;
             }
@@ -623,7 +623,7 @@ namespace Percolore.IOConnect
             }
             else
             {
-                modbusStatusStr = "Serial port not open";
+                modbusStatusStr = "Read registers failed. Serial port not open";
                 modbusStatus = true;
                 return false;
             }
