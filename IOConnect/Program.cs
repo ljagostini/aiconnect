@@ -170,15 +170,21 @@ namespace Percolore.IOConnect
             {
                 List<Util.ObjectColorante> colorantes =
                     Util.ObjectColorante.List().Where(s => s.Habilitado && s.Seguidor == -1).ToList();
-                string log_nivel_colorante = "";
-                foreach (Util.ObjectColorante c in colorantes)
-                    log_nivel_colorante += $"{c.Circuito},{Math.Round(c.Volume, 3)},";
+                if (colorantes.Count > 0)
+                {
+                    string log_nivel_colorante = "";
+                    foreach (Util.ObjectColorante c in colorantes)
+                        log_nivel_colorante += $"{c.Circuito},{Math.Round(c.Volume, 3)},";
 
-                log_nivel_colorante =
-                    log_nivel_colorante.Remove(log_nivel_colorante.Length - 1);
+                    log_nivel_colorante = log_nivel_colorante.Remove(log_nivel_colorante.Length - 1);
 
-                Log.Logar(
-                    TipoLog.Processo, parametros.PathLogProcessoDispensa, log_nivel_colorante);
+                    Log.Logar(
+                        TipoLog.Processo, parametros.PathLogProcessoDispensa, log_nivel_colorante);
+                }
+                else
+                {
+                    LogManager.LogWarning("Nenhum colorante habilitado para controle de nível.");
+                }
             }
 
             try
