@@ -17,10 +17,13 @@ namespace Percolore.IOConnect
              * Parametros, Colorantes, Calibragem
              * 
              * Arquivos opcionais com conversão disponível:
-             * Formulas, Recircular, Abastecimento
+             * Formulas, Recircular
              * 
              * Arquivos opcionais não convertidos:
              * Eventos, MotorPlacaMovimentacao, BasDat05, BasDat06, Users, CalibragemAuto, CalibragemAutoHist, RecircularAuto, PlMov
+             * 
+             * Arquivos não utilizados:
+             * Abastecimento
              * 
              * TODO: Implementar conversão dos arquivos opcionais
              */
@@ -155,11 +158,11 @@ namespace Percolore.IOConnect
                     unitColoranteDB.NivelMinimo = unitColoranteXML.NivelMinimo;
                     unitColoranteDB.Nome = unitColoranteXML.Nome;
                     unitColoranteDB.Volume = unitColoranteXML.Volume;
-                    unitColoranteDB.IsBase = false;
-                    unitColoranteDB.Seguidor = -1;
-                    unitColoranteDB.IsBicoIndividual = false;
-                    unitColoranteDB.VolumePurga = 5;
-                    unitColoranteDB.VolumeBicoIndividual = 0.0;
+                    unitColoranteDB.IsBase = unitColoranteXML.IsBase;
+                    unitColoranteDB.Seguidor = unitColoranteXML.Seguidor;
+                    unitColoranteDB.IsBicoIndividual = unitColoranteXML.IsBicoIndividual;
+                    unitColoranteDB.VolumePurga = unitColoranteXML.VolumePurga;
+                    unitColoranteDB.VolumeBicoIndividual = unitColoranteXML.VolumeBicoIndividual;
 
                     colorantesDB.Add(unitColoranteDB);
                 }
