@@ -1,19 +1,15 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Corantes>
-  <Corante Motor="1" Nome="G" MassaEspecifica="1.2325" Habilitado="true" Volume="0" Correspondencia="1" />
-  <Corante Motor="2" Nome="B" MassaEspecifica="1.3252" Habilitado="true" Volume="0" Correspondencia="2" />
-  <Corante Motor="3" Nome="C" MassaEspecifica="1.7722" Habilitado="true" Volume="0" Correspondencia="3" />
-  <Corante Motor="4" Nome="D" MassaEspecifica="1.3454" Habilitado="true" Volume="0" Correspondencia="4" />
-  <Corante Motor="5" Nome="E" MassaEspecifica="1.3846" Habilitado="true" Volume="0" Correspondencia="5" />
-  <Corante Motor="6" Nome="F" MassaEspecifica="2.1056" Habilitado="true" Volume="0" Correspondencia="6" />
-  <Corante Motor="7" Nome="J" MassaEspecifica="1.365" Habilitado="true" Volume="0" Correspondencia="7" />
-  <Corante Motor="8" Nome="W" MassaEspecifica="1.9871" Habilitado="true" Volume="0" Correspondencia="8" />
-  <Corante Motor="9" Nome="L" MassaEspecifica="1.3249" Habilitado="true" Volume="0" Correspondencia="9" />
-  <Corante Motor="10" Nome="M" MassaEspecifica="1.2996" Habilitado="true" Volume="0" Correspondencia="10" />
-  <Corante Motor="11" Nome="Z" MassaEspecifica="1.26" Habilitado="true" Volume="0" Correspondencia="11" />
-  <Corante Motor="12" Nome="V" MassaEspecifica="1.2507" Habilitado="true" Volume="0" Correspondencia="12" />
-  <Corante Motor="13" Nome="13X" MassaEspecifica="0" Habilitado="false" Volume="0" Correspondencia="13" />
-  <Corante Motor="14" Nome="14X" MassaEspecifica="0" Habilitado="false" Volume="0" Correspondencia="14" />
-  <Corante Motor="15" Nome="15X" MassaEspecifica="0" Habilitado="false" Volume="0" Correspondencia="15" />
-  <Corante Motor="16" Nome="16X" MassaEspecifica="0" Habilitado="false" Volume="0" Correspondencia="16" />
+  <Colorante Motor="1" Nome="A" MassaEspecifica="1.01" Habilitado="true" Volume="900" Correspondencia="1" Dispositivo="1" NivelMinimo="400" NivelMaximo="2000" IsBase="false" Seguidor="-1" Step="0" VolumePurga="0.8" ColorRGB="255;255;255;" IsBicoIndividual="false" />
+  <Colorante Motor="2" Nome="B" MassaEspecifica="1.02" Habilitado="true" Volume="900" Correspondencia="2" Dispositivo="1" NivelMinimo="400" NivelMaximo="2000" IsBase="false" Seguidor="-1" Step="0" VolumePurga="0.8" ColorRGB="255;255;255;" IsBicoIndividual="false" />
+  <Colorante Motor="3" Nome="C" MassaEspecifica="1.03" Habilitado="true" Volume="900" Correspondencia="3" Dispositivo="1" NivelMinimo="400" NivelMaximo="2000" IsBase="false" Seguidor="-1" Step="0" VolumePurga="0.8" ColorRGB="255;255;255;" IsBicoIndividual="false" />
+  <Colorante Motor="4" Nome="D" MassaEspecifica="1.04" Habilitado="true" Volume="900" Correspondencia="4" Dispositivo="1" NivelMinimo="400" NivelMaximo="2000" IsBase="false" Seguidor="-1" Step="0" VolumePurga="0.8" ColorRGB="255;255;255;" IsBicoIndividual="false" />
+  <Colorante Motor="5" Nome="E" MassaEspecifica="1.05" Habilitado="true" Volume="899" Correspondencia="5" Dispositivo="1" NivelMinimo="400" NivelMaximo="2000" IsBase="false" Seguidor="-1" Step="0" VolumePurga="0.8" ColorRGB="255;255;255;" IsBicoIndividual="false" />
+  <Colorante Motor="6" Nome="F" MassaEspecifica="1.06" Habilitado="true" Volume="900" Correspondencia="6" Dispositivo="1" NivelMinimo="400" NivelMaximo="2000" IsBase="false" Seguidor="-1" Step="0" VolumePurga="0.8" ColorRGB="255;255;255;" IsBicoIndividual="false" />
+  <Colorante Motor="7" Nome="G" MassaEspecifica="1.07" Habilitado="true" Volume="900" Correspondencia="7" Dispositivo="1" NivelMinimo="400" NivelMaximo="2000" IsBase="false" Seguidor="-1" Step="0" VolumePurga="0.8" ColorRGB="255;255;255;" IsBicoIndividual="false" />
+  <Colorante Motor="8" Nome="H" MassaEspecifica="1.08" Habilitado="true" Volume="900" Correspondencia="8" Dispositivo="1" NivelMinimo="400" NivelMaximo="2000" IsBase="false" Seguidor="-1" Step="0" VolumePurga="0.8" ColorRGB="255;255;255;" IsBicoIndividual="false" />
+  <Colorante Motor="9" Nome="I" MassaEspecifica="1.09" Habilitado="true" Volume="900" Correspondencia="9" Dispositivo="1" NivelMinimo="400" NivelMaximo="2000" IsBase="false" Seguidor="-1" Step="0" VolumePurga="0.8" ColorRGB="255;255;255;" IsBicoIndividual="false" />
+  <Colorante Motor="10" Nome="J" MassaEspecifica="1.10" Habilitado="true" Volume="900" Correspondencia="10" Dispositivo="1" NivelMinimo="400" NivelMaximo="2000" IsBase="false" Seguidor="-1" Step="0" VolumePurga="0.8" ColorRGB="255;255;255;" IsBicoIndividual="false" />
+  <Colorante Motor="11" Nome="K" MassaEspecifica="1.11" Habilitado="true" Volume="900" Correspondencia="11" Dispositivo="1" NivelMinimo="400" NivelMaximo="2000" IsBase="false" Seguidor="-1" Step="0" VolumePurga="0.8" ColorRGB="255;255;255;" IsBicoIndividual="false" />
+  <Colorante Motor="12" Nome="L" MassaEspecifica="1.12" Habilitado="true" Volume="900" Correspondencia="12" Dispositivo="1" NivelMinimo="400" NivelMaximo="2000" IsBase="false" Seguidor="-1" Step="0" VolumePurga="0.8" ColorRGB="255;255;255;" IsBicoIndividual="false" />
 </Corantes>
