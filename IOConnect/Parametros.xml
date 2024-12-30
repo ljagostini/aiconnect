@@ -1,29 +1,36 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Parametros>
-  <Slave>1</Slave>
-  <Velocidade>1400</Velocidade>
-  <Aceleracao>1400</Aceleracao>
-  <RevDelay>500</RevDelay>
-  <RevPulsos>200</RevPulsos>
-  <SomarRevPulsos>true</SomarRevPulsos>
+  <Velocidade>2333</Velocidade>
+  <Aceleracao>2333</Aceleracao>
+  <PulsoReverso>50</PulsoReverso>
+  <DelayReverso>500</DelayReverso>
+  <SomarPulsoReverso>true</SomarPulsoReverso>
   <HabilitarTecladoVirtual>false</HabilitarTecladoVirtual>
+  <QtdTentativasConexao>4</QtdTentativasConexao>
+  <ResponseTimeout>3000</ResponseTimeout>
+  <NomeDispositivo>COM</NomeDispositivo>
+  <NomeDispositivo2></NomeDispositivo2>
+  <IdDispositivo>2</IdDispositivo>
+  <IdDispositivo2>0</IdDispositivo2>
   <PathDAT>C:\Percolore\formula\Formula.dat</PathDAT>
+  <PadraoConteudoDAT>3</PadraoConteudoDAT>
+  <DesabilitarVolumeMinimoDat>false</DesabilitarVolumeMinimoDat>
+  <VolumeMinimoDat>0.308</VolumeMinimoDat>
   <VolumePurga>1</VolumePurga>
   <VelocidadePurga>1500</VelocidadePurga>
   <AceleracaoPurga>1500</AceleracaoPurga>
   <DelayPurga>500</DelayPurga>
   <PrazoExecucaoPurga>PT12H</PrazoExecucaoPurga>
-  <PadraoConteudoDAT>3</PadraoConteudoDAT>
   <BasePosicaoCircuitoDAT>1</BasePosicaoCircuitoDAT>
   <VolumeMinimo>200</VolumeMinimo>
-  <VolumeMaximo>2300</VolumeMaximo>
-  <ControlarVolume>false</ControlarVolume>
+  <VolumeMaximo>2000</VolumeMaximo>
+  <ControlarNivel>true</ControlarNivel>
+  <HabilitarRecirculacao>true</HabilitarRecirculacao>
   <HabilitarDispensaSequencial>true</HabilitarDispensaSequencial>
   <ValorShot>0.154</ValorShot>
   <HabilitarShot>false</HabilitarShot>
   <HabilitarOnca>true</HabilitarOnca>
   <HabilitarMililitro>true</HabilitarMililitro>
-  <DataExecucaoPurga>2022-04-19T07:35:43.0829193-03:00</DataExecucaoPurga>
   <UtilizarCorrespondenciaDAT>false</UtilizarCorrespondenciaDAT>
   <IniPulsoInicial>1</IniPulsoInicial>
   <IniPulsoLimite>50</IniPulsoLimite>
@@ -43,7 +50,6 @@
   <ControlarExecucaoPurga>true</ControlarExecucaoPurga>
   <HabilitarGrama>false</HabilitarGrama>
   <UnidadeMedidaNivelColorante>2</UnidadeMedidaNivelColorante>
-  <IdDispositivo>2</IdDispositivo>
   <PathLogComunicacao>C:\Percolore\sistema\comunicacao.log</PathLogComunicacao>
   <PathLogProcessoDispensa>C:\Percolore\log\AD-D8.log</PathLogProcessoDispensa>
   <PathLogControleDispensa>C:\Percolore\sistema\ctrldsp.log</PathLogControleDispensa>
