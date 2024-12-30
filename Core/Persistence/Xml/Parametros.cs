@@ -330,6 +330,8 @@ namespace Percolore.Core.Persistence.Xml
             elemento = xml.Element("NomeDispositivo");
             if (elemento != null)
                 p.NomeDispositivo = elemento.Value;
+            else if (xml.Element("PortaModbus") != null)
+                p.NomeDispositivo = "COM" + xml.Element("PortaModbus").Value;
 
             elemento = xml.Element("NomeDispositivo2");
             if (elemento != null)

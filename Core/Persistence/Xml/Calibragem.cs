@@ -4,7 +4,7 @@ using System.Xml.Linq;
 
 namespace Percolore.Core.Persistence.Xml
 {
-	public class Calibragem
+    public class Calibragem
     {
         public static readonly string PathFile = Path.Combine(Environment.CurrentDirectory, "Calibragem.xml");
         public static readonly string FileName = Path.GetFileName(PathFile);
@@ -12,6 +12,7 @@ namespace Percolore.Core.Persistence.Xml
         public int Motor { get; set; }
         public int UltimoPulsoReverso { get; set; }
         public List<ValoresVO> Valores { get; set; }
+        public int MinimoFaixas { get; set; } = 5;
 
         #region Métodos
 
@@ -19,6 +20,7 @@ namespace Percolore.Core.Persistence.Xml
         {
             Calibragem c = null;
             int ultimoPRev = 0;
+            int minimoFaixas = 5;
 
             XElement xml = XElement.Load(PathFile);
 
@@ -35,7 +37,13 @@ namespace Percolore.Core.Persistence.Xml
                 ultimoPRev = ultimoPulsoReverso;
             }
 
-            c = new Calibragem() { Motor = motor, Valores = new List<ValoresVO>(), UltimoPulsoReverso= ultimoPRev };
+            var minimoFaixasXml = xeCalibragem.Attribute("MinimoFaixas");
+            if (minimoFaixasXml != null)
+                int.TryParse(minimoFaixasXml.Value, out minimoFaixas);
+            if (minimoFaixas < 3)
+                minimoFaixas = 3;
+
+            c = new Calibragem() { Motor = motor, Valores = new List<ValoresVO>(), UltimoPulsoReverso = ultimoPRev, MinimoFaixas = minimoFaixas };
             ValoresVO valores = null;
 
             //Valores
@@ -64,42 +72,42 @@ namespace Percolore.Core.Persistence.Xml
                     Velocidade = velocidade;
                 }
 
-				atributoXml = v.Attribute("ReverseDelay");
+                atributoXml = v.Attribute("ReverseDelay");
                 if (atributoXml != null)
                 {
                     int.TryParse(atributoXml.Value, out int reverseDelay);
                     Delay = reverseDelay;
                 }
 
-				atributoXml = v.Attribute("Volume");
+                atributoXml = v.Attribute("Volume");
                 if (atributoXml != null)
                 {
                     double.TryParse(atributoXml.Value, NumberStyles.Any, CultureInfo.InvariantCulture, out double volume);
                     Volume = volume;
                 }
 
-				atributoXml = v.Attribute("MassaMedia");
+                atributoXml = v.Attribute("MassaMedia");
                 if (atributoXml != null)
                 {
                     double.TryParse(atributoXml.Value, NumberStyles.Any, CultureInfo.InvariantCulture, out double massaMedia);
                     MassaMedia = massaMedia;
                 }
 
-				atributoXml = v.Attribute("DesvioMedio");
+                atributoXml = v.Attribute("DesvioMedio");
                 if (atributoXml != null)
                 {
                     double.TryParse(atributoXml.Value, NumberStyles.Any, CultureInfo.InvariantCulture, out double desvioMedio);
                     DesvioMedio = desvioMedio;
                 }
 
-				atributoXml = v.Attribute("PulsoReverso");
+                atributoXml = v.Attribute("PulsoReverso");
                 if (atributoXml != null)
                 {
                     int.TryParse(atributoXml.Value, out int pulsoReverso);
                     PulsoReverso = pulsoReverso;
                 }
 
-				atributoXml = v.Attribute("Aceleracao");
+                atributoXml = v.Attribute("Aceleracao");
                 if (atributoXml != null)
                 {
                     int.TryParse(atributoXml.Value, out int aceleracao);
@@ -121,7 +129,7 @@ namespace Percolore.Core.Persistence.Xml
 
             return c;
         }
-        
+
         public static bool Validate(Calibragem c, out string outMsg)
         {
             #region Valida parâmetros
@@ -173,7 +181,7 @@ namespace Percolore.Core.Persistence.Xml
                         }
                     }
                     */
-                        
+
                 }
 
                 //Delay
@@ -227,7 +235,7 @@ namespace Percolore.Core.Persistence.Xml
                 xeValores.Add(new XAttribute("ReverseDelay", v.Delay));
                 xeValores.Add(new XAttribute("MassaMedia", v.MassaMedia));
                 xeValores.Add(new XAttribute("DesvioMedio", v.DesvioMedio));
-                xeValores.Add(new XAttribute("Aceleracao", v.Aceleracao));                    
+                xeValores.Add(new XAttribute("Aceleracao", v.Aceleracao));
                 xeValores.Add(new XAttribute("PulsoReverso", v.PulsoReverso));
                 xeCalibragem.Add(xeValores);
             }
@@ -265,7 +273,7 @@ namespace Percolore.Core.Persistence.Xml
                 xeValores.Attribute("Velocidade").SetValue(v.Velocidade);
                 xeValores.Attribute("ReverseDelay").SetValue(v.Delay);
                 xeValores.Attribute("MassaMedia").SetValue(v.MassaMedia);
-                xeValores.Attribute("DesvioMedio").SetValue(v.DesvioMedio);                   
+                xeValores.Attribute("DesvioMedio").SetValue(v.DesvioMedio);
                 xeValores.Attribute("PulsoReverso").SetValue(v.PulsoReverso);
                 xeValores.Attribute("Aceleracao").SetValue(v.Aceleracao);
             }
@@ -286,10 +294,10 @@ namespace Percolore.Core.Persistence.Xml
 
             xeCalibragem.Attribute("UltimoPulsoReverso").SetValue(pulsosRev);
 
-               
+
             xml.Save(PathFile);
         }
-        
+
         public static void UpdateInstall(Calibragem c)
         {
             //Xml
@@ -366,10 +374,10 @@ namespace Percolore.Core.Persistence.Xml
                 xeValores.Add(new XAttribute("PulsoReverso", v.PulsoReverso));
                 xeCalibragem.Add(xeValores);
             }
-               
+
             xml.Save(PathFile);
         }
-    
+
         #endregion
     }
 }

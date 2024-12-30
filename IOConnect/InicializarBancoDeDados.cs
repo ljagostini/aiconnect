@@ -259,17 +259,27 @@ namespace Percolore.IOConnect
                     unitCalibragemDB.Motor = unitCalibragemXML.Motor;
                     unitCalibragemDB.UltimoPulsoReverso = unitCalibragemXML.UltimoPulsoReverso;
                     unitCalibragemDB.Valores = new List<ValoresVO>();
+                    unitCalibragemDB.MinimoFaixas = unitCalibragemXML.MinimoFaixas;
+
                     foreach (ValoresVO calibragemValoresXML in unitCalibragemXML.Valores)
                     {
                         ValoresVO calibragemValoresDB = new ValoresVO();
-                        calibragemValoresDB.Aceleracao = calibragemValoresXML.Aceleracao;
-                        calibragemValoresDB.Delay = calibragemValoresXML.Delay;
-                        calibragemValoresDB.DesvioMedio = calibragemValoresXML.DesvioMedio;
-                        calibragemValoresDB.MassaMedia = calibragemValoresXML.MassaMedia;
-                        calibragemValoresDB.PulsoHorario = calibragemValoresXML.PulsoHorario;
-                        calibragemValoresDB.PulsoReverso = calibragemValoresXML.PulsoReverso;
-                        calibragemValoresDB.Velocidade = calibragemValoresXML.Velocidade;
+
                         calibragemValoresDB.Volume = calibragemValoresXML.Volume;
+                        calibragemValoresDB.PulsoHorario = calibragemValoresXML.PulsoHorario;
+                        calibragemValoresDB.Velocidade = calibragemValoresXML.Velocidade;
+
+                        if (calibragemValoresXML.Aceleracao == 0) calibragemValoresDB.Aceleracao = calibragemValoresDB.Velocidade;
+                        else calibragemValoresDB.Aceleracao = calibragemValoresXML.Aceleracao;
+
+                        calibragemValoresDB.Delay = calibragemValoresXML.Delay;
+
+                        if (calibragemValoresXML.PulsoReverso == 0) calibragemValoresDB.PulsoReverso = 50;
+                        else calibragemValoresDB.PulsoReverso = calibragemValoresXML.PulsoReverso;
+
+                        calibragemValoresDB.MassaMedia = calibragemValoresXML.MassaMedia;
+                        calibragemValoresDB.DesvioMedio = calibragemValoresXML.DesvioMedio;
+
                         unitCalibragemDB.Valores.Add(calibragemValoresDB);
                     }
                     Util.ObjectCalibragem.Add(unitCalibragemDB);
