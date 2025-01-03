@@ -69,4 +69,11 @@
     </None>
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Files\" />
+  </ItemGroup>
+
+  <Target Name="RunInnoSetup" AfterTargets="Build" Condition="'$(Configuration)' == 'Release'">
+    <Exec Command="&quot;C:\Program Files (x86)\Inno Setup 6\ISCC.exe&quot; &quot;$(ProjectDir)IOConnectInstallScript.iss&quot;" />
+  </Target>
 </Project>

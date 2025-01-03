@@ -1,0 +1,163 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Calibragens>
+  <Calibragem Motor="1" UltimoPulsoReverso="0" MinimoFaixas="5">
+    <Valores Volume="100" Pulsos="80000" Velocidade="2333" ReverseDelay="500" MassaMedia="0" DesvioMedio="0" Aceleracao="2333" PulsoReverso="50" />
+    <Valores Volume="10" Pulsos="8000" Velocidade="2333" ReverseDelay="500" MassaMedia="0" DesvioMedio="0" Aceleracao="2333" PulsoReverso="50" />
+    <Valores Volume="1" Pulsos="800" Velocidade="2333" ReverseDelay="500" MassaMedia="0" DesvioMedio="0" Aceleracao="2333" PulsoReverso="50" />
+    <Valores Volume="0.616" Pulsos="493" Velocidade="2333" ReverseDelay="500" MassaMedia="0" DesvioMedio="0" Aceleracao="2333" PulsoReverso="50" />
+    <Valores Volume="0.308" Pulsos="246" Velocidade="2000" ReverseDelay="500" MassaMedia="0" DesvioMedio="0" Aceleracao="1715" PulsoReverso="50" />
+    <Valores Volume="0.154" Pulsos="123" Velocidade="2000" ReverseDelay="500" MassaMedia="0" DesvioMedio="0" Aceleracao="1333" PulsoReverso="50" />
+    <Valores Volume="0.077" Pulsos="62" Velocidade="2000" ReverseDelay="500" MassaMedia="0" DesvioMedio="0" Aceleracao="1333" PulsoReverso="50" />
+    <Valores Volume="0.0385" Pulsos="31" Velocidade="2000" ReverseDelay="500" MassaMedia="0" DesvioMedio="0" Aceleracao="1333" PulsoReverso="50" />
+  </Calibragem>
+  <Calibragem Motor="2" UltimoPulsoReverso="0" MinimoFaixas="5">
+    <Valores Volume="100" Pulsos="80000" Velocidade="2333" ReverseDelay="500" MassaMedia="0" DesvioMedio="0" Aceleracao="2333" PulsoReverso="50" />
+    <Valores Volume="10" Pulsos="8000" Velocidade="2333" ReverseDelay="500" MassaMedia="0" DesvioMedio="0" Aceleracao="2333" PulsoReverso="50" />
+    <Valores Volume="1" Pulsos="800" Velocidade="2333" ReverseDelay="500" MassaMedia="0" DesvioMedio="0" Aceleracao="2333" PulsoReverso="50" />
+    <Valores Volume="0.616" Pulsos="493" Velocidade="2333" ReverseDelay="500" MassaMedia="0" DesvioMedio="0" Aceleracao="2333" PulsoReverso="50" />
+    <Valores Volume="0.308" Pulsos="246" Velocidade="2000" ReverseDelay="500" MassaMedia="0" DesvioMedio="0" Aceleracao="1715" PulsoReverso="50" />
+    <Valores Volume="0.154" Pulsos="123" Velocidade="2000" ReverseDelay="500" MassaMedia="0" DesvioMedio="0" Aceleracao="1333" PulsoReverso="50" />
+    <Valores Volume="0.077" Pulsos="62" Velocidade="2000" ReverseDelay="500" MassaMedia="0" DesvioMedio="0" Aceleracao="1333" PulsoReverso="50" />
+    <Valores Volume="0.0385" Pulsos="31" Velocidade="2000" ReverseDelay="500" MassaMedia="0" DesvioMedio="0" Aceleracao="1333" PulsoReverso="50" />
+  </Calibragem>
+  <Calibragem Motor="3" UltimoPulsoReverso="0" MinimoFaixas="5">
+    <Valores Volume="100" Pulsos="80000" Velocidade="2333" ReverseDelay="500" MassaMedia="0" DesvioMedio="0" Aceleracao="2333" PulsoReverso="50" />
+    <Valores Volume="10" Pulsos="8000" Velocidade="2333" ReverseDelay="500" MassaMedia="0" DesvioMedio="0" Aceleracao="2333" PulsoReverso="50" />
+    <Valores Volume="1" Pulsos="800" Velocidade="2333" ReverseDelay="500" MassaMedia="0" DesvioMedio="0" Aceleracao="2333" PulsoReverso="50" />
+    <Valores Volume="0.616" Pulsos="493" Velocidade="2333" ReverseDelay="500" MassaMedia="0" DesvioMedio="0" Aceleracao="2333" PulsoReverso="50" />
+    <Valores Volume="0.308" Pulsos="246" Velocidade="2000" ReverseDelay="500" MassaMedia="0" DesvioMedio="0" Aceleracao="1715" PulsoReverso="50" />
+    <Valores Volume="0.154" Pulsos="123" Velocidade="2000" ReverseDelay="500" MassaMedia="0" DesvioMedio="0" Aceleracao="1333" PulsoReverso="50" />
+    <Valores Volume="0.077" Pulsos="62" Velocidade="2000" ReverseDelay="500" MassaMedia="0" DesvioMedio="0" Aceleracao="1333" PulsoReverso="50" />
+    <Valores Volume="0.0385" Pulsos="31" Velocidade="2000" ReverseDelay="500" MassaMedia="0" DesvioMedio="0" Aceleracao="1333" PulsoReverso="50" />
+  </Calibragem>
+  <Calibragem Motor="4" UltimoPulsoReverso="0" MinimoFaixas="5">
+    <Valores Volume="100" Pulsos="80000" Velocidade="2333" ReverseDelay="500" MassaMedia="0" DesvioMedio="0" Aceleracao="2333" PulsoReverso="50" />
+    <Valores Volume="10" Pulsos="8000" Velocidade="2333" ReverseDelay="500" MassaMedia="0" DesvioMedio="0" Aceleracao="2333" PulsoReverso="50" />
+    <Valores Volume="1" Pulsos="800" Velocidade="2333" ReverseDelay="500" MassaMedia="0" DesvioMedio="0" Aceleracao="2333" PulsoReverso="50" />
+    <Valores Volume="0.616" Pulsos="493" Velocidade="2333" ReverseDelay="500" MassaMedia="0" DesvioMedio="0" Aceleracao="2333" PulsoReverso="50" />
+    <Valores Volume="0.308" Pulsos="246" Velocidade="2000" ReverseDelay="500" MassaMedia="0" DesvioMedio="0" Aceleracao="1715" PulsoReverso="50" />
+    <Valores Volume="0.154" Pulsos="123" Velocidade="2000" ReverseDelay="500" MassaMedia="0" DesvioMedio="0" Aceleracao="1333" PulsoReverso="50" />
+    <Valores Volume="0.077" Pulsos="62" Velocidade="2000" ReverseDelay="500" MassaMedia="0" DesvioMedio="0" Aceleracao="1333" PulsoReverso="50" />
+    <Valores Volume="0.0385" Pulsos="31" Velocidade="2000" ReverseDelay="500" MassaMedia="0" DesvioMedio="0" Aceleracao="1333" PulsoReverso="50" />
+  </Calibragem>
+  <Calibragem Motor="5" UltimoPulsoReverso="0" MinimoFaixas="5">
+    <Valores Volume="100" Pulsos="80000" Velocidade="2333" ReverseDelay="500" MassaMedia="0" DesvioMedio="0" Aceleracao="2333" PulsoReverso="50" />
+    <Valores Volume="10" Pulsos="8000" Velocidade="2333" ReverseDelay="500" MassaMedia="0" DesvioMedio="0" Aceleracao="2333" PulsoReverso="50" />
+    <Valores Volume="1" Pulsos="800" Velocidade="2333" ReverseDelay="500" MassaMedia="0" DesvioMedio="0" Aceleracao="2333" PulsoReverso="50" />
+    <Valores Volume="0.616" Pulsos="493" Velocidade="2333" ReverseDelay="500" MassaMedia="0" DesvioMedio="0" Aceleracao="2333" PulsoReverso="50" />
+    <Valores Volume="0.308" Pulsos="246" Velocidade="2000" ReverseDelay="500" MassaMedia="0" DesvioMedio="0" Aceleracao="1715" PulsoReverso="50" />
+    <Valores Volume="0.154" Pulsos="123" Velocidade="2000" ReverseDelay="500" MassaMedia="0" DesvioMedio="0" Aceleracao="1333" PulsoReverso="50" />
+    <Valores Volume="0.077" Pulsos="62" Velocidade="2000" ReverseDelay="500" MassaMedia="0" DesvioMedio="0" Aceleracao="1333" PulsoReverso="50" />
+    <Valores Volume="0.0385" Pulsos="31" Velocidade="2000" ReverseDelay="500" MassaMedia="0" DesvioMedio="0" Aceleracao="1333" PulsoReverso="50" />
+  </Calibragem>
+  <Calibragem Motor="6" UltimoPulsoReverso="0" MinimoFaixas="5">
+    <Valores Volume="100" Pulsos="80000" Velocidade="2333" ReverseDelay="500" MassaMedia="0" DesvioMedio="0" Aceleracao="2333" PulsoReverso="50" />
+    <Valores Volume="10" Pulsos="8000" Velocidade="2333" ReverseDelay="500" MassaMedia="0" DesvioMedio="0" Aceleracao="2333" PulsoReverso="50" />
+    <Valores Volume="1" Pulsos="800" Velocidade="2333" ReverseDelay="500" MassaMedia="0" DesvioMedio="0" Aceleracao="2333" PulsoReverso="50" />
+    <Valores Volume="0.616" Pulsos="493" Velocidade="2333" ReverseDelay="500" MassaMedia="0" DesvioMedio="0" Aceleracao="2333" PulsoReverso="50" />
+    <Valores Volume="0.308" Pulsos="246" Velocidade="2000" ReverseDelay="500" MassaMedia="0" DesvioMedio="0" Aceleracao="1715" PulsoReverso="50" />
+    <Valores Volume="0.154" Pulsos="123" Velocidade="2000" ReverseDelay="500" MassaMedia="0" DesvioMedio="0" Aceleracao="1333" PulsoReverso="50" />
+    <Valores Volume="0.077" Pulsos="62" Velocidade="2000" ReverseDelay="500" MassaMedia="0" DesvioMedio="0" Aceleracao="1333" PulsoReverso="50" />
+    <Valores Volume="0.0385" Pulsos="31" Velocidade="2000" ReverseDelay="500" MassaMedia="0" DesvioMedio="0" Aceleracao="1333" PulsoReverso="50" />
+  </Calibragem>
+  <Calibragem Motor="7" UltimoPulsoReverso="0" MinimoFaixas="5">
+    <Valores Volume="100" Pulsos="80000" Velocidade="2333" ReverseDelay="500" MassaMedia="0" DesvioMedio="0" Aceleracao="2333" PulsoReverso="50" />
+    <Valores Volume="10" Pulsos="8000" Velocidade="2333" ReverseDelay="500" MassaMedia="0" DesvioMedio="0" Aceleracao="2333" PulsoReverso="50" />
+    <Valores Volume="1" Pulsos="800" Velocidade="2333" ReverseDelay="500" MassaMedia="0" DesvioMedio="0" Aceleracao="2333" PulsoReverso="50" />
+    <Valores Volume="0.616" Pulsos="493" Velocidade="2333" ReverseDelay="500" MassaMedia="0" DesvioMedio="0" Aceleracao="2333" PulsoReverso="50" />
+    <Valores Volume="0.308" Pulsos="246" Velocidade="2000" ReverseDelay="500" MassaMedia="0" DesvioMedio="0" Aceleracao="1715" PulsoReverso="50" />
+    <Valores Volume="0.154" Pulsos="123" Velocidade="2000" ReverseDelay="500" MassaMedia="0" DesvioMedio="0" Aceleracao="1333" PulsoReverso="50" />
+    <Valores Volume="0.077" Pulsos="62" Velocidade="2000" ReverseDelay="500" MassaMedia="0" DesvioMedio="0" Aceleracao="1333" PulsoReverso="50" />
+    <Valores Volume="0.0385" Pulsos="31" Velocidade="2000" ReverseDelay="500" MassaMedia="0" DesvioMedio="0" Aceleracao="1333" PulsoReverso="50" />
+  </Calibragem>
+  <Calibragem Motor="8" UltimoPulsoReverso="0" MinimoFaixas="5">
+    <Valores Volume="100" Pulsos="80000" Velocidade="2333" ReverseDelay="500" MassaMedia="0" DesvioMedio="0" Aceleracao="2333" PulsoReverso="50" />
+    <Valores Volume="10" Pulsos="8000" Velocidade="2333" ReverseDelay="500" MassaMedia="0" DesvioMedio="0" Aceleracao="2333" PulsoReverso="50" />
+    <Valores Volume="1" Pulsos="800" Velocidade="2333" ReverseDelay="500" MassaMedia="0" DesvioMedio="0" Aceleracao="2333" PulsoReverso="50" />
+    <Valores Volume="0.616" Pulsos="493" Velocidade="2333" ReverseDelay="500" MassaMedia="0" DesvioMedio="0" Aceleracao="2333" PulsoReverso="50" />
+    <Valores Volume="0.308" Pulsos="246" Velocidade="2000" ReverseDelay="500" MassaMedia="0" DesvioMedio="0" Aceleracao="1715" PulsoReverso="50" />
+    <Valores Volume="0.154" Pulsos="123" Velocidade="2000" ReverseDelay="500" MassaMedia="0" DesvioMedio="0" Aceleracao="1333" PulsoReverso="50" />
+    <Valores Volume="0.077" Pulsos="62" Velocidade="2000" ReverseDelay="500" MassaMedia="0" DesvioMedio="0" Aceleracao="1333" PulsoReverso="50" />
+    <Valores Volume="0.0385" Pulsos="31" Velocidade="2000" ReverseDelay="500" MassaMedia="0" DesvioMedio="0" Aceleracao="1333" PulsoReverso="50" />
+  </Calibragem>
+  <Calibragem Motor="9" UltimoPulsoReverso="0" MinimoFaixas="5">
+    <Valores Volume="100" Pulsos="80000" Velocidade="2333" ReverseDelay="500" MassaMedia="0" DesvioMedio="0" Aceleracao="2333" PulsoReverso="50" />
+    <Valores Volume="10" Pulsos="8000" Velocidade="2333" ReverseDelay="500" MassaMedia="0" DesvioMedio="0" Aceleracao="2333" PulsoReverso="50" />
+    <Valores Volume="1" Pulsos="800" Velocidade="2333" ReverseDelay="500" MassaMedia="0" DesvioMedio="0" Aceleracao="2333" PulsoReverso="50" />
+    <Valores Volume="0.616" Pulsos="493" Velocidade="2333" ReverseDelay="500" MassaMedia="0" DesvioMedio="0" Aceleracao="2333" PulsoReverso="50" />
+    <Valores Volume="0.308" Pulsos="246" Velocidade="2000" ReverseDelay="500" MassaMedia="0" DesvioMedio="0" Aceleracao="1715" PulsoReverso="50" />
+    <Valores Volume="0.154" Pulsos="123" Velocidade="2000" ReverseDelay="500" MassaMedia="0" DesvioMedio="0" Aceleracao="1333" PulsoReverso="50" />
+    <Valores Volume="0.077" Pulsos="62" Velocidade="2000" ReverseDelay="500" MassaMedia="0" DesvioMedio="0" Aceleracao="1333" PulsoReverso="50" />
+    <Valores Volume="0.0385" Pulsos="31" Velocidade="2000" ReverseDelay="500" MassaMedia="0" DesvioMedio="0" Aceleracao="1333" PulsoReverso="50" />
+  </Calibragem>
+  <Calibragem Motor="10" UltimoPulsoReverso="0" MinimoFaixas="5">
+    <Valores Volume="100" Pulsos="80000" Velocidade="2333" ReverseDelay="500" MassaMedia="0" DesvioMedio="0" Aceleracao="2333" PulsoReverso="50" />
+    <Valores Volume="10" Pulsos="8000" Velocidade="2333" ReverseDelay="500" MassaMedia="0" DesvioMedio="0" Aceleracao="2333" PulsoReverso="50" />
+    <Valores Volume="1" Pulsos="800" Velocidade="2333" ReverseDelay="500" MassaMedia="0" DesvioMedio="0" Aceleracao="2333" PulsoReverso="50" />
+    <Valores Volume="0.616" Pulsos="493" Velocidade="2333" ReverseDelay="500" MassaMedia="0" DesvioMedio="0" Aceleracao="2333" PulsoReverso="50" />
+    <Valores Volume="0.308" Pulsos="246" Velocidade="2000" ReverseDelay="500" MassaMedia="0" DesvioMedio="0" Aceleracao="1715" PulsoReverso="50" />
+    <Valores Volume="0.154" Pulsos="123" Velocidade="2000" ReverseDelay="500" MassaMedia="0" DesvioMedio="0" Aceleracao="1333" PulsoReverso="50" />
+    <Valores Volume="0.077" Pulsos="62" Velocidade="2000" ReverseDelay="500" MassaMedia="0" DesvioMedio="0" Aceleracao="1333" PulsoReverso="50" />
+    <Valores Volume="0.0385" Pulsos="31" Velocidade="2000" ReverseDelay="500" MassaMedia="0" DesvioMedio="0" Aceleracao="1333" PulsoReverso="50" />
+  </Calibragem>
+  <Calibragem Motor="11" UltimoPulsoReverso="0" MinimoFaixas="5">
+    <Valores Volume="100" Pulsos="80000" Velocidade="2333" ReverseDelay="500" MassaMedia="0" DesvioMedio="0" Aceleracao="2333" PulsoReverso="50" />
+    <Valores Volume="10" Pulsos="8000" Velocidade="2333" ReverseDelay="500" MassaMedia="0" DesvioMedio="0" Aceleracao="2333" PulsoReverso="50" />
+    <Valores Volume="1" Pulsos="800" Velocidade="2333" ReverseDelay="500" MassaMedia="0" DesvioMedio="0" Aceleracao="2333" PulsoReverso="50" />
+    <Valores Volume="0.616" Pulsos="493" Velocidade="2333" ReverseDelay="500" MassaMedia="0" DesvioMedio="0" Aceleracao="2333" PulsoReverso="50" />
+    <Valores Volume="0.308" Pulsos="246" Velocidade="2000" ReverseDelay="500" MassaMedia="0" DesvioMedio="0" Aceleracao="1715" PulsoReverso="50" />
+    <Valores Volume="0.154" Pulsos="123" Velocidade="2000" ReverseDelay="500" MassaMedia="0" DesvioMedio="0" Aceleracao="1333" PulsoReverso="50" />
+    <Valores Volume="0.077" Pulsos="62" Velocidade="2000" ReverseDelay="500" MassaMedia="0" DesvioMedio="0" Aceleracao="1333" PulsoReverso="50" />
+    <Valores Volume="0.0385" Pulsos="31" Velocidade="2000" ReverseDelay="500" MassaMedia="0" DesvioMedio="0" Aceleracao="1333" PulsoReverso="50" />
+  </Calibragem>
+  <Calibragem Motor="12" UltimoPulsoReverso="0" MinimoFaixas="5">
+    <Valores Volume="100" Pulsos="80000" Velocidade="2333" ReverseDelay="500" MassaMedia="0" DesvioMedio="0" Aceleracao="2333" PulsoReverso="50" />
+    <Valores Volume="10" Pulsos="8000" Velocidade="2333" ReverseDelay="500" MassaMedia="0" DesvioMedio="0" Aceleracao="2333" PulsoReverso="50" />
+    <Valores Volume="1" Pulsos="800" Velocidade="2333" ReverseDelay="500" MassaMedia="0" DesvioMedio="0" Aceleracao="2333" PulsoReverso="50" />
+    <Valores Volume="0.616" Pulsos="493" Velocidade="2333" ReverseDelay="500" MassaMedia="0" DesvioMedio="0" Aceleracao="2333" PulsoReverso="50" />
+    <Valores Volume="0.308" Pulsos="246" Velocidade="2000" ReverseDelay="500" MassaMedia="0" DesvioMedio="0" Aceleracao="1715" PulsoReverso="50" />
+    <Valores Volume="0.154" Pulsos="123" Velocidade="2000" ReverseDelay="500" MassaMedia="0" DesvioMedio="0" Aceleracao="1333" PulsoReverso="50" />
+    <Valores Volume="0.077" Pulsos="62" Velocidade="2000" ReverseDelay="500" MassaMedia="0" DesvioMedio="0" Aceleracao="1333" PulsoReverso="50" />
+    <Valores Volume="0.0385" Pulsos="31" Velocidade="2000" ReverseDelay="500" MassaMedia="0" DesvioMedio="0" Aceleracao="1333" PulsoReverso="50" />
+  </Calibragem>
+  <Calibragem Motor="13" UltimoPulsoReverso="0" MinimoFaixas="5">
+    <Valores Volume="100" Pulsos="80000" Velocidade="2333" ReverseDelay="500" MassaMedia="0" DesvioMedio="0" Aceleracao="2333" PulsoReverso="50" />
+    <Valores Volume="10" Pulsos="8000" Velocidade="2333" ReverseDelay="500" MassaMedia="0" DesvioMedio="0" Aceleracao="2333" PulsoReverso="50" />
+    <Valores Volume="1" Pulsos="800" Velocidade="2333" ReverseDelay="500" MassaMedia="0" DesvioMedio="0" Aceleracao="2333" PulsoReverso="50" />
+    <Valores Volume="0.616" Pulsos="493" Velocidade="2333" ReverseDelay="500" MassaMedia="0" DesvioMedio="0" Aceleracao="2333" PulsoReverso="50" />
+    <Valores Volume="0.308" Pulsos="246" Velocidade="2000" ReverseDelay="500" MassaMedia="0" DesvioMedio="0" Aceleracao="1715" PulsoReverso="50" />
+    <Valores Volume="0.154" Pulsos="123" Velocidade="2000" ReverseDelay="500" MassaMedia="0" DesvioMedio="0" Aceleracao="1333" PulsoReverso="50" />
+    <Valores Volume="0.077" Pulsos="62" Velocidade="2000" ReverseDelay="500" MassaMedia="0" DesvioMedio="0" Aceleracao="1333" PulsoReverso="50" />
+    <Valores Volume="0.0385" Pulsos="31" Velocidade="2000" ReverseDelay="500" MassaMedia="0" DesvioMedio="0" Aceleracao="1333" PulsoReverso="50" />
+  </Calibragem>
+  <Calibragem Motor="14" UltimoPulsoReverso="0" MinimoFaixas="5">
+    <Valores Volume="100" Pulsos="80000" Velocidade="2333" ReverseDelay="500" MassaMedia="0" DesvioMedio="0" Aceleracao="2333" PulsoReverso="50" />
+    <Valores Volume="10" Pulsos="8000" Velocidade="2333" ReverseDelay="500" MassaMedia="0" DesvioMedio="0" Aceleracao="2333" PulsoReverso="50" />
+    <Valores Volume="1" Pulsos="800" Velocidade="2333" ReverseDelay="500" MassaMedia="0" DesvioMedio="0" Aceleracao="2333" PulsoReverso="50" />
+    <Valores Volume="0.616" Pulsos="493" Velocidade="2333" ReverseDelay="500" MassaMedia="0" DesvioMedio="0" Aceleracao="2333" PulsoReverso="50" />
+    <Valores Volume="0.308" Pulsos="246" Velocidade="2000" ReverseDelay="500" MassaMedia="0" DesvioMedio="0" Aceleracao="1715" PulsoReverso="50" />
+    <Valores Volume="0.154" Pulsos="123" Velocidade="2000" ReverseDelay="500" MassaMedia="0" DesvioMedio="0" Aceleracao="1333" PulsoReverso="50" />
+    <Valores Volume="0.077" Pulsos="62" Velocidade="2000" ReverseDelay="500" MassaMedia="0" DesvioMedio="0" Aceleracao="1333" PulsoReverso="50" />
+    <Valores Volume="0.0385" Pulsos="31" Velocidade="2000" ReverseDelay="500" MassaMedia="0" DesvioMedio="0" Aceleracao="1333" PulsoReverso="50" />
+  </Calibragem>
+  <Calibragem Motor="15" UltimoPulsoReverso="0" MinimoFaixas="5">
+    <Valores Volume="100" Pulsos="80000" Velocidade="2333" ReverseDelay="500" MassaMedia="0" DesvioMedio="0" Aceleracao="2333" PulsoReverso="50" />
+    <Valores Volume="10" Pulsos="8000" Velocidade="2333" ReverseDelay="500" MassaMedia="0" DesvioMedio="0" Aceleracao="2333" PulsoReverso="50" />
+    <Valores Volume="1" Pulsos="800" Velocidade="2333" ReverseDelay="500" MassaMedia="0" DesvioMedio="0" Aceleracao="2333" PulsoReverso="50" />
+    <Valores Volume="0.616" Pulsos="493" Velocidade="2333" ReverseDelay="500" MassaMedia="0" DesvioMedio="0" Aceleracao="2333" PulsoReverso="50" />
+    <Valores Volume="0.308" Pulsos="246" Velocidade="2000" ReverseDelay="500" MassaMedia="0" DesvioMedio="0" Aceleracao="1715" PulsoReverso="50" />
+    <Valores Volume="0.154" Pulsos="123" Velocidade="2000" ReverseDelay="500" MassaMedia="0" DesvioMedio="0" Aceleracao="1333" PulsoReverso="50" />
+    <Valores Volume="0.077" Pulsos="62" Velocidade="2000" ReverseDelay="500" MassaMedia="0" DesvioMedio="0" Aceleracao="1333" PulsoReverso="50" />
+    <Valores Volume="0.0385" Pulsos="31" Velocidade="2000" ReverseDelay="500" MassaMedia="0" DesvioMedio="0" Aceleracao="1333" PulsoReverso="50" />
+  </Calibragem>
+  <Calibragem Motor="16" UltimoPulsoReverso="0" MinimoFaixas="5">
+    <Valores Volume="100" Pulsos="80000" Velocidade="2333" ReverseDelay="500" MassaMedia="0" DesvioMedio="0" Aceleracao="2333" PulsoReverso="50" />
+    <Valores Volume="10" Pulsos="8000" Velocidade="2333" ReverseDelay="500" MassaMedia="0" DesvioMedio="0" Aceleracao="2333" PulsoReverso="50" />
+    <Valores Volume="1" Pulsos="800" Velocidade="2333" ReverseDelay="500" MassaMedia="0" DesvioMedio="0" Aceleracao="2333" PulsoReverso="50" />
+    <Valores Volume="0.616" Pulsos="493" Velocidade="2333" ReverseDelay="500" MassaMedia="0" DesvioMedio="0" Aceleracao="2333" PulsoReverso="50" />
+    <Valores Volume="0.308" Pulsos="246" Velocidade="2000" ReverseDelay="500" MassaMedia="0" DesvioMedio="0" Aceleracao="1715" PulsoReverso="50" />
+    <Valores Volume="0.154" Pulsos="123" Velocidade="2000" ReverseDelay="500" MassaMedia="0" DesvioMedio="0" Aceleracao="1333" PulsoReverso="50" />
+    <Valores Volume="0.077" Pulsos="62" Velocidade="2000" ReverseDelay="500" MassaMedia="0" DesvioMedio="0" Aceleracao="1333" PulsoReverso="50" />
+    <Valores Volume="0.0385" Pulsos="31" Velocidade="2000" ReverseDelay="500" MassaMedia="0" DesvioMedio="0" Aceleracao="1333" PulsoReverso="50" />
+  </Calibragem>
+</Calibragens>

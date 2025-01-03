@@ -27,4 +27,8 @@
     <Folder Include="Properties\" />
   </ItemGroup>
 
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+    <Exec Command="xcopy /Y /E &quot;$(TargetDir)*&quot; &quot;$(SolutionDir)dist\$(Configuration)\net8.0-windows\UpdateConfig\&quot;" />
+  </Target>
+
 </Project>
