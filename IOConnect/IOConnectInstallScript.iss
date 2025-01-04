@@ -4,9 +4,9 @@
 
 ;Empresa
 #define DefAppCompany = "Percolore"
-#define DefAppPublisher = "Percolore Máquinas Dosadoras"
-#define DefAppURL = "http://www.percolore.com.br"
-#define DefAppCopyright = "Copyright © 2003-2024"
+#define DefAppPublisher = "Percolore Equipamentos Tintométricos"
+#define DefAppURL = "https://www.percolore.com"
+#define DefAppCopyright = "Copyright © 2003-2025"
 
 ;Aplicação
 #define DefAppName = "IOConnect"
@@ -36,15 +36,14 @@ AppCopyright ={#DefAppCopyright}
 VersionInfoVersion ={#DefAppVersion}
 VersionInfoCompany =Percolore Máquinas
 VersionInfoDescription ={#DefAppDescription}
-ArchitecturesAllowed =x86 x64
+ArchitecturesAllowed =x86 x64compatible
 SolidCompression =yes
 Compression =lzma
 PrivilegesRequired=none
 SetupIconFile =Files\ioconnect.ico
-WizardImageBackColor =$0000CCFF
 WizardImageStretch =False
 WizardSmallImageFile =Files\WizardSmallImageFile.bmp
-WizardImageFile =Files\WizardImageFile.bmp
+WizardImageFile =Files\PercoloreWizard-100.bmp,Files\PercoloreWizard-125.bmp,Files\PercoloreWizard-150.bmp,Files\PercoloreWizard-175.bmp,Files\PercoloreWizard-200.bmp,Files\PercoloreWizard-225.bmp,Files\PercoloreWizard-250.bmp
 AllowUNCPath =False
 DiskSpanning =no
 DisableProgramGroupPage =yes
@@ -68,8 +67,7 @@ UsePreviousAppDir=no
 
 ;Caminho padrão de instalação.
 ;Obtém o nome da unidade lógica de instalação do windows seguido do nome da empresa e da aplicação
-;DefaultDirName={sd}\{#DefAppCompany}\{#DefAppName}
-DefaultDirName={sd}\{#DefAppCompany}
+DefaultDirName={sd}\{#DefAppCompany}\{#DefAppName}
 
 [Languages]
 Name: brazilianportuguese; MessagesFile: compiler:Languages\BrazilianPortuguese.isl
@@ -204,29 +202,8 @@ Name: {app}\runtimes\win-x64\native; Flags:
 Name: {app}\runtimes\win-x86; Flags: 
 Name: {app}\runtimes\win-x86\native; Flags: 
 
-Name: {app}\UpdateConfig; Flags: 
-Name: {app}\UpdateConfig\runtimes; Flags: 
-Name: {app}\UpdateConfig\runtimes\win; Flags: 
-Name: {app}\UpdateConfig\runtimes\win\lib; Flags: 
-Name: {app}\UpdateConfig\runtimes\win\lib\net8.0; Flags: 
-Name: {app}\UpdateConfig\runtimes\win\lib\netcoreapp2.1; Flags: 
-Name: {app}\UpdateConfig\runtimes\win\lib\netcoreapp3.0; Flags: 
-Name: {app}\UpdateConfig\runtimes\win\lib\netstandard2.0; Flags: 
-Name: {app}\UpdateConfig\runtimes\win-arm64; Flags: 
-Name: {app}\UpdateConfig\runtimes\win-arm64\native; Flags: 
-Name: {app}\UpdateConfig\runtimes\win-x64; Flags: 
-Name: {app}\UpdateConfig\runtimes\win-x64\native; Flags: 
-Name: {app}\UpdateConfig\runtimes\win-x86; Flags: 
-Name: {app}\UpdateConfig\runtimes\win-x86\native; Flags: 
-
-[InstallDelete]
-Name: {app}\RegUDCP\REGUDCP.exe.config; Type: files
-Name: {app}\RegUDCP\REGUDCP.pdb; Type: files
-Name: {app}\RegUDCP\REGUDCP.exe; Type: files
 
 [Files]
-;Arquivos copiados somente quando não existirem e que nunca serão deletados.
-
 ;Arquivos que serão sempre copiados
 Source: ..\dist\Release\net8.0-windows\es\IOConnect.resources.dll; DestDir: {app}\es
 Source: ..\dist\Release\net8.0-windows\es\Percolore.Core.resources.dll; DestDir: {app}\es
@@ -247,11 +224,6 @@ Source: ..\dist\Release\net8.0-windows\EntityFramework.dll; DestDir: {app}
 Source: ..\dist\Release\net8.0-windows\EntityFramework.SqlServer.dll; DestDir: {app}
 Source: ..\dist\Release\net8.0-windows\FluentFTP.dll; DestDir: {app}
 Source: ..\dist\Release\net8.0-windows\Fractions.dll; DestDir: {app}
-Source: ..\dist\Release\net8.0-windows\Gerador.deps.json; DestDir: {app}
-Source: ..\dist\Release\net8.0-windows\Gerador.dll; DestDir: {app}
-Source: ..\dist\Release\net8.0-windows\Gerador.dll.config; DestDir: {app}
-Source: ..\dist\Release\net8.0-windows\Gerador.exe; DestDir: {app}
-Source: ..\dist\Release\net8.0-windows\Gerador.runtimeconfig.json; DestDir: {app}
 Source: ..\dist\Release\net8.0-windows\Instalacao.deps.json; DestDir: {app}
 Source: ..\dist\Release\net8.0-windows\Instalacao.dll; DestDir: {app}
 Source: ..\dist\Release\net8.0-windows\Instalacao.exe; DestDir: {app}
@@ -278,7 +250,6 @@ Source: ..\dist\Release\net8.0-windows\Microsoft.Extensions.Logging.dll; DestDir
 Source: ..\dist\Release\net8.0-windows\Microsoft.Extensions.Options.dll; DestDir: {app}
 Source: ..\dist\Release\net8.0-windows\Microsoft.Extensions.Primitives.dll; DestDir: {app}
 Source: ..\dist\Release\net8.0-windows\Newtonsoft.Json.dll; DestDir: {app}
-Source: ..\dist\Release\net8.0-windows\Percolore.Core.deps.json; DestDir: {app}
 Source: ..\dist\Release\net8.0-windows\Percolore.Core.dll; DestDir: {app}
 Source: ..\dist\Release\net8.0-windows\Serilog.dll; DestDir: {app}
 Source: ..\dist\Release\net8.0-windows\Serilog.Extensions.Logging.dll; DestDir: {app}
@@ -286,14 +257,9 @@ Source: ..\dist\Release\net8.0-windows\Serilog.Settings.Configuration.dll; DestD
 Source: ..\dist\Release\net8.0-windows\Serilog.Sinks.Console.dll; DestDir: {app}
 Source: ..\dist\Release\net8.0-windows\Serilog.Sinks.File.dll; DestDir: {app}
 Source: ..\dist\Release\net8.0-windows\System.Data.OleDb.dll; DestDir: {app}
-Source: ..\dist\Release\net8.0-windows\System.Data.SqlClient.dll; DestDir: {app}
 Source: ..\dist\Release\net8.0-windows\System.Data.SQLite.dll; DestDir: {app}
 Source: ..\dist\Release\net8.0-windows\System.Data.SQLite.EF6.dll; DestDir: {app}
 Source: ..\dist\Release\net8.0-windows\System.Drawing.Common.dll; DestDir: {app}
-Source: ..\dist\Release\net8.0-windows\System.IO.Ports.dll; DestDir: {app}
-Source: ..\dist\Release\net8.0-windows\System.Management.dll; DestDir: {app}
-Source: ..\dist\Release\net8.0-windows\System.Windows.Forms.dll; DestDir: {app}
-Source: ..\dist\Release\net8.0-windows\System.Windows.Forms.Primitives.dll; DestDir: {app}
 Source: ..\dist\Release\net8.0-windows\Treinamento.deps.json; DestDir: {app}
 Source: ..\dist\Release\net8.0-windows\Treinamento.dll; DestDir: {app}
 Source: ..\dist\Release\net8.0-windows\Treinamento.dll.config; DestDir: {app}
@@ -301,44 +267,16 @@ Source: ..\dist\Release\net8.0-windows\Treinamento.exe; DestDir: {app}
 Source: ..\dist\Release\net8.0-windows\Treinamento.runtimeconfig.json; DestDir: {app}
 Source: ..\dist\Release\net8.0-windows\WSMBS.dll; DestDir: {app}
 
-Source: ..\dist\Release\net8.0-windows\UpdateConfig\runtimes\win\lib\net8.0\Microsoft.Win32.SystemEvents.dll; DestDir: {app}\UpdateConfig\runtimes\win\lib\net8.0
-Source: ..\dist\Release\net8.0-windows\UpdateConfig\runtimes\win\lib\netcoreapp2.1\System.Data.SqlClient.dll; DestDir: {app}\UpdateConfig\runtimes\win\lib\netcoreapp2.1
-Source: ..\dist\Release\net8.0-windows\UpdateConfig\runtimes\win\lib\netcoreapp3.0\System.Windows.Extensions.dll; DestDir: {app}\UpdateConfig\runtimes\win\lib\netcoreapp3.0
-Source: ..\dist\Release\net8.0-windows\UpdateConfig\runtimes\win\lib\netstandard2.0\System.Security.Cryptography.ProtectedData.dll; DestDir: {app}\UpdateConfig\runtimes\win\lib\netstandard2.0
-Source: ..\dist\Release\net8.0-windows\UpdateConfig\runtimes\win-arm64\native\sni.dll; DestDir: {app}\UpdateConfig\runtimes\win-arm64\native
-Source: ..\dist\Release\net8.0-windows\UpdateConfig\runtimes\win-x64\native\sni.dll; DestDir: {app}\UpdateConfig\runtimes\win-x64\native
-Source: ..\dist\Release\net8.0-windows\UpdateConfig\runtimes\win-x64\native\SQLite.Interop.dll; DestDir: {app}\UpdateConfig\runtimes\win-x64\native
-Source: ..\dist\Release\net8.0-windows\UpdateConfig\runtimes\win-x86\native\sni.dll; DestDir: {app}\UpdateConfig\runtimes\win-x86\native
-Source: ..\dist\Release\net8.0-windows\UpdateConfig\runtimes\win-x86\native\SQLite.Interop.dll; DestDir: {app}\UpdateConfig\runtimes\win-x86\native
-
-Source: ..\dist\Release\net8.0-windows\UpdateConfig\EntityFramework.dll; DestDir: {app}\UpdateConfig
-Source: ..\dist\Release\net8.0-windows\UpdateConfig\EntityFramework.SqlServer.dll; DestDir: {app}\UpdateConfig
-Source: ..\dist\Release\net8.0-windows\UpdateConfig\Microsoft.Win32.SystemEvents.dll; DestDir: {app}\UpdateConfig
-Source: ..\dist\Release\net8.0-windows\UpdateConfig\Newtonsoft.Json.dll; DestDir: {app}\UpdateConfig
-Source: ..\dist\Release\net8.0-windows\UpdateConfig\System.CodeDom.dll; DestDir: {app}\UpdateConfig
-Source: ..\dist\Release\net8.0-windows\UpdateConfig\System.Configuration.ConfigurationManager.dll; DestDir: {app}\UpdateConfig
-Source: ..\dist\Release\net8.0-windows\UpdateConfig\System.Data.SqlClient.dll; DestDir: {app}\UpdateConfig
-Source: ..\dist\Release\net8.0-windows\UpdateConfig\System.Data.SQLite.dll; DestDir: {app}\UpdateConfig
-Source: ..\dist\Release\net8.0-windows\UpdateConfig\System.Data.SQLite.EF6.dll; DestDir: {app}\UpdateConfig
-Source: ..\dist\Release\net8.0-windows\UpdateConfig\System.Drawing.Common.dll; DestDir: {app}\UpdateConfig
-Source: ..\dist\Release\net8.0-windows\UpdateConfig\System.Security.Cryptography.ProtectedData.dll; DestDir: {app}\UpdateConfig
-Source: ..\dist\Release\net8.0-windows\UpdateConfig\System.Security.Permissions.dll; DestDir: {app}\UpdateConfig
-Source: ..\dist\Release\net8.0-windows\UpdateConfig\System.Windows.Extensions.dll; DestDir: {app}\UpdateConfig
-Source: ..\dist\Release\net8.0-windows\UpdateConfig\UpdateConfig.deps.json; DestDir: {app}\UpdateConfig
-Source: ..\dist\Release\net8.0-windows\UpdateConfig\UpdateConfig.dll; DestDir: {app}\UpdateConfig
-Source: ..\dist\Release\net8.0-windows\UpdateConfig\UpdateConfig.dll.config; DestDir: {app}\UpdateConfig
-Source: ..\dist\Release\net8.0-windows\UpdateConfig\UpdateConfig.exe; DestDir: {app}\UpdateConfig
-Source: ..\dist\Release\net8.0-windows\UpdateConfig\UpdateConfig.runtimeconfig.json; DestDir: {app}\UpdateConfig
 
 ;Instalador do .NET 8
-Source: Installer\windowsdesktop-runtime-8.0.11-win-arm64.exe; DestDir: "{tmp}"; Flags: deleteafterinstall; Check: InstallDotNetArm64; AfterInstall: InstallDotNetWindowsDesktop
 Source: Installer\dotnet-runtime-8.0.11-win-arm64.exe; DestDir: "{tmp}"; Flags: deleteafterinstall; Check: InstallDotNetArm64; AfterInstall: InstallDotNet
-
-Source: Installer\windowsdesktop-runtime-8.0.11-win-x64.exe; DestDir: "{tmp}"; Flags: deleteafterinstall; Check: InstallDotNetX64; AfterInstall: InstallDotNetWindowsDesktop
 Source: Installer\dotnet-runtime-8.0.11-win-x64.exe; DestDir: "{tmp}"; Flags: deleteafterinstall; Check: InstallDotNetX64; AfterInstall: InstallDotNet
-
-Source: Installer\windowsdesktop-runtime-8.0.11-win-x86.exe; DestDir: "{tmp}"; Flags: deleteafterinstall; Check: InstallDotNetX86; AfterInstall: InstallDotNetWindowsDesktop
 Source: Installer\dotnet-runtime-8.0.11-win-x86.exe; DestDir: "{tmp}"; Flags: deleteafterinstall; Check: InstallDotNetX86; AfterInstall: InstallDotNet
+
+Source: Installer\windowsdesktop-runtime-8.0.11-win-arm64.exe; DestDir: "{tmp}"; Flags: deleteafterinstall; Check: InstallDotNetWinArm64; AfterInstall: InstallDotNetWindowsDesktop
+Source: Installer\windowsdesktop-runtime-8.0.11-win-x64.exe; DestDir: "{tmp}"; Flags: deleteafterinstall; Check: InstallDotNetWinX64; AfterInstall: InstallDotNetWindowsDesktop
+Source: Installer\windowsdesktop-runtime-8.0.11-win-x86.exe; DestDir: "{tmp}"; Flags: deleteafterinstall; Check: InstallDotNetWinX86; AfterInstall: InstallDotNetWindowsDesktop
+
 
 ;***************************
 ;*** Banco de Calibração ***
@@ -524,24 +462,14 @@ Name: {userstartup}\{#DefAppName}; Filename: {app}\{#DefAppName}; WorkingDir: {a
 [Run]
 Filename: {app}\Instalacao.exe; Flags: waituntilterminated; StatusMsg: {cm:msgFinalizandoInstalacao}
 Filename: {app}\{#DefAppExeFile}; Flags: nowait postinstall skipifsilent; Description: {cm:LaunchProgram,{#StringChange(DefAppExeFile, '&', '&&')}}
-;Filename: {app}\UpdateConfig\UpdateConfig.exe; WorkingDir: {app}\UpdateConfig; Tasks: Desktop_450_V3_PPG_Australia_Rainbow
-;Filename: {app}\UpdateConfig\UpdateConfig.exe; WorkingDir: {app}\UpdateConfig; Tasks: Desktop_450_V3_PPG_Australia_Colour_Smith
-;Filename: {app}\UpdateConfig\UpdateConfig.exe; WorkingDir: {app}\UpdateConfig; Tasks: Desktop_450_V2_PPG_Australia_Colour_Smith
 
 
 [Code]
-#include "Scripts\stringVersion.iss"
-#include "Scripts\fileReplaceString.iss"
-#include "Scripts\getAppValueRegister.iss"
-#include "Scripts\isAppRunning.iss"
-#include "Scripts\updateStructure.iss"
-
-var
-  bOldVersionExists : Boolean;
-  sOldInstallationPath : String;
-  bOldInstallationPathChange : Boolean;
-  sOldUninstallationPath : String;
-  sNewInstallationPath : String;
+#include "Installer\Scripts\stringVersion.iss"
+#include "Installer\Scripts\fileReplaceString.iss"
+#include "Installer\Scripts\getAppValueRegister.iss"
+#include "Installer\Scripts\isAppRunning.iss"
+#include "Installer\Scripts\updateStructure.iss"
 
 (*--------------------------------------------------------------------------------------------
   Instalação do .NET
@@ -562,7 +490,7 @@ begin
   if RegQueryStringValue(HKLM64, 'SYSTEM\CurrentControlSet\Control\Session Manager\Environment', 'PROCESSOR_ARCHITEW6432', Arch) then
   begin
     if Arch = 'ARM64' then
-      Result := 'Arm64'
+      Result := 'arm64'
     else
       Result := 'x64';  // Assume x64 para compatibilidade em fallback
   end
@@ -570,58 +498,57 @@ begin
     Result := Arch;
 end;
 
-function InstallDotNetArm64(): Boolean;
+function InstallDotNet8(architecture: String; platform: String): Boolean;
 var
-  architecture, regAddress, regVersion: String;
+  systemArchitecture, regAddress: String;
+  isNet8Installed: Cardinal;
 begin
   Result := false;  
-  architecture := GetSystemArchitecture();
+  systemArchitecture := GetSystemArchitecture();
   
-  if ('Arm64' = architecture) then
+  if (architecture = systemArchitecture) then
   begin
-    regAddress := 'Software\dotnet\Setup\InstalledVersions\' + architecture + '\sharedHost'
-    RegQueryStringValue(HKLM64, regAddress, 'Version', regVersion);
-    if (CompareStringVersion(regVersion, '{#DefAppNetVersion}') = 1) then
+    // SOFTWARE\WOW6432Node\dotnet\Setup\InstalledVersions\x64\sharedfx\Microsoft.NETCore.App
+    // SOFTWARE\WOW6432Node\dotnet\Setup\InstalledVersions\x64\sharedfx\Microsoft.WindowsDesktop.App
+    regAddress := 'Software\WOW6432Node\dotnet\Setup\InstalledVersions\' + architecture + '\sharedfx\' + platform
+    
+    RegQueryDWordValue(HKLM, regAddress, '{#DefAppNetVersion}', isNet8Installed);
+      
+    if (isNet8Installed <> 1) then
     begin
       Result := true;
     end;
   end;
+end;
+
+function InstallDotNetArm64(): Boolean;
+begin
+  Result := InstallDotNet8('arm64', 'Microsoft.NETCore.App');
 end;
 
 function InstallDotNetX64(): Boolean;
-var
-  architecture, regAddress, regVersion: String;
 begin
-  Result := false;  
-  architecture := GetSystemArchitecture();
-  
-  if ('x64' = architecture) then
-  begin
-    regAddress := 'Software\dotnet\Setup\InstalledVersions\' + architecture + '\sharedHost'
-    RegQueryStringValue(HKLM64, regAddress, 'Version', regVersion);
-    if (CompareStringVersion(regVersion, '{#DefAppNetVersion}') = 1) then
-    begin
-      Result := true;
-    end;
-  end;
+  Result := InstallDotNet8('x64', 'Microsoft.NETCore.App');
 end;
 
 function InstallDotNetX86(): Boolean;
-var
-  architecture, regAddress, regVersion: String;
 begin
-  Result := false;  
-  architecture := GetSystemArchitecture();
-  
-  if ('x86' = architecture) then
-  begin
-    regAddress := 'Software\dotnet\Setup\InstalledVersions\' + architecture + '\sharedHost'
-    RegQueryStringValue(HKLM, regAddress, 'Version', regVersion);
-    if (CompareStringVersion(regVersion, '{#DefAppNetVersion}') = 1) then
-    begin
-      Result := true;
-    end;
-  end;
+  Result := InstallDotNet8('x86', 'Microsoft.NETCore.App');  
+end;
+
+function InstallDotNetWinArm64(): Boolean;
+begin
+  Result := InstallDotNet8('arm64', 'Microsoft.WindowsDesktop.App');
+end;
+
+function InstallDotNetWinX64(): Boolean;
+begin
+  Result := InstallDotNet8('x64', 'Microsoft.WindowsDesktop.App');
+end;
+
+function InstallDotNetWinX86(): Boolean;
+begin
+  Result := InstallDotNet8('x86', 'Microsoft.WindowsDesktop.App');  
 end;
 
 procedure InstallDotNetWindowsDesktop;
@@ -638,7 +565,7 @@ begin
   case GetSystemArchitecture of
     'x86': DotNetInstaller := ExpandConstant('{tmp}\windowsdesktop-runtime-8.0.11-win-x86.exe');
     'x64': DotNetInstaller := ExpandConstant('{tmp}\windowsdesktop-runtime-8.0.11-win-x64.exe');
-    'Arm64': DotNetInstaller := ExpandConstant('{tmp}\windowsdesktop-runtime-8.0.11-win-arm64.exe');
+    'arm64': DotNetInstaller := ExpandConstant('{tmp}\windowsdesktop-runtime-8.0.11-win-arm64.exe');
     else
     begin
       MsgBox('{cm:msgArquiteturaNaoSuportada}', mbError, MB_OK);
@@ -691,7 +618,7 @@ begin
   case GetSystemArchitecture of
     'x86': DotNetInstaller := ExpandConstant('{tmp}\dotnet-runtime-8.0.11-win-x86.exe');
     'x64': DotNetInstaller := ExpandConstant('{tmp}\dotnet-runtime-8.0.11-win-x64.exe');
-    'Arm64': DotNetInstaller := ExpandConstant('{tmp}\dotnet-runtime-8.0.11-win-arm64.exe');
+    'arm64': DotNetInstaller := ExpandConstant('{tmp}\dotnet-runtime-8.0.11-win-arm64.exe');
     else
     begin
       MsgBox('{cm:msgArquiteturaNaoSuportada}', mbError, MB_OK);
@@ -762,10 +689,6 @@ begin
 end;
 
 function InitializeSetup: boolean;
-var
-  iReturn : Integer;
-  sCurrentVersionString : String;
-
 begin
   Result := False;
 
@@ -774,32 +697,6 @@ begin
     MsgBox(ExpandConstant('{cm:msgInicializacaoEncerrarIoconnect}'), mbError, MB_OK);
     exit;
   end;
-
-  //Define variáveis globais
-  sCurrentVersionString := GetAppValueRegister('DisplayVersion');
-  bOldVersionExists := (sCurrentVersionString <> '');
-  sOldInstallationPath := GetAppValueRegister('InstallLocation');
-  sNewInstallationPath := ExpandConstant('{#emit SetupSetting("DefaultDirName")}');
-  bOldInstallationPathChange := sOldInstallationPath <> sNewInstallationPath;
-  sOldUninstallationPath := GetAppValueRegister('UninstallString');
-
-  //A instalação só seguirá se a versão instalada na máquina for mais atual
-//  if (bOldVersionExists) then
- // begin
- //    iReturn := CompareStringVersion(sCurrentVersionString, '{#DefAppVersion}');
-
-     //Versões iguais
- //    if(iReturn = 2) then begin
-  //      MsgBox(ExpandConstant('{cm:msgInicializacaoVersaoJaInstalada}'), mbError, MB_OK);
- //       exit;
- //     end;
-
-     //Versão da máquina é mais atual
- //    if(iReturn = 3) then begin
- //       MsgBox(ExpandConstant('{cm:msgInicializacaoVersaoMaisRecenteInstalada}'), mbError, MB_OK);
- //       exit;
- //     end;
- // end;
 
   Result := True;
 end;
