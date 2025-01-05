@@ -12,7 +12,7 @@
 #define DefAppName = "IOConnect"
 #define DefAppExeFile = "IOConnect.exe"
 #define DefAppVersion = "5.0.0"
-#define DefAppArchitecture = "(x86)"
+#define DefAppArchitecture = "(ARM64)"
 #define DefAppDescription = "Utilitário de comunicação e execução de dispensa."
 
 ;Dependências
@@ -36,7 +36,7 @@ AppCopyright ={#DefAppCopyright}
 VersionInfoVersion ={#DefAppVersion}
 VersionInfoCompany =Percolore Máquinas
 VersionInfoDescription ={#DefAppDescription}
-ArchitecturesAllowed =x86 x64compatible
+ArchitecturesAllowed =x64compatible
 SolidCompression =yes
 Compression =lzma
 PrivilegesRequired=none
@@ -216,69 +216,68 @@ Name: {app}\es; Flags:
 
 
 [Files]
-Source: ..\dist\Publish\win-x86\es\IOConnect.resources.dll; DestDir: {app}\es
-Source: ..\dist\Publish\win-x86\es\Percolore.Core.resources.dll; DestDir: {app}\es
-Source: ..\dist\Publish\win-x86\es\Treinamento.resources.dll; DestDir: {app}\es
+Source: ..\dist\Publish\win-arm64\es\IOConnect.resources.dll; DestDir: {app}\es
+Source: ..\dist\Publish\win-arm64\es\Percolore.Core.resources.dll; DestDir: {app}\es
+Source: ..\dist\Publish\win-arm64\es\Treinamento.resources.dll; DestDir: {app}\es
 
-Source: ..\dist\Publish\win-x86\appsettings.json; DestDir: {app}
-Source: ..\dist\Publish\win-x86\EntityFramework.dll; DestDir: {app}
-Source: ..\dist\Publish\win-x86\EntityFramework.SqlServer.dll; DestDir: {app}
-Source: ..\dist\Publish\win-x86\FluentFTP.dll; DestDir: {app}
-Source: ..\dist\Publish\win-x86\Fractions.dll; DestDir: {app}
-Source: ..\dist\Publish\win-x86\Instalacao.deps.json; DestDir: {app}; Flags:deleteafterinstall;
-Source: ..\dist\Publish\win-x86\Instalacao.dll; DestDir: {app}; Flags:deleteafterinstall;
-Source: ..\dist\Publish\win-x86\Instalacao.exe; DestDir: {app}; Flags:deleteafterinstall;
-Source: ..\dist\Publish\win-x86\Instalacao.runtimeconfig.json; DestDir: {app}; Flags:deleteafterinstall;
-Source: ..\dist\Publish\win-x86\InTheHand.Net.Bluetooth.dll; DestDir: {app}
-Source: ..\dist\Publish\win-x86\IOConnect.deps.json; DestDir: {app}
-Source: ..\dist\Publish\win-x86\IOConnect.dll; DestDir: {app}
-Source: ..\dist\Publish\win-x86\IOConnect.dll.config; DestDir: {app}
-Source: ..\dist\Publish\win-x86\IOConnect.exe; DestDir: {app}
-Source: ..\dist\Publish\win-x86\IOConnect.runtimeconfig.json; DestDir: {app}
-Source: ..\dist\Publish\win-x86\Microsoft.Extensions.Configuration.Abstractions.dll; DestDir: {app}
-Source: ..\dist\Publish\win-x86\Microsoft.Extensions.Configuration.Binder.dll; DestDir: {app}
-Source: ..\dist\Publish\win-x86\Microsoft.Extensions.Configuration.dll; DestDir: {app}
-Source: ..\dist\Publish\win-x86\Microsoft.Extensions.Configuration.FileExtensions.dll; DestDir: {app}
-Source: ..\dist\Publish\win-x86\Microsoft.Extensions.Configuration.Json.dll; DestDir: {app}
-Source: ..\dist\Publish\win-x86\Microsoft.Extensions.DependencyInjection.Abstractions.dll; DestDir: {app}
-Source: ..\dist\Publish\win-x86\Microsoft.Extensions.DependencyInjection.dll; DestDir: {app}
-Source: ..\dist\Publish\win-x86\Microsoft.Extensions.DependencyModel.dll; DestDir: {app}
-Source: ..\dist\Publish\win-x86\Microsoft.Extensions.FileProviders.Abstractions.dll; DestDir: {app}
-Source: ..\dist\Publish\win-x86\Microsoft.Extensions.FileProviders.Physical.dll; DestDir: {app}
-Source: ..\dist\Publish\win-x86\Microsoft.Extensions.FileSystemGlobbing.dll; DestDir: {app}
-Source: ..\dist\Publish\win-x86\Microsoft.Extensions.Logging.Abstractions.dll; DestDir: {app}
-Source: ..\dist\Publish\win-x86\Microsoft.Extensions.Logging.dll; DestDir: {app}
-Source: ..\dist\Publish\win-x86\Microsoft.Extensions.Options.dll; DestDir: {app}
-Source: ..\dist\Publish\win-x86\Microsoft.Extensions.Primitives.dll; DestDir: {app}
-Source: ..\dist\Publish\win-x86\Newtonsoft.Json.dll; DestDir: {app}
-Source: ..\dist\Publish\win-x86\Percolore.Core.dll; DestDir: {app}
-Source: ..\dist\Publish\win-x86\Serilog.dll; DestDir: {app}
-Source: ..\dist\Publish\win-x86\Serilog.Extensions.Logging.dll; DestDir: {app}
-Source: ..\dist\Publish\win-x86\Serilog.Settings.Configuration.dll; DestDir: {app}
-Source: ..\dist\Publish\win-x86\Serilog.Sinks.Console.dll; DestDir: {app}
-Source: ..\dist\Publish\win-x86\Serilog.Sinks.File.dll; DestDir: {app}
-Source: ..\dist\Publish\win-x86\sni.dll; DestDir: {app}
-Source: ..\dist\Publish\win-x86\SQLite.Interop.dll; DestDir: {app}
-Source: ..\dist\Publish\win-x86\System.Data.OleDb.dll; DestDir: {app}
-Source: ..\dist\Publish\win-x86\System.Data.SqlClient.dll; DestDir: {app}
-Source: ..\dist\Publish\win-x86\System.Data.SQLite.dll; DestDir: {app}
-Source: ..\dist\Publish\win-x86\System.Data.SQLite.EF6.dll; DestDir: {app}
-Source: ..\dist\Publish\win-x86\System.Drawing.Common.dll; DestDir: {app}
-Source: ..\dist\Publish\win-x86\System.IO.Ports.dll; DestDir: {app}
-Source: ..\dist\Publish\win-x86\System.Management.dll; DestDir: {app}
-Source: ..\dist\Publish\win-x86\Treinamento.deps.json; DestDir: {app}
-Source: ..\dist\Publish\win-x86\Treinamento.dll; DestDir: {app}
-Source: ..\dist\Publish\win-x86\Treinamento.dll.config; DestDir: {app}
-Source: ..\dist\Publish\win-x86\Treinamento.exe; DestDir: {app}
-Source: ..\dist\Publish\win-x86\Treinamento.runtimeconfig.json; DestDir: {app}
-Source: ..\dist\Publish\win-x86\WSMBS.dll; DestDir: {app}
+Source: ..\dist\Publish\win-arm64\appsettings.json; DestDir: {app}
+Source: ..\dist\Publish\win-arm64\EntityFramework.dll; DestDir: {app}
+Source: ..\dist\Publish\win-arm64\EntityFramework.SqlServer.dll; DestDir: {app}
+Source: ..\dist\Publish\win-arm64\FluentFTP.dll; DestDir: {app}
+Source: ..\dist\Publish\win-arm64\Fractions.dll; DestDir: {app}
+Source: ..\dist\Publish\win-arm64\Instalacao.deps.json; DestDir: {app}; Flags:deleteafterinstall;
+Source: ..\dist\Publish\win-arm64\Instalacao.dll; DestDir: {app}; Flags:deleteafterinstall;
+Source: ..\dist\Publish\win-arm64\Instalacao.exe; DestDir: {app}; Flags:deleteafterinstall;
+Source: ..\dist\Publish\win-arm64\Instalacao.runtimeconfig.json; DestDir: {app}; Flags:deleteafterinstall;
+Source: ..\dist\Publish\win-arm64\InTheHand.Net.Bluetooth.dll; DestDir: {app}
+Source: ..\dist\Publish\win-arm64\IOConnect.deps.json; DestDir: {app}
+Source: ..\dist\Publish\win-arm64\IOConnect.dll; DestDir: {app}
+Source: ..\dist\Publish\win-arm64\IOConnect.dll.config; DestDir: {app}
+Source: ..\dist\Publish\win-arm64\IOConnect.exe; DestDir: {app}
+Source: ..\dist\Publish\win-arm64\IOConnect.runtimeconfig.json; DestDir: {app}
+Source: ..\dist\Publish\win-arm64\Microsoft.Extensions.Configuration.Abstractions.dll; DestDir: {app}
+Source: ..\dist\Publish\win-arm64\Microsoft.Extensions.Configuration.Binder.dll; DestDir: {app}
+Source: ..\dist\Publish\win-arm64\Microsoft.Extensions.Configuration.dll; DestDir: {app}
+Source: ..\dist\Publish\win-arm64\Microsoft.Extensions.Configuration.FileExtensions.dll; DestDir: {app}
+Source: ..\dist\Publish\win-arm64\Microsoft.Extensions.Configuration.Json.dll; DestDir: {app}
+Source: ..\dist\Publish\win-arm64\Microsoft.Extensions.DependencyInjection.Abstractions.dll; DestDir: {app}
+Source: ..\dist\Publish\win-arm64\Microsoft.Extensions.DependencyInjection.dll; DestDir: {app}
+Source: ..\dist\Publish\win-arm64\Microsoft.Extensions.DependencyModel.dll; DestDir: {app}
+Source: ..\dist\Publish\win-arm64\Microsoft.Extensions.FileProviders.Abstractions.dll; DestDir: {app}
+Source: ..\dist\Publish\win-arm64\Microsoft.Extensions.FileProviders.Physical.dll; DestDir: {app}
+Source: ..\dist\Publish\win-arm64\Microsoft.Extensions.FileSystemGlobbing.dll; DestDir: {app}
+Source: ..\dist\Publish\win-arm64\Microsoft.Extensions.Logging.Abstractions.dll; DestDir: {app}
+Source: ..\dist\Publish\win-arm64\Microsoft.Extensions.Logging.dll; DestDir: {app}
+Source: ..\dist\Publish\win-arm64\Microsoft.Extensions.Options.dll; DestDir: {app}
+Source: ..\dist\Publish\win-arm64\Microsoft.Extensions.Primitives.dll; DestDir: {app}
+Source: ..\dist\Publish\win-arm64\Newtonsoft.Json.dll; DestDir: {app}
+Source: ..\dist\Publish\win-arm64\Percolore.Core.dll; DestDir: {app}
+Source: ..\dist\Publish\win-arm64\Serilog.dll; DestDir: {app}
+Source: ..\dist\Publish\win-arm64\Serilog.Extensions.Logging.dll; DestDir: {app}
+Source: ..\dist\Publish\win-arm64\Serilog.Settings.Configuration.dll; DestDir: {app}
+Source: ..\dist\Publish\win-arm64\Serilog.Sinks.Console.dll; DestDir: {app}
+Source: ..\dist\Publish\win-arm64\Serilog.Sinks.File.dll; DestDir: {app}
+Source: ..\dist\Publish\win-arm64\sni.dll; DestDir: {app}
+Source: ..\dist\Publish\win-arm64\System.Data.OleDb.dll; DestDir: {app}
+Source: ..\dist\Publish\win-arm64\System.Data.SqlClient.dll; DestDir: {app}
+Source: ..\dist\Publish\win-arm64\System.Data.SQLite.dll; DestDir: {app}
+Source: ..\dist\Publish\win-arm64\System.Data.SQLite.EF6.dll; DestDir: {app}
+Source: ..\dist\Publish\win-arm64\System.Drawing.Common.dll; DestDir: {app}
+Source: ..\dist\Publish\win-arm64\System.IO.Ports.dll; DestDir: {app}
+Source: ..\dist\Publish\win-arm64\System.Management.dll; DestDir: {app}
+Source: ..\dist\Publish\win-arm64\Treinamento.deps.json; DestDir: {app}
+Source: ..\dist\Publish\win-arm64\Treinamento.dll; DestDir: {app}
+Source: ..\dist\Publish\win-arm64\Treinamento.dll.config; DestDir: {app}
+Source: ..\dist\Publish\win-arm64\Treinamento.exe; DestDir: {app}
+Source: ..\dist\Publish\win-arm64\Treinamento.runtimeconfig.json; DestDir: {app}
+Source: ..\dist\Publish\win-arm64\WSMBS.dll; DestDir: {app}
 
 ; Instalador Visual C++ Redistributable
-Source: Installer\VC_redist.x86.exe; DestDir: "{tmp}"; Flags: deleteafterinstall; Check: InstallVCRedist; AfterInstall: ExecuteVCRedist
+Source: Installer\VC_redist.arm64.exe; DestDir: "{tmp}"; Flags: deleteafterinstall; Check: InstallVCRedist; AfterInstall: ExecuteVCRedist
 
 ;Instalador do .NET 8
-Source: Installer\dotnet-runtime-8.0.11-win-x86.exe; DestDir: "{tmp}"; Flags: deleteafterinstall; Check: InstallDotNetX86; AfterInstall: InstallDotNet
-Source: Installer\windowsdesktop-runtime-8.0.11-win-x86.exe; DestDir: "{tmp}"; Flags: deleteafterinstall; Check: InstallDotNetWinX86; AfterInstall: InstallDotNetWindowsDesktop
+Source: Installer\dotnet-runtime-8.0.11-win-arm64.exe; DestDir: "{tmp}"; Flags: deleteafterinstall; Check: InstallDotNetArm64; AfterInstall: InstallDotNet
+Source: Installer\windowsdesktop-runtime-8.0.11-win-arm64.exe; DestDir: "{tmp}"; Flags: deleteafterinstall; Check: InstallDotNetWinArm64; AfterInstall: InstallDotNetWindowsDesktop
 
 
 ;***************************
@@ -520,14 +519,14 @@ begin
   end;
 end;
 
-function InstallDotNetX86(): Boolean;
+function InstallDotNetArm64(): Boolean;
 begin
-  Result := InstallDotNet8('x86', 'Microsoft.NETCore.App');  
+  Result := InstallDotNet8('arm64', 'Microsoft.NETCore.App');
 end;
 
-function InstallDotNetWinX86(): Boolean;
+function InstallDotNetWinArm64(): Boolean;
 begin
-  Result := InstallDotNet8('x86', 'Microsoft.WindowsDesktop.App');  
+  Result := InstallDotNet8('arm64', 'Microsoft.WindowsDesktop.App');
 end;
 
 function InstallVCRedist(): Boolean;
@@ -536,8 +535,8 @@ var
   IsInstalled: Cardinal;
 begin
   Result := True;
-  // Verifica a existência da chave para o VC_redist.x86
-  InstallKey := 'SOFTWARE\Microsoft\VisualStudio\14.0\VC\Runtimes\x86';
+  // Verifica a existência da chave para o VC_redist.arm64
+  InstallKey := 'SOFTWARE\Microsoft\VisualStudio\14.0\VC\Runtimes\arm64';
 
   // Verifica em HKLM se o redistributable está instalado (32 ou 64 bits)
   if RegQueryDWordValue(HKLM, InstallKey, 'Installed', IsInstalled) then
@@ -559,7 +558,7 @@ begin
   WizardForm.StatusLabel.Caption := ExpandConstant('{cm:msgVCRedistInstalando}');
   WizardForm.ProgressGauge.Style := npbstMarquee;
 
-  Installer := ExpandConstant('{tmp}\VC_redist.x86.exe');
+  Installer := ExpandConstant('{tmp}\VC_redist.arm64.exe');
 
   // Executa o instalador
   try
@@ -602,7 +601,7 @@ begin
   WizardForm.StatusLabel.Caption := ExpandConstant('{cm:msgNetWinDesktopInstalando,{#DefAppNetVersion}}');
   WizardForm.ProgressGauge.Style := npbstMarquee;
 
-  DotNetInstaller := ExpandConstant('{tmp}\windowsdesktop-runtime-8.0.11-win-x86.exe');
+  DotNetInstaller := ExpandConstant('{tmp}\windowsdesktop-runtime-8.0.11-win-arm64.exe');
 
   // Executa o instalador
   try
@@ -644,6 +643,8 @@ begin
   StatusText := WizardForm.StatusLabel.Caption;
   WizardForm.StatusLabel.Caption := ExpandConstant('{cm:msgNetInstalando,{#DefAppNetVersion}}');
   WizardForm.ProgressGauge.Style := npbstMarquee;
+
+  DotNetInstaller := ExpandConstant('{tmp}\dotnet-runtime-8.0.11-win-arm64.exe');
 
   // Executa o instalador
   try
