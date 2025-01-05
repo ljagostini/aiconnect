@@ -42,7 +42,7 @@
   </ItemGroup>
 
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
-    <Exec Command="xcopy /Y /E &quot;$(TargetDir)*&quot; &quot;$(SolutionDir)dist\$(Configuration)\net8.0-windows\&quot;" />
+    <Exec Command="xcopy /Y /E &quot;$(TargetDir)*&quot; &quot;$(MSBuildProjectDirectory)\..\dist\$(Configuration)\net8.0-windows\&quot;" />
   </Target>
 
 </Project>

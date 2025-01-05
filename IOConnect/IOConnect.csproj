@@ -73,7 +73,15 @@
     <Folder Include="Files\" />
   </ItemGroup>
 
-  <Target Name="RunInnoSetup" AfterTargets="Build" Condition="'$(Configuration)' == 'Release'">
-    <Exec Command="&quot;C:\Program Files (x86)\Inno Setup 6\ISCC.exe&quot; &quot;$(ProjectDir)IOConnectInstallScript.iss&quot;" />
+  <Target Name="RunInnoSetupX86" AfterTargets="Publish" Condition="'$(Configuration)' == 'Release' and '$(PlatformTarget)' == 'x86'">
+    <Exec Command="&quot;C:\Program Files (x86)\Inno Setup 6\ISCC.exe&quot; &quot;$(ProjectDir)IOConnectInstaller-win-x86.iss&quot;" />
+  </Target>
+  
+  <Target Name="RunInnoSetupX64" AfterTargets="Publish" Condition="'$(Configuration)' == 'Release' and '$(PlatformTarget)' == 'x64'">
+    <Exec Command="&quot;C:\Program Files (x86)\Inno Setup 6\ISCC.exe&quot; &quot;$(ProjectDir)IOConnectInstaller-win-x64.iss&quot;" />
+  </Target>
+
+  <Target Name="RunInnoSetupArm64" AfterTargets="Publish" Condition="'$(Configuration)' == 'Release' and '$(PlatformTarget)' == 'ARM64'">
+    <Exec Command="&quot;C:\Program Files (x86)\Inno Setup 6\ISCC.exe&quot; &quot;$(ProjectDir)IOConnectInstaller-win-arm64.iss&quot;" />
   </Target>
 </Project>
