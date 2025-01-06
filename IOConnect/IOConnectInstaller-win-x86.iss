@@ -645,6 +645,8 @@ begin
   WizardForm.StatusLabel.Caption := ExpandConstant('{cm:msgNetInstalando,{#DefAppNetVersion}}');
   WizardForm.ProgressGauge.Style := npbstMarquee;
 
+  DotNetInstaller := ExpandConstant('{tmp}\dotnet-runtime-8.0.11-win-x86.exe');
+
   // Executa o instalador
   try
     if Exec(DotNetInstaller, '/quiet /norestart', '', SW_SHOW, ewWaitUntilTerminated, ResultCode) then
