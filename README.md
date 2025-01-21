@@ -110,6 +110,44 @@ Se você precisar alterar algo ou recompilar a solução, repita os passos acima
 
  - [Tutorial: Compilar um aplicativo no Visual Studio 2022](https://learn.microsoft.com/pt-br/visualstudio/ide/walkthrough-building-an-application?view=vs-2022)
 
+## Configuração do Inno Setup no Processo de Build
+O instalador para o IOConnect é gerado automaticamente através de um script powershell, criado exclusivamente para essa finalidade, utilizando o **Inno Setup**. Para configurar ou modificar esse processo:
+
+### Passo 1: Instalação do Inno Setup
+1. Certifique-se de que o **Inno Setup Compiler (ISCC)** está instalado no caminho: `C:\Program Files (x86)\Inno Setup 6\ISCC.exe`. Se não estiver, utilize o instalador localizado no caminho `IOConnect\Installer` no repositório da solução `Tintometria.NET8.sln`.
+2. Os scripts de instalação (x86, x64 e ARM64) estão localizados na pasta do projeto IOConnect.
+
+### Passo 2: Selecione o modo de compilação
+1. No Visual Studio, selecione a arquitetura do processador (x86, x64 ou ARM64). É recomendado selecionar a opção *AnyCPU*, que permite gerar os binários do sistema de forma compatível com qualquer arquitetura.
+
+**Nota importante:** *Atualmente o IOConnect utiliza uma biblioteca externa para comunicação ModBus chamada WSMBS.dll, que é compatível apenas com arquiteturas x86. Compilar o IOCOnnect com esse componente em arquiteturas x64 ou AnyCPU vai gerar warnings na compilação e pode gerar incompatibilidade e mal funcionamento em sistemas diferentes de x86 (32-Bits)*. 
+
+### Passo 3: Compilação do Instalador
+1. Acesse a pasta `Installer`, no projeto IOConnect, e copie o endereço completo da pasta.
+2. Execute o Windows Powershell.
+3. Digite o comando `cd [caminho do installer]`, onde [caminho do installer] é o caminho copiado no passo 1, e pressione enter.
+4. Digite o comando `./publish-ioconnect -target [arquitetura]`, onde `[arquitetura]` é a arquitetura do processador alvo onde o IOConnect será instalado. Os valores permitidos para `[arquitetura]`são: win-x86, win-x64 e win-arm64.
+5. O instalador final será encontrado na pasta `dist`, na raiz da solução.
+
+## Adicionando novos parâmetros de configuração no instalador
+O instalador do IOConnect está preparado para configurar a instalação com parâmetros padrão para diversas máquinas e clientes, bastando para isso selecionar a configuração durante a execução do instalador.
+Durante a instalação, o instalador verifica qual a parametrização desejada e copia os arquivos de parãmetros em xml na pasta do IOConnect, que fará sua leitura e gravará nos bancos de dados de parâmetros os valores lidos.
+Caso seja necessário incluir novos parâmetros de configuração ao instalador será necessário:
+1. Criar os arquivos `Claibragem.xml`, `Colorantes.xml`, `Formulas.xml`, `Parametros.xml` e `Recircular.xml` com os valores desejados.
+2. Criar uma nova pasta no diretório `IOConnect\Files` com o nome da configuração, exemplo: `EUCATEX - e-colors - Percolore AD-D8`.
+3. Salvar dentro dessa pasta os arquivos de configuração criados no passo 1.
+4. Ajustar os arquivos de instalação do inno setup localizados na pasta do IOConnect. Os scripts são: `IOConnectInstaller-win-arm64.iss`, `IOConnectInstaller-win-x64.iss` e `IOConnectInstaller-win-x86.iss`.
+
+### Ajustando os scripts de instalação para comportar novas configurações
+Para ajustar os scripts de instalação do IOConnect para incluir novas configurações de máquinas, siga os seguintes passos:
+1. Abra o arquivo de instalação desejado e localize a seção `[Tasks]`.
+2. Em `Calibrações` inclua uma nova linha informando os parâmetros `name`, `description` e `Flags`. O parâmetro *Flags* deve ter o valor `exclusive`. Siga o mesmo padrão das calibrações existentes.
+3. Localize a seção `[Files]`
+4. Na sub seção `Banco de Calibração`, localize os arquivos da última calibração existente.
+5. Copie a última calibração existente e cole abaixo dela, tomando o cuidado de ajustar o nome da configuração, o caminho para os arquivos criandos na pasta `IOConnect\Files` e o nome da task relacionada no parâmetro `Tasks`. O nome da Task deve ser o mesmo nome criado no passo 2.
+6. Salve o arquivo.
+7. Repita o processo para os scripts de instalação das demais arquiteturas.
+
 ## Atualização de Compatibilidade do Gerador de Tokens
 
 ### Introdução
@@ -208,12 +246,13 @@ Maiores informações sobre a configuração do Serilog podem ser encontradas no
 # Contribuição
 
 
-Esta documentação foi elaborada por **Fábio Luiz Biano**, Analista de Sistemas na **Worksoftware Sistemas e Webdesign**.
+Esta documentação foi elaborada por **Fábio Luiz Biano**, Analista de Sistemas e proprietário da **Worksoftware Sistemas e Webdesign**.
 
 Para mais informações sobre nossos serviços, visite nosso [site](https://worksoftware.com.br) ou conecte-se pelas nossas redes sociais:
 
-- [Instagram da Worksoftware](https://www.instagram.com/oficial.worksoftware)
-- [Facebook da Worksoftware](https://www.facebook.com/worksoftware)
+- [Instagram](https://www.instagram.com/oficial.worksoftware)
+- [Facebook](https://www.facebook.com/worksoftware)
+- [LinkedIn](https://linkedin.com/company/worksoftware-sistemas)
 
 Você também pode entrar em contato diretamente comigo:
 
