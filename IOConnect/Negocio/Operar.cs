@@ -193,6 +193,8 @@ namespace Percolore.IOConnect
                     using (fMensagem m = new fMensagem(fMensagem.TipoMensagem.Erro))
                     {
                         string mensagem = ErrorMessageHandler.GetFriendlyErrorMessage(ex);
+                        if (string.IsNullOrWhiteSpace(mensagem))
+                            mensagem = Negocio.IdiomaResxExtensao.Global_Falha_DispositivoSemConectividade;
 
 						booFullScreenReturn = m.ShowDialog(
                             mensagem, Negocio.IdiomaResxExtensao.Global_Sim, Negocio.IdiomaResxExtensao.Global_Nao);

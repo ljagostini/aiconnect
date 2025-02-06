@@ -152,15 +152,21 @@ namespace Percolore.IOConnect
 
         public void SafeClose(SerialPort port)
         {
+            if (port is null)
+                return;
+
             try
             {
                 Stream internalSerialStream = (Stream)port.GetType()
                     .GetField("internalSerialStream", BindingFlags.Instance | BindingFlags.NonPublic).GetValue(port);
 
                 GC.SuppressFinalize(port);
-                GC.SuppressFinalize(internalSerialStream);
 
-                internalSerialStream.Close();
+                if (internalSerialStream != null)
+                {
+                    GC.SuppressFinalize(internalSerialStream);
+                    internalSerialStream.Close();
+                }
             }
 			catch (Exception e)
 			{
