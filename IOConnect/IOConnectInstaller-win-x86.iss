@@ -463,7 +463,6 @@ Name: {userstartup}\{#DefAppName}; Filename: {app}\{#DefAppName}; WorkingDir: {a
 ;
 
 [Run]
-Filename: {app}\Instalacao.exe; Flags: waituntilterminated; StatusMsg: {cm:msgFinalizandoInstalacao}
 Filename: {app}\{#DefAppExeFile}; Flags: nowait postinstall skipifsilent; Description: {cm:LaunchProgram,{#StringChange(DefAppExeFile, '&', '&&')}}
 
 
@@ -546,6 +545,20 @@ begin
     begin
       Result := False;
     end;
+  end;
+end;
+
+function CheckRegistryKey(): Boolean;
+var
+  Value: String;
+begin
+  if RegQueryStringValue(HKCU, 'SOFTWARE\Percolore\85b88a51-63da-4851-b32c-bcf57ec9e5d4', '8e6b214a-c9d2-464a-9460-0860eda5f875', Value) then
+  begin
+    Result := True;  // A chave existe
+  end
+  else
+  begin
+    Result := False; // A chave NÃO existe
   end;
 end;
 
@@ -694,9 +707,18 @@ begin
 end;
 
 procedure CurStepChanged(CurStep: TSetupStep);
+var
+  ResultCode: Integer;
 begin
+  if CurStep = ssPostInstall then
+  begin
+    if not CheckRegistryKey() then
+    begin
+      Exec(ExpandConstant('{app}\Instalacao.exe'), '', '', SW_SHOWNORMAL, ewWaitUntilTerminated, ResultCode);
+    end;
+  end;
 
-  //Quando instalação estiver concuída
+  // Quando instalação estiver concluída
   //if (CurStep = ssDone )then
   //begin
 
