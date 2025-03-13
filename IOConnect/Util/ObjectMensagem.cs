@@ -203,6 +203,7 @@ namespace Percolore.IOConnect.Util
 				case "Global_Falha_PerdaDeConexao": { Negocio.IdiomaResxExtensao.Global_Falha_PerdaDeConexao = aux.Conteudo; break; }
                 case "Global_Falha_PerdaConexaoDispositivo": { Negocio.IdiomaResxExtensao.Global_Falha_PerdaConexaoDispositivo = aux.Conteudo; break; }
                 case "Global_Falha_PerdaConexaoBluetooh": { Negocio.IdiomaResxExtensao.Global_Falha_PerdaConexaoBluetooh = aux.Conteudo; break; }
+				case "Global_Falha_SemConexaoBluetooh": { Negocio.IdiomaResxExtensao.Global_Falha_SemConexaoBluetooh = aux.Conteudo; break; }
 				case "Global_Falha_RessetData": { Negocio.IdiomaResxExtensao.Global_Falha_RessetData = aux.Conteudo; break; }
                 case "Global_Falha_TestarRecipiente": { Negocio.IdiomaResxExtensao.Global_Falha_TestarRecipiente = aux.Conteudo; break; }
                 case "Global_Falha_VolumeMinimoDat": { Negocio.IdiomaResxExtensao.Global_Falha_VolumeMinimoDat = aux.Conteudo; break; }

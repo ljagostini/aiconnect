@@ -375,7 +375,8 @@ namespace PaintMixer
 
 				if (portas == null || portas.LongLength == 0)
                 {
-                    throw new Exception(
+                    LogManager.LogInformation("[PaintMixer.PaintMixerInterface_P2.Connect] Nenhuma porta serial disponível.");
+					throw new Exception(
                         Percolore.IOConnect.Negocio.IdiomaResxExtensao.Global_DisensaNaoConectado);
                     //"O dispositivo de dispensa não encontra-se conectado à porta de comunicação.");
                 }
@@ -405,7 +406,8 @@ namespace PaintMixer
                             }
 							catch (Exception e)
 							{
-								LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", e);
+								LogManager.LogError($"[PaintMixerInterface_P2.Connect] Erro no módulo {this.GetType().Name}: ", e);
+                                throw new Percolore.Core.Exceptions.BluetoothException(Percolore.IOConnect.Negocio.IdiomaResx.Global_Falha_SemConexaoBluetooh, e);
 							}
 						}
                         else

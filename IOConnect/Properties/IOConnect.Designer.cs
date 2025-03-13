@@ -3840,6 +3840,17 @@ namespace Percolore.IOConnect.Properties {
 		}
 
 		/// <summary>
+		///   Looks up a localized string similar to Não foi possível conectar ao dispositivo. Verifique se o Bluetooth do computador está funcionando corretamente e se a máquina está ligada..
+		/// </summary>
+		internal static string Global_Falha_SemConexaoBluetooh
+		{
+			get
+			{
+				return ResourceManager.GetString("Global_Falha_SemConexaoBluetooh", resourceCulture);
+			}
+		}
+
+		/// <summary>
 		///   Looks up a localized string similar to Falha ao Ressetar data na purga e recirculação  :.
 		/// </summary>
 		internal static string Global_Falha_RessetData {

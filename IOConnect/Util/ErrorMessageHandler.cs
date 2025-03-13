@@ -1,4 +1,6 @@
-﻿namespace Percolore.IOConnect.Util
+﻿using Percolore.Core.Exceptions;
+
+namespace Percolore.IOConnect.Util
 {
 	internal class ErrorMessageHandler
 	{
@@ -6,6 +8,9 @@
 		{
 			if (exception is null)
 				return string.Empty;
+
+			if (exception is BluetoothException)
+				return exception.Message;
 
 			const string MODBUS_RTU_SEND_FC3_METHOD = "Percolore.IOConnect.ModBusRtu.SendFc3";
 			// Forms

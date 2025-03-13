@@ -2354,4 +2354,7 @@ Customer contact Percolore Ethernet communication failure!</value>
   <data name="Global_Falha_PerdaConexaoBluetooh" xml:space="preserve">
     <value>Communication with the device has been interrupted. This may be because the computer's processing is slow or the computer's Bluetooth has stopped working.</value>
   </data>
+  <data name="Global_Falha_SemConexaoBluetooh" xml:space="preserve">
+    <value>Unable to connect to the device. Check that the computer's Bluetooth is working properly and that the machine is turned on.</value>
+  </data>
 </root>

@@ -183,7 +183,7 @@ namespace Percolore.IOConnect
             }
 			catch (Exception ex)
 			{
-				LogManager.LogError($"Erro no módulo {typeof(Operar).Name}: ", ex);
+				LogManager.LogError($"[Operar.Conectar] Erro no módulo {typeof(Operar).Name}: ", ex);
 			
                 dispenser.Disconnect();
                
@@ -195,6 +195,10 @@ namespace Percolore.IOConnect
                         string mensagem = ErrorMessageHandler.GetFriendlyErrorMessage(ex);
                         if (string.IsNullOrWhiteSpace(mensagem))
                             mensagem = Negocio.IdiomaResxExtensao.Global_Falha_DispositivoSemConectividade;
+
+                        // Checks the confirm message
+                        if (!mensagem.Contains(Negocio.IdiomaResxExtensao.Global_Confirmar_DesejaTentarNovamente))
+							mensagem += Environment.NewLine + Negocio.IdiomaResxExtensao.Global_Confirmar_DesejaTentarNovamente;
 
 						booFullScreenReturn = m.ShowDialog(
                             mensagem, Negocio.IdiomaResxExtensao.Global_Sim, Negocio.IdiomaResxExtensao.Global_Nao);
