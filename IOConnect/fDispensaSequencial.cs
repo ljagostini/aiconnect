@@ -2,6 +2,7 @@
 using Percolore.Core.Logging;
 using Percolore.IOConnect.Util;
 using System.ComponentModel;
+using System.Diagnostics;
 
 namespace Percolore.IOConnect
 {
@@ -604,6 +605,9 @@ namespace Percolore.IOConnect
         //void Monitoramento_Event(object sender, EventArgs e)
         void Monitoramento_Event()
         {
+			Stopwatch sw = new Stopwatch();
+            sw.Start();
+			LogManager.LogInformation("[fDispensaSequencial.Monitoramento_Event] Started.");
             try
             {
                 if (prmDispensa.modBusDispenser_P3 != null)
@@ -916,11 +920,18 @@ namespace Percolore.IOConnect
                 this.isRunning = false;
                 this.counterFalha++;
             }
-        }
+
+            sw.Stop();
+            LogManager.LogInformation($"[fDispensaSequencial.Monitoramento_Event] Finished. Elapsed time: {sw.ElapsedMilliseconds} ms.");
+		}
 
         void ForceOpenConnection()
         {
-            try
+			Stopwatch sw = new Stopwatch();
+			sw.Start();
+			LogManager.LogInformation("[fDispensaSequencial.ForceOpenConnection] Started.");
+
+			try
             {
                 if (this.prmDispensa.modBusDispenser_P3 != null)
                 {
@@ -947,6 +958,9 @@ namespace Percolore.IOConnect
 			{
 				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
 			}
+
+			sw.Stop();
+			LogManager.LogInformation($"[fDispensaSequencial.ForceOpenConnection] Finished. Elapsed time: {sw.ElapsedMilliseconds} ms.");
 		}
 
         void trataActionP3()

@@ -1,4 +1,5 @@
 ﻿using Percolore.Core.Logging;
+using System.Diagnostics;
 using System.IO.Ports;
 using System.Reflection;
 
@@ -40,7 +41,11 @@ namespace Percolore.IOConnect
 
         public bool Open(string portName, int baudRate, int databits, Parity parity, StopBits stopBits)
         {
-            if (sp == null)
+			Stopwatch sw = new Stopwatch();
+			sw.Start();
+			LogManager.LogInformation("[ModBusRtu.Open] Started.");
+
+			if (sp == null)
             {
                 sp = new SerialPort();
             }
@@ -67,22 +72,31 @@ namespace Percolore.IOConnect
                 catch (Exception err)
                 {
                     modbusStatusStr = "Error opening " + portName + ": " + err.Message;
-                    LogManager.LogError(modbusStatusStr, err);
+                    LogManager.LogError($"[ModBusRtu.Open] {modbusStatusStr}", err);
                     modbusStatus = false;
-                    return false;
+
+					sw.Stop();
+					LogManager.LogInformation($"[ModBusRtu.Open] Finished. Elapsed time: {sw.ElapsedMilliseconds} ms.");
+					return false;
                 }
+
                 modbusStatusStr = portName + " opened successfully";
                 modbusStatus = true;
-                return true;
+
+				sw.Stop();
+				LogManager.LogInformation($"[ModBusRtu.Open] Finished. Elapsed time: {sw.ElapsedMilliseconds} ms.");
+				return true;
             }
             else
             {
                 modbusStatusStr = portName + " already opened";
                 modbusStatus = true;
 
-                return true;
+				sw.Stop();
+				LogManager.LogInformation($"[ModBusRtu.Open] Finished. Elapsed time: {sw.ElapsedMilliseconds} ms.");
+				return true;
             }
-        }
+		}
 
         public bool CloseM()
         {
@@ -155,7 +169,11 @@ namespace Percolore.IOConnect
             if (port is null)
                 return;
 
-            try
+			Stopwatch sw = new Stopwatch();
+			sw.Start();
+			LogManager.LogInformation("[ModBusRtu.SafeClose] Started.");
+
+			try
             {
                 Stream internalSerialStream = (Stream)port.GetType()
                     .GetField("internalSerialStream", BindingFlags.Instance | BindingFlags.NonPublic).GetValue(port);
@@ -172,6 +190,9 @@ namespace Percolore.IOConnect
 			{
 				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", e);
 			}
+
+			sw.Stop();
+			LogManager.LogInformation($"[ModBusRtu.SafeClose] Finished. Elapsed time: {sw.ElapsedMilliseconds} ms.");
 		}
 
         static void ShutdownEventLoopHandler(Stream internalSerialStream)
@@ -563,8 +584,12 @@ namespace Percolore.IOConnect
         #region Function 3 - Read Registers
         public bool SendFc3(byte address, ushort start, ushort registers, ref int[] values)
         {
-            //Ensure port is open:
-            if (sp.IsOpen && Modbus.USBConstant.connectUsb)
+			Stopwatch sw = new Stopwatch();
+			sw.Start();
+			LogManager.LogInformation("[moduleName] Started.");
+
+			//Ensure port is open:
+			if (sp.IsOpen && Modbus.USBConstant.connectUsb)
             {
                 //Clear in/out buffers:
                 try
@@ -603,7 +628,10 @@ namespace Percolore.IOConnect
                     modbusStatusStr = "Error in read event: " + err.Message;
                     LogManager.LogError(modbusStatusStr, err);
                     modbusStatus = false;
-                    return false;
+
+					sw.Stop();
+					LogManager.LogInformation($"[ModBusRtu.SendFc3] Finished. Elapsed time: {sw.ElapsedMilliseconds} ms.");
+					return false;
                 }
 
                 //Evaluate message:
@@ -618,20 +646,29 @@ namespace Percolore.IOConnect
                     }
                     modbusStatusStr = "Read successful";
                     modbusStatus = true;
-                    return true;
+
+					sw.Stop();
+					LogManager.LogInformation($"[ModBusRtu.SendFc3] Finished. Elapsed time: {sw.ElapsedMilliseconds} ms.");
+					return true;
                 }
                 else
                 {
                     modbusStatusStr = "CRC error";
                     modbusStatus = false;
-                    return false;
+
+					sw.Stop();
+					LogManager.LogInformation($"[ModBusRtu.SendFc3] Finished. Elapsed time: {sw.ElapsedMilliseconds} ms.");
+					return false;
                 }
             }
             else
             {
                 modbusStatusStr = "Read registers failed. Serial port not open";
                 modbusStatus = true;
-                return false;
+
+				sw.Stop();
+				LogManager.LogInformation($"[ModBusRtu.SendFc3] Finished. Elapsed time: {sw.ElapsedMilliseconds} ms.");
+				return false;
             }
         }
         #endregion
