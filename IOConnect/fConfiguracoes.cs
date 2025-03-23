@@ -3407,7 +3407,7 @@ namespace Percolore.IOConnect
                     cbTipoTempoMonitRecirculacaoAuto.SelectedIndex = (_parametros.TempoReciAuto <= 0) ? 0 : _parametros.TempoReciAuto - 1;
                 }
 
-                atualizaDataGridRecircularProdutos();
+                inicializaDataGridRecircularProdutos();
 
                 #endregion
             }
@@ -6807,14 +6807,49 @@ namespace Percolore.IOConnect
         {
             
         }
-       
 
-        private void atualizaDataGridRecircularProdutos()
+        /// <summary>
+        /// Faz a inicialização dos campos de cada válvula na tela de configurações de Recirculação.
+        /// </summary>
+        private void inicializaDataGridRecircularProdutos()
         {
             try
             {
                 for (int i = 0; i < this._listRecircular.Count; i++)
                 {
+                    // Habilita ou desabilita estado dos campos de cada válvula
+                    atualizaEstadoDataGridRecircularProdutos();
+
+                    // Inicializa os campos na tela com os dados do banco de dados
+                    _recircularVolDin[i].Text = this._listRecircular[i].VolumeDin.ToString();
+                    _recircularDias[i].Text = this._listRecircular[i].Dias.ToString();
+                    _recircularVol[i].Text = this._listRecircular[i].VolumeRecircular.ToString();
+                    _recircularValve[i].Checked = this._listRecircular[i].isValve;
+                    _recircularAuto[i].Checked = this._listRecircular[i].isAuto;
+                }
+            }
+            catch (Exception ex)
+            {
+                LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+            }
+        }
+
+        /// <summary>
+        /// Habilita ou desabilita estado dos campos de cada válvula na tela de configurações de Recirculação.
+        /// </summary>
+        private void atualizaEstadoDataGridRecircularProdutos()
+        {
+            // Verifica se algum dos dois parâmetros de habilitação da recirculação está marcado na interface
+            bool habilitar = chkHabilitarMonitRecirculacao.Checked || chkHabilitarMonitRecirculacaoAuto.Checked;
+
+            try
+            {
+                for (int i = 0; i < this._listRecircular.Count; i++)
+                {
+                    // Define se é possível habilitar ou desabilitar a válvula com base na interface
+                    _recircularCKT[i].Enabled = habilitar;
+
+                    // Define a cor de fundo do botão de acordo com o estado da válvula
                     if (this._listRecircular[i].Habilitado)
                     {
                         _recircularCKT[i].BackColor = Cores.Seguir;
@@ -6824,25 +6859,20 @@ namespace Percolore.IOConnect
                         _recircularCKT[i].BackColor = Cores.Parar;
                     }
 
-                    _recircularVolDin[i].Text = this._listRecircular[i].VolumeDin.ToString();
-                    _recircularDias[i].Text = this._listRecircular[i].Dias.ToString();
-                    _recircularVol[i].Text = this._listRecircular[i].VolumeRecircular.ToString();
-                    _recircularValve[i].Checked = this._listRecircular[i].isValve;
-                    _recircularAuto[i].Checked = this._listRecircular[i].isAuto;
-
-                    _recircularDias[i].Enabled = this._listRecircular[i].Habilitado;
-                    _recircularVol[i].Enabled = this._listRecircular[i].Habilitado;
-                    _recircularVolDin[i].Enabled = this._listRecircular[i].Habilitado;
-                    _recircularValve[i].Enabled = this._listRecircular[i].Habilitado;
-                    _recircularAuto[i].Enabled = this._listRecircular[i].Habilitado;
+                    // Define se é possível habilitar ou desabilitar os campos de acordo com o estado da válvula e a interface
+                    _recircularDias[i].Enabled = habilitar && this._listRecircular[i].Habilitado;
+                    _recircularVol[i].Enabled = habilitar && this._listRecircular[i].Habilitado;
+                    _recircularVolDin[i].Enabled = habilitar && this._listRecircular[i].Habilitado;
+                    _recircularValve[i].Enabled = habilitar && this._listRecircular[i].Habilitado;
+                    _recircularAuto[i].Enabled = habilitar && this._listRecircular[i].Habilitado;
                 }
             }
-			catch (Exception ex)
-			{
-				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
-			}
-		}
-        
+            catch (Exception ex)
+            {
+                LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+            }
+        }
+
         private void btnProductPar_Click(object sender, EventArgs e)
         {
             try
@@ -6984,12 +7014,20 @@ namespace Percolore.IOConnect
 
                 bool habilitado = !this._listRecircular[index].Habilitado;
                 this._listRecircular[index].Habilitado = habilitado;
-                this.Invoke(new MethodInvoker(RessetarRecirculacao));
+
+                // Habilita ou desabilita estado dos campos de cada válvula
+                atualizaEstadoDataGridRecircularProdutos();
             }
 			catch (Exception ex)
 			{
 				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
 			}
 		}
+
+        private void chkHabilitarMonitRecirculacao_CheckedChanged(object sender, EventArgs e)
+        {
+            // Habilita ou desabilita estado dos campos de cada válvula
+            atualizaEstadoDataGridRecircularProdutos();
+        }
     }
 }

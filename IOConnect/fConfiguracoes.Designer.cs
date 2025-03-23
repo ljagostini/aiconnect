@@ -15559,6 +15559,7 @@ namespace Percolore.IOConnect
             this.chkHabilitarMonitRecirculacaoAuto.TabIndex = 421;
             this.chkHabilitarMonitRecirculacaoAuto.Text = "Habilitar Monitoramento para Recirculação Automática";
             this.chkHabilitarMonitRecirculacaoAuto.UseVisualStyleBackColor = true;
+            this.chkHabilitarMonitRecirculacaoAuto.CheckedChanged += (this.chkHabilitarMonitRecirculacao_CheckedChanged);
             // 
             // groupBox2
             // 
@@ -15584,6 +15585,7 @@ namespace Percolore.IOConnect
             this.chkHabilitarMonitRecirculacao.TabIndex = 407;
             this.chkHabilitarMonitRecirculacao.Text = "Habilitar Monitoramento para Recirculação";
             this.chkHabilitarMonitRecirculacao.UseVisualStyleBackColor = true;
+            this.chkHabilitarMonitRecirculacao.CheckedChanged += (this.chkHabilitarMonitRecirculacao_CheckedChanged);
             // 
             // txtDelayMonitRecirculacao
             // 
