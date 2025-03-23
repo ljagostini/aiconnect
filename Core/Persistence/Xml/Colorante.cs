@@ -123,7 +123,14 @@ namespace Percolore.Core.Persistence.Xml
                 Colorante c = new Colorante();
                 c.Circuito = int.Parse(elemento.Attribute("Motor").Value);
                 c.Nome = elemento.Attribute("Nome").Value;
-                c.MassaEspecifica = XmlConvert.ToDouble(elemento.Attribute("MassaEspecifica").Value);
+                try
+                {
+                    c.MassaEspecifica = XmlConvert.ToDouble(elemento.Attribute("MassaEspecifica").Value);
+                }
+                catch
+                {
+                    c.MassaEspecifica = 0;
+                }
 
                 XAttribute xAttribute = null;
 
