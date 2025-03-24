@@ -4,7 +4,7 @@ using System.Xml.Linq;
 
 namespace Percolore.Core.Persistence.Xml
 {
-	public class Parametros
+    public class Parametros
     {
         public static readonly string PathFile = Path.Combine(Environment.CurrentDirectory, "Parametros.xml");
         public static readonly string FileName = Path.GetFileName(PathFile);
@@ -12,7 +12,6 @@ namespace Percolore.Core.Persistence.Xml
         public byte PortaModbus;
 
         #region Geral
-
         public int ResponseTimeout { get; set; } = 1000;
         public byte Slave { get; } = 1;
         public int Velocidade { get; set; } = 0;
@@ -32,10 +31,18 @@ namespace Percolore.Core.Persistence.Xml
 
         public string NomeDispositivo { get; set; } = "";
         public string NomeDispositivo2 { get; set; } = "";
-        public string VersaoIoconnect { get; set; } = "18";
+        public string VersaoIoconnect { get; set; } = "";
 
         public bool HabilitarDispensaSequencialP1 { get; set; } = false;
         public bool HabilitarDispensaSequencialP2 { get; set; } = false;
+        public int QtdTentativasConexao { get; set; } = 1;
+        public bool HabilitarIdentificacaoCopo { get; set; } = false;
+        public bool TreinamentoCal { get; set; } = false;
+        public bool HabLimpBicos { get; set; } = false;
+        public int DelayLimpBicos { get; set; } = 6;
+        public int TipoLimpBicos { get; set; } = 1;
+        public bool ViewMessageProc { get; set; } = false;
+        public int TipoDosagemExec { get; set; } = 1;
 
         #endregion
 
@@ -56,7 +63,58 @@ namespace Percolore.Core.Persistence.Xml
         public string PathRepositorioDAT { get; set; } = Path.Combine(PathDiretorioSistema, "dat_old");
         public bool DesabilitarInterfaceDispensaSequencial { get; set; } = false;
         public bool DesabilitarInterfaceDispensaSimultanea { get; set; } = false;
-        
+        public string PathMonitoramentoFilaDAT { get; set; } = Path.Combine(Environment.CurrentDirectory, "formulaFila*.dat");
+        public bool DesabilitarMonitoramentoFilaDAT { get; set; } = true;
+
+        public int DelayMonitoramentoFilaDAT { get; set; } = 2;
+
+        public bool DesabilitarVolumeMinimoDat { get; set; } = false;
+        public double VolumeMinimoDat { get; set; } = 0.1;
+
+        public string Dat_06_UNT_Pref { get; set; } = "@UNT";
+        public int Dat_06_UNT_1_IsPonto { get; set; } = 0;
+        public int Dat_06_UNT_2_IsPonto { get; set; } = 0;
+
+        public string Dat_06_CAN_Pref { get; set; } = "@CAN";
+        public int Dat_06_CAN_1_IsPonto { get; set; } = 0;
+
+        public string Dat_06_FRM_Pref { get; set; } = "@FRM";
+        public string Dat_06_FRM_SEP { get; set; } = ";";
+        public int Dat_06_FRM_1_IsPonto { get; set; } = 0;
+
+        public string Dat_06_BAS_Pref { get; set; } = "@BAS";
+        public int Dat_06_BAS_1_IsPonto { get; set; } = 0;
+
+        public int Dat_06_BAS_Habilitado { get; set; } = 0;
+
+
+        public string Dat_05_UNT_Pref { get; set; } = "@UNT";
+        public int Dat_05_UNT_1_IsPonto { get; set; } = 0;
+        public int Dat_05_UNT_2_IsPonto { get; set; } = 0;
+
+        public string Dat_05_CAN_Pref { get; set; } = "@CAN";
+        public int Dat_05_CAN_1_IsPonto { get; set; } = 0;
+
+        public string Dat_05_FRM_Pref { get; set; } = "@CNT";
+        public string Dat_05_FRM_SEP { get; set; } = ";";
+        public int Dat_05_FRM_1_IsPonto { get; set; } = 0;
+
+        public string Dat_05_BAS_Pref { get; set; } = "@BAS";
+        public int Dat_05_BAS_1_IsPonto { get; set; } = 0;
+
+        public int Dat_05_BAS_Habilitado { get; set; } = 0;
+
+
+        public int DelayUDCP { get; set; } = 0;
+
+        public int CreateFileTmpUDCP { get; set; } = 0;
+
+        public string ExtFileTmpUDCP { get; set; } = "tmp";
+
+        public bool ProcRemoveLataUDCP { get; set; } = false;
+
+        public bool DisablePopUpDispDat { get; set; } = true;
+
         #endregion
 
         #region Purga
@@ -113,6 +171,7 @@ namespace Percolore.Core.Persistence.Xml
         public bool HabilitarMililitro { get; set; } = true;
         public bool HabilitarGrama { get; set; } = false;
         public int UnidadeMedidaNivelColorante { get; set; } = (int)UnidadeMedida.Mililitro;
+        public int ValorFraction { get; set; } = 800;
 
         #endregion
 
@@ -122,6 +181,8 @@ namespace Percolore.Core.Persistence.Xml
         public string PathLogControleDispensa { get; set; } = Path.Combine(PathDiretorioSistema, "ctrldsp.log");
         public bool HabilitarLogComunicacao { get; set; } = false;
         public string PathLogComunicacao { get; set; } = Path.Combine(PathDiretorioSistema, "comunicacao.log");
+        public bool HabilitarLogAutomateTesterProt { get; set; } = false;
+        public bool LogAutomateBackup { get; set; } = false;
 
         #endregion
 
@@ -130,6 +191,8 @@ namespace Percolore.Core.Persistence.Xml
         public string IpProducao { get; set; } = "192.168.0.10";
         public string PortaProducao { get; set; } = "3110";
         public bool DesabilitaMonitProcessoProducao { get; set; } = true;
+        public string TipoBaseDados { get; set; } = "0";
+        public string PathBasesDados { get; set; } = "http://localhost/WebApiDosadora/api/";
         #endregion
 
         #region Sincronismo Formula
@@ -137,6 +200,47 @@ namespace Percolore.Core.Persistence.Xml
         public string IpSincFormula { get; set; } = "192.168.0.10";
         public string PortaSincFormula { get; set; } = "3111";
         #endregion
+
+        #region Sincronismo Token
+        public bool DesabilitaMonitSyncToken { get; set; } = true;
+        public string IpSincToken { get; set; } = "192.168.0.10";
+        public string PortaSincToken { get; set; } = "3112";
+
+        public string TipoEventos { get; set; } = "HD";
+
+        #endregion
+
+        #region Sincronismo bkp Calibragem
+        public bool DesabilitaMonitSyncBkpCalibragem { get; set; } = true;
+        public string UrlSincBkpCalibragem { get; set; } = "ftp://192.168.125.116/BdCalicracao";
+
+        #endregion
+
+        public int TimeoutPingTcp = 8000;
+
+        #region recirculação
+        public bool HabilitarRecirculacao { get; set; } = false;
+        public int DelayMonitRecirculacao { get; set; } = 4;
+        #endregion
+
+        #region Placa Mov
+        public int Address_PlacaMov { get; set; } = 3;
+        public string NomeDispositivo_PlacaMov { get; set; } = "";
+        public int DelayAlertaPlacaMov { get; set; } = 5;
+        #endregion
+
+        #region recirculaçãoAuto
+        public bool HabilitarRecirculacaoAuto { get; set; } = false;
+        public int DelayMonitRecirculacaoAuto { get; set; } = 4;
+        public int DelayNotificacaotRecirculacaoAuto { get; set; } = 5;
+        public int QtdNotificacaotRecirculacaoAuto { get; set; } = 3;
+        #endregion
+
+        public int DelayEsponja { get; set; } = 5;
+        public bool LogBD { get; set; } = false;
+        public string NameRemoteAccess { get; set; } = "BASupSrvcCnfg.exe";
+        public int TempoReciAuto { get; set; }
+        public bool LogStatusMaquina { get; set; } = false;
 
         #region Métodos
 
@@ -151,61 +255,99 @@ namespace Percolore.Core.Persistence.Xml
 
             #region Geral
 
-            p.ResponseTimeout = XmlConvert.ToInt32(xml.Element("ResponseTimeout").Value);
-            p.Velocidade = XmlConvert.ToInt32(xml.Element("Velocidade").Value);
-            p.Aceleracao = XmlConvert.ToInt32(xml.Element("Aceleracao").Value);
-            p.DelayReverso = XmlConvert.ToInt32(xml.Element("RevDelay").Value);
-            p.PulsoReverso = XmlConvert.ToInt32(xml.Element("RevPulsos").Value);
-            p.SomarPulsoReverso = XmlConvert.ToBoolean(xml.Element("SomarRevPulsos").Value);
-            p.HabilitarTecladoVirtual =
-                XmlConvert.ToBoolean(xml.Element("HabilitarTecladoVirtual").Value);
-            p.HabilitarDispensaSequencial =
-                XmlConvert.ToBoolean(xml.Element("HabilitarDispensaSequencial").Value);
-            p.HabilitarFormulaPersonalizada =
-                XmlConvert.ToBoolean(xml.Element("HabilitarFormulaPersonalizada").Value);
-            p.HabilitarTesteRecipiente =
-                XmlConvert.ToBoolean(xml.Element("HabilitarTesteRecipiente").Value);
-            p.IdIdioma =
-                XmlConvert.ToInt32(xml.Element("IdIdioma").Value);
-            p.IdDispositivo =
-                XmlConvert.ToInt32(xml.Element("IdDispositivo").Value);
+            elemento = xml.Element("ResponseTimeout");
+            if (elemento != null)
+                p.ResponseTimeout = XmlConvert.ToInt32(elemento.Value);
+
+            elemento = xml.Element("Velocidade");
+            if (elemento != null)
+                p.Velocidade = XmlConvert.ToInt32(elemento.Value);
+
+            elemento = xml.Element("Aceleracao");
+            if (elemento != null)
+                p.Aceleracao = XmlConvert.ToInt32(elemento.Value);
+
+            elemento = xml.Element("RevDelay");
+            if (elemento != null)
+                p.DelayReverso = XmlConvert.ToInt32(elemento.Value);
+
+            elemento = xml.Element("DelayReverso");
+            if (elemento != null)
+                p.DelayReverso = XmlConvert.ToInt32(elemento.Value);
+
+            elemento = xml.Element("RevPulsos");
+            if (elemento != null)
+                p.PulsoReverso = XmlConvert.ToInt32(elemento.Value);
+
+            elemento = xml.Element("PulsoReverso");
+            if (elemento != null)
+                p.PulsoReverso = XmlConvert.ToInt32(elemento.Value);
+
+            elemento = xml.Element("SomarRevPulsos");
+            if (elemento != null)
+                p.SomarPulsoReverso = XmlConvert.ToBoolean(elemento.Value);
+
+            elemento = xml.Element("SomarPulsoReverso");
+            if (elemento != null)
+                p.SomarPulsoReverso = XmlConvert.ToBoolean(elemento.Value);
+
+            elemento = xml.Element("HabilitarTecladoVirtual");
+            if (elemento != null)
+                p.HabilitarTecladoVirtual = XmlConvert.ToBoolean(elemento.Value);
+
+            elemento = xml.Element("HabilitarDispensaSequencial");
+            if (elemento != null)
+                p.HabilitarDispensaSequencial = XmlConvert.ToBoolean(elemento.Value);
+
+            elemento = xml.Element("HabilitarFormulaPersonalizada");
+            if (elemento != null)
+                p.HabilitarFormulaPersonalizada = XmlConvert.ToBoolean(elemento.Value);
+
+            elemento = xml.Element("HabilitarTesteRecipiente");
+            if (elemento != null)
+                p.HabilitarTesteRecipiente = XmlConvert.ToBoolean(elemento.Value);
+
+            elemento = xml.Element("IdIdioma");
+            if (elemento != null)
+                p.IdIdioma = XmlConvert.ToInt32(elemento.Value);
+
+            elemento = xml.Element("IdDispositivo");
+            if (elemento != null)
+                p.IdDispositivo = XmlConvert.ToInt32(elemento.Value);
 
             elemento = xml.Element("HabilitarPurgaIndividual");
             if (elemento != null)
-                p.HabilitarPurgaIndividual = XmlConvert.ToBoolean(xml.Element("HabilitarPurgaIndividual").Value);
+                p.HabilitarPurgaIndividual = XmlConvert.ToBoolean(elemento.Value);
 
             elemento = xml.Element("HabilitarTouchScrenn");
             if (elemento != null)
-                p.HabilitarTouchScrenn = XmlConvert.ToBoolean(xml.Element("HabilitarTouchScrenn").Value);
-
+                p.HabilitarTouchScrenn = XmlConvert.ToBoolean(elemento.Value);
 
             elemento = xml.Element("IdDispositivo2");
             if (elemento != null)
-                p.IdDispositivo2 = XmlConvert.ToInt32(xml.Element("IdDispositivo2").Value);
+                p.IdDispositivo2 = XmlConvert.ToInt32(elemento.Value);
 
-            //
             elemento = xml.Element("NomeDispositivo");
             if (elemento != null)
-                p.NomeDispositivo = xml.Element("NomeDispositivo").Value;
+                p.NomeDispositivo = elemento.Value;
+            else if (xml.Element("PortaModbus") != null)
+                p.NomeDispositivo = "COM" + xml.Element("PortaModbus").Value;
 
-            //
             elemento = xml.Element("NomeDispositivo2");
             if (elemento != null)
-                p.NomeDispositivo2 = xml.Element("NomeDispositivo2").Value;
+                p.NomeDispositivo2 = elemento.Value;
 
-            //
             elemento = xml.Element("VersaoIoconnect");
             if (elemento != null)
-                p.VersaoIoconnect = xml.Element("VersaoIoconnect").Value;
+                p.VersaoIoconnect = elemento.Value;
 
-            //
             elemento = xml.Element("HabilitarDispensaSequencialP1");
             if (elemento != null)
-                p.HabilitarDispensaSequencialP1 = XmlConvert.ToBoolean(xml.Element("HabilitarDispensaSequencialP1").Value);
+                p.HabilitarDispensaSequencialP1 = XmlConvert.ToBoolean(elemento.Value);
 
             elemento = xml.Element("HabilitarDispensaSequencialP2");
             if (elemento != null)
-                p.HabilitarDispensaSequencialP2 = XmlConvert.ToBoolean(xml.Element("HabilitarDispensaSequencialP2").Value);
+                p.HabilitarDispensaSequencialP2 = XmlConvert.ToBoolean(elemento.Value);
 
             #endregion
 
@@ -213,59 +355,52 @@ namespace Percolore.Core.Persistence.Xml
 
             elemento = xml.Element("PathDAT");
             if (elemento != null)
-                p.PathMonitoramentoDAT = xml.Element("PathDAT").Value;
+                p.PathMonitoramentoDAT = elemento.Value;
 
             elemento = xml.Element("PathRepositorioDAT");
             if (elemento != null)
-                p.PathRepositorioDAT = xml.Element("PathRepositorioDAT").Value;
+                p.PathRepositorioDAT = elemento.Value;
 
             elemento = xml.Element("PadraoConteudoDAT");
             if (elemento != null)
             {
-                p.PadraoConteudoDAT =
-                    XmlConvert.ToInt32(xml.Element("PadraoConteudoDAT").Value);
+                p.PadraoConteudoDAT = XmlConvert.ToInt32(elemento.Value);
             }
 
             elemento = xml.Element("BasePosicaoCircuitoDAT");
             if (elemento != null)
             {
-                p.BasePosicaoCircuitoDAT =
-                    XmlConvert.ToInt32(xml.Element("BasePosicaoCircuitoDAT").Value);
+                p.BasePosicaoCircuitoDAT = XmlConvert.ToInt32(elemento.Value);
             }
 
             elemento = xml.Element("UtilizarCorrespondenciaDAT");
             if (elemento != null)
             {
-                p.UtilizarCorrespondenciaDAT =
-                    XmlConvert.ToBoolean(xml.Element("UtilizarCorrespondenciaDAT").Value);
+                p.UtilizarCorrespondenciaDAT = XmlConvert.ToBoolean(elemento.Value);
             }
 
             elemento = xml.Element("DesabilitarInterfaceDispensaSequencial");
             if (elemento != null)
             {
-                p.DesabilitarInterfaceDispensaSequencial =
-                    XmlConvert.ToBoolean(xml.Element("DesabilitarInterfaceDispensaSequencial").Value);
+                p.DesabilitarInterfaceDispensaSequencial = XmlConvert.ToBoolean(elemento.Value);
             }
 
             elemento = xml.Element("DesabilitarInterfaceDispensaSimultanea");
             if (elemento != null)
             {
-                p.DesabilitarInterfaceDispensaSimultanea =
-                    XmlConvert.ToBoolean(xml.Element("DesabilitarInterfaceDispensaSimultanea").Value);
+                p.DesabilitarInterfaceDispensaSimultanea = XmlConvert.ToBoolean(elemento.Value);
             }
 
             elemento = xml.Element("DesabilitarInterfaceInicializacaoCircuito");
             if (elemento != null)
             {
-                p.DesabilitarInterfaceInicializacaoCircuito =
-                    XmlConvert.ToBoolean(xml.Element("DesabilitarInterfaceInicializacaoCircuito").Value);
+                p.DesabilitarInterfaceInicializacaoCircuito = XmlConvert.ToBoolean(elemento.Value);
             }
 
             elemento = xml.Element("DesabilitarInterfacePurga");
             if (elemento != null)
             {
-                p.DesabilitarInterfacePurga =
-                    XmlConvert.ToBoolean(xml.Element("DesabilitarInterfacePurga").Value);
+                p.DesabilitarInterfacePurga = XmlConvert.ToBoolean(elemento.Value);
             }
 
             #endregion
@@ -275,49 +410,45 @@ namespace Percolore.Core.Persistence.Xml
             elemento = xml.Element("PrazoExecucaoPurga");
             if (elemento != null)
             {
-                p.PrazoExecucaoPurga =
-                    XmlConvert.ToTimeSpan(xml.Element("PrazoExecucaoPurga").Value);
+                p.PrazoExecucaoPurga = XmlConvert.ToTimeSpan(elemento.Value);
             }
 
             elemento = xml.Element("DataExecucaoPurga");
             if (elemento != null)
-                p.DataExecucaoPurga = DateTime.Parse(xml.Element("DataExecucaoPurga").Value);
+                p.DataExecucaoPurga = DateTime.Parse(elemento.Value);
 
             elemento = xml.Element("VolumePurga");
             if (elemento != null)
-                p.VolumePurga = XmlConvert.ToDouble(xml.Element("VolumePurga").Value);
+                p.VolumePurga = XmlConvert.ToDouble(elemento.Value);
 
             elemento = xml.Element("VelocidadePurga");
             if (elemento != null)
-                p.VelocidadePurga = XmlConvert.ToInt32((xml.Element("VelocidadePurga").Value));
+                p.VelocidadePurga = XmlConvert.ToInt32((elemento.Value));
 
             elemento = xml.Element("AceleracaoPurga");
             if (elemento != null)
-                p.AceleracaoPurga = XmlConvert.ToInt32(xml.Element("AceleracaoPurga").Value);
+                p.AceleracaoPurga = XmlConvert.ToInt32(elemento.Value);
 
             elemento = xml.Element("DelayPurga");
             if (elemento != null)
-                p.DelayPurga = XmlConvert.ToInt32(xml.Element("DelayPurga").Value);
+                p.DelayPurga = XmlConvert.ToInt32(elemento.Value);
 
             elemento = xml.Element("ControlarExecucaoPurga");
             if (elemento != null)
             {
-                p.ControlarExecucaoPurga =
-                    XmlConvert.ToBoolean(xml.Element("ControlarExecucaoPurga").Value);
+                p.ControlarExecucaoPurga = XmlConvert.ToBoolean(elemento.Value);
             }
 
             elemento = xml.Element("ExigirExecucaoPurga");
             if (elemento != null)
             {
-                p.ExigirExecucaoPurga =
-                    XmlConvert.ToBoolean(xml.Element("ExigirExecucaoPurga").Value);
+                p.ExigirExecucaoPurga = XmlConvert.ToBoolean(elemento.Value);
             }
 
             elemento = xml.Element("PurgaSequencial");
             if (elemento != null)
             {
-                p.PurgaSequencial =
-                    XmlConvert.ToBoolean(xml.Element("PurgaSequencial").Value);
+                p.PurgaSequencial = XmlConvert.ToBoolean(elemento.Value);
             }
 
 
@@ -327,15 +458,15 @@ namespace Percolore.Core.Persistence.Xml
 
             elemento = xml.Element("VolumeMinimo");
             if (elemento != null)
-                p.VolumeMinimo = XmlConvert.ToDouble(xml.Element("VolumeMinimo").Value);
+                p.VolumeMinimo = XmlConvert.ToDouble(elemento.Value);
 
             elemento = xml.Element("VolumeMaximo");
             if (elemento != null)
-                p.VolumeMaximo = XmlConvert.ToDouble(xml.Element("VolumeMaximo").Value);
+                p.VolumeMaximo = XmlConvert.ToDouble(elemento.Value);
 
             elemento = xml.Element("ControlarVolume");
             if (elemento != null)
-                p.ControlarNivel = XmlConvert.ToBoolean(xml.Element("ControlarVolume").Value);
+                p.ControlarNivel = XmlConvert.ToBoolean(elemento.Value);
 
             #endregion
 
@@ -343,45 +474,44 @@ namespace Percolore.Core.Persistence.Xml
 
             elemento = xml.Element("IniPulsoInicial");
             if (elemento != null)
-                p.IniPulsoInicial = XmlConvert.ToInt32((xml.Element("IniPulsoInicial").Value));
+                p.IniPulsoInicial = XmlConvert.ToInt32((elemento.Value));
 
             elemento = xml.Element("IniPulsoLimite");
             if (elemento != null)
-                p.IniPulsoLimite = XmlConvert.ToInt32((xml.Element("IniPulsoLimite").Value));
+                p.IniPulsoLimite = XmlConvert.ToInt32((elemento.Value));
 
             elemento = xml.Element("IniVariacaoPulso");
             if (elemento != null)
-                p.IniVariacaoPulso = XmlConvert.ToInt32((xml.Element("IniVariacaoPulso").Value));
+                p.IniVariacaoPulso = XmlConvert.ToInt32((elemento.Value));
 
             elemento = xml.Element("IniStepVariacao");
             if (elemento != null)
-                p.IniStepVariacao = XmlConvert.ToDouble((xml.Element("IniStepVariacao").Value));
+                p.IniStepVariacao = XmlConvert.ToDouble((elemento.Value));
 
             elemento = xml.Element("IniVelocidade");
             if (elemento != null)
-                p.IniVelocidade = XmlConvert.ToInt32((xml.Element("IniVelocidade").Value));
+                p.IniVelocidade = XmlConvert.ToInt32((elemento.Value));
 
             elemento = xml.Element("IniAceleracao");
             if (elemento != null)
-                p.IniAceleracao = XmlConvert.ToInt32((xml.Element("IniAceleracao").Value));
+                p.IniAceleracao = XmlConvert.ToInt32((elemento.Value));
 
             elemento = xml.Element("IniMovimentoReverso");
             if (elemento != null)
-                p.IniMovimentoReverso = XmlConvert.ToBoolean((xml.Element("IniMovimentoReverso").Value));
+                p.IniMovimentoReverso = XmlConvert.ToBoolean((elemento.Value));
 
             elemento = xml.Element("InicializarCircuitosPurga");
             if (elemento != null)
-                p.InicializarCircuitosPurga = XmlConvert.ToBoolean(xml.Element("InicializarCircuitosPurga").Value);
+                p.InicializarCircuitosPurga = XmlConvert.ToBoolean(elemento.Value);
 
-            //
             elemento = xml.Element("InicializarCircuitosPurgaIndividual");
             if (elemento != null)
-                p.InicializarCircuitosPurgaIndividual = XmlConvert.ToBoolean(xml.Element("InicializarCircuitosPurgaIndividual").Value);
+                p.InicializarCircuitosPurgaIndividual = XmlConvert.ToBoolean(elemento.Value);
 
 
             elemento = xml.Element("QtdeCircuitoGrupo");
             if (elemento != null)
-                p.QtdeCircuitoGrupo = XmlConvert.ToInt32(xml.Element("QtdeCircuitoGrupo").Value);
+                p.QtdeCircuitoGrupo = XmlConvert.ToInt32(elemento.Value);
 
             #endregion
 
@@ -389,27 +519,27 @@ namespace Percolore.Core.Persistence.Xml
 
             elemento = xml.Element("ValorShot");
             if (elemento != null)
-                p.ValorShot = XmlConvert.ToDouble(xml.Element("ValorShot").Value);
+                p.ValorShot = XmlConvert.ToDouble(elemento.Value);
 
             elemento = xml.Element("HabilitarShot");
             if (elemento != null)
-                p.HabilitarShot = XmlConvert.ToBoolean(xml.Element("HabilitarShot").Value);
+                p.HabilitarShot = XmlConvert.ToBoolean(elemento.Value);
 
             elemento = xml.Element("HabilitarOnca");
             if (elemento != null)
-                p.HabilitarOnca = XmlConvert.ToBoolean(xml.Element("HabilitarOnca").Value);
+                p.HabilitarOnca = XmlConvert.ToBoolean(elemento.Value);
 
             elemento = xml.Element("HabilitarMililitro");
             if (elemento != null)
-                p.HabilitarMililitro = XmlConvert.ToBoolean(xml.Element("HabilitarMililitro").Value);
+                p.HabilitarMililitro = XmlConvert.ToBoolean(elemento.Value);
 
             elemento = xml.Element("HabilitarGrama");
             if (elemento != null)
-                p.HabilitarGrama = XmlConvert.ToBoolean(xml.Element("HabilitarGrama").Value);
+                p.HabilitarGrama = XmlConvert.ToBoolean(elemento.Value);
 
             elemento = xml.Element("UnidadeMedidaNivelColorante");
             if (elemento != null)
-                p.UnidadeMedidaNivelColorante = XmlConvert.ToInt32(xml.Element("UnidadeMedidaNivelColorante").Value);
+                p.UnidadeMedidaNivelColorante = XmlConvert.ToInt32(elemento.Value);
 
             #endregion
 
@@ -417,105 +547,370 @@ namespace Percolore.Core.Persistence.Xml
 
             elemento = xml.Element("PathLogProcessoDispensa");
             if (elemento != null)
-                p.PathLogProcessoDispensa = xml.Element("PathLogProcessoDispensa").Value;
+                p.PathLogProcessoDispensa = elemento.Value;
 
             elemento = xml.Element("PathLogControleDispensa");
             if (elemento != null)
-                p.PathLogControleDispensa = xml.Element("PathLogControleDispensa").Value;
+                p.PathLogControleDispensa = elemento.Value;
 
             elemento = xml.Element("HabilitarLogComunicacao");
             if (elemento != null)
-                p.HabilitarLogComunicacao = XmlConvert.ToBoolean(xml.Element("HabilitarLogComunicacao").Value);
+                p.HabilitarLogComunicacao = XmlConvert.ToBoolean(elemento.Value);
 
             elemento = xml.Element("PathLogComunicacao");
             if (elemento != null)
-                p.PathLogComunicacao = xml.Element("PathLogComunicacao").Value;
+                p.PathLogComunicacao = elemento.Value;
 
             #endregion
-                
+
             #region Monitoramento dos circuitos
 
             elemento = xml.Element("QtdeMonitCircuitoGrupo");
             if (elemento != null)
-                p.QtdeMonitCircuitoGrupo = XmlConvert.ToInt32((xml.Element("QtdeMonitCircuitoGrupo").Value));
+                p.QtdeMonitCircuitoGrupo = XmlConvert.ToInt32((elemento.Value));
 
             elemento = xml.Element("MonitVelocidade");
             if (elemento != null)
-                p.MonitVelocidade = XmlConvert.ToInt32((xml.Element("MonitVelocidade").Value));
+                p.MonitVelocidade = XmlConvert.ToInt32((elemento.Value));
 
             elemento = xml.Element("MonitAceleracao");
             if (elemento != null)
-                p.MonitAceleracao = XmlConvert.ToInt32((xml.Element("MonitAceleracao").Value));
-               
+                p.MonitAceleracao = XmlConvert.ToInt32((elemento.Value));
+
             elemento = xml.Element("MonitDelay");
             if (elemento != null)
-                p.MonitDelay = XmlConvert.ToInt32((xml.Element("MonitDelay").Value));
+                p.MonitDelay = XmlConvert.ToInt32((elemento.Value));
 
             elemento = xml.Element("MonitTimerDelay");
             if (elemento != null)
-                p.MonitTimerDelay = XmlConvert.ToInt32((xml.Element("MonitTimerDelay").Value));
+                p.MonitTimerDelay = XmlConvert.ToInt32((elemento.Value));
 
             elemento = xml.Element("MonitTimerDelayIni");
             if (elemento != null)
-                p.MonitTimerDelayIni = XmlConvert.ToInt32((xml.Element("MonitTimerDelayIni").Value));
+                p.MonitTimerDelayIni = XmlConvert.ToInt32((elemento.Value));
 
             elemento = xml.Element("DesabilitarInterfaceMonitCircuito");
             if (elemento != null)
-                p.DesabilitarInterfaceMonitCircuito = XmlConvert.ToBoolean((xml.Element("DesabilitarInterfaceMonitCircuito").Value));
+                p.DesabilitarInterfaceMonitCircuito = XmlConvert.ToBoolean((elemento.Value));
 
             elemento = xml.Element("DesabilitarProcessoMonitCircuito");
             if (elemento != null)
-                p.DesabilitarProcessoMonitCircuito = XmlConvert.ToBoolean((xml.Element("DesabilitarProcessoMonitCircuito").Value));
-                
+                p.DesabilitarProcessoMonitCircuito = XmlConvert.ToBoolean((elemento.Value));
+
 
             elemento = xml.Element("MonitMovimentoReverso");
             if (elemento != null)
-                p.MonitMovimentoReverso = XmlConvert.ToBoolean(xml.Element("MonitMovimentoReverso").Value);
+                p.MonitMovimentoReverso = XmlConvert.ToBoolean(elemento.Value);
 
             elemento = xml.Element("MonitPulsos");
             if (elemento != null)
-                p.MonitPulsos = XmlConvert.ToInt32(xml.Element("MonitPulsos").Value);
-
-
-
+                p.MonitPulsos = XmlConvert.ToInt32(elemento.Value);
 
             #endregion
 
             #region Producao
-            
+
             elemento = xml.Element("TipoProducao");
             if (elemento != null)
-                p.TipoProducao = xml.Element("TipoProducao").Value;
+                p.TipoProducao = elemento.Value;
 
             elemento = xml.Element("IpProducao");
             if (elemento != null)
-                p.IpProducao = xml.Element("IpProducao").Value;
+                p.IpProducao = elemento.Value;
 
 
             elemento = xml.Element("PortaProducao");
             if (elemento != null)
-                p.PortaProducao = xml.Element("PortaProducao").Value;                
+                p.PortaProducao = elemento.Value;
 
 
             elemento = xml.Element("DesabilitaMonitProcessoProducao");
             if (elemento != null)
-                p.DesabilitaMonitProcessoProducao = XmlConvert.ToBoolean((xml.Element("DesabilitaMonitProcessoProducao").Value));
+                p.DesabilitaMonitProcessoProducao = XmlConvert.ToBoolean((elemento.Value));
 
             #endregion
 
             #region Sinc Formula
-                
+
             elemento = xml.Element("DesabilitaMonitSincFormula");
             if (elemento != null)
-                p.DesabilitaMonitSincFormula = XmlConvert.ToBoolean((xml.Element("DesabilitaMonitSincFormula").Value));
+                p.DesabilitaMonitSincFormula = XmlConvert.ToBoolean((elemento.Value));
 
             elemento = xml.Element("PortaSincFormula");
             if (elemento != null)
-                p.PortaSincFormula = xml.Element("PortaSincFormula").Value;
+                p.PortaSincFormula = elemento.Value;
 
             elemento = xml.Element("IpSincFormula");
             if (elemento != null)
-                p.IpSincFormula = xml.Element("IpSincFormula").Value;
+                p.IpSincFormula = elemento.Value;
+
+            #endregion
+
+            #region Adição posterior
+
+            elemento = xml.Element("QtdTentativasConexao");
+            if (elemento != null)
+                p.QtdTentativasConexao = XmlConvert.ToInt32(elemento.Value);
+
+            elemento = xml.Element("HabilitarIdentificacaoCopo");
+            if (elemento != null)
+                p.HabilitarIdentificacaoCopo = XmlConvert.ToBoolean(elemento.Value);
+
+            elemento = xml.Element("TreinamentoCal");
+            if (elemento != null)
+                p.TreinamentoCal = XmlConvert.ToBoolean(elemento.Value);
+
+            elemento = xml.Element("HabLimpBicos");
+            if (elemento != null)
+                p.HabLimpBicos = XmlConvert.ToBoolean(elemento.Value);
+
+            elemento = xml.Element("DelayLimpBicos");
+            if (elemento != null)
+                p.DelayLimpBicos = XmlConvert.ToInt32(elemento.Value);
+
+            elemento = xml.Element("TipoLimpBicos");
+            if (elemento != null)
+                p.TipoLimpBicos = XmlConvert.ToInt32(elemento.Value);
+
+            elemento = xml.Element("ViewMessageProc");
+            if (elemento != null)
+                p.ViewMessageProc = XmlConvert.ToBoolean(elemento.Value);
+
+            elemento = xml.Element("TipoDosagemExec");
+            if (elemento != null)
+                p.TipoDosagemExec = XmlConvert.ToInt32(elemento.Value);
+
+            elemento = xml.Element("PathMonitoramentoFilaDAT");
+            if (elemento != null)
+                p.PathMonitoramentoFilaDAT = elemento.Value;
+
+            elemento = xml.Element("DesabilitarMonitoramentoFilaDAT");
+            if (elemento != null)
+                p.DesabilitarMonitoramentoFilaDAT = XmlConvert.ToBoolean(elemento.Value);
+
+            elemento = xml.Element("DelayMonitoramentoFilaDAT");
+            if (elemento != null)
+                p.DelayMonitoramentoFilaDAT = XmlConvert.ToInt32(elemento.Value);
+
+            elemento = xml.Element("DesabilitarVolumeMinimoDat");
+            if (elemento != null)
+                p.DesabilitarVolumeMinimoDat = XmlConvert.ToBoolean(elemento.Value);
+
+            elemento = xml.Element("VolumeMinimoDat");
+            if (elemento != null)
+                p.VolumeMinimoDat = XmlConvert.ToDouble(elemento.Value);
+
+            elemento = xml.Element("Dat_06_UNT_Pref");
+            if (elemento != null)
+                p.Dat_06_UNT_Pref = elemento.Value;
+
+            elemento = xml.Element("Dat_06_UNT_1_IsPonto");
+            if (elemento != null)
+                p.Dat_06_UNT_1_IsPonto = XmlConvert.ToInt32(elemento.Value);
+
+            elemento = xml.Element("Dat_06_UNT_2_IsPonto");
+            if (elemento != null)
+                p.Dat_06_UNT_2_IsPonto = XmlConvert.ToInt32(elemento.Value);
+
+            elemento = xml.Element("Dat_06_CAN_Pref");
+            if (elemento != null)
+                p.Dat_06_CAN_Pref = elemento.Value;
+
+            elemento = xml.Element("Dat_06_CAN_1_IsPonto");
+            if (elemento != null)
+                p.Dat_06_CAN_1_IsPonto = XmlConvert.ToInt32(elemento.Value);
+
+            elemento = xml.Element("Dat_06_FRM_Pref");
+            if (elemento != null)
+                p.Dat_06_FRM_Pref = elemento.Value;
+
+            elemento = xml.Element("Dat_06_FRM_SEP");
+            if (elemento != null)
+                p.Dat_06_FRM_SEP = elemento.Value;
+
+            elemento = xml.Element("Dat_06_FRM_1_IsPonto");
+            if (elemento != null)
+                p.Dat_06_FRM_1_IsPonto = XmlConvert.ToInt32(elemento.Value);
+
+            elemento = xml.Element("Dat_06_BAS_Pref");
+            if (elemento != null)
+                p.Dat_06_BAS_Pref = elemento.Value;
+
+            elemento = xml.Element("Dat_06_BAS_1_IsPonto");
+            if (elemento != null)
+                p.Dat_06_BAS_1_IsPonto = XmlConvert.ToInt32(elemento.Value);
+
+            elemento = xml.Element("Dat_06_BAS_Habilitado");
+            if (elemento != null)
+                p.Dat_06_BAS_Habilitado = XmlConvert.ToInt32(elemento.Value);
+
+            elemento = xml.Element("Dat_05_UNT_Pref");
+            if (elemento != null)
+                p.Dat_05_UNT_Pref = elemento.Value;
+
+            elemento = xml.Element("Dat_05_UNT_1_IsPonto");
+            if (elemento != null)
+                p.Dat_05_UNT_1_IsPonto = XmlConvert.ToInt32(elemento.Value);
+
+            elemento = xml.Element("Dat_05_UNT_2_IsPonto");
+            if (elemento != null)
+                p.Dat_05_UNT_2_IsPonto = XmlConvert.ToInt32(elemento.Value);
+
+            elemento = xml.Element("Dat_05_CAN_Pref");
+            if (elemento != null)
+                p.Dat_05_CAN_Pref = elemento.Value;
+
+            elemento = xml.Element("Dat_05_CAN_1_IsPonto");
+            if (elemento != null)
+                p.Dat_05_CAN_1_IsPonto = XmlConvert.ToInt32(elemento.Value);
+
+            elemento = xml.Element("Dat_05_FRM_Pref");
+            if (elemento != null)
+                p.Dat_05_FRM_Pref = elemento.Value;
+
+            elemento = xml.Element("Dat_05_FRM_SEP");
+            if (elemento != null)
+                p.Dat_05_FRM_SEP = elemento.Value;
+
+            elemento = xml.Element("Dat_05_FRM_1_IsPonto");
+            if (elemento != null)
+                p.Dat_05_FRM_1_IsPonto = XmlConvert.ToInt32(elemento.Value);
+
+            elemento = xml.Element("Dat_05_BAS_Pref");
+            if (elemento != null)
+                p.Dat_05_BAS_Pref = elemento.Value;
+
+            elemento = xml.Element("Dat_05_BAS_1_IsPonto");
+            if (elemento != null)
+                p.Dat_05_BAS_1_IsPonto = XmlConvert.ToInt32(elemento.Value);
+
+            elemento = xml.Element("Dat_05_BAS_Habilitado");
+            if (elemento != null)
+                p.Dat_05_BAS_Habilitado = XmlConvert.ToInt32(elemento.Value);
+
+            elemento = xml.Element("DelayUDCP");
+            if (elemento != null)
+                p.DelayUDCP = XmlConvert.ToInt32(elemento.Value);
+
+            elemento = xml.Element("CreateFileTmpUDCP");
+            if (elemento != null)
+                p.CreateFileTmpUDCP = XmlConvert.ToInt32(elemento.Value);
+
+            elemento = xml.Element("ExtFileTmpUDCP");
+            if (elemento != null)
+                p.ExtFileTmpUDCP = elemento.Value;
+
+            elemento = xml.Element("ProcRemoveLataUDCP");
+            if (elemento != null)
+                p.ProcRemoveLataUDCP = XmlConvert.ToBoolean(elemento.Value);
+
+            elemento = xml.Element("DisablePopUpDispDat");
+            if (elemento != null)
+                p.DisablePopUpDispDat = XmlConvert.ToBoolean(elemento.Value);
+
+            elemento = xml.Element("ValorFraction");
+            if (elemento != null)
+                p.ValorFraction = XmlConvert.ToInt32(elemento.Value);
+
+            elemento = xml.Element("HabilitarLogAutomateTesterProt");
+            if (elemento != null)
+                p.HabilitarLogAutomateTesterProt = XmlConvert.ToBoolean(elemento.Value);
+
+            elemento = xml.Element("LogAutomateBackup");
+            if (elemento != null)
+                p.LogAutomateBackup = XmlConvert.ToBoolean(elemento.Value);
+
+            elemento = xml.Element("TipoBaseDados");
+            if (elemento != null)
+                p.TipoBaseDados = elemento.Value;
+
+            elemento = xml.Element("PathBasesDados");
+            if (elemento != null)
+                p.PathBasesDados = elemento.Value;
+
+            elemento = xml.Element("DesabilitaMonitSyncToken");
+            if (elemento != null)
+                p.DesabilitaMonitSyncToken = XmlConvert.ToBoolean(elemento.Value);
+
+            elemento = xml.Element("IpSincToken");
+            if (elemento != null)
+                p.IpSincToken = elemento.Value;
+
+            elemento = xml.Element("PortaSincToken");
+            if (elemento != null)
+                p.PortaSincToken = elemento.Value;
+
+            elemento = xml.Element("TipoEventos");
+            if (elemento != null)
+                p.TipoEventos = elemento.Value;
+
+            elemento = xml.Element("DesabilitaMonitSyncBkpCalibragem");
+            if (elemento != null)
+                p.DesabilitaMonitSyncBkpCalibragem = XmlConvert.ToBoolean(elemento.Value);
+
+            elemento = xml.Element("UrlSincBkpCalibragem");
+            if (elemento != null)
+                p.UrlSincBkpCalibragem = elemento.Value;
+
+            elemento = xml.Element("TimeoutPingTcp");
+            if (elemento != null)
+                p.TimeoutPingTcp = XmlConvert.ToInt32(elemento.Value);
+
+            elemento = xml.Element("HabilitarRecirculacao");
+            if (elemento != null)
+                p.HabilitarRecirculacao = XmlConvert.ToBoolean(elemento.Value);
+
+            elemento = xml.Element("DelayMonitRecirculacao");
+            if (elemento != null)
+                p.DelayMonitRecirculacao = XmlConvert.ToInt32(elemento.Value);
+
+            elemento = xml.Element("Address_PlacaMov");
+            if (elemento != null)
+                p.Address_PlacaMov = XmlConvert.ToInt32(elemento.Value);
+
+            elemento = xml.Element("NomeDispositivo_PlacaMov");
+            if (elemento != null)
+                p.NomeDispositivo_PlacaMov = elemento.Value;
+
+            elemento = xml.Element("DelayAlertaPlacaMov");
+            if (elemento != null)
+                p.DelayAlertaPlacaMov = XmlConvert.ToInt32(elemento.Value);
+
+            elemento = xml.Element("HabilitarRecirculacaoAuto");
+            if (elemento != null)
+                p.HabilitarRecirculacaoAuto = XmlConvert.ToBoolean(elemento.Value);
+
+            elemento = xml.Element("DelayMonitRecirculacaoAuto");
+            if (elemento != null)
+                p.DelayMonitRecirculacaoAuto = XmlConvert.ToInt32(elemento.Value);
+
+            elemento = xml.Element("DelayNotificacaotRecirculacaoAuto");
+            if (elemento != null)
+                p.DelayNotificacaotRecirculacaoAuto = XmlConvert.ToInt32(elemento.Value);
+
+            elemento = xml.Element("QtdNotificacaotRecirculacaoAuto");
+            if (elemento != null)
+                p.QtdNotificacaotRecirculacaoAuto = XmlConvert.ToInt32(elemento.Value);
+
+            elemento = xml.Element("DelayEsponja");
+            if (elemento != null)
+                p.DelayEsponja = XmlConvert.ToInt32(elemento.Value);
+
+            elemento = xml.Element("LogBD");
+            if (elemento != null)
+                p.LogBD = XmlConvert.ToBoolean(elemento.Value);
+
+            elemento = xml.Element("NameRemoteAccess");
+            if (elemento != null)
+                p.NameRemoteAccess = elemento.Value;
+
+            elemento = xml.Element("TempoReciAuto");
+            if (elemento != null)
+                p.TempoReciAuto = XmlConvert.ToInt32(elemento.Value);
+
+            elemento = xml.Element("LogStatusMaquina");
+            if (elemento != null)
+                p.LogStatusMaquina = XmlConvert.ToBoolean(elemento.Value);
 
             #endregion
 
@@ -646,14 +1041,14 @@ namespace Percolore.Core.Persistence.Xml
 
             if (p.MonitTimerDelayIni < 10)
                 validacoes.AppendLine(Properties.UI.Parametros_Monit_TimerDelayIniMaiorDez);
-           
+
             if (p.QtdeMonitCircuitoGrupo < 3 || p.QtdeMonitCircuitoGrupo > 5)
                 validacoes.AppendLine(Properties.UI.Parametros_Monit_QtdeCircuitosGrupoFaixa);
 
             if (p.MonitPulsos == 0)
                 validacoes.AppendLine(Properties.UI.Parametros_Monit_PulsoMaiorZero);
 
-           
+
 
             #endregion
 
@@ -700,382 +1095,14 @@ namespace Percolore.Core.Persistence.Xml
         {
             XElement xml = XElement.Load(PathFile);
 
-            #region Geral
-
-            xml.Element("ResponseTimeout").SetValue(p.ResponseTimeout);
-            xml.Element("Velocidade").SetValue(p.Velocidade);
-            xml.Element("Aceleracao").SetValue(p.Aceleracao);
-            xml.Element("RevDelay").SetValue(p.DelayReverso);
-            xml.Element("RevPulsos").SetValue(p.PulsoReverso);
-            xml.Element("SomarRevPulsos").SetValue(p.SomarPulsoReverso);
-            xml.Element("HabilitarTecladoVirtual").SetValue(p.HabilitarTecladoVirtual);
-            xml.Element("HabilitarDispensaSequencial").SetValue(p.HabilitarDispensaSequencial);
-            xml.Element("HabilitarFormulaPersonalizada").SetValue(p.HabilitarFormulaPersonalizada);
-            xml.Element("HabilitarTesteRecipiente").SetValue(p.HabilitarTesteRecipiente);
-            xml.Element("IdDispositivo").SetValue(p.IdDispositivo);
-
-            if (xml.Element("HabilitarPurgaIndividual") == null)
-                xml.Add(new XElement("HabilitarPurgaIndividual", p.HabilitarPurgaIndividual));
-            else
-                xml.Element("HabilitarPurgaIndividual").SetValue(p.HabilitarPurgaIndividual);
-
-            if (xml.Element("HabilitarTouchScrenn") == null)
-                xml.Add(new XElement("HabilitarTouchScrenn", p.HabilitarTouchScrenn));
-            else
-                xml.Element("HabilitarTouchScrenn").SetValue(p.HabilitarTouchScrenn);
-
-            if (xml.Element("VersaoIoconnect") == null)
-                xml.Add(new XElement("VersaoIoconnect", p.VersaoIoconnect));
-            else
-                xml.Element("VersaoIoconnect").SetValue(p.VersaoIoconnect);
-
-            if (xml.Element("IdDispositivo2") == null)
-                xml.Add(new XElement("IdDispositivo2", p.IdDispositivo2));
-            else
-                xml.Element("IdDispositivo2").SetValue(p.IdDispositivo2);
-
-            if (xml.Element("NomeDispositivo") == null)
-                xml.Add(new XElement("NomeDispositivo", p.NomeDispositivo));
-            else
-                xml.Element("NomeDispositivo").SetValue(p.NomeDispositivo);
-
-            if (xml.Element("NomeDispositivo2") == null)
-                xml.Add(new XElement("NomeDispositivo2", p.NomeDispositivo2));
-            else
-                xml.Element("NomeDispositivo2").SetValue(p.NomeDispositivo2);
-
-            if (xml.Element("HabilitarDispensaSequencialP1") == null)
-                xml.Add(new XElement("HabilitarDispensaSequencialP1", p.HabilitarDispensaSequencialP1));
-            else
-                xml.Element("HabilitarDispensaSequencialP1").SetValue(p.HabilitarDispensaSequencialP1);
-
-            if (xml.Element("HabilitarDispensaSequencialP2") == null)
-                xml.Add(new XElement("HabilitarDispensaSequencialP2", p.HabilitarDispensaSequencialP2));
-            else
-                xml.Element("HabilitarDispensaSequencialP2").SetValue(p.HabilitarDispensaSequencialP2);
-
-            #endregion
-
-            #region DAT
-
-            if (xml.Element("PathDAT") == null)
-                xml.Add(new XElement("PathDAT", p.PathMonitoramentoDAT));
-            else
-                xml.Element("PathDAT").SetValue(p.PathMonitoramentoDAT);
-
-            if (xml.Element("PathRepositorioDAT") == null)
-                xml.Add(new XElement("PathRepositorioDAT", p.PathRepositorioDAT));
-            else
-                xml.Element("PathRepositorioDAT").SetValue(p.PathRepositorioDAT);
-
-            if (xml.Element("PadraoConteudoDAT") == null)
-                xml.Add(new XElement("PadraoConteudoDAT", p.PadraoConteudoDAT));
-            else
-                xml.Element("PadraoConteudoDAT").SetValue(p.PadraoConteudoDAT);
-
-            if (xml.Element("BasePosicaoCircuitoDAT") == null)
-                xml.Add(new XElement("BasePosicaoCircuitoDAT", p.BasePosicaoCircuitoDAT));
-            else
-                xml.Element("BasePosicaoCircuitoDAT").SetValue(p.BasePosicaoCircuitoDAT);
-
-            if (xml.Element("UtilizarCorrespondenciaDAT") == null)
-                xml.Add(new XElement("UtilizarCorrespondenciaDAT", p.UtilizarCorrespondenciaDAT));
-            else
-                xml.Element("UtilizarCorrespondenciaDAT").SetValue(p.UtilizarCorrespondenciaDAT);
-
-            if (xml.Element("DesabilitarInterfaceDispensaSequencial") == null)
-                xml.Add(new XElement("DesabilitarInterfaceDispensaSequencial", p.DesabilitarInterfaceDispensaSequencial));
-            else
-                xml.Element("DesabilitarInterfaceDispensaSequencial").SetValue(p.DesabilitarInterfaceDispensaSequencial);
-
-            if (xml.Element("DesabilitarInterfaceDispensaSimultanea") == null)
-                xml.Add(new XElement("DesabilitarInterfaceDispensaSimultanea", p.DesabilitarInterfaceDispensaSimultanea));
-            else
-                xml.Element("DesabilitarInterfaceDispensaSimultanea").SetValue(p.DesabilitarInterfaceDispensaSimultanea);
-
-            if (xml.Element("DesabilitarInterfaceInicializacaoCircuito") == null)
-                xml.Add(new XElement("DesabilitarInterfaceInicializacaoCircuito", p.DesabilitarInterfaceInicializacaoCircuito));
-            else
-                xml.Element("DesabilitarInterfaceInicializacaoCircuito").SetValue(p.DesabilitarInterfaceInicializacaoCircuito);
-
-            if (xml.Element("DesabilitarInterfacePurga") == null)
-                xml.Add(new XElement("DesabilitarInterfacePurga", p.DesabilitarInterfacePurga));
-            else
-                xml.Element("DesabilitarInterfacePurga").SetValue(p.DesabilitarInterfacePurga);
-
-            #endregion
-
-            #region Purga
-
-            if (xml.Element("PrazoExecucaoPurga") == null)
-                xml.Add(new XElement("PrazoExecucaoPurga", p.PrazoExecucaoPurga));
-            else
-                xml.Element("PrazoExecucaoPurga").SetValue(p.PrazoExecucaoPurga);
-
-            if (xml.Element("VolumePurga") == null)
-                xml.Add(new XElement("VolumePurga", p.VolumePurga));
-            else
-                xml.Element("VolumePurga").SetValue(p.VolumePurga);
-
-            if (xml.Element("VelocidadePurga") == null)
-                xml.Add(new XElement("VelocidadePurga", p.VelocidadePurga));
-            else
-                xml.Element("VelocidadePurga").SetValue(p.VelocidadePurga);
-
-            if (xml.Element("AceleracaoPurga") == null)
-                xml.Add(new XElement("AceleracaoPurga", p.AceleracaoPurga));
-            else
-                xml.Element("AceleracaoPurga").SetValue(p.AceleracaoPurga);
-
-            if (xml.Element("DelayPurga") == null)
-                xml.Add(new XElement("DelayPurga", p.DelayPurga));
-            else
-                xml.Element("DelayPurga").SetValue(p.DelayPurga);
-
-            if (xml.Element("ControlarExecucaoPurga") == null)
-                xml.Add(new XElement("ControlarExecucaoPurga", p.ControlarExecucaoPurga));
-            else
-                xml.Element("ControlarExecucaoPurga").SetValue(p.ControlarExecucaoPurga);
-
-            if (xml.Element("ExigirExecucaoPurga") == null)
-                xml.Add(new XElement("ExigirExecucaoPurga", p.ExigirExecucaoPurga));
-            else
-                xml.Element("ExigirExecucaoPurga").SetValue(p.ExigirExecucaoPurga);
-
-            if (xml.Element("PurgaSequencial") == null)
-                xml.Add(new XElement("PurgaSequencial", p.PurgaSequencial));
-            else
-                xml.Element("PurgaSequencial").SetValue(p.PurgaSequencial);
-
-            #endregion
-
-            #region Controle de volume
-
-            if (xml.Element("VolumeMinimo") == null)
-                xml.Add(new XElement("VolumeMinimo", p.VolumeMinimo));
-            else
-                xml.Element("VolumeMinimo").SetValue(p.VolumeMinimo);
-
-            if (xml.Element("VolumeMaximo") == null)
-                xml.Add(new XElement("VolumeMaximo", p.VolumeMaximo));
-            else
-                xml.Element("VolumeMaximo").SetValue(p.VolumeMaximo);
-
-            if (xml.Element("ControlarVolume") == null)
-                xml.Add(new XElement("ControlarVolume", p.ControlarNivel));
-            else
-                xml.Element("ControlarVolume").SetValue(p.ControlarNivel);
-
-            #endregion
-
-            #region Inicialização de circuitos
-
-            if (xml.Element("IniPulsoInicial") == null)
-                xml.Add(new XElement("IniPulsoInicial", p.IniPulsoInicial));
-            else
-                xml.Element("IniPulsoInicial").SetValue(p.IniPulsoInicial);
-
-            if (xml.Element("IniPulsoLimite") == null)
-                xml.Add(new XElement("IniPulsoLimite", p.IniPulsoLimite));
-            else
-                xml.Element("IniPulsoLimite").SetValue(p.IniPulsoLimite);
-
-            if (xml.Element("IniVariacaoPulso") == null)
-                xml.Add(new XElement("IniVariacaoPulso", p.IniVariacaoPulso));
-            else
-                xml.Element("IniVariacaoPulso").SetValue(p.IniVariacaoPulso);
-
-            if (xml.Element("IniStepVariacao") == null)
-                xml.Add(new XElement("IniStepVariacao", p.IniStepVariacao));
-            else
-                xml.Element("IniStepVariacao").SetValue(p.IniStepVariacao);
-
-            if (xml.Element("IniVelocidade") == null)
-                xml.Add(new XElement("IniVelocidade", p.IniVelocidade));
-            else
-                xml.Element("IniVelocidade").SetValue(p.IniVelocidade);
-
-            if (xml.Element("IniAceleracao") == null)
-                xml.Add(new XElement("IniAceleracao", p.IniAceleracao));
-            else
-                xml.Element("IniAceleracao").SetValue(p.IniAceleracao);
-
-            if (xml.Element("IniMovimentoReverso") == null)
-                xml.Add(new XElement("IniMovimentoReverso", p.IniMovimentoReverso));
-            else
-                xml.Element("IniMovimentoReverso").SetValue(p.IniMovimentoReverso);
-
-            if (xml.Element("InicializarCircuitosPurga") == null)
-                xml.Add(new XElement("InicializarCircuitosPurga", p.InicializarCircuitosPurga));
-            else
-                xml.Element("InicializarCircuitosPurga").SetValue(p.InicializarCircuitosPurga);
-
-            if (xml.Element("InicializarCircuitosPurgaIndividual") == null)
-                xml.Add(new XElement("InicializarCircuitosPurgaIndividual", p.InicializarCircuitosPurgaIndividual));
-            else
-                xml.Element("InicializarCircuitosPurgaIndividual").SetValue(p.InicializarCircuitosPurgaIndividual);
-
-            if (xml.Element("QtdeCircuitoGrupo") == null)
-                xml.Add(new XElement("QtdeCircuitoGrupo", p.QtdeCircuitoGrupo));
-            else
-                xml.Element("QtdeCircuitoGrupo").SetValue(p.QtdeCircuitoGrupo);
-
-            #endregion
-
-            #region Monitoramento dos circuitos
-
-            if (xml.Element("QtdeMonitCircuitoGrupo") == null)
-                xml.Add(new XElement("QtdeMonitCircuitoGrupo", p.QtdeMonitCircuitoGrupo));
-            else
-                xml.Element("QtdeMonitCircuitoGrupo").SetValue(p.QtdeMonitCircuitoGrupo);
-
-            if (xml.Element("DesabilitarInterfaceMonitCircuito") == null)
-                xml.Add(new XElement("DesabilitarInterfaceMonitCircuito", p.DesabilitarInterfaceMonitCircuito));
-            else
-                xml.Element("DesabilitarInterfaceMonitCircuito").SetValue(p.DesabilitarInterfaceMonitCircuito);
-
-            if (xml.Element("DesabilitarProcessoMonitCircuito") == null)
-                xml.Add(new XElement("DesabilitarProcessoMonitCircuito", p.DesabilitarProcessoMonitCircuito));
-            else
-                xml.Element("DesabilitarProcessoMonitCircuito").SetValue(p.DesabilitarProcessoMonitCircuito);
-
-            if (xml.Element("MonitMovimentoReverso") == null)
-                xml.Add(new XElement("MonitMovimentoReverso", p.MonitMovimentoReverso));
-            else
-                xml.Element("MonitMovimentoReverso").SetValue(p.MonitMovimentoReverso);
-
-            if (xml.Element("MonitVelocidade") == null)
-                xml.Add(new XElement("MonitVelocidade", p.MonitVelocidade));
-            else
-                xml.Element("MonitVelocidade").SetValue(p.MonitVelocidade);
-
-            if (xml.Element("MonitAceleracao") == null)
-                xml.Add(new XElement("MonitAceleracao", p.MonitAceleracao));
-            else
-                xml.Element("MonitAceleracao").SetValue(p.MonitAceleracao);
-
-            if (xml.Element("MonitDelay") == null)
-                xml.Add(new XElement("MonitDelay", p.MonitDelay));
-            else
-                xml.Element("MonitDelay").SetValue(p.MonitDelay);
-
-            if (xml.Element("MonitTimerDelay") == null)
-                xml.Add(new XElement("MonitTimerDelay", p.MonitTimerDelay));
-            else
-                xml.Element("MonitTimerDelay").SetValue(p.MonitTimerDelay);
-
-            if (xml.Element("MonitTimerDelayIni") == null)
-                xml.Add(new XElement("MonitTimerDelayIni", p.MonitTimerDelayIni));
-            else
-                xml.Element("MonitTimerDelayIni").SetValue(p.MonitTimerDelayIni);
-
-            if (xml.Element("MonitPulsos") == null)
-                xml.Add(new XElement("MonitPulsos", p.MonitPulsos));
-            else
-                xml.Element("MonitPulsos").SetValue(p.MonitPulsos);
-
-            #endregion
-
-            #region Unidade de medida
-
-            if (xml.Element("ValorShot") == null)
-                xml.Add(new XElement("ValorShot", p.ValorShot));
-            else
-                xml.Element("ValorShot").SetValue(p.ValorShot);
-
-            if (xml.Element("HabilitarShot") == null)
-                xml.Add(new XElement("HabilitarShot", p.HabilitarShot));
-            else
-                xml.Element("HabilitarShot").SetValue(p.HabilitarShot);
-
-            if (xml.Element("HabilitarOnca") == null)
-                xml.Add(new XElement("HabilitarOnca", p.HabilitarOnca));
-            else
-                xml.Element("HabilitarOnca").SetValue(p.HabilitarOnca);
-
-            if (xml.Element("HabilitarMililitro") == null)
-                xml.Add(new XElement("HabilitarMililitro", p.HabilitarMililitro));
-            else
-                xml.Element("HabilitarMililitro").SetValue(p.HabilitarMililitro);
-
-            if (xml.Element("HabilitarGrama") == null)
-                xml.Add(new XElement("HabilitarGrama", p.HabilitarGrama));
-            else
-                xml.Element("HabilitarGrama").SetValue(p.HabilitarGrama);
-
-            if (xml.Element("UnidadeMedidaNivelColorante") == null)
-                xml.Add(new XElement("UnidadeMedidaNivelColorante", p.UnidadeMedidaNivelColorante));
-            else
-                xml.Element("UnidadeMedidaNivelColorante").SetValue(p.UnidadeMedidaNivelColorante);
-
-            #endregion
-
-            #region Log
-
-            if (xml.Element("PathLogProcessoDispensa") == null)
-                xml.Add(new XElement("PathLogProcessoDispensa", p.PathLogProcessoDispensa));
-            else
-                xml.Element("PathLogProcessoDispensa").SetValue(p.PathLogProcessoDispensa);
-
-            if (xml.Element("PathLogControleDispensa") == null)
-                xml.Add(new XElement("PathLogControleDispensa", p.PathLogControleDispensa));
-            else
-                xml.Element("PathLogControleDispensa").SetValue(p.PathLogControleDispensa);
-
-            if (xml.Element("HabilitarLogComunicacao") == null)
-                xml.Add(new XElement("HabilitarLogComunicacao", p.HabilitarLogComunicacao));
-            else
-                xml.Element("HabilitarLogComunicacao").SetValue(p.HabilitarLogComunicacao);
-
-            if (xml.Element("PathLogComunicacao") == null)
-                xml.Add(new XElement("PathLogComunicacao", p.PathLogComunicacao));
-            else
-                xml.Element("PathLogComunicacao").SetValue(p.PathLogComunicacao);
-
-            #endregion
-
-            #region Produção
-
-            if (xml.Element("TipoProducao") == null)
-                xml.Add(new XElement("TipoProducao", p.TipoProducao));
-            else
-                xml.Element("TipoProducao").SetValue(p.TipoProducao);
-
-            if (xml.Element("IpProducao") == null)
-                xml.Add(new XElement("IpProducao", p.IpProducao));
-            else
-                xml.Element("IpProducao").SetValue(p.IpProducao);
-
-            if (xml.Element("PortaProducao") == null)
-                xml.Add(new XElement("PortaProducao", p.PortaProducao));
-            else
-                xml.Element("PortaProducao").SetValue(p.PortaProducao);
-
-            if (xml.Element("DesabilitaMonitProcessoProducao") == null)
-                xml.Add(new XElement("DesabilitaMonitProcessoProducao", p.DesabilitaMonitProcessoProducao));
-            else
-                xml.Element("DesabilitaMonitProcessoProducao").SetValue(p.DesabilitaMonitProcessoProducao);
-
-            #endregion
-
-            #region Sinc Formula
-
-            if (xml.Element("DesabilitaMonitSincFormula") == null)
-                xml.Add(new XElement("DesabilitaMonitSincFormula", p.DesabilitaMonitSincFormula));
-            else
-                xml.Element("DesabilitaMonitSincFormula").SetValue(p.DesabilitaMonitSincFormula);
-
-            if (xml.Element("PortaSincFormula") == null)
-                xml.Add(new XElement("PortaSincFormula", p.PortaSincFormula));
-            else
-                xml.Element("PortaSincFormula").SetValue(p.PortaSincFormula);
-
-            if (xml.Element("IpSincFormula") == null)
-                xml.Add(new XElement("IpSincFormula", p.IpSincFormula));
-            else
-                xml.Element("IpSincFormula").SetValue(p.IpSincFormula);
-
-            #endregion
+            // loop por todas as propriedades do objeto para atualizar o xml
+            foreach (var prop in p.GetType().GetProperties())
+            {
+                if (xml.Element(prop.Name) == null)
+                    xml.Add(new XElement(prop.Name, prop.GetValue(p)));
+                else
+                    xml.Element(prop.Name).SetValue(prop.GetValue(p));
+            }
 
             xml.Save(PathFile);
         }
@@ -1192,7 +1219,7 @@ namespace Percolore.Core.Persistence.Xml
             XElement xml = XElement.Load(PathFile);
 
             #region Adicionar
-               
+
             #region Monitoramento dos circuitos
 
             if (xml.Element("QtdeMonitCircuitoGrupo") == null)
@@ -1200,28 +1227,28 @@ namespace Percolore.Core.Persistence.Xml
 
             if (xml.Element("DesabilitarInterfaceMonitCircuito") == null)
                 xml.Add(new XElement("DesabilitarInterfaceMonitCircuito", p.DesabilitarInterfaceMonitCircuito));
-              
+
             if (xml.Element("DesabilitarProcessoMonitCircuito") == null)
                 xml.Add(new XElement("DesabilitarProcessoMonitCircuito", p.DesabilitarProcessoMonitCircuito));
 
             if (xml.Element("MonitMovimentoReverso") == null)
                 xml.Add(new XElement("MonitMovimentoReverso", p.MonitMovimentoReverso));
-                
+
             if (xml.Element("MonitVelocidade") == null)
                 xml.Add(new XElement("MonitVelocidade", p.MonitVelocidade));
-                
+
             if (xml.Element("MonitAceleracao") == null)
                 xml.Add(new XElement("MonitAceleracao", p.MonitAceleracao));
-                
+
             if (xml.Element("MonitDelay") == null)
                 xml.Add(new XElement("MonitDelay", p.MonitDelay));
-                
+
             if (xml.Element("MonitTimerDelay") == null)
                 xml.Add(new XElement("MonitTimerDelay", p.MonitTimerDelay));
-                
+
             if (xml.Element("MonitTimerDelayIni") == null)
                 xml.Add(new XElement("MonitTimerDelayIni", p.MonitTimerDelayIni));
-                
+
             if (xml.Element("MonitPulsos") == null)
                 xml.Add(new XElement("MonitPulsos", p.MonitPulsos));
 
@@ -1253,7 +1280,7 @@ namespace Percolore.Core.Persistence.Xml
 
             if (xml.Element("IpSincFormula") == null)
                 xml.Add(new XElement("IpSincFormula", p.IpSincFormula));
-                
+
             #endregion
 
             if (xml.Element("IdDispositivo2") == null)
