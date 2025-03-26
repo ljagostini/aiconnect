@@ -372,40 +372,42 @@ namespace Percolore.IOConnect
 
             try
             {
-                string pathFile = _parametros.PathMonitoramentoFilaDAT;
-                if (pathFile.Contains(@"\"))
+                if (!_parametros.DesabilitarMonitoramentoFilaDAT)
                 {
-                    string[] arrPath = pathFile.Split((char)92);
-                    if (arrPath.Length > 0)
+                    string pathFile = _parametros.PathMonitoramentoFilaDAT;
+                    if (pathFile.Contains(@"\"))
                     {
-                        string file = arrPath[arrPath.Length - 1];
-                        if (file.Contains("."))
+                        string[] arrPath = pathFile.Split((char)92);
+                        if (arrPath.Length > 0)
                         {
-                            string[] arrFile = file.Split('.');
-                            int indexof = pathFile.IndexOf(file);
-                            string path = pathFile.Substring(0, indexof);
-                            string[] fileEntries = Directory.GetFiles(path, "*." + arrFile[arrFile.Length - 1]);
-                            if (fileEntries != null && fileEntries.Length > 0)
+                            string file = arrPath[arrPath.Length - 1];
+                            if (file.Contains("."))
                             {
-
-                                item = new ToolStripMenuItem(
-                                    fileEntries.Length + " " + mnotificacao,
-                                    Imagem.Get_Notificacao(),
-                                   MenuNotificacao,
-                                   OpcaoMenu.GerenciadorFilaDat.ToString());
-                                item.ImageScaling = ToolStripItemImageScaling.None;
-                                _contextMenu.Items.Add(item);
+                                string[] arrFile = file.Split('.');
+                                int indexof = pathFile.IndexOf(file);
+                                string path = pathFile.Substring(0, indexof);
+                                string[] fileEntries = Directory.GetFiles(path, "*." + arrFile[arrFile.Length - 1]);
+                                if (fileEntries != null && fileEntries.Length > 0)
+                                {
+                                    item = new ToolStripMenuItem(
+                                        fileEntries.Length + " " + mnotificacao,
+                                        Imagem.Get_Notificacao(),
+                                       MenuNotificacao,
+                                       OpcaoMenu.GerenciadorFilaDat.ToString());
+                                    item.ImageScaling = ToolStripItemImageScaling.None;
+                                    _contextMenu.Items.Add(item);
+                                }
                             }
                         }
                     }
                 }
             }
-			catch (Exception ex)
-			{
-				LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
-			}
+            catch (Exception ex)
+            {
+                LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", ex);
+            }
 
-			bool isUDCP = false;
+            bool isUDCP = false;
             if ((DatPattern)_parametros.PadraoConteudoDAT == DatPattern.PadraoUDCP)
             {
                 isUDCP = true;
