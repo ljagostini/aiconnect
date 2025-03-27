@@ -382,7 +382,7 @@ namespace PaintMixer
                 }
                 foreach (string porta in portas)
                 {
-                    mb.Open(porta, 9600, 8, Parity.Even, StopBits.One);
+                    mb.Open(porta, 9600, 8, Parity.Even, StopBits.One, timeoutConexao: responseTimeout);
                     if (mb.isOpen())
                     {
                         bConnect = true;

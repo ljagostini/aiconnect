@@ -39,64 +39,67 @@ namespace Percolore.IOConnect
 
         #region Open / Close Procedures
 
-        public bool Open(string portName, int baudRate, int databits, Parity parity, StopBits stopBits)
+        public bool Open(string portName, int baudRate, int databits, Parity parity, StopBits stopBits, int timeoutConexao = 2000)
         {
-			Stopwatch sw = new Stopwatch();
-			sw.Start();
-			LogManager.LogInformation("[ModBusRtu.Open] Started.");
+            // O timeout para conexão não deve ser menor do que meio segundo
+            if (timeoutConexao < 500)
+            {
+                timeoutConexao = 500;
+            }
 
-			if (sp == null)
+            Stopwatch sw = new Stopwatch();
+            sw.Start();
+            LogManager.LogInformation("[ModBusRtu.Open] Started.");
+
+            // Se não há conexão configurada, cria uma nova conexão
+            if (sp == null)
             {
                 sp = new SerialPort();
             }
-            //Ensure port isn't already opened:
+
+            // Garante que a porta serial não está aberta
             if (!sp.IsOpen)
             {
-                //Assign desired settings to the serial port:
+                // Atribuição de parâmetros da porta serial
                 sp.PortName = portName;
                 sp.BaudRate = baudRate;
                 sp.DataBits = databits;
                 sp.Parity = parity;
                 sp.StopBits = stopBits;
-                //These timeouts are default and cannot be editted through the class at this point:
+
+                // Timeouts de leitura e escrita, não usados na abertura da porta serial
                 sp.ReadTimeout = 2000;
                 sp.WriteTimeout = 2000;
 
+                // Tenta abrir a conexão com a porta serial
                 try
                 {
                     sp.Open();
-                  
                     sp.DataReceived += new SerialDataReceivedEventHandler(DataReceivedHandler);
                     this.isDataReceived = true;
+
+                    modbusStatusStr = portName + " opened successfully";
+                    modbusStatus = true;
                 }
+                // Em caso de erro, exibe mensagem de erro e retorna falso
                 catch (Exception err)
                 {
                     modbusStatusStr = "Error opening " + portName + ": " + err.Message;
                     LogManager.LogError($"[ModBusRtu.Open] {modbusStatusStr}", err);
                     modbusStatus = false;
-
-					sw.Stop();
-					LogManager.LogInformation($"[ModBusRtu.Open] Finished. Elapsed time: {sw.ElapsedMilliseconds} ms.");
-					return false;
                 }
-
-                modbusStatusStr = portName + " opened successfully";
-                modbusStatus = true;
-
-				sw.Stop();
-				LogManager.LogInformation($"[ModBusRtu.Open] Finished. Elapsed time: {sw.ElapsedMilliseconds} ms.");
-				return true;
             }
+            // Se a porta serial já está aberta, atualiza status e retorna verdadeiro
             else
             {
                 modbusStatusStr = portName + " already opened";
                 modbusStatus = true;
-
-				sw.Stop();
-				LogManager.LogInformation($"[ModBusRtu.Open] Finished. Elapsed time: {sw.ElapsedMilliseconds} ms.");
-				return true;
             }
-		}
+
+            sw.Stop();
+            LogManager.LogInformation($"[ModBusRtu.Open] Finished. Elapsed time: {sw.ElapsedMilliseconds} ms.");
+            return modbusStatus;
+        }
 
         public bool CloseM()
         {

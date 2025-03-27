@@ -168,79 +168,89 @@ namespace Percolore.IOConnect
         /// cancele a operação.
         /// </summary>
         /// <param name="dispenser">Dispenser passado como referência para ser conectado.</param>
+        /// <param name="forceMessage">Força exibição de mensagem de confirmação.</param>
+        /// <returns>Retorna boolean verdadeiro se a conexão foi efetuada com sucesso.</returns>
         /// 
         public static bool Conectar(ref IDispenser dispenser, bool forceMessage = true)
         {
-            bool booFullScreenReturn = false;
-            bool booRetorno = false;
+            // Inicializa variáveis
+            CounterComunication = 0;
+            bool retornoDesejaContinuar = true;
+            bool conexaoOk = false;
             Util.ObjectParametros p = Util.ObjectParametros.Load();
-            try
-            {   
+
+            // Loop de tentativas de conexão
+            while (true)
+            {
+                // Desconecta o dispenser e incrementa contador de tentativas
                 dispenser.Disconnect();
-                dispenser.Connect();
-                booRetorno = true;
-                CounterComunication = 0;
-            }
-			catch (Exception ex)
-			{
-				LogManager.LogError($"[Operar.Conectar] Erro no módulo {typeof(Operar).Name}: ", ex);
-			
-                dispenser.Disconnect();
-               
-                if (forceMessage && CounterComunication >= p.QtdTentativasConexao)
+                CounterComunication++;
+
+                // Caso a conexão seja efetuada com sucesso, sai do loop
+                try
                 {
-
-                    using (fMensagem m = new fMensagem(fMensagem.TipoMensagem.Erro))
-                    {
-                        string mensagem = ErrorMessageHandler.GetFriendlyErrorMessage(ex);
-                        if (string.IsNullOrWhiteSpace(mensagem))
-                            mensagem = Negocio.IdiomaResxExtensao.Global_Falha_DispositivoSemConectividade;
-
-                        // Checks the confirm message
-                        if (!mensagem.Contains(Negocio.IdiomaResxExtensao.Global_Confirmar_DesejaTentarNovamente))
-							mensagem += Environment.NewLine + Negocio.IdiomaResxExtensao.Global_Confirmar_DesejaTentarNovamente;
-
-						booFullScreenReturn = m.ShowDialog(
-                            mensagem, Negocio.IdiomaResxExtensao.Global_Sim, Negocio.IdiomaResxExtensao.Global_Nao);
-                        geraEventoFalhaComunicacao(Negocio.IdiomaResxExtensao.Global_Falha_DispositivoSemConectividade);
-                    };
+                    dispenser.Connect();
+                    conexaoOk = true;
+                    break;
                 }
-                else
+                // Caso ocorra erro na conexão, trata a exceção
+                catch (Exception ex)
                 {
-                    CounterComunication++;
-                    if(CounterComunication <= p.QtdTentativasConexao)
+                    LogManager.LogError($"[Operar.Conectar] Erro no módulo {typeof(Operar).Name}: ", ex);
+
+                    // Caso o contador de tentativas seja maior ou igual ao limite configurado
+                    if (CounterComunication >= p.QtdTentativasConexao)
                     {
-                        booFullScreenReturn = true;
+                        // Presume que não deseja continuar
+                        retornoDesejaContinuar = false;
+
+                        // Exibe a mensagem de erro questionando se deseja tentar novamente
+                        if (forceMessage)
+                        {
+                            using (fMensagem m = new fMensagem(fMensagem.TipoMensagem.Erro))
+                            {
+                                // Obtém a mensagem de erro de acordo com o retorno do método dispenser.Connect()
+                                string mensagem = ErrorMessageHandler.GetFriendlyErrorMessage(ex);
+                                if (string.IsNullOrWhiteSpace(mensagem))
+                                    mensagem = Negocio.IdiomaResxExtensao.Global_Falha_DispositivoSemConectividade;
+
+                                // Se já não contém a mensagem de tentar novamente, adiciona
+                                if (!mensagem.Contains(Negocio.IdiomaResxExtensao.Global_Confirmar_DesejaTentarNovamente))
+                                    mensagem += Environment.NewLine + Negocio.IdiomaResxExtensao.Global_Confirmar_DesejaTentarNovamente;
+
+                                // Exibe a mensagem de erro na tela
+                                retornoDesejaContinuar = m.ShowDialog(
+                                    mensagem, Negocio.IdiomaResxExtensao.Global_Sim, Negocio.IdiomaResxExtensao.Global_Nao);
+                                geraEventoFalhaComunicacao(Negocio.IdiomaResxExtensao.Global_Falha_DispositivoSemConectividade);
+                            };
+                        }
+
+                        // Se a mensagem de erro não for exibida ou a resposta for negativa, sai do loop
+                        if (!retornoDesejaContinuar)
+                        {
+                            break;
+                        }
                     }
-                    else
-                    {
-                        booFullScreenReturn = false;
-                    }
-                }
-               
-
-                if (booFullScreenReturn)
-                {
-                    Thread.Sleep(2000);
-                    booRetorno = Conectar(ref dispenser, forceMessage);
-                }
-                else
-                {
-                    booRetorno = false;
-                    CounterComunication = 0;
-                    Log.Logar(
-                        TipoLog.Processo,
-                        Util.ObjectParametros.Load().PathLogProcessoDispensa,
-                        Negocio.IdiomaResxExtensao.Log_Cod_98 + Negocio.IdiomaResxExtensao.Global_Falha_NaoFoiPossivelConectar + Environment.NewLine + Negocio.IdiomaResxExtensao.Global_ProcessoCanceladoUsuario);
-                    geraEventoFalhaComunicacao(Negocio.IdiomaResxExtensao.Global_Falha_NaoFoiPossivelConectar);
                 }
             }
 
-            // retorno da function
-            return booRetorno;
+            // Se a conexão não foi efetuada com sucesso, registra no log
+            if (!conexaoOk)
+            {
+                Log.Logar(
+                    TipoLog.Processo,
+                    Util.ObjectParametros.Load().PathLogProcessoDispensa,
+                    Negocio.IdiomaResxExtensao.Log_Cod_98 + Negocio.IdiomaResxExtensao.Global_Falha_NaoFoiPossivelConectar + Environment.NewLine + Negocio.IdiomaResxExtensao.Global_ProcessoCanceladoUsuario);
+                geraEventoFalhaComunicacao(Negocio.IdiomaResxExtensao.Global_Falha_NaoFoiPossivelConectar);
+            }
+
+            CounterComunication = 0;
+
+            // Retorna o resultado da conexão
+            return conexaoOk;
         }
 
-       
+
         public static bool ConectarP3(ref ModBusDispenserMover_P3 dispenser, bool forceMessage = true)
         {
             bool booFullScreenReturn = false;
