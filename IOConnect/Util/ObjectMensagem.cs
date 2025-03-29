@@ -199,12 +199,13 @@ namespace Percolore.IOConnect.Util
                 case "Global_Falha_Monitoramento": { Negocio.IdiomaResxExtensao.Global_Falha_Monitoramento = aux.Conteudo; break; }
                 case "Global_Falha_NaoFoiPossivelAtualizar": { Negocio.IdiomaResxExtensao.Global_Falha_NaoFoiPossivelAtualizar = aux.Conteudo; break; }
                 case "Global_Falha_NaoFoiPossivelConectar": { Negocio.IdiomaResxExtensao.Global_Falha_NaoFoiPossivelConectar = aux.Conteudo; break; }
+                case "Global_Falha_NenhumaPortaSerial": { Negocio.IdiomaResxExtensao.Global_Falha_NenhumaPortaSerial = aux.Conteudo; break; }
                 case "Global_Falha_DispositivoSemConectividade": { Negocio.IdiomaResxExtensao.Global_Falha_DispositivoSemConectividade = aux.Conteudo; break; }
-				case "Global_Falha_PerdaDeConexao": { Negocio.IdiomaResxExtensao.Global_Falha_PerdaDeConexao = aux.Conteudo; break; }
+                case "Global_Falha_PerdaDeConexao": { Negocio.IdiomaResxExtensao.Global_Falha_PerdaDeConexao = aux.Conteudo; break; }
                 case "Global_Falha_PerdaConexaoDispositivo": { Negocio.IdiomaResxExtensao.Global_Falha_PerdaConexaoDispositivo = aux.Conteudo; break; }
                 case "Global_Falha_PerdaConexaoBluetooh": { Negocio.IdiomaResxExtensao.Global_Falha_PerdaConexaoBluetooh = aux.Conteudo; break; }
-				case "Global_Falha_SemConexaoBluetooh": { Negocio.IdiomaResxExtensao.Global_Falha_SemConexaoBluetooh = aux.Conteudo; break; }
-				case "Global_Falha_RessetData": { Negocio.IdiomaResxExtensao.Global_Falha_RessetData = aux.Conteudo; break; }
+                case "Global_Falha_SemConexaoBluetooh": { Negocio.IdiomaResxExtensao.Global_Falha_SemConexaoBluetooh = aux.Conteudo; break; }
+                case "Global_Falha_RessetData": { Negocio.IdiomaResxExtensao.Global_Falha_RessetData = aux.Conteudo; break; }
                 case "Global_Falha_TestarRecipiente": { Negocio.IdiomaResxExtensao.Global_Falha_TestarRecipiente = aux.Conteudo; break; }
                 case "Global_Falha_VolumeMinimoDat": { Negocio.IdiomaResxExtensao.Global_Falha_VolumeMinimoDat = aux.Conteudo; break; }
                 case "Global_FalhaDosagem": { Negocio.IdiomaResxExtensao.Global_FalhaDosagem = aux.Conteudo; break; }

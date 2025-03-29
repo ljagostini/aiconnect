@@ -1,10 +1,17 @@
 ﻿using Percolore.Core.Exceptions;
+using Percolore.IOConnect.Negocio;
 
 namespace Percolore.IOConnect.Util
 {
 	internal class ErrorMessageHandler
 	{
-		public static string GetFriendlyErrorMessage(Exception exception)
+		/// <summary>
+		/// Get a friendly error message from an exception
+		/// </summary>
+		/// <param name="exception">The exception</param>
+		/// <param name="tipoConexao">The connection type of the serial port</param>
+		/// <returns></returns>
+		public static string GetFriendlyErrorMessage(Exception exception, SerialPortConnectionType tipoConexao = SerialPortConnectionType.Unknown)
 		{
 			if (exception is null)
 				return string.Empty;
@@ -25,10 +32,18 @@ namespace Percolore.IOConnect.Util
 			bool isRecircular = (exception.StackTrace is null) ? false : exception.StackTrace.Contains(RECIRCULAR_FORM, StringComparison.InvariantCultureIgnoreCase);
 			bool isSendFc3Method = (exception.StackTrace is null) ? false : exception.StackTrace.Contains(MODBUS_RTU_SEND_FC3_METHOD, StringComparison.InvariantCultureIgnoreCase);
 
+			// No serial port found (Bluetooth disconnected on Windows ou USB/Serial cable disconnected on PC)
+			if (exception.Message.Contains(Negocio.IdiomaResxExtensao.Global_Falha_NenhumaPortaSerial))
+				return Negocio.IdiomaResxExtensao.Global_Falha_NenhumaPortaSerial
+					 + Environment.NewLine
+					 + Negocio.IdiomaResxExtensao.Global_Confirmar_DesejaTentarNovamente;
+
 			// Connection lost with device (emergency button pressed, backward switch open, energy interrupted or energy plug disconected)
 			if (exception.Message.Contains(TIMEOUT_READING_ERROR, StringComparison.InvariantCultureIgnoreCase) ||
 				(!isPurge && !isRecircular && exception.Message.Contains(SERIAL_PORT_NOT_OPEN, StringComparison.InvariantCultureIgnoreCase)))
-				return Negocio.IdiomaResxExtensao.Global_Falha_PerdaConexaoDispositivo;
+				return Negocio.IdiomaResxExtensao.Global_Falha_PerdaConexaoDispositivo
+					 + Environment.NewLine
+					 + Negocio.IdiomaResxExtensao.Global_Confirmar_DesejaTentarNovamente;
 
 			// No connectivity with device (device turned of, cable disconnect or damaged, bluetooth turned of on device, emergency button pressed)
 			if (exception.Message.Contains(Negocio.IdiomaResxExtensao.Global_DisensaNaoConectado, StringComparison.InvariantCultureIgnoreCase))

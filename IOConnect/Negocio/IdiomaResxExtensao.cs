@@ -55,7 +55,8 @@ namespace Percolore.IOConnect.Negocio
         public static string Global_Falha_Monitoramento{ get; set; } = string.Empty;
         public static string Global_Falha_NaoFoiPossivelAtualizar{ get; set; } = string.Empty;
         public static string Global_Falha_NaoFoiPossivelConectar{ get; set; } = string.Empty;
-		public static string Global_Falha_DispositivoSemConectividade { get; set; } = string.Empty;
+        public static string Global_Falha_NenhumaPortaSerial { get; set; } = string.Empty;
+        public static string Global_Falha_DispositivoSemConectividade { get; set; } = string.Empty;
 		public static string Global_Falha_PerdaDeConexao{ get; set; } = string.Empty;
         public static string Global_Falha_PerdaConexaoDispositivo { get; set; } = string.Empty;
         public static string Global_Falha_PerdaConexaoBluetooh { get; set; } = string.Empty;
@@ -1166,6 +1167,7 @@ namespace Percolore.IOConnect.Negocio
             Global_Falha_Monitoramento = Negocio.IdiomaResx.Global_Falha_Monitoramento;
             Global_Falha_NaoFoiPossivelAtualizar = Negocio.IdiomaResx.Global_Falha_NaoFoiPossivelAtualizar;
             Global_Falha_NaoFoiPossivelConectar = Negocio.IdiomaResx.Global_Falha_NaoFoiPossivelConectar;
+            Global_Falha_NenhumaPortaSerial = Negocio.IdiomaResx.Global_Falha_NenhumaPortaSerial;
             Global_Falha_DispositivoSemConectividade = Negocio.IdiomaResx.Global_Falha_DispositivoSemConectividade;
 			Global_Falha_PerdaDeConexao = Negocio.IdiomaResx.Global_Falha_PerdaDeConexao;
             Global_Falha_PerdaConexaoDispositivo = Negocio.IdiomaResx.Global_Falha_PerdaConexaoDispositivo;
@@ -1893,6 +1895,7 @@ namespace Percolore.IOConnect.Negocio
             msg.Global_Falha_Monitoramento = Global_Falha_Monitoramento;
             msg.Global_Falha_NaoFoiPossivelAtualizar = Global_Falha_NaoFoiPossivelAtualizar;
             msg.Global_Falha_NaoFoiPossivelConectar = Global_Falha_NaoFoiPossivelConectar;
+            msg.Global_Falha_NenhumaPortaSerial = Global_Falha_NenhumaPortaSerial;
             msg.Global_Falha_DispositivoSemConectividade = Global_Falha_DispositivoSemConectividade;
 			msg.Global_Falha_PerdaDeConexao = Global_Falha_PerdaDeConexao;
             msg.Global_Falha_PerdaConexaoDispositivo = Global_Falha_PerdaConexaoDispositivo;
@@ -2794,6 +2797,7 @@ namespace Percolore.IOConnect.Negocio
                 lMensagem.Add(getMensagem(op.IdIdioma.ToString(), "Global_Falha_Monitoramento", msg.Global_Falha_Monitoramento));
                 lMensagem.Add(getMensagem(op.IdIdioma.ToString(), "Global_Falha_NaoFoiPossivelAtualizar", msg.Global_Falha_NaoFoiPossivelAtualizar));
                 lMensagem.Add(getMensagem(op.IdIdioma.ToString(), "Global_Falha_NaoFoiPossivelConectar", msg.Global_Falha_NaoFoiPossivelConectar));
+                lMensagem.Add(getMensagem(op.IdIdioma.ToString(), "Global_Falha_NenhumaPortaSerial", msg.Global_Falha_NenhumaPortaSerial));
                 lMensagem.Add(getMensagem(op.IdIdioma.ToString(), "Global_Falha_DispositivoSemConectividade", msg.Global_Falha_DispositivoSemConectividade));
                 lMensagem.Add(getMensagem(op.IdIdioma.ToString(), "Global_Falha_PerdaDeConexao", msg.Global_Falha_PerdaDeConexao));
                 lMensagem.Add(getMensagem(op.IdIdioma.ToString(), "Global_Falha_PerdaConexaoDispositivo", msg.Global_Falha_PerdaConexaoDispositivo));

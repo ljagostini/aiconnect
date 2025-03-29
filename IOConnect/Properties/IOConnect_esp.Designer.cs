@@ -3792,10 +3792,21 @@ namespace Percolore.IOConnect.Properties {
             }
         }
 
-		/// <summary>
-		///   Looks up a localized string similar to No se puede conectar al dispositivo. Comprobar que el botón de emergencia esté pulsado y que la conexión serie esté configurada..
-		/// </summary>
-		internal static string Global_Falha_DispositivoSemConectividade
+        /// <summary>
+        ///   Looks up a localized string similar to No se puede conectar al dispositivo porque no se encontró el puerto serie. Compruebe que el Bluetooth de su ordenador está encendido o que el cable de la dosificadora está conectado..
+        /// </summary>
+        internal static string Global_Falha_NenhumaPortaSerial
+        {
+            get
+            {
+                return ResourceManager.GetString("Global_Falha_NenhumaPortaSerial", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to No se puede conectar al dispositivo. Comprobar que el botón de emergencia esté pulsado y que la conexión serie esté configurada..
+        /// </summary>
+        internal static string Global_Falha_DispositivoSemConectividade
 		{
 			get
 			{

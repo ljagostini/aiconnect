@@ -1,6 +1,7 @@
 ﻿using InTheHand.Net.Sockets;
 using Percolore.Core.Logging;
 using Percolore.IOConnect;
+using Percolore.IOConnect.Negocio;
 using Percolore.IOConnect.Util;
 using System.IO.Ports;
 
@@ -373,16 +374,24 @@ namespace PaintMixer
 					LogManager.LogError($"Erro no módulo {this.GetType().Name}: ", e);
 				}
 
-				if (portas == null || portas.LongLength == 0)
+                // Caso nenhuma porta serial esteja configurada ou disponível
+                if (portas == null || portas.LongLength == 0)
                 {
+                    // Registra e lança exceção
                     LogManager.LogInformation("[PaintMixer.PaintMixerInterface_P2.Connect] Nenhuma porta serial disponível.");
-					throw new Exception(
-                        Percolore.IOConnect.Negocio.IdiomaResxExtensao.Global_DisensaNaoConectado);
-                    //"O dispositivo de dispensa não encontra-se conectado à porta de comunicação.");
+                    throw new Exception(Percolore.IOConnect.Negocio.IdiomaResxExtensao.Global_Falha_NenhumaPortaSerial);
                 }
+
+                // Inicializa a variável que define o tipo de conexão de uma porta serial
+                SerialPortConnectionType tipoConexao = SerialPortConnectionType.Unknown;
+
+                // Loop pelas portas seriais disponíveis tentando comunicar
                 foreach (string porta in portas)
                 {
+                    // Verifica o tipo de conexão da porta serial (USB, Bluetooth, etc)
+                    tipoConexao = SerialPortHelper.GetPortConnectionType(porta);
                     mb.Open(porta, 9600, 8, Parity.Even, StopBits.One, timeoutConexao: responseTimeout);
+
                     if (mb.isOpen())
                     {
                         bConnect = true;
@@ -400,22 +409,26 @@ namespace PaintMixer
                                 {
                                     counterConnect = 0;
                                     BluetoothClient btClient = new BluetoothClient();
-									var devices = btClient.DiscoverDevices();
-									Bluetooth.PairBluetoothDevices(devices);
-								}
+                                    var devices = btClient.DiscoverDevices();
+                                    Bluetooth.PairBluetoothDevices(devices);
+                                }
                             }
-							catch (Exception e)
-							{
-								LogManager.LogError($"[PaintMixerInterface_P2.Connect] Erro no módulo {this.GetType().Name}: ", e);
+                            catch (Exception e)
+                            {
+                                LogManager.LogError($"[PaintMixerInterface_P2.Connect] Erro no módulo {this.GetType().Name}: ", e);
                                 throw new Percolore.Core.Exceptions.BluetoothException(Percolore.IOConnect.Negocio.IdiomaResx.Global_Falha_SemConexaoBluetooh, e);
-							}
-						}
+                            }
+                        }
                         else
                         {
                             this.counterConnect = 0;
                             break;
                         }
                     }
+                }
+                if (portas.Length == 1 && tipoConexao == SerialPortConnectionType.Bluetooth)
+                {
+                    throw new Percolore.Core.Exceptions.BluetoothException(Percolore.IOConnect.Negocio.IdiomaResx.Global_Falha_SemConexaoBluetooh);
                 }
             }
 

@@ -215,6 +215,7 @@ namespace Percolore.IOConnect.Negocio
         public static string Global_Falha_Monitoramento;
         public static string Global_Falha_NaoFoiPossivelAtualizar;
         public static string Global_Falha_NaoFoiPossivelConectar;
+        public static string Global_Falha_NenhumaPortaSerial;
         public static string Global_Falha_DispositivoSemConectividade;
 		public static string Global_Falha_PerdaDeConexao;
         public static string Global_Falha_PerdaConexaoDispositivo;
@@ -1167,6 +1168,7 @@ namespace Percolore.IOConnect.Negocio
                 Global_Falha_Monitoramento = Properties.IOConnect_esp.Global_Falha_Monitoramento;
                 Global_Falha_NaoFoiPossivelAtualizar = Properties.IOConnect_esp.Global_Falha_NaoFoiPossivelAtualizar;
                 Global_Falha_NaoFoiPossivelConectar = Properties.IOConnect_esp.Global_Falha_NaoFoiPossivelConectar;
+                Global_Falha_NenhumaPortaSerial = Properties.IOConnect_esp.Global_Falha_NenhumaPortaSerial;
                 Global_Falha_DispositivoSemConectividade = Properties.IOConnect_esp.Global_Falha_DispositivoSemConectividade;
 				Global_Falha_PerdaDeConexao = Properties.IOConnect_esp.Global_Falha_PerdaDeConexao;
                 Global_Falha_PerdaConexaoDispositivo = Properties.IOConnect_esp.Global_Falha_PerdaConexaoDispositivo;
@@ -2036,6 +2038,7 @@ namespace Percolore.IOConnect.Negocio
                 Global_Falha_Monitoramento = Properties.IOConnect_eng.Global_Falha_Monitoramento;
                 Global_Falha_NaoFoiPossivelAtualizar = Properties.IOConnect_eng.Global_Falha_NaoFoiPossivelAtualizar;
                 Global_Falha_NaoFoiPossivelConectar = Properties.IOConnect_eng.Global_Falha_NaoFoiPossivelConectar;
+                Global_Falha_NenhumaPortaSerial = Properties.IOConnect_eng.Global_Falha_NenhumaPortaSerial;
                 Global_Falha_DispositivoSemConectividade = Properties.IOConnect_eng.Global_Falha_DispositivoSemConectividade;
 				Global_Falha_PerdaDeConexao = Properties.IOConnect_eng.Global_Falha_PerdaDeConexao;
                 Global_Falha_PerdaConexaoDispositivo = Properties.IOConnect_eng.Global_Falha_PerdaConexaoDispositivo;
@@ -2914,6 +2917,7 @@ namespace Percolore.IOConnect.Negocio
                 Global_Falha_Monitoramento = Properties.IOConnect.Global_Falha_Monitoramento;
                 Global_Falha_NaoFoiPossivelAtualizar = Properties.IOConnect.Global_Falha_NaoFoiPossivelAtualizar;
                 Global_Falha_NaoFoiPossivelConectar = Properties.IOConnect.Global_Falha_NaoFoiPossivelConectar;
+                Global_Falha_NenhumaPortaSerial = Properties.IOConnect.Global_Falha_NenhumaPortaSerial;
                 Global_Falha_DispositivoSemConectividade = Properties.IOConnect.Global_Falha_DispositivoSemConectividade;
 				Global_Falha_PerdaDeConexao = Properties.IOConnect.Global_Falha_PerdaDeConexao;
                 Global_Falha_PerdaConexaoDispositivo = Properties.IOConnect.Global_Falha_PerdaConexaoDispositivo;
