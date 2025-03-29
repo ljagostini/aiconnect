@@ -710,7 +710,7 @@ namespace Percolore.IOConnect
                 this.chkExigirExecucaoPurga.Text = Negocio.IdiomaResxExtensao.Configuracoes_chkExigirExecucaoPurga;
                 this.chkPurgaSequencial.Text = Negocio.IdiomaResxExtensao.Configuracoes_chkPurgaSequencial;
 
-                txtPurgaPrazoExecucao.Text = _parametros.PrazoExecucaoPurga.Hours.ToString();
+                txtPurgaPrazoExecucao.Text = _parametros.PrazoExecucaoPurga.TotalHours.ToString();
                 txtPurgaVolume.Text = _parametros.VolumePurga.ToString();
                 txtPurgaVelocidade.Text = _parametros.VelocidadePurga.ToString();
                 txtPurgaAceleracao.Text = _parametros.AceleracaoPurga.ToString();

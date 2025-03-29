@@ -560,7 +560,7 @@
     <value>Desabilitar processo de execução Sincronismo de Fórmulas</value>
   </data>
   <data name="Configuracoes_chkPurgaControleExecucao" xml:space="preserve">
-    <value>Executar purga obrigatória em</value>
+    <value>Purga necessária a cada</value>
   </data>
   <data name="Configuracoes_chkPurgaInterfaceProcesso" xml:space="preserve">
     <value>Desabilitar interface de execução do processo</value>

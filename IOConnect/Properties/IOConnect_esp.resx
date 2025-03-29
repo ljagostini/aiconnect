@@ -335,7 +335,7 @@
     <value>Modo de simulación</value>
   </data>
   <data name="Configuracoes_chkPurgaControleExecucao" xml:space="preserve">
-    <value>Realice una purga de obligatoria</value>
+    <value>Se requiere purga cada</value>
   </data>
   <data name="Configuracoes_chkTecladoVirtual" xml:space="preserve">
     <value>Teclado virtual</value>

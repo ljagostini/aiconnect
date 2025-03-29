@@ -557,7 +557,7 @@
     <value>Disable formulas sync</value>
   </data>
   <data name="Configuracoes_chkPurgaControleExecucao" xml:space="preserve">
-    <value>Mandatory purge every:</value>
+    <value>Purge needed every</value>
   </data>
   <data name="Configuracoes_chkPurgaInterfaceProcesso" xml:space="preserve">
     <value>Disable process execution</value>
