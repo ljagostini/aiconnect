@@ -26,7 +26,6 @@ namespace Percolore.Core.UserControl
         public bool isTouchScrenn = false;
         public bool isOpenTeclado = false;
 
-        bool isWin10 = false;
         public UTextBox()
         {
             this.SetStyle(
@@ -37,8 +36,6 @@ namespace Percolore.Core.UserControl
             ForeColor = Color.FromArgb(120, 120, 120);
             BorderColor = Color.Gainsboro;
             BorderStyle = BorderStyle.FixedSingle;
-
-            isWin10 = (WMI.GetOSBuildVersion().Major == 10);
         }
 
         protected override void OnKeyPress(KeyPressEventArgs e)
@@ -151,7 +148,7 @@ namespace Percolore.Core.UserControl
                      * 
                      * A solução encontrada foi, apenas neste cenário,  anular a ação do SO 
                      * encerrando o processo do teclado. */
-                    if (isWin10)
+                    if (WMI.GetOSBuildVersion().Major == 10)
                         KeyboardHelper.Kill();
                 }
 
