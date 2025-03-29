@@ -53,7 +53,6 @@ namespace Percolore.Core.UserControl
             }
         }
 
-        bool isWin10 = false;
         public UComboBox()
         {
             this.SetStyle(
@@ -61,8 +60,6 @@ namespace Percolore.Core.UserControl
 
             _borderColor = Color.Gainsboro;
             ForeColor = Color.FromArgb(120, 120, 120);
-
-            isWin10 = (WMI.GetOSBuildVersion().Major == 10);
         }
 
         protected override void WndProc(ref Message m)
@@ -128,7 +125,7 @@ namespace Percolore.Core.UserControl
 					if (!_habilitarTecladoVirtual)
 						return;
 
-					if (isWin10)
+					if (WMI.GetOSBuildVersion().Major == 10)
                         KeyboardHelper.Kill();
 
 					/* O teclado virtual é chamado manualmente no Windows 7, 8 e 10 */
