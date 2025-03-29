@@ -1,4 +1,5 @@
-﻿using Percolore.Core.Logging;
+﻿using Percolore.Core;
+using Percolore.Core.Logging;
 using Percolore.Core.Persistence.WindowsRegistry;
 using Percolore.Core.Security.Token;
 using Percolore.IOConnect.Util;
@@ -31,6 +32,7 @@ namespace Percolore.IOConnect
 #if DEBUG
             this.TopMost = false;
 #endif
+            AssemblyInfo info = new AssemblyInfo(System.Reflection.Assembly.GetExecutingAssembly());
 
             _serial = serial;
             _appGuid = appGuid;
@@ -40,7 +42,7 @@ namespace Percolore.IOConnect
 
             //Globalização
             lblTitulo.Text = Negocio.IdiomaResxExtensao.ValidadeManutencao_lblTitulo;
-            lblNumeroSerie.Text = $"{Negocio.IdiomaResxExtensao.ValidadeManutencao_lblNumeroSerie} {_serial}";
+            lblNumeroSerie.Text = $"{Negocio.IdiomaResxExtensao.ValidadeManutencao_lblNumeroSerie} {_serial}\n{Negocio.IdiomaResxExtensao.Sobre_Label_0003} {info.AssemblyComercialVersion}";
 
             btnCancelar.Text = string.Empty;
             btnCancelar.Image = Imagem.GetCancelar_48x48();

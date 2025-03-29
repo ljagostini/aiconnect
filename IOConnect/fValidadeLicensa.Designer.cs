@@ -80,7 +80,7 @@
             // lblNumeroSerie
             // 
             this.lblNumeroSerie.AutoSize = true;
-            this.lblNumeroSerie.Font = new System.Drawing.Font("Segoe UI Light", 10.75F);
+            this.lblNumeroSerie.Font = new System.Drawing.Font("Segoe UI Light", 12.75F);
             this.lblNumeroSerie.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(250)))), ((int)(((byte)(250)))), ((int)(((byte)(250)))));
             this.lblNumeroSerie.Location = new System.Drawing.Point(3, 148);
             this.lblNumeroSerie.Margin = new System.Windows.Forms.Padding(6, 0, 6, 0);
@@ -109,7 +109,7 @@
             this.txtInput.BorderColor = System.Drawing.Color.Gray;
             this.txtInput.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.txtInput.Conteudo = Percolore.Core.UserControl.TipoConteudo.Padrao;
-            this.txtInput.Font = new System.Drawing.Font("Segoe UI Light", 25F);
+            this.txtInput.Font = new System.Drawing.Font("Cascadia Mono", 25F);
             this.txtInput.ForeColor = System.Drawing.Color.WhiteSmoke;
             this.txtInput.Location = new System.Drawing.Point(7, 88);
             this.txtInput.Name = "txtInput";
