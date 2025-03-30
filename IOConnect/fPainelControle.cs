@@ -125,9 +125,11 @@ namespace Percolore.IOConnect
 
         private DateTime dtFailEvt = DateTime.Now.AddMinutes(-20);
 
-
         private DateTime dtExecutadoLimpBicos = DateTime.Now;
         private List<Util.ObjectLimpBicos> listLimpBicosConfig = new List<Util.ObjectLimpBicos>();
+
+        private CancellationTokenSource _ctsItemConexao = new CancellationTokenSource();
+
         public fPainelControle()
         {  
             //Parâmetros que serão utilizados no monitoramento
@@ -146,34 +148,14 @@ namespace Percolore.IOConnect
             //_notifyIcon.Click += new System.EventHandler(Notify_Click);
             AssemblyInfo info = new AssemblyInfo(Assembly.GetExecutingAssembly());
             VersaoSoftware = info.AssemblyComercialVersion;
-            /*
-           if(VersaoSoftware.Contains("."))
-           {
-               string[] arrVersion = VersaoSoftware.Split('.');
-               if (arrVersion.Length > 1)
-               {
-                   VersaoSoftware = arrVersion[0] + ".";
-                   for (int i = 1; i < arrVersion.Length -1; i++)
-                   {
-                       if (arrVersion[i].Length <= 1)
-                       {
-                           VersaoSoftware += "0";
-                       }                        
-                       VersaoSoftware += arrVersion[i] + ".";
-                   }
-                   if(arrVersion[arrVersion.Length - 1].Length<=1)
-                   {
-                       VersaoSoftware += "0";
-                   }
-                   VersaoSoftware += arrVersion[arrVersion.Length - 1];
-               }
-           }
-           */
+
             #region Limpeza Bicos
             this.dtExecutadoLimpBicos = Util.ObjectLimpBicos.LoadExecutado();
             this.listLimpBicosConfig = Util.ObjectLimpBicos.List();
 
             #endregion
+
+            // Cria menu de contexto para acesso às funcionalidades do IOConnect
             CreateMenuDinamicoIdioma();
 
             #region adicionar novo controle de monitoramento dos circuitos
@@ -368,7 +350,7 @@ namespace Percolore.IOConnect
             string mManutencaoPlacaMov = Negocio.IdiomaResxExtensao.PainelControle_Menu_PlacaMov;
             string mLimpezaBico = Negocio.IdiomaResxExtensao.PainelControle_Menu_LimpezaBico;
             string mSerialLog = "Log Serial";
-            string mConectPlaca = Negocio.IdiomaResxExtensao.PainelControle_Menu_ConnectPlaca + (this.machine_turned_on ? Negocio.IdiomaResxExtensao.PainelControle_Menu_ConnectPlaca_On : Negocio.IdiomaResxExtensao.PainelControle_Menu_ConnectPlaca_Off);
+            string mConectPlaca = Negocio.IdiomaResxExtensao.PainelControle_TesteConexao;
 
             try
             {
@@ -614,6 +596,10 @@ namespace Percolore.IOConnect
             item.ImageScaling = ToolStripItemImageScaling.None;
             _contextMenu.Items.Add(item);
 
+            // Evento para atualização do status de conexão da máquina
+            _contextMenu.Opening += testeComunicacao;
+            _contextMenu.Closed += abortarTesteComunicacao;
+
             //Adiciona menu de contexto ao ícone da bandeja
             _notifyIcon.ContextMenuStrip = _contextMenu;
 
@@ -629,6 +615,72 @@ namespace Percolore.IOConnect
             _notifyIcon.Visible = true;
 
             #endregion
+        }
+
+        // Faz o teste de comunicação dentro do painel de controle em thread separada
+        private void testeComunicacao(object sender, CancelEventArgs e)
+        {
+            // Cancela o teste de comunicação anterior
+            _ctsItemConexao?.Cancel();
+            _ctsItemConexao?.Dispose();
+
+            // Inicia um novo teste de comunicação
+            _ctsItemConexao = new CancellationTokenSource();
+            var token = _ctsItemConexao.Token;
+
+            // Executa em thread separada
+            Task.Run(() =>
+            {
+                // Obtem o item de menu que exibe o status de conexão da máquina
+                var itemMenu = _notifyIcon.ContextMenuStrip.Items[1];
+                
+                try
+                {
+                    token.ThrowIfCancellationRequested();
+
+                    // Executa o teste de comunicação
+                    getMaquinaLigada(true);
+
+                    // Cancela o teste de comunicação caso o usuário feche o painel de controle
+                    token.ThrowIfCancellationRequested();
+
+                    // Aguarda 100ms para evitar que a mudança não ocorra antes da criação do menu
+                    Thread.Sleep(100);
+
+                    // Atualiza o item de menu com o status de conexão da máquina
+                    itemMenu.GetCurrentParent().BeginInvoke((Action)(() =>
+                    {
+                        if (this.machine_turned_on)
+                        {
+                            itemMenu.Text = Negocio.IdiomaResxExtensao.PainelControle_Menu_ConnectPlaca + Negocio.IdiomaResxExtensao.PainelControle_Menu_ConnectPlaca_On;
+                            itemMenu.BackColor = Color.ForestGreen;
+                            itemMenu.ForeColor = Color.White;
+                        }
+                        else
+                        {
+                            itemMenu.Text = Negocio.IdiomaResxExtensao.PainelControle_Menu_ConnectPlaca + Negocio.IdiomaResxExtensao.PainelControle_Menu_ConnectPlaca_Off;
+                            itemMenu.BackColor = Color.Firebrick;
+                            itemMenu.ForeColor = Color.White;
+                        }
+                    }));
+                }
+                catch (OperationCanceledException)
+                {
+                    #if DEBUG
+                    LogManager.LogDebug("O usuário fechou o painel de controle antes do término do teste de comunicação.");
+                    #endif
+                }
+                catch (Exception ex)
+                {
+                    LogManager.LogError("Erro ao exibir a mensagem de status de conexão da máquina dentro do painel de controle.", ex);
+                }
+            });
+        }
+
+        // Aborta o teste de comunicação do painel de controle caso o usuário feche o painel
+        private void abortarTesteComunicacao(object sender, ToolStripDropDownClosedEventArgs e)
+        {
+            _ctsItemConexao?.Cancel();
         }
 
         private void ToolStripDropDown1_Closed(Object sender, ToolStripDropDownClosedEventArgs e)
@@ -1000,26 +1052,6 @@ namespace Percolore.IOConnect
                     else if(this.isControleEsponja)
                     {
                         getMessageEsponja();
-                    }
-                    #endregion
-
-                    #region Maquina Ligada
-                    switch ((Dispositivo)_parametros.IdDispositivo)
-                    {
-                        case Dispositivo.Placa_2:
-                            {
-                                getMaquinaLigada();
-                                break;
-                            }
-                        case Dispositivo.Simulador:
-                            {
-                                getMaquinaLigada();
-                                break;
-                            }
-                        default:
-                            {
-                                break;
-                            }
                     }
                     #endregion
 

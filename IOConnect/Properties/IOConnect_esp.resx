@@ -2378,4 +2378,7 @@ Contacto con el cliente ¡Fallo de comunicación de Percolore Ethernet!</value>
   <data name="Global_Falha_NenhumaPortaSerial" xml:space="preserve">
     <value>No se puede conectar al dispositivo porque no se encontró el puerto serie. Compruebe que el Bluetooth de su ordenador está encendido o que el cable de la dosificadora está conectado.</value>
   </data>
+  <data name="PainelControle_TesteConexao" xml:space="preserve">
+    <value>Conectándose...</value>
+  </data>
 </root>

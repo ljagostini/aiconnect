@@ -851,6 +851,7 @@ namespace Percolore.IOConnect.Negocio
         public static string Configuracoes_lblUniMedidaUnidadeAbast;
         public static string Configuracoes_lblUniMedidaUnidadeAbastCad;
 
+        public static string PainelControle_TesteConexao { get; set; } = string.Empty;
         public static string PainelControle_Menu_ConnectPlaca { get; set; } = string.Empty;
         public static string PainelControle_Menu_ConnectPlaca_On { get; set; } = string.Empty;
         public static string PainelControle_Menu_ConnectPlaca_Off { get; set; } = string.Empty;
@@ -1746,6 +1747,7 @@ namespace Percolore.IOConnect.Negocio
                 Configuracoes_lblUniMedidaUnidadeAbast = Properties.IOConnect_esp.Configuracoes_lblUniMedidaUnidadeAbast;
                 Configuracoes_lblUniMedidaUnidadeAbastCad = Properties.IOConnect_esp.Configuracoes_lblUniMedidaUnidadeAbastCad;
 
+                PainelControle_TesteConexao = Properties.IOConnect_esp.PainelControle_TesteConexao;
                 PainelControle_Menu_ConnectPlaca = "Máquina ";
                 PainelControle_Menu_ConnectPlaca_On = "On ";
                 PainelControle_Menu_ConnectPlaca_Off = "Off ";
@@ -2621,6 +2623,7 @@ namespace Percolore.IOConnect.Negocio
                 Configuracoes_lblUniMedidaUnidadeAbast = Properties.IOConnect_eng.Configuracoes_lblUniMedidaUnidadeAbast;
                 Configuracoes_lblUniMedidaUnidadeAbastCad = Properties.IOConnect_eng.Configuracoes_lblUniMedidaUnidadeAbastCad;
 
+                PainelControle_TesteConexao = Properties.IOConnect_eng.PainelControle_TesteConexao;
                 PainelControle_Menu_ConnectPlaca = "Machine ";
                 PainelControle_Menu_ConnectPlaca_On = "Connected ";
                 PainelControle_Menu_ConnectPlaca_Off = "Disconnected ";
@@ -3492,6 +3495,7 @@ namespace Percolore.IOConnect.Negocio
                 Configuracoes_lblUniMedidaUnidadeAbast = Properties.IOConnect.Configuracoes_lblUniMedidaUnidadeAbast;
                 Configuracoes_lblUniMedidaUnidadeAbastCad = Properties.IOConnect.Configuracoes_lblUniMedidaUnidadeAbastCad;
 
+                PainelControle_TesteConexao = Properties.IOConnect.PainelControle_TesteConexao;
                 PainelControle_Menu_ConnectPlaca = "Máquina ";
                 PainelControle_Menu_ConnectPlaca_On = "On ";
                 PainelControle_Menu_ConnectPlaca_Off = "Off ";

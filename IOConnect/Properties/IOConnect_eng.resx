@@ -2360,4 +2360,7 @@ Customer contact Percolore Ethernet communication failure!</value>
   <data name="Global_Falha_NenhumaPortaSerial" xml:space="preserve">
     <value>Unable to connect to the device because the serial port was not found. Check that your computer's Bluetooth is on or that the dosing machine's cable is connected.</value>
   </data>
+  <data name="PainelControle_TesteConexao" xml:space="preserve">
+    <value>Connecting...</value>
+  </data>
 </root>

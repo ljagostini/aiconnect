@@ -2355,8 +2355,8 @@ Cliente entre em contato com a Percolore Falha de comunicação Ethernet!</value
   <data name="Configuracoes_lblPurgaParâmetrosDispensa" xml:space="preserve">
     <value />
   </data>
-  <data name="PainelControle_Menu_Configurações" xml:space="preserve">
-    <value />
+  <data name="PainelControle_TesteConexao" xml:space="preserve">
+    <value>Conectando...</value>
   </data>
   <data name="Global_Falha_SemConexaoBluetooh" xml:space="preserve">
     <value>Não foi possível conectar ao dispositivo. Verifique se o Bluetooth do computador está funcionando corretamente e se a máquina está ligada.</value>

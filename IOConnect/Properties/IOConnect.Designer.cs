@@ -5447,6 +5447,15 @@ namespace Percolore.IOConnect.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Conectándose....
+        /// </summary>
+        internal static string PainelControle_TesteConexao {
+            get {
+                return ResourceManager.GetString("PainelControle_TesteConexao", resourceCulture);
+            }
+        }
+
+        /// <summary>
         ///   Looks up a localized string similar to Treinamento.
         /// </summary>
         internal static string PainelControle_Menu_Treinamento {

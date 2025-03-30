@@ -5444,7 +5444,16 @@ namespace Percolore.IOConnect.Properties {
                 return ResourceManager.GetString("PainelControle_Menu_Treinamento", resourceCulture);
             }
         }
-        
+
+        /// <summary>
+        /// Looks up a localized string similar to Conectando....
+        /// </summary>
+        internal static string PainelControle_TesteConexao {
+            get {
+                return ResourceManager.GetString("PainelControle_TesteConexao", resourceCulture);
+            }
+        }
+
         /// <summary>
         ///   Looks up a localized string similar to El tiempo de espera debe ser un valor entre 0 y 65535..
         /// </summary>

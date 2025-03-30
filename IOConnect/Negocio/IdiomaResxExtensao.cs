@@ -850,6 +850,7 @@ namespace Percolore.IOConnect.Negocio
         public static string Configuracao_AbastecimentoErrorRemove { get; set; } = string.Empty;
         public static string Configuracoes_lblUniMedidaUnidadeAbast { get; set; } = string.Empty;
         public static string Configuracoes_lblUniMedidaUnidadeAbastCad { get; set; } = string.Empty;
+        public static string PainelControle_TesteConexao { get; set; } = string.Empty;
         public static string PainelControle_Menu_ConnectPlaca { get; set; } = string.Empty;
         public static string PainelControle_Menu_ConnectPlaca_On { get; set; } = string.Empty;
         public static string PainelControle_Menu_ConnectPlaca_Off { get; set; } = string.Empty;
@@ -1746,6 +1747,7 @@ namespace Percolore.IOConnect.Negocio
             Configuracoes_lblUniMedidaUnidadeAbast = Negocio.IdiomaResx.Configuracoes_lblUniMedidaUnidadeAbast;
             Configuracoes_lblUniMedidaUnidadeAbastCad = Negocio.IdiomaResx.Configuracoes_lblUniMedidaUnidadeAbastCad;
 
+            PainelControle_TesteConexao = Negocio.IdiomaResx.PainelControle_TesteConexao;
             PainelControle_Menu_ConnectPlaca = Negocio.IdiomaResx.PainelControle_Menu_ConnectPlaca;
             PainelControle_Menu_ConnectPlaca_On = Negocio.IdiomaResx.PainelControle_Menu_ConnectPlaca_On;
             PainelControle_Menu_ConnectPlaca_Off = Negocio.IdiomaResx.PainelControle_Menu_ConnectPlaca_Off;
@@ -2652,6 +2654,7 @@ namespace Percolore.IOConnect.Negocio
             msg.Configuracoes_lblUniMedidaUnidadeAbast = Configuracoes_lblUniMedidaUnidadeAbast;
             msg.Configuracoes_lblUniMedidaUnidadeAbastCad = Configuracoes_lblUniMedidaUnidadeAbastCad;
 
+            msg.PainelControle_TesteConexao = PainelControle_TesteConexao;
             msg.PainelControle_Menu_ConnectPlaca = PainelControle_Menu_ConnectPlaca;
             msg.PainelControle_Menu_ConnectPlaca_On = PainelControle_Menu_ConnectPlaca_On;
             msg.PainelControle_Menu_ConnectPlaca_Off = PainelControle_Menu_ConnectPlaca_Off;
@@ -3519,6 +3522,7 @@ namespace Percolore.IOConnect.Negocio
                 lMensagem.Add(getMensagem(op.IdIdioma.ToString(), "Configuracoes_lblUniMedidaUnidadeAbast", msg.Configuracoes_lblUniMedidaUnidadeAbast));
                 lMensagem.Add(getMensagem(op.IdIdioma.ToString(), "Configuracoes_lblUniMedidaUnidadeAbastCad", msg.Configuracoes_lblUniMedidaUnidadeAbastCad));
 
+                lMensagem.Add(getMensagem(op.IdIdioma.ToString(), "PainelControle_TesteConexao", msg.PainelControle_TesteConexao));
                 lMensagem.Add(getMensagem(op.IdIdioma.ToString(), "PainelControle_Menu_ConnectPlaca", msg.PainelControle_Menu_ConnectPlaca));
                 lMensagem.Add(getMensagem(op.IdIdioma.ToString(), "PainelControle_Menu_ConnectPlaca_On", msg.PainelControle_Menu_ConnectPlaca_On));
                 lMensagem.Add(getMensagem(op.IdIdioma.ToString(), "PainelControle_Menu_ConnectPlaca_Off", msg.PainelControle_Menu_ConnectPlaca_Off));

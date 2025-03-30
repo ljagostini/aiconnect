@@ -5443,6 +5443,15 @@ namespace Percolore.IOConnect.Properties {
                 return ResourceManager.GetString("PainelControle_Menu_Treinamento", resourceCulture);
             }
         }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Connecting....
+        /// </summary>
+        internal static string PainelControle_TesteConexao {
+            get {
+                return ResourceManager.GetString("PainelControle_TesteConexao", resourceCulture);
+            }
+        }
         
         /// <summary>
         ///   Looks up a localized string similar to Timeout must be between 0 and 65535..
