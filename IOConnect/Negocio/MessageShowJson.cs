@@ -848,6 +848,7 @@ namespace Percolore.IOConnect.Negocio
         public  string Configuracoes_lblUniMedidaUnidadeAbast { get; set; } = string.Empty;
         public  string Configuracoes_lblUniMedidaUnidadeAbastCad { get; set; } = string.Empty;
 
+        public string PainelControle_TesteConexao { get; set; } = string.Empty;
         public string PainelControle_Menu_ConnectPlaca { get; set; } = string.Empty;
         public string PainelControle_Menu_ConnectPlaca_On { get; set; } = string.Empty;
         public string PainelControle_Menu_ConnectPlaca_Off { get; set; } = string.Empty;
