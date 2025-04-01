@@ -3003,6 +3003,12 @@ namespace Percolore.IOConnect.Properties {
                 return ResourceManager.GetString("DispensaSimultanea_lblSubStatus_Msg01", resourceCulture);
             }
         }
+
+        internal static string DispensaSimultanea_lblStatus_Reconectando {
+            get {
+                return ResourceManager.GetString("DispensaSimultanea_lblStatus_Reconectando", resourceCulture);
+            }
+        }
         
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.

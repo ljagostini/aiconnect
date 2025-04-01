@@ -992,7 +992,7 @@
     <value>Pronto para dispensar produtos.</value>
   </data>
   <data name="DispensaSequencial_lblStatus_Msg02" xml:space="preserve">
-    <value>Dispensando produto</value>
+    <value>Dispensando cada produto...</value>
   </data>
   <data name="DispensaSequencial_lblSubStatus_Msg01" xml:space="preserve">
     <value>Clique no botão iniciar para executar o processo!</value>
@@ -1004,10 +1004,10 @@
     <value>Pronto para dispensar</value>
   </data>
   <data name="DispensaSimultanea_lblStatus_Msg02" xml:space="preserve">
-    <value>Dispensando de produtos.</value>
+    <value>Dispensando produtos...</value>
   </data>
   <data name="DispensaSimultanea_lblSubStatus_Msg01" xml:space="preserve">
-    <value>Clique no botão para iniciar a distribuição de produtos!</value>
+    <value>Clique no botão para iniciar a dispensa de produtos!</value>
   </data>
   <data name="fAutenticacao_btnCancelar" xml:space="preserve">
     <value>Cancelar</value>
@@ -2363,5 +2363,8 @@ Cliente entre em contato com a Percolore Falha de comunicação Ethernet!</value
   </data>
   <data name="Global_Falha_NenhumaPortaSerial" xml:space="preserve">
     <value>Não foi possível conectar ao dispositivo pois a porta serial não foi encontrada. Verifique se o Bluetooth do computador está ligado ou se o cabo da dosadora está conectado.</value>
+  </data>
+  <data name="DispensaSimultanea_lblStatus_Reconectando" xml:space="preserve">
+    <value>Tentando reconectar ao dispositivo...</value>
   </data>
 </root>

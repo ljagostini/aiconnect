@@ -1001,7 +1001,7 @@
     <value>Ready to dispense</value>
   </data>
   <data name="DispensaSimultanea_lblStatus_Msg02" xml:space="preserve">
-    <value>Dispensing</value>
+    <value>Dispensing products...</value>
   </data>
   <data name="DispensaSimultanea_lblSubStatus_Msg01" xml:space="preserve">
     <value>Click start to dispense!</value>
@@ -2362,5 +2362,8 @@ Customer contact Percolore Ethernet communication failure!</value>
   </data>
   <data name="PainelControle_TesteConexao" xml:space="preserve">
     <value>Connecting...</value>
+  </data>
+  <data name="DispensaSimultanea_lblStatus_Reconectando" xml:space="preserve">
+    <value>Trying to reconnect the device...</value>
   </data>
 </root>

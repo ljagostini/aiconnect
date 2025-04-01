@@ -266,7 +266,7 @@
     <value>Lista para dispensar</value>
   </data>
   <data name="DispensaSimultanea_lblStatus_Msg02" xml:space="preserve">
-    <value>Dispensación de colorantes.</value>
+    <value>Dispensación de colorantes...</value>
   </data>
   <data name="DispensaSimultanea_lblSubStatus_Msg01" xml:space="preserve">
     <value>Haga clic en el botón para iniciar la distribución de colorantes!</value>
@@ -2380,5 +2380,8 @@ Contacto con el cliente ¡Fallo de comunicación de Percolore Ethernet!</value>
   </data>
   <data name="PainelControle_TesteConexao" xml:space="preserve">
     <value>Conectándose...</value>
+  </data>
+  <data name="DispensaSimultanea_lblStatus_Reconectando" xml:space="preserve">
+    <value>Intentando volver a conectar el dispositivo...</value>
   </data>
 </root>

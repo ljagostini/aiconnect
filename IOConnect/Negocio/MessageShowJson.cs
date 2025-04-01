@@ -319,6 +319,7 @@ namespace Percolore.IOConnect.Negocio
         public  string DispensaSimultanea_lblStatus_Msg01 { get; set; } = string.Empty;
         public  string DispensaSimultanea_lblStatus_Msg02 { get; set; } = string.Empty;
         public  string DispensaSimultanea_lblSubStatus_Msg01 { get; set; } = string.Empty;
+        public  string DispensaSimultanea_lblStatus_Reconectando { get; set; } = string.Empty;
         public  string FormulaPersonalizada_Informacao_ColoranteExistente { get; set; } = string.Empty;
         public  string FormulaPersonalizada_Informacao_QuantidadeNaoInformada { get; set; } = string.Empty;
         public  string FormulaPersonalizada_Informaco_InformarColorante { get; set; } = string.Empty;

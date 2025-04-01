@@ -405,11 +405,11 @@ namespace Percolore.IOConnect
             //There is a bug in .Net 2.0 DataReceived Event that prevents people from using this
             //event as an interrupt to handle data (it doesn't fire all of the time).  Therefore
             //we have to use the ReadByte command for a fixed length as it's been shown to be reliable.
-            for (int i = 0; Modbus.USBConstant.connectUsb && i < 30; i++)
+            for (int i = 0; Modbus.USBConstant.connectUsb && i < 300; i++)
             {
                 if (!this.isTerminouRead)
                 {
-                    Thread.Sleep(100);
+                    Thread.Sleep(10);
                 }
             }
             if (!this.isTerminouRead)

@@ -314,6 +314,7 @@ namespace Percolore.IOConnect.Negocio
         public static string DispensaSequencial_lblStatus_Msg02 { get; set; } = string.Empty;
         public static string DispensaSequencial_lblSubStatus_Msg01 { get; set; } = string.Empty;
         public static string DispensaSequencial_lblSubStatus_Msg02 { get; set; } = string.Empty;
+        public static string DispensaSimultanea_lblStatus_Reconectando { get; set; } = string.Empty;
         public static string DispensaSimultanea_lblStatus_Msg01 { get; set; } = string.Empty;
         public static string DispensaSimultanea_lblStatus_Msg02 { get; set; } = string.Empty;
         public static string DispensaSimultanea_lblSubStatus_Msg01 { get; set; } = string.Empty;
@@ -1112,6 +1113,7 @@ namespace Percolore.IOConnect.Negocio
             DispensaSequencial_lblStatus_Msg02 = Negocio.IdiomaResx.DispensaSequencial_lblStatus_Msg02;
             DispensaSequencial_lblSubStatus_Msg01 = Negocio.IdiomaResx.DispensaSequencial_lblSubStatus_Msg01;
             DispensaSequencial_lblSubStatus_Msg02 = Negocio.IdiomaResx.DispensaSequencial_lblSubStatus_Msg02;
+            DispensaSimultanea_lblStatus_Reconectando = Negocio.IdiomaResx.DispensaSimultanea_lblStatus_Reconectando;
             DispensaSimultanea_lblStatus_Msg01 = Negocio.IdiomaResx.DispensaSimultanea_lblStatus_Msg01;
             DispensaSimultanea_lblStatus_Msg02 = Negocio.IdiomaResx.DispensaSimultanea_lblStatus_Msg02;
             DispensaSimultanea_lblSubStatus_Msg01 = Negocio.IdiomaResx.DispensaSimultanea_lblSubStatus_Msg01;
@@ -2153,6 +2155,7 @@ namespace Percolore.IOConnect.Negocio
             msg.DispensaSequencial_lblStatus_Msg02 = DispensaSequencial_lblStatus_Msg02;
             msg.DispensaSequencial_lblSubStatus_Msg01 = DispensaSequencial_lblSubStatus_Msg01;
             msg.DispensaSequencial_lblSubStatus_Msg02 = DispensaSequencial_lblSubStatus_Msg02;
+            msg.DispensaSimultanea_lblStatus_Reconectando = DispensaSimultanea_lblStatus_Reconectando;
             msg.DispensaSimultanea_lblStatus_Msg01 = DispensaSimultanea_lblStatus_Msg01;
             msg.DispensaSimultanea_lblStatus_Msg02 = DispensaSimultanea_lblStatus_Msg02;
             msg.DispensaSimultanea_lblSubStatus_Msg01 = DispensaSimultanea_lblSubStatus_Msg01;
@@ -3057,7 +3060,8 @@ namespace Percolore.IOConnect.Negocio
                 lMensagem.Add(getMensagem(op.IdIdioma.ToString(), "DispensaSequencial_lblStatus_Msg02", msg.DispensaSequencial_lblStatus_Msg02));
                 lMensagem.Add(getMensagem(op.IdIdioma.ToString(), "DispensaSequencial_lblSubStatus_Msg01", msg.DispensaSequencial_lblSubStatus_Msg01));
                 lMensagem.Add(getMensagem(op.IdIdioma.ToString(), "DispensaSequencial_lblSubStatus_Msg02", msg.DispensaSequencial_lblSubStatus_Msg02));
-                lMensagem.Add(getMensagem(op.IdIdioma.ToString(), "DispensaSimultanea_lblStatus_Msg01", msg.DispensaSimultanea_lblStatus_Msg01));
+                lMensagem.Add(getMensagem(op.IdIdioma.ToString(), "DispensaSequencial_lblSubStatus_Msg02", msg.DispensaSequencial_lblSubStatus_Msg02));
+                lMensagem.Add(getMensagem(op.IdIdioma.ToString(), "DispensaSimultanea_lblStatus_Reconectando", msg.DispensaSimultanea_lblStatus_Reconectando));
                 lMensagem.Add(getMensagem(op.IdIdioma.ToString(), "DispensaSimultanea_lblStatus_Msg02", msg.DispensaSimultanea_lblStatus_Msg02));
                 lMensagem.Add(getMensagem(op.IdIdioma.ToString(), "DispensaSimultanea_lblSubStatus_Msg01", msg.DispensaSimultanea_lblSubStatus_Msg01));
                 lMensagem.Add(getMensagem(op.IdIdioma.ToString(), "FormulaPersonalizada_Informacao_ColoranteExistente", msg.FormulaPersonalizada_Informacao_ColoranteExistente));

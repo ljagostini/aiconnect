@@ -164,6 +164,7 @@ namespace Percolore.IOConnect.Negocio
         public static string DispensaSimultanea_lblStatus_Msg01;
         public static string DispensaSimultanea_lblStatus_Msg02;
         public static string DispensaSimultanea_lblSubStatus_Msg01;
+        public static string DispensaSimultanea_lblStatus_Reconectando;
         public static string FormulaPersonalizada_Informacao_ColoranteExistente;
         public static string FormulaPersonalizada_Informacao_QuantidadeNaoInformada;
         public static string FormulaPersonalizada_Informaco_InformarColorante;
@@ -1113,6 +1114,7 @@ namespace Percolore.IOConnect.Negocio
                 DispensaSequencial_lblStatus_Msg02 = Properties.IOConnect_esp.DispensaSequencial_lblStatus_Msg02;
                 DispensaSequencial_lblSubStatus_Msg01 = Properties.IOConnect_esp.DispensaSequencial_lblSubStatus_Msg01;
                 DispensaSequencial_lblSubStatus_Msg02 = Properties.IOConnect_esp.DispensaSequencial_lblSubStatus_Msg02;
+                DispensaSimultanea_lblStatus_Reconectando = Properties.IOConnect_esp.DispensaSimultanea_lblStatus_Reconectando;
                 DispensaSimultanea_lblStatus_Msg01 = Properties.IOConnect_esp.DispensaSimultanea_lblStatus_Msg01;
                 DispensaSimultanea_lblStatus_Msg02 = Properties.IOConnect_esp.DispensaSimultanea_lblStatus_Msg02;
                 DispensaSimultanea_lblSubStatus_Msg01 = Properties.IOConnect_esp.DispensaSimultanea_lblSubStatus_Msg01;
@@ -1986,6 +1988,7 @@ namespace Percolore.IOConnect.Negocio
                 DispensaSequencial_lblStatus_Msg02 = Properties.IOConnect_eng.DispensaSequencial_lblStatus_Msg02;
                 DispensaSequencial_lblSubStatus_Msg01 = Properties.IOConnect_eng.DispensaSequencial_lblSubStatus_Msg01;
                 DispensaSequencial_lblSubStatus_Msg02 = Properties.IOConnect_eng.DispensaSequencial_lblSubStatus_Msg02;
+                DispensaSimultanea_lblStatus_Reconectando = Properties.IOConnect_eng.DispensaSimultanea_lblStatus_Reconectando;
                 DispensaSimultanea_lblStatus_Msg01 = Properties.IOConnect_eng.DispensaSimultanea_lblStatus_Msg01;
                 DispensaSimultanea_lblStatus_Msg02 = Properties.IOConnect_eng.DispensaSimultanea_lblStatus_Msg02;
                 DispensaSimultanea_lblSubStatus_Msg01 = Properties.IOConnect_eng.DispensaSimultanea_lblSubStatus_Msg01;
@@ -2866,6 +2869,7 @@ namespace Percolore.IOConnect.Negocio
                 DispensaSequencial_lblStatus_Msg02 = Properties.IOConnect.DispensaSequencial_lblStatus_Msg02;
                 DispensaSequencial_lblSubStatus_Msg01 = Properties.IOConnect.DispensaSequencial_lblSubStatus_Msg01;
                 DispensaSequencial_lblSubStatus_Msg02 = Properties.IOConnect.DispensaSequencial_lblSubStatus_Msg02;
+                DispensaSimultanea_lblStatus_Reconectando = Properties.IOConnect.DispensaSimultanea_lblStatus_Reconectando;
                 DispensaSimultanea_lblStatus_Msg01 = Properties.IOConnect.DispensaSimultanea_lblStatus_Msg01;
                 DispensaSimultanea_lblStatus_Msg02 = Properties.IOConnect.DispensaSimultanea_lblStatus_Msg02;
                 DispensaSimultanea_lblSubStatus_Msg01 = Properties.IOConnect.DispensaSimultanea_lblSubStatus_Msg01;

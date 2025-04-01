@@ -426,7 +426,7 @@ namespace PaintMixer
                         }
                     }
                 }
-                if (portas.Length == 1 && tipoConexao == SerialPortConnectionType.Bluetooth)
+                if (!bConnect && portas.Length == 1 && tipoConexao == SerialPortConnectionType.Bluetooth)
                 {
                     throw new Percolore.Core.Exceptions.BluetoothException(Percolore.IOConnect.Negocio.IdiomaResx.Global_Falha_SemConexaoBluetooh);
                 }

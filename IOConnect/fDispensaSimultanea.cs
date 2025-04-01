@@ -209,17 +209,21 @@ namespace Percolore.IOConnect
 
         void Iniciar_Click(object sender, EventArgs e)
         {
-            lblSubStatus.Visible = false;
             progressBar.Visible = true;
             progressBar.Visible = true;
             btnIniciar.Enabled = false;
             btnCancelar.Visible = false;
             btnAbortar.Visible = true;
+
             lblStatus.Text = Negocio.IdiomaResxExtensao.DispensaSimultanea_lblStatus_Msg02;
+            lblSubStatus.Text = Negocio.IdiomaResxExtensao.Configuracoes_tabColorantes + ":";
+            for (int i = 0; i < this.colorantes.Count; i++)
+            {
+                lblSubStatus.Text += " " + this.colorantes[i].Nome;
+            }
+
             this.counterUltimoP1 = this._valores.Count;
             this.counterUltimoP2 = (this._valores2 != null && this._valores2.Count > 0) ? this._valores2.Count : 0;
-            
-
            
             try
             {
@@ -469,8 +473,9 @@ namespace Percolore.IOConnect
                         }
                     }
 
-                  
-                    if (((counterP1 >= counterUltimoP1 && existe_Base_P1 && terminou_Base_P1) || (counterP1 >= counterUltimoP1 && !existe_Base_P1)) && 
+
+                    // Dispensa concluída, desconta os corantes do abastecimento
+                    if (((counterP1 >= counterUltimoP1 && existe_Base_P1 && terminou_Base_P1) || (counterP1 >= counterUltimoP1 && !existe_Base_P1)) &&
                         ((counterP2 >= counterUltimoP2 && existe_Base_P2 && terminou_Base_P2) || (counterP2 >= counterUltimoP2 && !existe_Base_P2)))
                     {
                         if (_dispenser[0].IsReady)
@@ -791,7 +796,11 @@ namespace Percolore.IOConnect
             }
             catch (Exception ex)
             {
-                if ((this.counterFalhaConexao > _parametros.QtdTentativasConexao) || (this.modBusDispenser_P3 != null))
+                if (this.counterFalhaConexao > 0)
+                {
+                    lblStatus.Text = Negocio.IdiomaResxExtensao.DispensaSimultanea_lblStatus_Reconectando;
+                }
+                if ((this.counterFalhaConexao >= _parametros.QtdTentativasConexao) || (this.modBusDispenser_P3 != null))
                 {
 					string customMessage = ErrorMessageHandler.GetFriendlyErrorMessage(ex);
 					Falha(ex, customMessage);
@@ -813,11 +822,8 @@ namespace Percolore.IOConnect
                 if (this.modBusDispenser_P3 != null)
                 {
                     this.modBusDispenser_P3.Disconnect();
-                    Thread.Sleep(1000);
                     this.modBusDispenser_P3.Disconnect_Mover();
-                    Thread.Sleep(1000);
                     this.modBusDispenser_P3.Connect();
-                    Thread.Sleep(1000);
                     this.modBusDispenser_P3.Connect_Mover();
                 }
                 else
@@ -825,9 +831,7 @@ namespace Percolore.IOConnect
                     for (int i = 0; i < this._dispenser.Count; i++)
                     {
                         this._dispenser[i].Disconnect();
-                        Thread.Sleep(1000);
                         this._dispenser[i].Connect();
-                        Thread.Sleep(1000);
                     }
                 }
             }
